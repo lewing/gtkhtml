@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "POT-Creation-Date: 2002-10-31 05:42+0100\n"
-"PO-Revision-Date: 2002-11-07 12:53+EDT\n"
+"PO-Revision-Date: 2002-11-22 23:19+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -90,7 +90,7 @@ msgstr ""
 #: capplet/gtkhtml-capplet.glade.h:16
 #: components/html-editor/gtkhtml-editor-properties.glade.h:47
 msgid "Miscellaneous"
-msgstr ""
+msgstr "የተለያየ"
 
 #: capplet/gtkhtml-capplet.glade.h:17
 msgid "New shortcut:"
@@ -288,27 +288,27 @@ msgstr "አረንጓዴ"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:31
 msgid "Header _1"
-msgstr ""
+msgstr "የገጽ አናት _1"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:32
 msgid "Header _2"
-msgstr ""
+msgstr "የገጽ አናት _2"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:33
 msgid "Header _3"
-msgstr ""
+msgstr "የገጽ አናት _3"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:34
 msgid "Header _4"
-msgstr ""
+msgstr "የገጽ አናት _4"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:35
 msgid "Header _5"
-msgstr ""
+msgstr "የገጽ አናት _5"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:36
 msgid "Header _6"
-msgstr ""
+msgstr "የገጽ አናት _6"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:37
 #: components/html-editor/editor-control-factory.c:181
@@ -552,7 +552,7 @@ msgstr ""
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
 #: components/html-editor/text.c:222 components/html-editor/toolbar.c:529
 msgid "Strikeout"
-msgstr ""
+msgstr "አጥፋ"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:93
 msgid "Su_perscript"
@@ -619,7 +619,7 @@ msgstr "ብጫ"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:107
 msgid "_Alignment"
-msgstr ""
+msgstr "ኩልኩል (_A)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:108
 msgid "_Alphabetical List"
@@ -627,7 +627,7 @@ msgstr ""
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:109
 msgid "_Bold"
-msgstr ""
+msgstr "ደማቅ (_B)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:110
 msgid "_Bulleted List"
@@ -643,7 +643,7 @@ msgstr "ቅጂ (_C)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:113
 msgid "_Decrease Indent"
-msgstr ""
+msgstr "ገባ ማለቱን ቀንስ (_D)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:114
 msgid "_Edit"
@@ -667,7 +667,7 @@ msgstr "የHTML ፋይል... (_H)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:119
 msgid "_Heading"
-msgstr ""
+msgstr "አርእስት (_H)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:120
 msgid "_Image..."
@@ -675,7 +675,7 @@ msgstr "ምስል... (_I)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:121
 msgid "_Increase Indent"
-msgstr ""
+msgstr "አንቀጹን ጨምሩ (_I)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:122
 msgid "_Indifferent"
@@ -759,7 +759,7 @@ msgstr ""
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:142
 msgid "_Strikeout"
-msgstr ""
+msgstr "አጥፋ (_S)"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:143
 msgid "_Style"
@@ -874,11 +874,11 @@ msgstr "+4"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:11
 msgid "Alignment"
-msgstr ""
+msgstr "ኩልኩል"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:12
 msgid "Alignment:"
-msgstr ""
+msgstr "ኩልኩል፦"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:13
 msgid "Apply changes to:"
@@ -887,7 +887,7 @@ msgstr ""
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
 #: components/html-editor/text.c:219 components/html-editor/toolbar.c:523
 msgid "Bold"
-msgstr ""
+msgstr "ደማቅ"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:17
 msgid "Border"
@@ -963,7 +963,7 @@ msgstr "የፊት ለፊቱ ቀለም"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:35
 msgid "Header"
-msgstr ""
+msgstr "የገጽ አናት"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:36
 msgid "Height:"
@@ -1069,11 +1069,11 @@ msgstr "መጠን"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:67
 msgid "Spacing"
-msgstr ""
+msgstr "ክፍተት"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:68
 msgid "Spacing:"
-msgstr ""
+msgstr "ክፍተት፦"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:70
 #: components/html-editor/paragraph.c:110 components/html-editor/text.c:206
@@ -1212,27 +1212,27 @@ msgstr ""
 
 #: components/html-editor/paragraph.c:126 components/html-editor/toolbar.c:56
 msgid "Header 1"
-msgstr ""
+msgstr "የገጽ አናት 1"
 
 #: components/html-editor/paragraph.c:127 components/html-editor/toolbar.c:57
 msgid "Header 2"
-msgstr ""
+msgstr "የገጽ አናት 2"
 
 #: components/html-editor/paragraph.c:128 components/html-editor/toolbar.c:58
 msgid "Header 3"
-msgstr ""
+msgstr "የገጽ አናት 3"
 
 #: components/html-editor/paragraph.c:129 components/html-editor/toolbar.c:59
 msgid "Header 4"
-msgstr ""
+msgstr "የገጽ አናት 4"
 
 #: components/html-editor/paragraph.c:130 components/html-editor/toolbar.c:60
 msgid "Header 5"
-msgstr ""
+msgstr "የገጽ አናት 5"
 
 #: components/html-editor/paragraph.c:131 components/html-editor/toolbar.c:61
 msgid "Header 6"
-msgstr ""
+msgstr "የገጽ አናት 6"
 
 #: components/html-editor/paragraph.c:132 components/html-editor/toolbar.c:62
 msgid "Address"
@@ -1256,12 +1256,12 @@ msgstr ""
 
 #: components/html-editor/paragraph.c:145
 msgid "Align"
-msgstr ""
+msgstr "በስርዓት ኰልኩል"
 
 #: components/html-editor/popup.c:394
 #, c-format
 msgid "Check '%s' spelling..."
-msgstr ""
+msgstr "የ'%s'ን አጻጻፉን አጣራ..."
 
 #: components/html-editor/popup.c:395
 #, c-format
@@ -1574,7 +1574,7 @@ msgstr ""
 
 #: src/htmlbutton.c:145
 msgid "Reset"
-msgstr ""
+msgstr "እንደገና አስተካክል"
 
 #: src/htmlengine-print.c:197
 msgid "Cannot allocate default font for printing\n"
