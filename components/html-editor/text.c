@@ -58,8 +58,6 @@ struct _GtkHTMLEditTextProperties {
 	HTMLColor *color;
 	gchar *url;
 
-	GtkHTML *sample;
-
 	HTMLText *text;
 };
 typedef struct _GtkHTMLEditTextProperties GtkHTMLEditTextProperties;
@@ -77,46 +75,6 @@ static GtkHTMLFontStyle styles [STYLES] = {
 static gint get_size (GtkHTMLFontStyle s);
 
 static void
-fill_sample (GtkHTMLEditTextProperties *d)
-{
-	gchar *body, *size, *color, *bg, *a, *sa;
-
-	if (d->url && *d->url) {
-		gchar *enc_url;
-
-		enc_url = html_encode_entities (d->url, g_utf8_strlen (d->url, -1), NULL);
-		a = g_strdup_printf ("<a href=\"%s\">", d->url);
-		g_free (enc_url);
-	} else
-		a = g_strdup ("");
-
-	bg    = html_engine_save_get_sample_body (d->cd->html->engine, NULL);
-	sa    = d->url && *d->url ? "</a>" : "";
-	size  = g_strdup_printf ("<font size=%d>", get_size (d->style_or) + 1);
-	
-	color = g_strdup_printf ("<font color=#%02x%02x%02x>",
-				 d->color->color.red   >> 8,
-				 d->color->color.green >> 8,
-				 d->color->color.blue  >> 8);
-	
-	body  = g_strconcat (bg, a,
-			     CVAL (0) ? "<b>" : "",
-			     CVAL (1) ? "<i>" : "",
-			     CVAL (2) ? "<u>" : "",
-			     CVAL (3) ? "<s>" : "",
-			     size, color,
-			     /* string marked for translations is sample text. you may want to translate it to common sample text in your language */
-			     _("The quick brown fox jumps over the lazy dog."), sa, NULL);
-	
-	gtk_html_load_from_string (d->sample, body, -1);
-	g_free (color);
-	g_free (size);
-	g_free (a);
-	g_free (bg);
-	g_free (body);
-}
-
-static void
 color_changed (GtkWidget *w, GdkColor *color, gboolean custom, gboolean by_user, gboolean is_default,
 	       GtkHTMLEditTextProperties *data)
 {
@@ -128,7 +86,6 @@ color_changed (GtkWidget *w, GdkColor *color, gboolean custom, gboolean by_user,
 	html_color_ref (data->color);
 	data->color_changed = TRUE;
 	gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
-	fill_sample (data);
 }
 
 static void
@@ -141,7 +98,6 @@ set_size (GtkWidget *w, GtkHTMLEditTextProperties *data)
 	data->style_or  |= size;
 	data->style_changed = TRUE;
 	gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
-	fill_sample (data);
 }
 
 static void
@@ -159,7 +115,6 @@ set_style (GtkWidget *w, GtkHTMLEditTextProperties *d)
 
 	d->style_changed = TRUE;
 	gtk_html_edit_properties_dialog_change (d->cd->properties_dialog);
-	fill_sample (d);
 }
 
 static gint
@@ -178,7 +133,6 @@ set_url (GtkWidget *w, GtkHTMLEditTextProperties *data)
 	data->url_changed = TRUE;
 
 	gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
-	fill_sample (data);
 }
 
 GtkWidget *
@@ -283,10 +237,6 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 
 	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Color"), editor_hig_inner_hbox (_("_Foreground:"), data->color_combo)),
 			  1, 2, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
-
-	/* sample */
-	gtk_table_attach (GTK_TABLE (table), sample_frame (&data->sample), 0, 2, 2, 3, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
-	fill_sample (data);
 
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);

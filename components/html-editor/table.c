@@ -48,7 +48,6 @@ typedef struct
 	GtkHTMLControlData *cd;
 
 	HTMLTable *table;
-	GtkHTML *sample;
 
 	gboolean   has_bg_color;
 	gboolean   changed_bg_color;
@@ -102,65 +101,6 @@ typedef struct
 } GtkHTMLEditTableProperties;
 
 static void set_insert_ui (GtkHTMLEditTableProperties *d);
-
-#define CHANGE if (!d->disable_change) gtk_html_edit_properties_dialog_change (d->cd->properties_dialog)
-#define FILL   if (!d->disable_change && d->sample) fill_sample (d)
-
-static void
-fill_prop_sample (GtkHTMLEditTableProperties *d)
-{
-	GString *cells;
-	gchar *body, *html, *bg_color, *bg_pixmap, *spacing, *align, *width;
-	gint r, c;
-
-	body      = html_engine_save_get_sample_body (d->cd->html->engine, NULL);
-	bg_color  = d->has_bg_color
-		? g_strdup_printf (" bgcolor=\"#%02x%02x%02x\"",
-				   d->bg_color.red >> 8,
-				   d->bg_color.green >> 8,
-				   d->bg_color.blue >> 8)
-		: g_strdup ("");
-	bg_pixmap = d->has_bg_pixmap && d->bg_pixmap
-		? g_strdup_printf (" background=\"file://%s\"", d->bg_pixmap)
-		: g_strdup ("");
-	spacing = g_strdup_printf (" cellspacing=\"%d\" cellpadding=\"%d\" border=\"%d\"", d->spacing, d->padding, d->border);
-
-	align   = d->align != HTML_HALIGN_NONE
-		? g_strdup_printf (" align=\"%s\"",
-				   d->align == HTML_HALIGN_CENTER ? "center"
-				   : (d->align == HTML_HALIGN_RIGHT ? "right" : "left"))
-		: g_strdup ("");
-	width   = d->width != 0 && d->has_width
-		? g_strdup_printf (" width=\"%d%s\"", d->width, d->width_percent ? "%" : "") : g_strdup ("");
-
-	cells  = g_string_new (NULL);
-	for (r = 0; r < d->rows; r ++) {
-		g_string_append (cells, "<tr>");
-		for (c = 0; c < d->cols; c ++) {
-			gchar *cell;
-
-			cell = g_strdup_printf ("<td>*%03d*</td>", d->cols*r + c + 1);
-			g_string_append (cells, cell);
-			g_free (cell);
-		}
-		g_string_append (cells, "</tr>");
-	}
-			
-	html      = g_strconcat (body, "<table", bg_color, bg_pixmap, spacing, align, width, ">",
-				 cells->str, "</table>", NULL);
-	g_string_free (cells, TRUE);
-	gtk_html_load_from_string (d->sample, html, -1);
-
-	g_free (body);
-	g_free (bg_color);
-	g_free (bg_pixmap);
-	g_free (spacing);
-	g_free (align);
-	g_free (width);
-	g_free (html);
-
-	/* printf ("html: %s\n", html); */
-}
 
 #define TEMPLATES 3
 typedef struct {
@@ -254,70 +194,6 @@ substitute_char (gchar *str, const gchar *var_name, const gchar *value)
 	return str;
 }
 
-static gchar *
-get_sample_html (GtkHTMLEditTableProperties *d, gboolean preview)
-{
-	GString *cells;
-	gchar *body, *html, *table_begin, *width;
-	gint r, c;
-
-	body      = html_engine_save_get_sample_body (d->cd->html->engine, NULL);
-
-	table_begin = g_strdup (table_templates [d->template].table_begin);
-	table_begin = substitute_int (table_begin, "@border@",  d->border);
-	table_begin = substitute_int (table_begin, "@spacing@", d->spacing);
-	table_begin = substitute_int (table_begin, "@padding@", d->padding);
-	table_begin = substitute_char (table_begin, "@align@", d->align == HTML_HALIGN_NONE ? ""
-				       : (d->align == HTML_HALIGN_CENTER ? " align=\"center\""
-					  : (d->align == HTML_HALIGN_RIGHT ? " align=\"right\"" : " align=\"left\"")));
-
-	width   = d->width != 0 && d->has_width
-		? g_strdup_printf (" width=\"%d%s\"", d->width, d->width_percent ? "%" : "") : g_strdup ("");
-	table_begin = substitute_char (table_begin, "@width@", width);
-	g_free (width);
-
-	cells  = g_string_new (NULL);
-	for (r = 0; r < d->rows; r ++) {
-		g_string_append (cells, "<tr>");
-		for (c = 0; c < d->cols; c ++) {
-			gchar *cell;
-
-			cell = g_strdup_printf (preview ? "<td>*%03d*</td>" : "<td></td>", d->cols*r + c + 1);
-			g_string_append (cells, cell);
-			g_free (cell);
-		}
-		g_string_append (cells, "</tr>");
-	}
-			
-	html      = g_strconcat (body, table_begin, cells->str, table_templates [d->template].table_end, NULL);
-	g_string_free (cells, TRUE);
-
-	g_free (body);
-	g_free (table_begin);
-
-	return html;
-}
-
-static void
-fill_insert_sample (GtkHTMLEditTableProperties *d)
-{
-	gchar *html;
-
-	html = get_sample_html (d, TRUE);
-	gtk_html_load_from_string (d->sample, html, -1);
-
-	g_free (html);
-}
-
-static void
-fill_sample (GtkHTMLEditTableProperties *d)
-{
-	if (d->insert)
-		fill_insert_sample (d);
-	else
-		fill_prop_sample (d);
-}
-
 static GtkHTMLEditTableProperties *
 data_new (GtkHTMLControlData *cd)
 {
@@ -347,8 +223,6 @@ static void
 set_has_bg_color (GtkWidget *check, GtkHTMLEditTableProperties *d)
 {
 	d->has_bg_color = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_bg_color));
-	FILL;
-	CHANGE;
 	if (!d->disable_change)
 		d->changed_bg_color = TRUE;
 }
@@ -357,8 +231,6 @@ static void
 set_has_bg_pixmap (GtkWidget *check, GtkHTMLEditTableProperties *d)
 {
 	d->has_bg_pixmap = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap));
-	FILL;
-	CHANGE;
 	if (!d->disable_change)
 		d->changed_bg_pixmap = TRUE;
 }
@@ -378,8 +250,6 @@ changed_bg_color (GtkWidget *w, GdkColor *color, gboolean custom, gboolean by_us
 	if (!d->has_bg_color)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_color), TRUE);
 	else {
-		FILL;
-		CHANGE;
 	}
 }
 
@@ -394,8 +264,6 @@ changed_bg_pixmap (GtkWidget *w, GtkHTMLEditTableProperties *d)
 	else {
 		if (!d->bg_pixmap || !*d->bg_pixmap)
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap), FALSE);
-		FILL;
-		CHANGE;
 	}
 }
 
@@ -405,8 +273,6 @@ changed_spacing (GtkWidget *w, GtkHTMLEditTableProperties *d)
 	d->spacing = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_spacing));
 	if (!d->disable_change)
 		d->changed_spacing = TRUE;
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -415,8 +281,6 @@ changed_padding (GtkWidget *w, GtkHTMLEditTableProperties *d)
 	d->padding = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_padding));
 	if (!d->disable_change)
 		d->changed_padding = TRUE;
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -425,8 +289,6 @@ changed_border (GtkWidget *w, GtkHTMLEditTableProperties *d)
 	d->border = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_border));
 	if (!d->disable_change)
 		d->changed_border = TRUE;
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -435,8 +297,6 @@ changed_align (GtkWidget *w, GtkHTMLEditTableProperties *d)
 	d->align = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) + HTML_HALIGN_LEFT;
 	if (!d->disable_change)
 		d->changed_align = TRUE;
-	FILL;
-	CHANGE;	
 }
 
 static void
@@ -449,8 +309,6 @@ changed_width (GtkWidget *w, GtkHTMLEditTableProperties *d)
 		d->disable_change = FALSE;
 		d->changed_width = TRUE;
 	}
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -459,8 +317,6 @@ set_has_width (GtkWidget *check, GtkHTMLEditTableProperties *d)
 	d->has_width = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_width));
 	if (!d->disable_change)
 		d->changed_width = TRUE;
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -469,8 +325,6 @@ changed_width_percent (GtkWidget *w, GtkHTMLEditTableProperties *d)
 	d->width_percent = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
 	if (!d->disable_change)
 		d->changed_width = TRUE;
-	FILL;
-	CHANGE;	
 }
 
 static void
@@ -479,8 +333,6 @@ changed_cols (GtkWidget *w, GtkHTMLEditTableProperties *d)
 	d->cols = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_cols));
 	if (!d->disable_change)
 		d->changed_cols = TRUE;
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -489,8 +341,6 @@ changed_rows (GtkWidget *w, GtkHTMLEditTableProperties *d)
 	d->rows = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_rows));
 	if (!d->disable_change)
 		d->changed_rows = TRUE;
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -508,8 +358,6 @@ changed_template (GtkWidget *w, GtkHTMLEditTableProperties *d)
 		d->cols    = table_templates [d->template].default_columns;
 
 	set_insert_ui (d);
-
-	CHANGE;	
 }
 
 /*
@@ -580,10 +428,7 @@ table_widget (GtkHTMLEditTableProperties *d)
 	UPPER_FIX (cols);
 	UPPER_FIX (rows);
 
-	gtk_box_pack_start (GTK_BOX (table_page), sample_frame (&d->sample), TRUE, TRUE, 0);
-
 	gtk_widget_show_all (table_page);
-        /* RM2 gdk_color_alloc (gdk_window_get_colormap (d->cd->html->engine->window), &d->bg_color); */
 	gnome_pixmap_entry_set_preview (GNOME_PIXMAP_ENTRY (d->entry_bg_pixmap), FALSE);
 
 	return table_page;
@@ -646,7 +491,6 @@ table_insert_widget (GtkHTMLEditTableProperties *d)
 	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template)), "selection-done",
 			  G_CALLBACK (changed_template), d);
 	fill_templates (d);
-	gtk_box_pack_start (GTK_BOX (table_page), sample_frame (&d->sample), TRUE, TRUE, 0);
 
 	gtk_widget_show_all (table_page);
 
@@ -680,8 +524,6 @@ set_ui (GtkHTMLEditTableProperties *d)
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_rows),  d->rows);
 
 	d->disable_change = FALSE;
-
-	FILL;
 }
 
 static void
@@ -703,8 +545,6 @@ set_insert_ui (GtkHTMLEditTableProperties *d)
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_template), d->template);
 
 	d->disable_change = FALSE;
-
-	FILL;
 }
 
 static void
@@ -781,14 +621,9 @@ table_insert_cb (GtkHTMLControlData *cd, gpointer get_data)
 {
 	GtkHTMLEditTableProperties *d = (GtkHTMLEditTableProperties *) get_data;
 	HTMLEngine *e = d->cd->html->engine;
-	gchar *html;
 	gint position;
 
 	position = e->cursor->position + table_templates [d->template].offset;
-	html = get_sample_html (d, FALSE);
-	/* printf ("INSERT(%d):\n%s\n", d->template, html); */
-	gtk_html_append_html (cd->html, html);
-	g_free (html);
 	html_cursor_jump_to_position (e->cursor, e, position);
 
 	return TRUE;

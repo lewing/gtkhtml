@@ -57,8 +57,6 @@ typedef struct
 	GtkHTMLControlData *cd;
 	HTMLTableCell *cell;
 
-	GtkHTML *sample;
-
 	gboolean   has_bg_color;
 	gboolean   changed_bg_color;
 	GdkColor   bg_color;
@@ -115,88 +113,6 @@ typedef struct
 
 } GtkHTMLEditCellProperties;
 
-#define CHANGE if (!d->disable_change) gtk_html_edit_properties_dialog_change (d->cd->properties_dialog)
-#define FILL   if (!d->disable_change) fill_sample (d)
-
-static void
-fill_sample (GtkHTMLEditCellProperties *d)
-{
-	GString *str;
-	gchar *body, *bg_color, *bg_pixmap, *valign, *halign, *width, *height, *wrap, *cell, *cspan, *rspan;
-	gint r, c;
-
-	body      = html_engine_save_get_sample_body (d->cd->html->engine, NULL);
-
-	bg_color  = d->has_bg_color
-		? g_strdup_printf (" bgcolor=\"#%02x%02x%02x\"",
-				   d->bg_color.red >> 8,
-				   d->bg_color.green >> 8,
-				   d->bg_color.blue >> 8)
-		: g_strdup ("");
-	bg_pixmap = d->has_bg_pixmap && d->bg_pixmap
-		? g_strdup_printf (" background=\"file://%s\"", d->bg_pixmap)
-		: g_strdup ("");
-	halign    = d->halign != HTML_HALIGN_NONE ? g_strdup_printf (" align=\"%s\"", d->halign == HTML_HALIGN_LEFT
-								     ? "left"
-								     : (d->halign == HTML_HALIGN_CENTER ? "center" : "right"))
-		: g_strdup ("");
-
-	valign    = d->valign != HTML_VALIGN_MIDDLE ? g_strdup_printf (" valign=\"%s\"", d->valign == HTML_VALIGN_TOP
-								       ? "top" : "bottom")
-		: g_strdup ("");
-	width   = d->width != 0 && d->has_width
-		? g_strdup_printf (" width=\"%d%s\"", d->width, d->width_percent ? "%" : "") : g_strdup ("");
-	height  = d->height != 0 && d->has_height
-		? g_strdup_printf (" height=\"%d%s\"", d->height, d->height_percent ? "%" : "") : g_strdup ("");
-	wrap    = d->wrap ? " nowrap" : "";
-
-	cspan   = d->cspan > 1 ? g_strdup_printf (" colspan=%d", d->cspan) : g_strdup ("");
-	rspan   = d->rspan > 1 ? g_strdup_printf (" rowspan=%d", d->rspan) : g_strdup ("");
-	cell    = g_strconcat ("<", d->heading ? "th" : "td",
-			       bg_color, bg_pixmap, halign, valign, width, height, cspan, rspan, wrap, ">", NULL);
-
-	str = g_string_new (body);
-	g_string_append (str, "<table border=1 cellpadding=4 cellspacing=2>");
-
-	for (r = 0; r < d->rspan + 1; r ++) {
-		g_string_append (str, "<tr>");
-		for (c = 0; c < (r < d->rspan ? (r == 0 ? 3 : 2) : d->cspan + 2); c ++) {
-			if ((r == 0 && c == 1)
-			    || (d->scope == ROW && r == 0)
-			    || (d->scope == COLUMN && c == 1)
-			    || d->scope == TABLE)
-				g_string_append (str, cell);
-			else
-				g_string_append (str, "<td>");
-
-			if (c == 1 && r == 0) {
-				/* string marked for translations is sample text. you may want to translate it to common sample text in your language */
-				g_string_append (str, _("The quick brown fox jumps over the lazy dog."));
-				g_string_append (str, " ");
-				g_string_append (str, _("The quick brown fox jumps over the lazy dog."));
-			} else {
-				g_string_append (str, "&nbsp;");
-				g_string_append (str, _("Other"));
-				g_string_append (str, "&nbsp;");
-			}
-			g_string_append (str, "</td>");
-		}
-		g_string_append (str, "</tr>");
-	}
-	g_string_append (str, "</table>");
-	gtk_html_load_from_string (d->sample, str->str, -1);
-
-	g_free (halign);
-	g_free (valign);
-	g_free (bg_color);
-	g_free (bg_pixmap);
-	g_free (body);
-	g_free (cell);
-	g_free (rspan);
-	g_free (cspan);
-	g_string_free (str, TRUE);
-}
-
 static GtkHTMLEditCellProperties *
 data_new (GtkHTMLControlData *cd)
 {
@@ -217,8 +133,6 @@ static void
 set_has_bg_color (GtkWidget *check, GtkHTMLEditCellProperties *d)
 {
 	d->has_bg_color = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_bg_color));
-	FILL;
-	CHANGE;
 	if (!d->disable_change)
 		d->changed_bg_color = TRUE;
 }
@@ -227,8 +141,6 @@ static void
 set_has_bg_pixmap (GtkWidget *check, GtkHTMLEditCellProperties *d)
 {
 	d->has_bg_pixmap = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap));
-	FILL;
-	CHANGE;
 	if (!d->disable_change)
 		d->changed_bg_pixmap = TRUE;
 }
@@ -248,8 +160,6 @@ changed_bg_color (GtkWidget *w, GdkColor *color, gboolean custom, gboolean by_us
 	if (!d->has_bg_color)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_color), TRUE);
 	else {
-		FILL;
-		CHANGE;
 	}
 }
 
@@ -264,8 +174,6 @@ changed_bg_pixmap (GtkWidget *w, GtkHTMLEditCellProperties *d)
 	else {
 		if (!d->bg_pixmap || !*d->bg_pixmap)
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap), FALSE);
-		FILL;
-		CHANGE;
 	}
 }
 
@@ -275,8 +183,6 @@ changed_halign (GtkWidget *w, GtkHTMLEditCellProperties *d)
 	d->halign = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) + HTML_HALIGN_LEFT;
 	if (!d->disable_change)
 		d->changed_halign = TRUE;
-	FILL;
-	CHANGE;	
 }
 
 static void
@@ -285,24 +191,18 @@ changed_valign (GtkWidget *w, GtkHTMLEditCellProperties *d)
 	d->valign = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) + HTML_VALIGN_TOP;
 	if (!d->disable_change)
 		d->changed_valign = TRUE;
-	FILL;
-	CHANGE;	
 }
 
 static void
 changed_cspan (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
 	d->cspan = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_cspan));
-	FILL;
-	CHANGE;
 }
 
 static void
 changed_rspan (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
 	d->rspan = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_rspan));
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -315,8 +215,6 @@ changed_width (GtkWidget *w, GtkHTMLEditCellProperties *d)
 		d->disable_change = FALSE;
 		d->changed_width = TRUE;
 	}
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -325,8 +223,6 @@ set_has_width (GtkWidget *check, GtkHTMLEditCellProperties *d)
 	d->has_width = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_width));
 	if (!d->disable_change)
 		d->changed_width = TRUE;
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -335,8 +231,6 @@ changed_width_percent (GtkWidget *w, GtkHTMLEditCellProperties *d)
 	d->width_percent = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
 	if (!d->disable_change)
 		d->changed_width = TRUE;
-	FILL;
-	CHANGE;	
 }
 
 static void
@@ -349,8 +243,6 @@ changed_height (GtkWidget *w, GtkHTMLEditCellProperties *d)
 		d->disable_change = FALSE;
 		d->changed_height = TRUE;
 	}
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -359,8 +251,6 @@ set_has_height (GtkWidget *check, GtkHTMLEditCellProperties *d)
 	d->has_height = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_height));
 	if (!d->disable_change)
 		d->changed_height = TRUE;
-	FILL;
-	CHANGE;
 }
 
 static void
@@ -369,8 +259,6 @@ changed_height_percent (GtkWidget *w, GtkHTMLEditCellProperties *d)
 	d->height_percent = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
 	if (!d->disable_change)
 		d->changed_height = TRUE;
-	FILL;
-	CHANGE;	
 }
 
 static void
@@ -379,8 +267,6 @@ changed_wrap (GtkWidget *w, GtkHTMLEditCellProperties *d)
 	d->wrap = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
 	if (!d->disable_change)
 		d->changed_wrap = TRUE;
-	FILL;
-	CHANGE;	
 }
 
 static void
@@ -389,16 +275,12 @@ changed_heading (GtkWidget *w, GtkHTMLEditCellProperties *d)
 	d->heading = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
 	if (!d->disable_change)
 		d->changed_heading = TRUE;
-	FILL;
-	CHANGE;	
 }
 
 static void
 changed_scope (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
 	d->scope = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w)));
-	FILL;
-	CHANGE;	
 }
 
 /*
@@ -480,8 +362,6 @@ cell_widget (GtkHTMLEditCellProperties *d)
 	g_signal_connect (d->spin_cspan, "value_changed", G_CALLBACK (changed_cspan), d);
 	g_signal_connect (d->spin_rspan, "value_changed", G_CALLBACK (changed_rspan), d);
 
-	gtk_box_pack_start_defaults (GTK_BOX (cell_page), sample_frame (&d->sample));
-
 	gtk_widget_show_all (cell_page);
 	gnome_pixmap_entry_set_preview (GNOME_PIXMAP_ENTRY (d->entry_bg_pixmap), FALSE);
 
@@ -519,8 +399,6 @@ set_ui (GtkHTMLEditCellProperties *d)
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_rspan),  d->rspan);
 
 	d->disable_change = FALSE;
-
-	FILL;
 }
 
 static void
