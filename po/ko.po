@@ -5,10 +5,10 @@
 # Changwoo Ryu <cwryu@debian.org>, 2004.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml 3.1\n"
+"Project-Id-Version: gtkhtml 3.2.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-09-23 20:14+0200\n"
-"PO-Revision-Date: 2004-07-26 06:24+0900\n"
+"PO-Revision-Date: 2004-10-06 13:00+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -882,7 +882,7 @@ msgstr "이모티콘(_S)"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:141
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:142
 msgid "_Spell Check Document..."
-msgstr "문서 맞춤법 검사(S)..."
+msgstr "문서 맞춤법 검사(_S)..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:142
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:143
