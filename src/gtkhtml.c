@@ -3399,8 +3399,12 @@ get_line_height (GtkHTML *html)
 
 	p = html->engine->painter;
 
-	return html_painter_calc_ascent (p, GTK_HTML_FONT_STYLE_SIZE_3, NULL)
-		+ html_painter_calc_descent (p, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
+	/* FIXME shall we use html_painter_calc_text_size now that these
+	 * are gone ?
+	 return html_painter_calc_ascent (p, GTK_HTML_FONT_STYLE_SIZE_3, NULL)
+	 + html_painter_calc_descent (p, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
+	*/
+	return 0;
 }
 
 static void

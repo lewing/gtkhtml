@@ -1,3 +1,9 @@
+2002-09-12  Bastien Nocera  <hadess@hadess.net>
+
+	* gtkhtml.c: (get_line_height): hack around use of
+	html_painter_calc_ascent and html_painter_calc_descent so that we're
+	able to compile it.
+
 2002-09-12  Radek Doulik  <rodo@ximian.com>
 
 	* htmlengine.c (parse_a): don't push color for links
