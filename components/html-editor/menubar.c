@@ -29,6 +29,7 @@
 
 #include <gnome.h>
 #include <bonobo.h>
+#include <gal/widgets/e-unicode.h>
 
 #include "e-html-utils.h"
 #include "menubar.h"
@@ -221,17 +222,22 @@ file_dialog_ok (GtkWidget *w, GtkHTMLControlData *cd)
 		if (!cd->file_html) {
 			gtk_html_write (tmp, stream, "<PRE>", 5);
 		}
-		while ((rb = read (fd, buffer, BUFFER_SIZE - (cd->file_html ? 0 : 1))) > 0) {
+		while ((rb = read (fd, buffer, BUFFER_SIZE - 1)) > 0) {
+			gchar *native;
+
+			buffer [rb] = 0;
+
+			native = e_utf8_from_gtk_string (GTK_WIDGET (cd->html), buffer);
 			if (cd->file_html) {
-				gtk_html_write (tmp, stream, buffer, rb);
+				gtk_html_write (tmp, stream, native, -1);
 			} else {
 				gchar *html;
 
-				buffer [rb] = 0;
-				html = e_text_to_html (buffer, E_TEXT_TO_HTML_CONVERT_SPACES);
-				gtk_html_write (tmp, stream, html, strlen (html));
+				html = e_text_to_html (native, E_TEXT_TO_HTML_CONVERT_SPACES);
+				gtk_html_write (tmp, stream, html, -1);
 				g_free (html);
 			}
+			g_free (native);
 		}
 		if (!cd->file_html) {
 			gtk_html_write (tmp, stream, "</PRE>", 6);
