@@ -556,7 +556,7 @@ set_cursor_at_end_of_object (HTMLEngine *e, HTMLObject *o, guint len)
 }
 
 static inline void
-insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check, HTMLUndoDirection dir)
+insert_object_do (HTMLEngine *e, HTMLObject *obj, guint *len, gboolean check, HTMLUndoDirection dir)
 {
 	HTMLObject *cur;
 	HTMLCursor *orig;
@@ -605,7 +605,7 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check, HTM
 	split_and_add_empty_texts (e, level, &left, &right);
 	first = html_object_heads_list (obj);
 	last  = html_object_tails_list (obj);
-	set_cursor_at_end_of_object (e, obj, len);
+	set_cursor_at_end_of_object (e, obj, *len);
 
 	if ((left && left->data) || (right && (right->data))) {
 		HTMLObject *parent, *where;
@@ -625,9 +625,12 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check, HTM
 	printf ("position before merge %d\n", e->cursor->position);
 	remove_empty_and_merge (e, TRUE, last, right, orig);
 	remove_empty_and_merge (e, TRUE, left, first, orig);
+	printf ("position after merge %d\n", e->cursor->position);
 
-	/* if (check)
-	   html_engine_spell_check_range (e, orig, e->cursor); */
+	*len = e->cursor->position - orig->position;
+
+	if (check)
+		html_engine_spell_check_range (e, orig, e->cursor);
 	html_cursor_destroy (orig);
 	html_engine_thaw (e);
 }
@@ -676,7 +679,7 @@ insert_object (HTMLEngine *e, HTMLObject *obj, guint len, HTMLUndoDirection dir,
 	/* if (HTML_IS_TABLE (obj))
 		append_object (e, obj, len, dir);
 		else if (len > 0) */ {
-		insert_object_do (e, obj, len, check, dir);
+		insert_object_do (e, obj, &len, check, dir);
 		insert_setup_undo (e, len, dir);
 	}
 }
