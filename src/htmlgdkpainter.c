@@ -791,7 +791,7 @@ draw_lines (PangoGlyphString *str, gint x, gint y, GdkDrawable *drawable, GdkGC 
 }
 
 static gint
-draw_glyphs (HTMLPainter *painter, gint x, gint y, PangoItem *item, PangoGlyphString *glyphs)
+draw_glyphs (HTMLPainter *painter, gint x, gint y, PangoItem *item, PangoGlyphString *glyphs, GdkColor *fg, GdkColor *bg)
 {
 	HTMLGdkPainter *gdk_painter;
 	guint i;
@@ -807,9 +807,21 @@ draw_glyphs (HTMLPainter *painter, gint x, gint y, PangoItem *item, PangoGlyphSt
 	bg_gc = NULL;
 	gc = item_gc (painter, item, gdk_painter->pixmap, painter->widget->style->text_gc [painter->widget->state],
 		      &properties, &bg_gc);
+
+	if (fg)
+		gdk_gc_set_rgb_fg_color (gc, fg);
+	if (bg) {
+		if (!bg_gc) {
+			bg_gc = gdk_gc_new (gdk_painter->pixmap);
+			//gdk_gc_copy (bg_gc, gdk_painter->gc);
+			gdk_gc_copy (bg_gc, painter->widget->style->text_gc [painter->widget->state]);
+		}
+		gdk_gc_set_rgb_fg_color (bg_gc, bg);
+	}
+
 	if (bg_gc) {
 		PangoRectangle log_rect;
-		
+
 		pango_glyph_string_extents (glyphs, item->analysis.font, NULL, &log_rect);
 		gdk_draw_rectangle (gdk_painter->pixmap, bg_gc, TRUE, x, y - PANGO_PIXELS (PANGO_ASCENT (log_rect)),
 				    PANGO_PIXELS (log_rect.width), PANGO_PIXELS (log_rect.height));

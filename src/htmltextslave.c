@@ -794,12 +794,14 @@ draw_normal (HTMLTextSlave *self,
 		}
 	}
 
+	printf ("draw_normal %d %d %d\n", selection_bg.red, selection_bg.green, selection_bg.blue);
+
 	run_width = 0;
 	for (cur = html_text_slave_get_glyph_items (self, p); cur; cur = cur->next) {
 		HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) cur->data;
 		int cur_width;
 
-		cur_width = html_painter_draw_glyphs (p, obj->x + tx + run_width, obj->y + ty + get_ys (text, p), gi->glyph_item.item, gi->glyph_item.glyphs);
+		cur_width = html_painter_draw_glyphs (p, obj->x + tx + run_width, obj->y + ty + get_ys (text, p), gi->glyph_item.item, gi->glyph_item.glyphs, NULL, NULL);
 
 		if (selection) {
 			isect_start = MAX (gi->glyph_item.item->offset, selection_start_index);
@@ -811,6 +813,7 @@ draw_normal (HTMLTextSlave *self,
 			if (isect_start < isect_end) {
 				PangoRectangle log_rect;
 				int start_x, end_x;
+				int cx, cy, cw, ch;
 		
 				pango_glyph_string_index_to_x (gi->glyph_item.glyphs,
 							       text->text + gi->glyph_item.item->offset,
@@ -835,15 +838,23 @@ draw_normal (HTMLTextSlave *self,
 					html_painter_pango_to_engine (p, start_x < end_x ? (end_x - start_x) : (start_x - end_x)),
 					html_painter_pango_to_engine (p, log_rect.width));
 
-				html_painter_set_pen (p, &selection_bg);
+				/*html_painter_set_pen (p, &selection_bg);
 				html_painter_fill_rect (p,
 							obj->x + tx + run_width + html_painter_pango_to_engine (p, MIN (start_x, end_x)),
 							obj->y + ty + get_ys (text, p) - html_painter_pango_to_engine (p, PANGO_ASCENT (log_rect)),
 							html_painter_pango_to_engine (p, start_x < end_x ? (end_x - start_x) : (start_x - end_x)),
 							html_painter_pango_to_engine (p, log_rect.height));
-
-				html_painter_set_pen (p, &selection_fg);
-				html_painter_draw_glyphs (p, obj->x + tx + run_width, obj->y + ty + get_ys (text, p), gi->glyph_item.item, gi->glyph_item.glyphs);
+				*/
+				html_painter_get_clip_rectangle (p, &cx, &cy, &cw, &ch);
+				html_painter_set_clip_rectangle (p,
+							obj->x + tx + run_width + html_painter_pango_to_engine (p, MIN (start_x, end_x)),
+							obj->y + ty + get_ys (text, p) - html_painter_pango_to_engine (p, PANGO_ASCENT (log_rect)),
+							html_painter_pango_to_engine (p, start_x < end_x ? (end_x - start_x) : (start_x - end_x)),
+							html_painter_pango_to_engine (p, log_rect.height));
+			
+				html_painter_draw_glyphs (p, obj->x + tx + run_width, obj->y + ty + get_ys (text, p), gi->glyph_item.item, gi->glyph_item.glyphs,
+							  &selection_fg, &selection_bg);
+				html_painter_set_clip_rectangle (p, cx, cy, cw, ch);
 			}
 		}
 
@@ -928,7 +939,7 @@ draw (HTMLObject *o,
 
 	end = slave->posStart + slave->posLen;
 	draw_normal (slave, p, font_style, x, y, width, height, tx, ty);
-	
+
 	if (owner->spell_errors)
 		draw_spell_errors (slave, p, tx ,ty);
 	

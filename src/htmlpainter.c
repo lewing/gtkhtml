@@ -116,6 +116,7 @@ html_painter_init (GObject *object, HTMLPainterClass *real_klass)
 	painter->font_style = GTK_HTML_FONT_STYLE_DEFAULT;
 	painter->font_face = NULL;
 	painter->widget = NULL;
+	painter->clip_width = painter->clip_height = 0;
 }
 
 static void
@@ -615,7 +616,7 @@ html_painter_draw_entries (HTMLPainter *painter, gint x, gint y,
 			
 			tab = memchr (c_text + 1, (unsigned char) '\t', bytes - 1);
 		} else {
-			x += (* HP_CLASS (painter)->draw_glyphs) (painter, x, y, item, gl->data);
+			x += (* HP_CLASS (painter)->draw_glyphs) (painter, x, y, item, gl->data, NULL, NULL);
 
 			if (line_offset != -1)
 				line_offset += g_utf8_pointer_to_offset (c_text, next);
@@ -629,9 +630,9 @@ html_painter_draw_entries (HTMLPainter *painter, gint x, gint y,
 }
 
 int
-html_painter_draw_glyphs (HTMLPainter *painter, int x, int y, PangoItem *item, PangoGlyphString *glyphs)
+html_painter_draw_glyphs (HTMLPainter *painter, int x, int y, PangoItem *item, PangoGlyphString *glyphs, GdkColor *fg, GdkColor *bg)
 {
-	return (* HP_CLASS (painter)->draw_glyphs) (painter, x, y, item, glyphs);
+	return (* HP_CLASS (painter)->draw_glyphs) (painter, x, y, item, glyphs, fg, bg);
 }
 
 /**
@@ -771,7 +772,25 @@ html_painter_set_clip_rectangle (HTMLPainter *painter,
 	g_return_if_fail (painter != NULL);
 	g_return_if_fail (HTML_IS_PAINTER (painter));
 
+	painter->clip_x = x;
+	painter->clip_y = y;
+	painter->clip_width = width;
+	painter->clip_height = height;
+
+	printf ("clip rect: %d,%d %dx%d\n", x, y, width, height);
+
 	(* HP_CLASS (painter)->set_clip_rectangle) (painter, x, y, width, height);
+}
+
+void
+html_painter_get_clip_rectangle (HTMLPainter *painter,
+				 gint *x, gint *y,
+				 gint *width, gint *height)
+{
+	*x = painter->clip_x;
+	*y = painter->clip_y;
+	*width = painter->clip_width;
+	*height = painter->clip_height;
 }
 
 /* Passing 0 for pix_width / pix_height makes it use the image width */
