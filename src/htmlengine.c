@@ -164,6 +164,8 @@ enum {
 static guint signals [LAST_SIGNAL] = { 0 };
 
 #define TIMER_INTERVAL 300
+#define DT(x) ;
+#define DF(x) x
 
 typedef enum {
 	ID_A,       ID_ADDRESS,  ID_B,      ID_BIG,    ID_BLOCKQUOTE, 
@@ -173,7 +175,7 @@ typedef enum {
 	ID_PRE,     ID_SMALL,    ID_SPAN,   ID_STRONG, ID_U,
 	ID_UL,      ID_TEXTAREA, ID_TABLE,  ID_TD,     ID_TH, 
 	ID_TR,      ID_TT,       ID_VAR,    ID_S,      ID_SUB, 
-	ID_SUP,     ID_STRIKE
+	ID_SUP,     ID_STRIKE,   ID_HTML
 } HTMLElementID;
 
 
@@ -336,10 +338,15 @@ current_row_valign (HTMLEngine *e)
 	GList *item;
 	HTMLVAlignType rv = HTML_VALIGN_MIDDLE;
 
+	if (!html_stack_top (e->table_stack)) {
+		DT (g_warning ("missing table");)
+		return;
+	}
+
 	for (item = e->span_stack->list; item; item = item->next) {
 		span = item->data;
 		if (span->id == ID_TR) {
-			g_warning ("found row");
+			DT(g_warning ("found row");)
 
 			if (span->style)
 				rv = span->style->text_valign;
@@ -348,7 +355,7 @@ current_row_valign (HTMLEngine *e)
 		}
 
 		if (span->id == ID_TABLE) {
-			g_warning ("found table before row");
+			DT(g_warning ("found table before row");)
 			//break;
 		}
 	}
@@ -356,8 +363,6 @@ current_row_valign (HTMLEngine *e)
 	if (span->id != ID_TR)
 		g_warning ("no row");
 
-	if (rv == HTML_VALIGN_BOTTOM)
-		g_warning ("found bottom");
 
 	return rv;
 }
@@ -366,6 +371,8 @@ current_row_valign (HTMLEngine *e)
 static HTMLFontFace *
 current_font_face (HTMLEngine *e)
 {
+
+
 	HTMLElement *span;
 	GList *item;
 	
@@ -3305,7 +3312,7 @@ block_end_table (HTMLEngine *e, HTMLObject *clue, HTMLBlockStackElement *elem)
 
         if (table) { 
 		if (table->col == 0 && table->row == 0) {
-			printf ("deleting empty table %p\n", table);
+			DT(printf ("deleting empty table %p\n", table);)
 			html_object_destroy (HTML_OBJECT (table));
 			return;
 		}
@@ -3313,7 +3320,7 @@ block_end_table (HTMLEngine *e, HTMLObject *clue, HTMLBlockStackElement *elem)
 		if (align != HTML_HALIGN_LEFT && align != HTML_HALIGN_RIGHT) {
 		        finish_flow (e, clue);
 
-			printf ("unaligned table(%p)\n", table);
+			DT(printf ("unaligned table(%p)\n", table);)
 			append_element (e, clue, HTML_OBJECT (table));
 
 			if (align != HTML_HALIGN_NONE && e->flow)
@@ -3324,7 +3331,7 @@ block_end_table (HTMLEngine *e, HTMLObject *clue, HTMLBlockStackElement *elem)
 			HTMLClueAligned *aligned = HTML_CLUEALIGNED (html_cluealigned_new (NULL, 0, 0, clue->max_width, 100));
 			HTML_CLUE (aligned)->halign = align;
 
-			printf ("ALIGNED table(%p)\n", table);
+			DT(printf ("ALIGNED table(%p)\n", table);)
 
 			html_clue_append (HTML_CLUE (aligned), HTML_OBJECT (table));
 			append_element (e, clue, HTML_OBJECT (aligned));
@@ -3362,9 +3369,9 @@ block_ensure_row (HTMLEngine *e)
 	for (item = e->span_stack->list; item; item = item->next) {
 		span = item->data;
 
-		printf ("%d:", span->id);
+		DT(printf ("%d:", span->id);)
 		if (span->id == ID_TR) {
-			printf ("no ensure row\n");
+			DT(printf ("no ensure row\n");)
 			return;
 		}
 
@@ -3375,6 +3382,29 @@ block_ensure_row (HTMLEngine *e)
 	
 	html_table_start_row (table);
 	push_block_element (e, ID_TR, NULL, 3, block_end_row, 0, 0);
+}
+
+static void
+close_current_table (HTMLEngine *e)
+{
+	HTMLElement *span;
+	GList *item;
+	
+	for (item = e->span_stack->list; item; item = item->next) {
+		span = item->data;
+		
+		DT(printf ("%d:", span->id);)
+		if (span->id == ID_TABLE)
+			break;
+
+		if (span->id == ID_TH || span->id == ID_TD) {
+			DT(printf ("found cell\n");)
+			return;
+		}
+	}
+
+	DT(printf ("pop_table\n");)
+	pop_block (e, ID_TABLE);
 }
 
 static void
@@ -3395,7 +3425,8 @@ parse_t (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 		gint border = 0;
 
 		close_anchor (e);
-		
+		close_current_table (e);
+
 		html_string_tokenizer_tokenize (e->st, str + 5, " >");
 		while (html_string_tokenizer_has_more_tokens (e->st)) {
 			const gchar *token = html_string_tokenizer_next_token (e->st);
@@ -4591,10 +4622,12 @@ html_engine_begin (HTMLEngine *e, char *content_type)
 	e->newPage = TRUE;
 	clear_selection (e);
 
-	html_engine_thaw_idle_reset (e);
+	html_engine_thaw_idle_flush (e);
 
 	g_slist_free (e->cursor_position_stack);
 	e->cursor_position_stack = NULL;
+
+	push_block_element (e, ID_HTML, NULL, 10, NULL, 0, 0);
 
 	return new_stream;
 }
@@ -4688,7 +4721,7 @@ update_embedded (GtkWidget *widget, gpointer data)
 static gboolean
 html_engine_update_event (HTMLEngine *e)
 {
-	/* printf ("html_engine_update_event\n"); */
+	printf ("html_engine_update_event\n");
 
 	e->updateTimer = 0;
 
@@ -4884,6 +4917,7 @@ html_engine_stream_end (GtkHTMLStream *stream,
 
 	e->writing = FALSE;
 
+	pop_block (e, ID_HTML);
 	html_tokenizer_end (e->ht);
 	while (html_engine_timer_event (e))
 		;
@@ -5526,7 +5560,7 @@ html_engine_freeze (HTMLEngine *engine)
 	g_return_if_fail (HTML_IS_ENGINE (engine));
 
 	html_engine_flush_draw_queue (engine);
-	/* printf ("html_engine_freeze %d\n", engine->freeze_count); */
+	DF (printf ("html_engine_freeze %d\n", engine->freeze_count); fflush (stdout));
 
 	html_engine_hide_cursor (engine);
 	engine->freeze_count++;
@@ -5684,7 +5718,7 @@ thaw_idle (gpointer data)
 	gboolean redraw_whole;
 	gint w, h;
 
-	/* printf ("thaw_idle\n"); */
+	DF (printf ("thaw_idle %d\n", e->freeze_count); fflush (stdout));
 
 #ifdef CHECK_CURSOR
 	check_cursor (e);
@@ -5693,7 +5727,7 @@ thaw_idle (gpointer data)
 	e->thaw_idle_id = 0;
 	if (e->freeze_count != 1) {
 		/* we have been frozen again meanwhile */
-		/* printf ("frozen again meanwhile\n"); */
+		DF (printf ("frozen again meanwhile\n"); fflush (stdout);)
 		html_engine_show_cursor (e);
 
 		return FALSE;
@@ -5754,6 +5788,7 @@ html_engine_thaw (HTMLEngine *engine)
 
 	if (engine->freeze_count == 1) {
 		if (engine->thaw_idle_id == 0) {
+			DF (printf ("queueing thaw_idle %d\n", engine->freeze_count);)
 			engine->thaw_idle_id = gtk_idle_add (thaw_idle, engine);
 		}
 	} else {
@@ -5761,18 +5796,16 @@ html_engine_thaw (HTMLEngine *engine)
 		html_engine_show_cursor (engine);
 	}
 
-	/* printf ("html_engine_thaw %d\n", engine->freeze_count); */
+	DF (printf ("html_engine_thaw %d\n", engine->freeze_count);)
 }
 
 void
-html_engine_thaw_idle_reset (HTMLEngine *e)
+html_engine_thaw_idle_flush (HTMLEngine *e)
 {
-	if (e->thaw_idle_id) {
-		gtk_idle_remove (e->thaw_idle_id);
-		e->thaw_idle_id = 0;
-		html_engine_show_cursor (e);
-	}
-	gtk_html_private_calc_scrollbars (e->widget, NULL, NULL);
+	DF (printf ("html_engine_thaw_idle_flush\n");fflush (stdout);)
+
+	if (e->thaw_idle_id) 
+		thaw_idle (e);
 }
 
 
