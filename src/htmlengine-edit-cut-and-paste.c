@@ -914,7 +914,10 @@ append_object (HTMLEngine *e, HTMLObject *o, guint len, HTMLUndoDirection dir)
 	html_engine_freeze (e);
 	if (!html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
 		insert_empty_paragraph (e, dir);
-		if (!html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
+		if (e->cursor->object->parent->prev
+		    && html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent->prev))) {
+			html_cursor_backward (e->cursor, e);
+		} else if (!html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
 			insert_empty_paragraph (e, dir);
 			html_cursor_backward (e->cursor, e);
 		}
@@ -939,59 +942,12 @@ append_object (HTMLEngine *e, HTMLObject *o, guint len, HTMLUndoDirection dir)
 	insert_setup_undo (e, len, dir);
 
 	return;
-
-	if (html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
-		HTMLObject *c, *cn;
-		HTMLClue *clue = HTML_CLUE (e->cursor->object->parent);
-		for (c = clue->head; c; c = cn) {
-			cn = c->next;
-			html_object_destroy (c);
-		}
-		clue->head = clue->tail = o;
-		e->cursor->object = o;
-		e->cursor->offset = 0;
-		o->parent = HTML_OBJECT (clue);
-	} else {
-		HTMLObject *flow;
-
-		flow  = html_clueflow_new (HTML_CLUEFLOW_STYLE_NORMAL, 0, HTML_LIST_TYPE_UNORDERED, 1);
-		html_clue_append (HTML_CLUE (flow), o);
-
-		html_object_split (e->cursor->object, e, NULL, e->cursor->offset, 2, &left, &right);
-		len += 2;
-		back = 1;
-
-		where = HTML_OBJECT (left->data);
-		html_clue_append_after (HTML_CLUE (where->parent), flow, where);
-
-		if (html_clueflow_is_empty (HTML_CLUEFLOW (where))) {
-			html_cursor_forward (e->cursor, e);
-			html_clue_remove (HTML_CLUE (where->parent), where);
-			html_object_destroy (where);
-			len --;
-			e->cursor->position --;
-		}
-		if (html_clueflow_is_empty (HTML_CLUEFLOW (HTML_OBJECT (flow)->next))) {
-			HTMLObject *empty;
-
-			empty = HTML_OBJECT (flow)->next;
-			html_clue_remove (HTML_CLUE (empty->parent), empty);
-			html_object_destroy (empty);
-			len --;
-			back = 0;
-		}
-	}
-
-	html_cursor_forward_n (e->cursor, e, len);
-	html_object_change_set (o, HTML_CHANGE_ALL_CALC);
-	html_engine_thaw (e);
-
-	insert_setup_undo (e, len, dir);
-	html_cursor_backward_n (e->cursor, e, back);
 }
 
 void
 html_engine_append_object (HTMLEngine *e, HTMLObject *o, guint len)
 {
+	html_undo_level_begin (e->undo, "Append object", "Remove appended object");
 	append_object (e, o, len, HTML_UNDO_UNDO);
+	html_undo_level_end (e->undo);
 }
