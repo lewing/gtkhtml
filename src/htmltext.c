@@ -959,16 +959,15 @@ html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, gint offset, g
 	gint wl = 0;
 	gint ww = 0;
 
-	while (html_text_pi_backward (pi, &ii, &io)) {
+	if (html_text_pi_backward (pi, &ii, &io)) {
 		if (pi->entries [ii].attrs [io].is_white) {
 			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
 				ww += PANGO_PIXELS (pi->entries [ii].widths [io]);
 			wl ++;
-		} else
-			break;
+		}
 	}
 
-	if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter))
+	if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter) && wl)
 		html_painter_calc_text_size (painter, html_text_get_text (text, offset - wl),
 					     wl, NULL, NULL, 0, NULL, html_text_get_font_style (text), text->face,
 					     &ww, NULL, NULL);
