@@ -1,3 +1,13 @@
+2002-05-14  Larry Ewing  <lewing@ximian.com>
+
+	* htmlclueflow.c (write_flow_tag): fix prev calc, rework <br>
+	output.
+	(save2): fix prev calc.
+	(html_clueflow_set_item_type): set the toplevel type to match the
+	new setting.
+	(html_clueflow_modify_indentation_by_delta): always update the
+	indentation.
+
 2002-05-10  Larry Ewing  <lewing@ximian.com>
 
 	* htmlclueflow.c (get_tag): remove unused function.

@@ -1630,7 +1630,7 @@ write_flow_tag (HTMLClueFlow *self, HTMLEngineSaveState *state)
 	if (HTML_IS_CLUEFLOW (HTML_OBJECT (self)->next))
 		next = HTML_CLUEFLOW (HTML_OBJECT (self)->next);
 	    
-	if (HTML_IS_CLUEFLOW (HTML_OBJECT (self)->next))
+	if (HTML_IS_CLUEFLOW (HTML_OBJECT (self)->prev))
 		prev = HTML_CLUEFLOW (HTML_OBJECT (self)->prev);
 
 	d = get_similar_depth (self, prev);
@@ -1642,13 +1642,8 @@ write_flow_tag (HTMLClueFlow *self, HTMLEngineSaveState *state)
 			return FALSE;
 		}
 	} else if (is_levels_equal (self, prev) && prev->style == self->style) {
-		if (self->style != HTML_CLUEFLOW_STYLE_PRE) {
-			if (!save_indent_string (self, state, "<BR>\n"))
-				return FALSE;
-
-			if (!save_indent_string (self, state, ""))
-				return FALSE;
-		}
+		if (!save_indent_string (self, state, ""))
+			return FALSE;
 	} else {
 		char *start = get_start_tag (self);
 
@@ -1680,17 +1675,27 @@ write_flow_tag (HTMLClueFlow *self, HTMLEngineSaveState *state)
 			return FALSE;
 	}
 
-	if (!html_engine_save_output_string (state, "\n"))
-		return FALSE;
-
-	d = get_similar_depth (self, next);
-	if (!is_item (self) && !is_levels_equal (self, next)) {
+	if (is_item (self)) {
+		if (!html_engine_save_output_string (state, "\n"))
+			return FALSE;
+	} else if (is_levels_equal (self, next) && self->style == next->style) {
+		if (self->style != HTML_CLUEFLOW_STYLE_PRE) {
+			if (!html_engine_save_output_string (state, "<BR>\n"))
+				return FALSE;
+		} else {
+			if (!html_engine_save_output_string (state, "\n"))
+				return FALSE;
+		}
+	} else {
 		char *end = get_start_tag (self);
 
 		if (end) {
-			if (!save_indent_string (self, state, "</%s>\n", end))
+			if (!html_engine_save_output_string (state, "</%s>\n", end))
 				return FALSE;
-		} 
+		} else { 
+			if (!html_engine_save_output_string (state, "\n"))
+				return FALSE;
+		}
 	}
 	
 	return TRUE;
@@ -1709,7 +1714,7 @@ save2 (HTMLObject *s,
 	if (HTML_IS_CLUEFLOW (HTML_OBJECT (self)->next))
 		next = HTML_CLUEFLOW (HTML_OBJECT (self)->next);
 	    
-	if (HTML_IS_CLUEFLOW (HTML_OBJECT (self)->next))
+	if (HTML_IS_CLUEFLOW (HTML_OBJECT (self)->prev))
 		prev = HTML_CLUEFLOW (HTML_OBJECT (self)->prev);
 
 	d = i = get_similar_depth (self, prev);
@@ -2444,6 +2449,9 @@ html_clueflow_set_item_type (HTMLClueFlow *flow,
 	html_object_change_set (HTML_OBJECT (flow), HTML_CHANGE_ALL);
 	flow->item_type = item_type;
 
+	if (flow->levels->len)
+		flow->levels->data[flow->levels->len - 1] = item_type;
+
 	update_item_number (HTML_OBJECT (flow));
 	if (!items_are_relative (HTML_OBJECT (flow), HTML_OBJECT (flow)->next) && HTML_OBJECT (flow)->next)
 		update_item_number (HTML_OBJECT (flow)->next);
@@ -2517,9 +2525,6 @@ html_clueflow_modify_indentation_by_delta (HTMLClueFlow *flow,
 	g_return_if_fail (flow != NULL);
 	g_return_if_fail (engine != NULL);
 	g_return_if_fail (HTML_IS_ENGINE (engine));
-
-	if (indentation_delta == 0)
-		return;
 
 	html_clueflow_set_indentation (flow, engine, flow->levels->len + indentation_delta);
 }
