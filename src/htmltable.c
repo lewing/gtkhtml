@@ -978,7 +978,7 @@ html_table_set_cells_position (HTMLTable *table, HTMLPainter *painter)
 				HTML_OBJECT (cell)->x = COLUMN_OPT (table, c) + pixel_size * border_extra;
 				HTML_OBJECT (cell)->y = ROW_HEIGHT (table, rl) + pixel_size * (- table->spacing)
 					- HTML_OBJECT (cell)->descent;
-				html_object_set_max_ascent (HTML_OBJECT (cell), painter,
+				html_object_set_max_height (HTML_OBJECT (cell), painter,
 							    ROW_HEIGHT (table, rl) - ROW_HEIGHT (table, cell->row)
 							    - pixel_size * (table->spacing + border_extra));
 			}
