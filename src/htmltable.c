@@ -166,19 +166,25 @@ op_copy (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, guint *len)
 		for (c = 0; c < cols; c++) {
 			HTMLTableCell *cell = t->cells [start->row + r][c + start_col];
 
-			if (!cell || (r == 0 && c < start_col) || (r == rows - 1 && c > end->col - start_col))
+			if (!cell || (end->row != start->row
+				      && ((r == 0 && c < start_col) || (r == rows - 1 && c > end->col))))
 				continue;
-			if (cell->row == r + start->row && cell->col == c + start_col)
-				set_cell (nt, r, c, HTML_TABLE_CELL
-					  (html_object_op_copy (HTML_OBJECT (cell), e,
-								html_object_get_bound_list (HTML_OBJECT (cell), from),
-								html_object_get_bound_list (HTML_OBJECT (cell), to), len)));
-			else
+			if (cell->row == r + start->row && cell->col == c + start_col) {
+				HTMLTableCell *cell_copy;
+				cell_copy = HTML_TABLE_CELL
+					(html_object_op_copy (HTML_OBJECT (cell), e,
+							      html_object_get_bound_list (HTML_OBJECT (cell), from),
+							      html_object_get_bound_list (HTML_OBJECT (cell), to), len));
+				set_cell (nt, r, c, cell_copy);
+				html_table_cell_set_position (cell_copy, r, c);
+			} else
 				nt->cells [r][c] = nt->cells [cell->row - start->row][cell->col - start_col];
 		}
 
 	if (end->col - start_col < cols - 1)
 		do_cspan (nt, nt->totalRows - 1, end->col - start_col, nt->cells [nt->totalRows - 1][end->col - start_col]);
+
+	(*len) += 2;
 
 	return HTML_OBJECT (nt);
 }

@@ -330,6 +330,7 @@ html_engine_copy (HTMLEngine *e)
 		e->clipboard_len = 0;
 		e->clipboard     = html_object_op_copy (HTML_OBJECT (from->data), e, from->next, to->next,
 							&e->clipboard_len);
+		printf ("copy len: %d\n", e->clipboard_len);
 		gtk_html_debug_dump_tree_simple (e->clipboard, 0);
 		html_engine_thaw (e);
 	}
