@@ -1,7 +1,16 @@
 2002-05-07  Larry Ewing  <lewing@ximian.com>
 
+	* test-html-editor-control.c (save_through_persist_stream): use a
+	reasonable mode and truncate existing files.  
+	(save_through_plain_persist_stream): truncate existing stream. Wow
+	yet another way in which bonobo sucks.
+
+	* GNOME_GtkHTML_Editor.oaf.in: add Editor interface to the oaf
+	list.
+
 	* test-html-editor-control.c (save_through_plain_persist_stream):
 	give a reasonable mode for the new file.
+	add missing includes.
 
 2002-05-01  Larry Ewing  <lewing@ximian.com>
 

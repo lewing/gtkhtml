@@ -86,8 +86,8 @@ save_through_persist_stream (const gchar *filename,
 
 	stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
 				     Bonobo_Storage_WRITE |
-				     Bonobo_Storage_CREATE |
-				     Bonobo_Storage_FAILIFEXIST, 0);
+				     Bonobo_Storage_CREATE,
+				     S_IRUSR | S_IWUSR);
 
 	if (stream == NULL) {
 		g_warning ("Couldn't create `%s'\n", filename);
@@ -97,6 +97,7 @@ save_through_persist_stream (const gchar *filename,
 
 		stream_object = BONOBO_OBJECT (stream);
 		corba_stream = bonobo_object_corba_objref (stream_object);
+		Bonobo_Stream_truncate (corba_stream, 0, &ev);
 		Bonobo_PersistStream_save (pstream, corba_stream,
 					   "text/html", &ev);
 	}
@@ -119,8 +120,7 @@ save_through_plain_persist_stream (const gchar *filename,
 	stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
 				     Bonobo_Storage_READ | 
 				     Bonobo_Storage_WRITE |
-				     Bonobo_Storage_CREATE |
-				     Bonobo_Storage_FAILIFEXIST, S_IRUSR | S_IWUSR);
+				     Bonobo_Storage_CREATE, S_IRUSR | S_IWUSR);
 
 	if (stream == NULL) {
 		g_warning ("Couldn't create `%s'\n", filename);
@@ -130,6 +130,7 @@ save_through_plain_persist_stream (const gchar *filename,
 
 		stream_object = BONOBO_OBJECT (stream);
 		corba_stream = bonobo_object_corba_objref (stream_object);
+		Bonobo_Stream_truncate (corba_stream, 0, &ev);
 		Bonobo_PersistStream_save (pstream, corba_stream,
 					   "text/plain", &ev);
 	}
