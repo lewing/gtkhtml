@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sk\n"
-"POT-Creation-Date: 2002-05-31 09:21+0200\n"
+"POT-Creation-Date: 2002-06-13 11:41-0500\n"
 "PO-Revision-Date: 2002-05-31 09:22+0200\n"
 "Last-Translator: Stanislav Višňovský <visnovsky@nenya.ms.mff.cuni.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -1339,4 +1339,3 @@ msgstr "U_kážka pred tlačou"
 #: src/testgtkhtml.c:112
 msgid "Print preview"
 msgstr "Ukážka pred tlačou"
-
