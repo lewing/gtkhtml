@@ -9,14 +9,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2003-09-25 18:00+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-09-28 22:03+0200\n"
 "PO-Revision-Date: 2003-05-09 00:59+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -982,11 +982,12 @@ msgstr "Prostokąty"
 
 #. string marked for translations is sample text. you may want to translate it to common sample text in your language
 #: components/html-editor/body.c:123
-#, fuzzy
 msgid ""
 "The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a href="
 "\"mailto:dog\">dog</a>."
-msgstr "Pchnąć w tę łódź jeża lub ośm skrzyń fig."
+msgstr ""
+"Pchnąć w tę łódź <a href=\"mailto:jeż\">jeża</a> lub ośm skrzyń <a href="
+"\"mailto:fig\">fig</a>."
 
 #: components/html-editor/body.c:276 src/gtkhtml.c:2555
 msgid "Document Title"
@@ -1434,9 +1435,8 @@ msgstr "Wstaw: plik tekstowy"
 
 #. string marked for translations is sample text. you may want to translate it to common sample text in your language
 #: components/html-editor/paragraph.c:62
-#, fuzzy
 msgid "The quick brown fox jumps over the lazy dog.</div>"
-msgstr "Pchnąć w tę łódź jeża lub ośm skrzyń fig."
+msgstr "Pchnąć w tę łódź jeża lub ośm skrzyń fig.</div>"
 
 #: components/html-editor/paragraph.c:131
 msgid "Pre"
@@ -1572,13 +1572,12 @@ msgid "Cell contents"
 msgstr "Zawartość komórki"
 
 #: components/html-editor/popup.c:539
-#, fuzzy
 msgid "Check Word Spelling..."
-msgstr "Sprawdź pisownię \"%s\"..."
+msgstr "Sprawdź pisownię..."
 
 #: components/html-editor/popup.c:544
 msgid "Add Word to"
-msgstr ""
+msgstr "Dodaj słowo do"
 
 #: components/html-editor/popup.c:548
 #, c-format
@@ -1586,18 +1585,16 @@ msgid "%s Dictionary"
 msgstr "Słownik %s"
 
 #: components/html-editor/popup.c:557
-#, fuzzy
 msgid "Add Word to Dictionary"
-msgstr "Słownik %s"
+msgstr "Dodaj słowo do słownika"
 
 #: components/html-editor/popup.c:560
-#, fuzzy
 msgid "Ignore Misspelled Word"
-msgstr "Nie odnaleziono niepoprawnie zapisanych słów"
+msgstr "Ignoruj źle wpisane słowa"
 
 #: components/html-editor/popup.c:563
 msgid "Input Methods"
-msgstr ""
+msgstr "Metoda wprowadzania"
 
 #: components/html-editor/replace.c:75
 msgid "Replace confirmation"
@@ -1651,15 +1648,11 @@ msgstr "_Wstecz"
 msgid "Find Regular Expression"
 msgstr "Wyszukiwanie według wyrażenia regularnego"
 
-#: components/html-editor/spell.c:278
-msgid "No misspelled word found"
-msgstr "Nie odnaleziono niepoprawnie zapisanych słów"
-
-#: components/html-editor/spell.c:285
+#: components/html-editor/spell.c:277
 msgid "Spell checker"
 msgstr "Sprawdzanie pisowni"
 
-#: components/html-editor/spell.c:378
+#: components/html-editor/spell.c:366
 msgid "Current _Languages"
 msgstr "Aktualne ję_zyki"
 
@@ -1693,7 +1686,7 @@ msgstr "Ramka obrazu"
 
 #: components/html-editor/template.c:281
 msgid "Labels"
-msgstr ""
+msgstr "Etykiety"
 
 #: components/html-editor/test-html-editor-control.c:317
 msgid "Open file..."
@@ -1916,6 +1909,9 @@ msgstr "Podgląd wydruku"
 #: src/testgtkhtml.c:973
 msgid "GtkHTML Test Application"
 msgstr "Aplikacja testowa GtkHTML"
+
+#~ msgid "No misspelled word found"
+#~ msgstr "Nie odnaleziono niepoprawnie zapisanych słów"
 
 #~ msgid "The quick brown fox jumped over the lazy dog."
 #~ msgstr "Pchnąć w tę łódź jeża lub ośm skrzyń fig."
