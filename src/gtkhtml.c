@@ -135,7 +135,8 @@ static gchar *  get_value_nick         (GtkHTMLCommandType com_type);
 
 /* Values for selection information.  FIXME: what about COMPOUND_STRING and
    TEXT?  */
-enum _TargetInfo {  
+enum _TargetInfo {
+	TARGET_HTML,
 	TARGET_UTF8_STRING,
 	TARGET_UTF8,
 	TARGET_COMPOUND_TEXT,
@@ -1567,31 +1568,21 @@ selection_get (GtkWidget        *widget,
 	GtkHTML *html;
 	gchar *selection_string = NULL;
 	gchar *localized_string = NULL;
+	HTMLObject *selection_object = NULL;
+	guint selection_object_len = 0;
 
 	g_return_if_fail (widget != NULL);
 	g_return_if_fail (GTK_IS_HTML (widget));
 	
 	html = GTK_HTML (widget);
-	if (selection_data->selection == GDK_SELECTION_PRIMARY)
-	  {
-		  if (html->priv->primary) {
-			  selection_string =  html_object_get_selection_string (html->priv->primary, html->engine);
-			  html_object_destroy (html->priv->primary);
-			  html->priv->primary = NULL;
-		  } else {
-			  selection_string = html_engine_get_selection_string (html->engine);
-		  }
-		  if (selection_string)
-			  g_print("primary paste: `%s'\n", selection_string);
-	  }
-	else	/* CLIPBOARD */
-	  {
+	if (selection_data->selection == GDK_SELECTION_PRIMARY) {
+		html_engine_copy_object (html->engine, &selection_object, &selection_object_len);
+	} else	/* CLIPBOARD */ {
 		if (html->engine->clipboard) {
-			selection_string =
-			   html_object_get_selection_string (html->engine->clipboard, html->engine);
-			/* g_print("clipboard paste: `%s'\n", selection_string); */
+			selection_object = html->engine->clipboard;
+			selection_object_len = html->engine->clipboard_len;
 		}
-	  }
+	}
 
 	/*
 	 * FIXME we should make e_utf8_to/from_string_target and 
@@ -1601,54 +1592,80 @@ selection_get (GtkWidget        *widget,
 	 * should be localized.
 	 */
 	
-	if (selection_string != NULL) {
-		if (info == TARGET_UTF8_STRING) {
-			/* printf ("UTF8_STRING\n"); */
-			gtk_selection_data_set (selection_data,
-						gdk_atom_intern ("UTF8_STRING", FALSE), 8,
-						(const guchar *) selection_string,
-						strlen (selection_string));
-		} else if (info == TARGET_UTF8) {
-			/* printf ("UTF-8\n"); */
-			gtk_selection_data_set (selection_data,
-						gdk_atom_intern ("UTF-8", FALSE), 8,
-						(const guchar *) selection_string,
-						strlen (selection_string));
-		} else if (info == TARGET_STRING || info == TARGET_TEXT || info == TARGET_COMPOUND_TEXT) {
-			gchar *to_be_freed;
+	if (info == TARGET_HTML) {
+		if (selection_object) {
+			HTMLEngineSaveState *state = html_engine_save_buffer_new (html->engine);
+			GString *buffer;
+			
+			html_object_save (selection_object, state);
+			buffer = (GString *)state->user_data;
+			
+			g_warning ("BUFFER = %s", buffer->str);
+			selection_string = e_utf8_to_charset_string_sized ("ucs2", buffer->str, buffer->len);
+			
+			if (selection_string)
+				gtk_selection_data_set (selection_data,
+							gdk_atom_intern ("text/html", FALSE), 16,
+							selection_string,
+							g_utf8_strlen (buffer->str, buffer->len) * 2); /* FIXME semi bogus length */
+			
+			html_engine_save_buffer_free (state);
+		}				
+	} else {
+		selection_string = html_object_get_selection_string (selection_object, html->engine);
 
-			to_be_freed = selection_string;
-			selection_string = replace_nbsp (selection_string);
-			g_free (to_be_freed);
-			localized_string = e_utf8_to_gtk_string (widget,
+		if (selection_string != NULL) {
+			if (info == TARGET_UTF8_STRING) {
+				/* printf ("UTF8_STRING\n"); */
+				gtk_selection_data_set (selection_data,
+							gdk_atom_intern ("UTF8_STRING", FALSE), 8,
+							(const guchar *) selection_string,
+							strlen (selection_string));
+			} else if (info == TARGET_UTF8) {
+				/* printf ("UTF-8\n"); */
+				gtk_selection_data_set (selection_data,
+							gdk_atom_intern ("UTF-8", FALSE), 8,
+							(const guchar *) selection_string,
+							strlen (selection_string));
+			} else if (info == TARGET_STRING || info == TARGET_TEXT || info == TARGET_COMPOUND_TEXT) {
+				gchar *to_be_freed;
+				
+				to_be_freed = selection_string;
+				selection_string = replace_nbsp (selection_string);
+				g_free (to_be_freed);
+				localized_string = e_utf8_to_gtk_string (widget,
 								 selection_string);
-
-			if (info == TARGET_STRING) {
-				/* printf ("STRING\n"); */
-				gtk_selection_data_set (selection_data,
-							GDK_SELECTION_TYPE_STRING, 8,
-							(const guchar *) localized_string, 
-							strlen (localized_string));
-			} else {
-				guchar *text;
-				GdkAtom encoding;
-				gint format;
-				gint new_length;
-			
-				/* printf ("TEXT or COMPOUND_TEXT\n"); */
-				gdk_string_to_compound_text (localized_string, 
-							     &encoding, &format,
-							     &text, &new_length);
-
-				gtk_selection_data_set (selection_data,
-							encoding, format,
-							text, new_length);
-				gdk_free_compound_text (text);
+				
+				if (info == TARGET_STRING) {
+					/* printf ("STRING\n"); */
+					gtk_selection_data_set (selection_data,
+								GDK_SELECTION_TYPE_STRING, 8,
+								(const guchar *) localized_string, 
+								strlen (localized_string));
+				} else {
+					guchar *text;
+					GdkAtom encoding;
+					gint format;
+					gint new_length;
+					
+					/* printf ("TEXT or COMPOUND_TEXT\n"); */
+					gdk_string_to_compound_text (localized_string, 
+								     &encoding, &format,
+								     &text, &new_length);
+					
+					gtk_selection_data_set (selection_data,
+								encoding, format,
+								text, new_length);
+					gdk_free_compound_text (text);
+				}
+				
 			}
-			
 		}
 		g_free (selection_string);
 		g_free (localized_string);
+		if (selection_object && selection_data->selection == GDK_SELECTION_PRIMARY) {
+			html_object_destroy (selection_object);
+		}
 	}
 }
 
@@ -2525,6 +2542,7 @@ static void
 init (GtkHTML* html)
 {
 	static const GtkTargetEntry targets[] = {
+		{ "text/html", 0, TARGET_HTML },
 		{ "UTF8_STRING", 0, TARGET_UTF8_STRING },
 		{ "UTF-8", 0, TARGET_UTF8 },
 		{ "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
