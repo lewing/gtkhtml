@@ -1,3 +1,44 @@
+Tue Sep  7 21:27:44 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkhtmlpainter.[ch]: Split html_painter_calc_text_size()
+	into a simple html_painter_calc_text_size() and a complex 
+	html_painter_calc_entries_size(), and
+	html_painter_draw_text() into a simple html_painter_draw_text()
+	and a complex html_painter_draw_entries()
+
+	* gtkhtml.c htmlclueflow.c htmlimage.c: Adapt to the above, fix 
+	some places where inconsistent font styles/faces were being used
+	for measuring and drawing. Fix a place in htmlimage.c where
+	a random font style/face was being used to draw text.
+
+	* gtkhtmlpainter.[ch]: Remove unused html_painter_calc_text_size_bytes()
+
+	* htmlpainter.[ch] htmltextslave.c htmlgdkpainter.c: 
+	Remove lots of useless parameters from html_painter_draw_spell_error().
+
+	* htmlpainter.[ch] htmlgdkpainter.c htmlprinter.c:
+	Change draw_text() virtual method into draw_glyphs() which takes
+	a single PangoGlyphString rather than an indefinite combination
+	of text and/or HTMLTextPangoInfo/GList.
+
+	* htmlpainter.c: Rewrite the text drawing code to fix
+	character/glyph confusion, and a bug where we drawing too
+	much around tabs.
+
+	* htmltext.[ch] htmlpainter.c: Keep the family/style we used 
+	for itemization in the HTMLTextPangoInfo structure, so that
+	when we later need the space width, we can get the correct one.
+
+	* htmltextslave.c (draw_normal) htmltext.c (html_text_calc_text_size): 
+	Remove a left-over HTML_IS_PRINTER() checks.
+
+	* htmltext.c: Add a size attribute if we are overriding the font
+	with the fixed font, and the fixed font size is different from
+	the variable font size.
+
+	* htmlgdkpainter.h: Remove leftover declaration of 
+	html_gdk_painter_text_itemize_and_prepare_glyphs().
+	
 2004-09-16  Radek Doulik  <rodo@ximian.com>
 
 	* htmltable.c (divide_upto_preferred_width): divide the less of

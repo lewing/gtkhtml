@@ -83,6 +83,9 @@ html_text_pango_info_new (gint n)
 	pi->n = n;
 	pi->entries = g_new0 (HTMLTextPangoInfoEntry, n);
 	pi->attrs = NULL;
+	pi->have_font = FALSE;
+	pi->font_style = GTK_HTML_FONT_STYLE_DEFAULT;
+	pi->face = NULL;
 
 	return pi;
 }
@@ -97,6 +100,7 @@ html_text_pango_info_destroy (HTMLTextPangoInfo *pi)
 		g_free (pi->entries [i].widths);
 	}
 	g_free (pi->attrs);
+	g_free (pi->face);
 	g_free (pi);
 }
 
@@ -907,22 +911,12 @@ void
 html_text_calc_text_size (HTMLText *t, HTMLPainter *painter,
 			  gint start_byte_offset,
 			  guint len, HTMLTextPangoInfo *pi, GList *glyphs, gint *line_offset,
-			  GtkHTMLFontStyle font_style,
-			  HTMLFontFace *face,
 			  gint *width, gint *asc, gint *dsc)
 {
-		PangoAttrList *attrs = NULL;
 		char *text = t->text + start_byte_offset;
 
-		if (HTML_IS_PRINTER (painter)) {
-			attrs = html_text_get_attr_list (t, start_byte_offset, start_byte_offset + (g_utf8_offset_to_pointer (text, len) - text));
-		}
-		
-		html_painter_calc_text_size (painter, text, len, pi, attrs, glyphs,
-					     start_byte_offset, line_offset, font_style, face, width, asc, dsc);
-
-		if (attrs)
-			pango_attr_list_unref (attrs);
+		html_painter_calc_entries_size (painter, text, len, pi, glyphs,
+						line_offset, width, asc, dsc);
 }
 
 gint
@@ -1265,6 +1259,9 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 		pango_attr_list_unref (attrs);
 
 		text->pi = html_text_pango_info_new (g_list_length (items));
+		text->pi->have_font = TRUE;
+		text->pi->font_style = html_text_get_font_style (text);
+		text->pi->face = g_strdup (text->face);
 
 		for (i = 0, cur = items; i < text->pi->n; i ++, cur = cur->next)
 			text->pi->entries [i].item = (PangoItem *) cur->data;
@@ -3244,7 +3241,9 @@ html_text_change_attrs (PangoAttrList *attr_list, GtkHTMLFontStyle style, HTMLEn
 
 	if (!avoid_default_size
 	    || (((style & GTK_HTML_FONT_STYLE_SIZE_MASK) != GTK_HTML_FONT_STYLE_DEFAULT)
-		&& ((style & GTK_HTML_FONT_STYLE_SIZE_MASK) != GTK_HTML_FONT_STYLE_SIZE_3))) {
+		&& ((style & GTK_HTML_FONT_STYLE_SIZE_MASK) != GTK_HTML_FONT_STYLE_SIZE_3))
+	    || ((style & GTK_HTML_FONT_STYLE_FIXED) &&
+		e->painter->font_manager.fix_size != e->painter->font_manager.var_size)) {
 		attr = html_pango_attr_font_size_new (style);
 		html_pango_attr_font_size_calc ((HTMLPangoAttrFontSize *) attr, e);
 		attr->start_index = start_index;

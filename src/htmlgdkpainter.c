@@ -664,7 +664,7 @@ fill_rect (HTMLPainter *painter,
 }
 
 static gint
-draw_spell_error (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, HTMLTextPangoInfo *pi, GList *glyphs, gint start_byte_offset)
+draw_spell_error (HTMLPainter *painter, gint x, gint y, HTMLTextPangoInfo *pi, GList *glyphs)
 {
 	HTMLGdkPainter *gdk_painter;
 	GdkGCValues values;
@@ -769,12 +769,12 @@ item_gc (HTMLPainter *p, PangoItem *item, GdkDrawable *drawable, GdkGC *orig_gc,
 }
 
 static gint
-draw_lines (PangoGlyphString *str, gint x, gint y, GdkDrawable *drawable, GdkGC *gc, HTMLTextPangoInfo *pi, gint ii, HTMLPangoProperties *properties)
+draw_lines (PangoGlyphString *str, gint x, gint y, GdkDrawable *drawable, GdkGC *gc, PangoItem *item, HTMLPangoProperties *properties)
 {
 	PangoRectangle log_rect;
 	gint width, dsc, asc;
 
-	pango_glyph_string_extents (str, pi->entries [ii].item->analysis.font, NULL, &log_rect);
+	pango_glyph_string_extents (str, item->analysis.font, NULL, &log_rect);
 
 	width = PANGO_PIXELS (log_rect.width);
 	dsc = PANGO_PIXELS (PANGO_DESCENT (log_rect));
@@ -790,71 +790,40 @@ draw_lines (PangoGlyphString *str, gint x, gint y, GdkDrawable *drawable, GdkGC 
 }
 
 static gint
-draw_text (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, HTMLTextPangoInfo *pi, PangoAttrList *attrs, GList *glyphs, gint start_byte_offset)
+draw_glyphs (HTMLPainter *painter, gint x, gint y, PangoItem *item, PangoGlyphString *glyphs)
 {
 	HTMLGdkPainter *gdk_painter;
-	PangoGlyphString *str;
-	gboolean temp_pi = FALSE;
-	gint blen, width = 0, ii;
-
-	if (len == -1)
-		len = g_utf8_strlen (text, -1);
+	guint i;
+	GdkGC *gc, *bg_gc;
+	HTMLPangoProperties properties;
+	gint cw = 0;
 
 	gdk_painter = HTML_GDK_PAINTER (painter);
 
 	x -= gdk_painter->x1;
-y -= gdk_painter->y1;
+	y -= gdk_painter->y1;
 
-	blen = g_utf8_offset_to_pointer (text, len) - text;
-	if (!pi) {
-		pi = html_painter_text_itemize_and_prepare_glyphs (painter, html_painter_get_font (painter, painter->font_face, painter->font_style),
-								   text, blen, &glyphs, attrs);
-		start_byte_offset = 0;
-		temp_pi = TRUE;
+	bg_gc = NULL;
+	gc = item_gc (painter, item, gdk_painter->pixmap, painter->widget->style->text_gc [painter->widget->state],
+		      &properties, &bg_gc);
+	if (bg_gc) {
+		PangoRectangle log_rect;
+		
+		pango_glyph_string_extents (glyphs, item->analysis.font, NULL, &log_rect);
+		gdk_draw_rectangle (gdk_painter->pixmap, bg_gc, TRUE, x, y - PANGO_PIXELS (PANGO_ASCENT (log_rect)),
+				    PANGO_PIXELS (log_rect.width), PANGO_PIXELS (log_rect.height));
+		g_object_unref (bg_gc);
 	}
-	if (pi && pi->n) {
-		GList *gl;
-		guint i;
+	gdk_draw_glyphs (gdk_painter->pixmap, gc,
+			 item->analysis.font, x, y, glyphs);
+	if (properties.strikethrough || properties.underline)
+		cw = draw_lines (glyphs, x, y, gdk_painter->pixmap, gc, item, &properties);
+	else
+		for (i=0; i < glyphs->num_glyphs; i ++)
+			cw += PANGO_PIXELS (glyphs->glyphs [i].geometry.width);
+	g_object_unref (gc);
 
-		for (gl = glyphs; gl; gl = gl->next) {
-			GdkGC *gc, *bg_gc;
-			HTMLPangoProperties properties;
-			gint cw = 0;
-
-			str = (PangoGlyphString *) gl->data;
-			gl = gl->next;
-			ii = GPOINTER_TO_INT (gl->data);
-			bg_gc = NULL;
-			gc = item_gc (painter, pi->entries [ii].item, gdk_painter->pixmap, painter->widget->style->text_gc [painter->widget->state],
-				      &properties, &bg_gc);
-			if (bg_gc) {
-				PangoRectangle log_rect;
-
-				pango_glyph_string_extents (str, pi->entries [ii].item->analysis.font, NULL, &log_rect);
-				gdk_draw_rectangle (gdk_painter->pixmap, bg_gc, TRUE, x + width, y - PANGO_PIXELS (PANGO_ASCENT (log_rect)),
-						    PANGO_PIXELS (log_rect.width), PANGO_PIXELS (log_rect.height));
-				g_object_unref (bg_gc);
-			}
-			gdk_draw_glyphs (gdk_painter->pixmap, gc,
-					 pi->entries [ii].item->analysis.font, x + width, y, str);
-			if (properties.strikethrough || properties.underline)
-				cw = draw_lines (str, x + width, y, gdk_painter->pixmap, gc, pi, ii, &properties);
-			else
-				for (i=0; i < str->num_glyphs; i ++)
-					cw += PANGO_PIXELS (str->glyphs [i].geometry.width);
-			g_object_unref (gc);
-			width += cw;
-		}
-	}
-
-	if (temp_pi) {
-		if (glyphs)
-			html_painter_glyphs_destroy (glyphs);
-		if (pi)
-			html_text_pango_info_destroy (pi);
-	}
-
-	return width;
+	return cw;
 }
 
 static void
@@ -959,7 +928,7 @@ html_gdk_painter_class_init (GObjectClass *object_class)
 	painter_class->get_black = get_black;
 	painter_class->draw_line = draw_line;
 	painter_class->draw_rect = draw_rect;
-	painter_class->draw_text = draw_text;
+	painter_class->draw_glyphs = draw_glyphs;
 	painter_class->draw_spell_error = draw_spell_error;
 	painter_class->fill_rect = fill_rect;
 	painter_class->draw_pixmap = draw_pixmap;

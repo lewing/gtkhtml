@@ -589,93 +589,56 @@ draw_lines (HTMLPrinter *printer, double x, double y, double width, PangoAnalysi
 }
 
 static gint
-draw_text (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, HTMLTextPangoInfo *pi, PangoAttrList *attrs, GList *glyphs, gint start_byte_offset)
+draw_glyphs (HTMLPainter *painter, gint x, gint y, PangoItem *item, PangoGlyphString *glyphs)
 {
 	HTMLPrinter *printer;
 	gdouble print_x, print_y;
-	PangoGlyphString *str;
-	gboolean temp_pi = FALSE;
-	gint blen, width = 0, ii;
-
-	if (len == -1)
-		len = g_utf8_strlen (text, -1);
-
-	width = 0.0;
+	PangoRectangle log_rect;
+	HTMLPangoProperties properties;
 
 	printer = HTML_PRINTER (painter);
 
-	blen = g_utf8_offset_to_pointer (text, len) - text;
-	if (!pi) {
-		pi = html_painter_text_itemize_and_prepare_glyphs (painter,
-								   html_painter_get_font (painter, painter->font_face, painter->font_style),
-								   text, blen, &glyphs, attrs);
-		start_byte_offset = 0;
-		temp_pi = TRUE;
+	html_printer_coordinates_to_gnome_print (printer, x, y, &print_x, &print_y);
+
+	gnome_print_gsave (printer->context);
+
+	html_pango_get_item_properties (item, &properties);
+	
+	pango_glyph_string_extents (glyphs, item->analysis.font, NULL, &log_rect);
+	
+	if (properties.bg_color) {
+		gnome_print_setrgbcolor (printer->context,
+					 properties.bg_color->red / 65535.0,
+					 properties.bg_color->green / 65535.0,
+					 properties.bg_color->blue / 65535.0);
+		gnome_print_rect_filled (printer->context,
+					 print_x,
+					 print_y - SCALE_PANGO_TO_GNOME_PRINT (log_rect.y + log_rect.height),
+					 SCALE_PANGO_TO_GNOME_PRINT (log_rect.width),
+					 SCALE_PANGO_TO_GNOME_PRINT (log_rect.height));
 	}
-	if (pi && pi->n) {
-		GList *gl;
-		
-		html_printer_coordinates_to_gnome_print (printer, x, y, &print_x, &print_y);
-		for (gl = glyphs; gl; gl = gl->next) {
-			PangoRectangle log_rect;
-			HTMLPangoProperties properties;
-			gdouble item_x;
-
-			str = (PangoGlyphString *) gl->data;
-			gl = gl->next;
-			ii = GPOINTER_TO_INT (gl->data);
-
-			gnome_print_gsave (printer->context);
-
-			html_pango_get_item_properties (pi->entries [ii].item, &properties);
-			
-			pango_glyph_string_extents (str, pi->entries [ii].item->analysis.font, NULL, &log_rect);
-			
-			item_x = print_x + SCALE_PANGO_TO_GNOME_PRINT (width);
-			
-			if (properties.bg_color) {
-				gnome_print_setrgbcolor (printer->context,
-							 properties.bg_color->red / 65535.0,
-							 properties.bg_color->green / 65535.0,
-							 properties.bg_color->blue / 65535.0);
-				gnome_print_rect_filled (printer->context,
-							 item_x,
-							 print_y - SCALE_PANGO_TO_GNOME_PRINT (log_rect.y + log_rect.height),
-							 SCALE_PANGO_TO_GNOME_PRINT (log_rect.width),
-							 SCALE_PANGO_TO_GNOME_PRINT (log_rect.height));
-			}
-
-			if (properties.fg_color) {
-				gnome_print_setrgbcolor (printer->context,
-							 properties.fg_color->red / 65535.0,
-							 properties.fg_color->green / 65535.0,
-							 properties.fg_color->blue / 65535.0);
-			} else {
-				gnome_print_setrgbcolor (printer->context, 0., 0., 0.);
-			}
-			
-			gnome_print_moveto (printer->context, item_x, print_y);
-			gnome_print_pango_glyph_string (printer->context, 
-							pi->entries [ii].item->analysis.font,
-							str);
-			draw_lines (printer, item_x, print_y,
-				    SCALE_PANGO_TO_GNOME_PRINT (log_rect.width),
-				    &pi->entries [ii].item->analysis, &properties);
-			
-			gnome_print_grestore (printer->context);
-
-			width += log_rect.width;
-		}
+	
+	if (properties.fg_color) {
+		gnome_print_setrgbcolor (printer->context,
+					 properties.fg_color->red / 65535.0,
+					 properties.fg_color->green / 65535.0,
+					 properties.fg_color->blue / 65535.0);
+	} else {
+		gnome_print_setrgbcolor (printer->context, 0., 0., 0.);
 	}
-
-	if (temp_pi) {
-		if (glyphs)
-			html_painter_glyphs_destroy (glyphs);
-		if (pi)
-			html_text_pango_info_destroy (pi);
-	}
-
-	return html_painter_pango_to_engine (painter, width);
+	
+	gnome_print_moveto (printer->context, print_x, print_y);
+	gnome_print_pango_glyph_string (printer->context, 
+					item->analysis.font,
+					glyphs);
+	draw_lines (printer, print_x, print_y,
+		    SCALE_PANGO_TO_GNOME_PRINT (log_rect.width),
+		    &item->analysis, &properties);
+	
+	gnome_print_grestore (printer->context);
+	
+	
+	return html_painter_pango_to_engine (painter, log_rect.width);
 }
 
 static void
@@ -766,7 +729,7 @@ html_printer_class_init (GObjectClass *object_class)
 	painter_class->draw_line = draw_line;
 	painter_class->draw_rect = draw_rect;
 	painter_class->draw_panel = draw_panel;
-	painter_class->draw_text = draw_text;
+	painter_class->draw_glyphs = draw_glyphs;
 	painter_class->fill_rect = fill_rect;
 	painter_class->draw_pixmap = draw_pixmap;
 	painter_class->clear = clear;

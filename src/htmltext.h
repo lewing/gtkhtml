@@ -52,6 +52,10 @@ struct _HTMLTextPangoInfo {
 	HTMLTextPangoInfoEntry *entries;
 	PangoLogAttr *attrs;
 	gint n;
+	
+	gboolean have_font;
+	GtkHTMLFontStyle font_style;
+	HTMLFontFace *face;
 };
 
 struct _HTMLPangoAttrFontSize {
@@ -305,8 +309,6 @@ void               html_text_calc_text_size        (HTMLText              *t,
 						    HTMLTextPangoInfo     *pi,
 						    GList                 *glyphs,
 						    gint                  *line_offset,
-						    GtkHTMLFontStyle       font_style,
-						    HTMLFontFace          *face,
 						    gint                  *width,
 						    gint                  *asc,
 						    gint                  *dsc);
