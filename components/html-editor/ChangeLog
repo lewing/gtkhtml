@@ -1,3 +1,16 @@
+2003-09-15  Larry Ewing  <lewing@ximian.com>
+
+	* editor-control-factory.c (set_frame_cb): activate the menu items
+	by hand in set_frame rather than using the activate signal.  The
+	has the effect of reverting most of the changes federico
+	introduced with the bonoboui fixes.
+
+	* control-data.c (gtk_html_control_data_new): remove now unused
+	detach handler id.
+
+	* menubar.c (menubar_set_languages): protect again a NULL language
+	setting.  Remove teh detach function.
+
 2003-09-02  Larry Ewing  <lewing@ximian.com>
 
 	* GNOME_GtkHTML_Editor-emacs.xml.in: add file with emacs friendly
@@ -37,7 +50,6 @@
 	(set_frame_cb): Don't set up the menubar here, nor the sensitivity
 	of the EditSpellCheck verb.
 
->>>>>>> 1.410.2.7
 2003-09-05  Antonio Xu  <antonio.xu@sun.com>
 
 	* editor-control-factory.c (load_from_file): use
