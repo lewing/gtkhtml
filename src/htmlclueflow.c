@@ -747,9 +747,29 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 			break;
 	}
 
-	while (begin && begin != cur) {
-		begin->y = o->ascent + a;
-		begin = begin->next;
+	{
+		gint xinc, left;
+
+		left = MAX (0, *rmargin - start_lmargin - x);
+
+		switch (HTML_CLUE (o)->halign) {
+		case HTML_HALIGN_NONE:
+		case HTML_HALIGN_LEFT:
+			xinc = 0;
+			break;
+		case HTML_HALIGN_CENTER:
+			xinc = left / 2;
+			break;
+		case HTML_HALIGN_RIGHT:
+			xinc = left;
+			break;
+		}
+
+		while (begin && begin != cur) {
+			begin->x += xinc;
+			begin->y = o->ascent + a;
+			begin = begin->next;
+		}
 	}
 
 	o->y += a + d;
