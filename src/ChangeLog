@@ -1,3 +1,10 @@
+2004-10-08  Radek Doulik  <rodo@ximian.com>
+
+	* htmltext.c (html_text_remove_unwanted_line_breaks): added "$+?"
+	to nonbreaking characters (comon in urls)
+
+	Addition to #54852 fix
+
 2004-09-28  Radek Doulik  <rodo@ximian.com>
 
 	* htmlclueflow.c (save_plain): do not let wi drop under clen. it
