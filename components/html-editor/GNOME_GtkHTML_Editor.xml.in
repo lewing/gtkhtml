@@ -164,8 +164,6 @@
 				pixtype="filename" pixname="@ICONSDIR@/insert-rule-16.png"/>
 				<menuitem name="InsertTable" verb=""
                                 pixtype="filename" pixname="@ICONSDIR@/insert-table-16.png"/>
-				<menuitem name="InsertTemplate" verb=""
-                                pixtype="filename" pixname="@ICONSDIR@/insert-object-16.png"/>
 				<menuitem name="InsertTextFile" verb=""/>
 				<menuitem name="InsertHTMLFile" verb=""/>
 				<submenu name="Smiley" _label="_Smiley"
@@ -311,8 +309,6 @@
                 pixtype="filename" pixname="@ICONSDIR@/insert-rule-24.png"/>
 		<toolitem name="InsertTable" verb="" _label="Table"
                 pixtype="filename" pixname="@ICONSDIR@/insert-table-24.png"/>
-		<toolitem name="InsertTemplate" verb="" _label="Template"
-                pixtype="filename" pixname="@ICONSDIR@/insert-object-24.png"/>
 	</dockitem>
 
 </Root> 
