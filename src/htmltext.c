@@ -662,9 +662,9 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gi
 	pi = html_text_get_pango_info (text, painter);
 
 	if (asc)
-		*asc = 0;
+		*asc = html_painter_get_space_asc (painter, html_text_get_font_style (text), text->face);
 	if (dsc)
-		*dsc = 0;
+		*dsc = html_painter_get_space_dsc (painter, html_text_get_font_style (text), text->face);
 
 	if (pi->n == 0)
 		return 0;

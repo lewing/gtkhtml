@@ -142,7 +142,7 @@ text_width (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *te
 	if (pi && glyphs) {
 		GList *list;
 		int i;
-		for (list = glyphs; list; list = list->next) {
+		for (list = glyphs, i = 0; list; list = list->next, i++) {
 			PangoGlyphString *str = (PangoGlyphString *) list->data;
 			for (i=0; i < str->num_glyphs; i ++)
 				width += str->glyphs [i].geometry.width;
@@ -204,6 +204,7 @@ static HTMLFont *
 alloc_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, GtkHTMLFontStyle style)
 {
 	PangoFontDescription *desc = NULL;
+	gint space_width, space_asc, space_dsc;
 
 	if (face) {
 		desc = pango_font_description_from_string (face);
@@ -220,8 +221,9 @@ alloc_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, Gt
 	pango_font_description_set_style (desc, style & GTK_HTML_FONT_STYLE_ITALIC ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
 	pango_font_description_set_weight (desc, style & GTK_HTML_FONT_STYLE_BOLD ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
 
+	text_size (HTML_GDK_PAINTER (painter), desc, " ", 1, NULL, NULL, 0, &space_width, &space_asc, &space_dsc);
 	return html_font_new (desc,
-			      text_width (HTML_GDK_PAINTER (painter), desc, " ", 1),
+			      space_width, space_asc, space_dsc,
 			      text_width (HTML_GDK_PAINTER (painter), desc, "\xc2\xa0", 2),
 			      text_width (HTML_GDK_PAINTER (painter), desc, "\t", 1),
 			      text_width (HTML_GDK_PAINTER (painter), desc, HTML_BLOCK_INDENT, strlen (HTML_BLOCK_INDENT)),
