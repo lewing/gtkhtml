@@ -1,3 +1,7 @@
+2003-10-13  Frederic Crozat  <fcrozat@mandrakesoft.com>
+
+	* popup.c: Add missing header include.
+
 2003-09-15  Larry Ewing  <lewing@ximian.com>
 
 	* editor-control-factory.c (set_frame_cb): activate the menu items
