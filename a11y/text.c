@@ -25,10 +25,14 @@
 #include <atk/atkcomponent.h>
 #include <atk/atktext.h>
 
+#include "gtkhtml.h"
+#include "htmlengine.h"
+#include "htmlinterval.h"
 #include "htmllinktext.h"
 #include "htmltext.h"
 #include "htmltextslave.h"
 
+#include "object.h"
 #include "html.h"
 #include "text.h"
 
@@ -286,28 +290,67 @@ html_a11y_text_get_character_count (AtkText *text)
 	return HTML_TEXT (HTML_A11Y_HTML (text))->text_len;
 }
 
+static gint
+html_a11y_text_get_n_selections (AtkText *text)
+{
+	return HTML_A11Y_HTML (text)->selected ? 1 : 0;
+}
+
+static gchar *
+html_a11y_text_get_selection (AtkText *text, gint selection_num, gint *start_offset, gint *end_offset)
+{
+	HTMLText *to = HTML_TEXT (HTML_A11Y_HTML (text));
+
+	if (!HTML_OBJECT (to)->selected || selection_num > 0)
+		return NULL;
+
+	*start_offset = to->select_start;
+	*end_offset = to->select_start + to->select_length;
+
+	return html_a11y_text_get_text (text, *start_offset, *end_offset);
+}
+
+static gboolean
+html_a11y_text_add_selection (AtkText *text, gint start_offset, gint end_offset)
+{
+	GtkHTML *html = GTK_HTML_A11Y_GTKHTML (html_a11y_get_gtkhtml_parent (HTML_A11Y (text)));
+	HTMLObject *obj = HTML_A11Y_HTML (text);
+	HTMLInterval *i;
+
+	if (html_engine_is_selection_active (html->engine))
+		return FALSE;
+
+	i = html_interval_new (obj, obj, start_offset, end_offset);
+	html_engine_select_interval (html->engine, i);
+
+	return TRUE;
+}
+
+static gboolean
+html_a11y_text_remove_selection (AtkText *text, gint selection_num)
+{
+	GtkHTML *html = GTK_HTML_A11Y_GTKHTML (html_a11y_get_gtkhtml_parent (HTML_A11Y (text)));
+	HTMLObject *obj = HTML_A11Y_HTML (text);
+	HTMLInterval *i;
+
+	if (!obj->selected || selection_num)
+		return FALSE;
+
+	html_engine_unselect_all (html->engine);
+
+	return TRUE;
+}
+
+static gboolean
+html_a11y_text_set_selection (AtkText *text, gint selection_num, gint start_offset, gint end_offset)
+{
+	if (selection_num)
+		return FALSE;
+
+	return html_a11y_text_add_selection (text, start_offset, end_offset);
+}
+
 /*
-  gchar*         (* get_text)                     (AtkText          *text,
-                                                   gint             start_offset,
-                                                   gint             end_offset);
-  gchar*         (* get_text_after_offset)        (AtkText          *text,
-                                                   gint             offset,
-                                                   AtkTextBoundary  boundary_type,
-						   gint             *start_offset,
-						   gint             *end_offset);
-  gchar*         (* get_text_at_offset)           (AtkText          *text,
-                                                   gint             offset,
-                                                   AtkTextBoundary  boundary_type,
-						   gint             *start_offset,
-						   gint             *end_offset);
-  gunichar       (* get_character_at_offset)      (AtkText          *text,
-                                                   gint             offset);
-  gchar*         (* get_text_before_offset)       (AtkText          *text,
-                                                   gint             offset,
-                                                   AtkTextBoundary  boundary_type,
- 						   gint             *start_offset,
-						   gint             *end_offset);
-  gint           (* get_caret_offset)             (AtkText          *text);
   AtkAttributeSet* (* get_run_attributes)         (AtkText	    *text,
 						   gint	  	    offset,
 						   gint             *start_offset,
@@ -325,20 +368,6 @@ html_a11y_text_get_character_count (AtkText *text)
                                                    gint             x,
                                                    gint             y,
                                                    AtkCoordType	    coords);
-  gint		 (* get_n_selections)		  (AtkText          *text);
-  gchar*         (* get_selection)	          (AtkText          *text,
-						   gint		    selection_num,
-						   gint		    *start_offset,
-						   gint		    *end_offset);
-  gboolean       (* add_selection)		  (AtkText          *text,
-						   gint		    start_offset,
-						   gint		    end_offset);
-  gboolean       (* remove_selection)		  (AtkText          *text,
-						   gint             selection_num);
-  gboolean       (* set_selection)		  (AtkText          *text,
-						   gint		    selection_num,
-						   gint		    start_offset,
-						   gint		    end_offset);
   gboolean       (* set_caret_offset)             (AtkText          *text,
                                                    gint             offset);
 

@@ -240,24 +240,33 @@ html_a11y_ref_child (AtkObject *accessible, gint index)
 	return accessible_child;
 }
 
+GtkHTMLA11Y *
+html_a11y_get_gtkhtml_parent (HTMLA11Y *a11y)
+{
+	GtkHTMLA11Y *gtkhtml_a11y = NULL;
+	AtkObject *obj = ATK_OBJECT (a11y);
+
+	while (obj) {
+		obj = atk_object_get_parent (obj);
+		if (G_IS_GTK_HTML_A11Y (obj)) {
+			gtkhtml_a11y = GTK_HTML_A11Y (obj);
+			break;
+		}
+	}
+
+	return gtkhtml_a11y;
+}
+
 void
 html_a11y_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type)
 {
-	AtkObject *cur = ATK_OBJECT (component);
 	HTMLObject *obj = HTML_A11Y_HTML (component);
 	GtkHTMLA11Y *a11y = NULL;
 	gint ax, ay;
 
 	g_return_if_fail (obj);
 
-	while (cur) {
-		cur = atk_object_get_parent (cur);
-		if (G_TYPE_FROM_INSTANCE (cur) == G_TYPE_GTK_HTML_A11Y) {
-			a11y = GTK_HTML_A11Y (cur);
-			break;
-		}
-	}
-
+	a11y = html_a11y_get_gtkhtml_parent (HTML_A11Y (component));
 	g_return_if_fail (a11y);
 
 	atk_component_get_extents (ATK_COMPONENT (a11y), x, y, width, height, coord_type);
