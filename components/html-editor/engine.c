@@ -271,7 +271,7 @@ BONOBO_TYPE_FUNC_FULL (
 	EditorEngine,                  /* Glib class name */
 	GNOME_GtkHTML_Editor_Engine,   /* CORBA interface name */
 	BONOBO_TYPE_OBJECT,            /* parent type */
-	editor_engine);                       /* local prefix ie. 'echo'_class_init */
+	editor_engine);                /* local prefix ie. 'echo'_class_init */
 
 EditorEngine *
 editor_engine_new (GtkHTMLControlData *cd)
