@@ -59,6 +59,8 @@ static gchar *html_a11y_text_get_selection (AtkText *text, gint selection_num, g
 static gboolean html_a11y_text_add_selection (AtkText *text, gint start_offset, gint end_offset);
 static gboolean html_a11y_text_remove_selection (AtkText *text, gint selection_num);
 static gboolean html_a11y_text_set_selection (AtkText *text, gint selection_num, gint start_offset, gint end_offset);
+static gint html_a11y_text_get_caret_offset (AtkText *text);
+static gboolean html_a11y_text_set_caret_offset (AtkText *text, gint offset);
 
 static AtkObjectClass *parent_class = NULL;
 
@@ -125,6 +127,8 @@ atk_text_interface_init (AtkTextIface *iface)
 	iface->get_selection = html_a11y_text_get_selection;
 	iface->remove_selection = html_a11y_text_remove_selection;
 	iface->set_selection = html_a11y_text_set_selection;
+	iface->get_caret_offset = html_a11y_text_get_caret_offset;
+	iface->set_caret_offset = html_a11y_text_set_caret_offset;
 }
 
 static void
@@ -257,6 +261,24 @@ html_a11y_text_get_text (AtkText *text, gint start_offset, gint end_offset)
 	str = html_text_get_text (to, start_offset);
 
 	return g_strndup (str, g_utf8_offset_to_pointer (str, end_offset - start_offset) - str);
+}
+
+static gint
+html_a11y_text_get_caret_offset(AtkText * text)
+{
+	HTMLObject * p;
+	HTMLEngine * e;
+
+	g_return_val_if_fail(text && G_IS_HTML_A11Y_TEXT(text), 0);
+
+	return (gint)g_object_get_data(G_OBJECT(text), "caret-offset");
+}
+
+static gboolean
+html_a11y_text_set_caret_offset(AtkText * text, gint offset)
+{
+	printf("FIXME, set_caret_offset not implmented");
+	return FALSE;	
 }
 
 static gchar *
