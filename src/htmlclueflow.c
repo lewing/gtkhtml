@@ -121,6 +121,16 @@ is_item (HTMLClueFlow *flow)
 }
 
 static inline gboolean
+is_blockquote (HTMLListType type)
+{
+	if ((type == HTML_LIST_TYPE_BLOCKQUOTE_CITE)
+	    || (type == HTML_LIST_TYPE_BLOCKQUOTE))
+		return TRUE;
+
+	return FALSE;
+}
+
+static inline gboolean
 items_are_relative (HTMLObject *self, HTMLObject *next_object)
 {
 	HTMLClueFlow *flow, *next;
@@ -1844,7 +1854,7 @@ save_plain (HTMLObject *self,
 	HTMLClueFlow *flow;
 	HTMLEngineSaveState *buffer_state;
 	GString *out = g_string_new ("");
-	size_t len;
+	gint len;
 	gint pad;
 	gint align_pad;
 	gboolean firstline = TRUE;
@@ -2464,10 +2474,11 @@ html_clueflow_set_item_type (HTMLClueFlow *flow,
 	g_return_if_fail (HTML_IS_ENGINE (engine));
 
 	html_object_change_set (HTML_OBJECT (flow), HTML_CHANGE_ALL);
-	flow->item_type = item_type;
 
-	if (flow->levels->len)
+	if ((is_blockquote (item_type) != is_blockquote (flow->item_type)) && flow->levels->len)
 		flow->levels->data[flow->levels->len - 1] = item_type;
+
+	flow->item_type = item_type;
 
 	update_item_number (HTML_OBJECT (flow));
 	if (!items_are_relative (HTML_OBJECT (flow), HTML_OBJECT (flow)->next) && HTML_OBJECT (flow)->next)

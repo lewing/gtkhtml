@@ -1,3 +1,12 @@
+2002-05-21  Larry Ewing  <lewing@ximian.com>
+
+	* htmlclueflow.c (draw_item): draw the item number offset by the
+	indent amount not the first->x offset this fixes the difference
+	between out rendering and the rendering of mozilla of aligned
+	paragraphs.
+	(save_plain): align the paragraph in plain mode.  Yes NotZed this
+	is fun.
+
 2002-05-20  Larry Ewing  <lewing@ximian.com>
 
 	* htmlclueflow.c (write_flow_tag): Fix handling for empty
@@ -23,6 +32,25 @@
 	(free_prop): free the array.
 	(get_props): dup the levels.
 	(undo_or_redo): set the levels.
+
+2002-05-20  Radek Doulik  <rodo@ximian.com>
+
+	* htmlengine-edit-clueflowstyle.c
+	(html_engine_set_clueflow_style): added dir parameter, fixed undo
+
+	* htmlengine-edit-cut-and-paste.c (check_flows): new helper
+	functions, takes care about clueflow's style changes
+
+2002-05-17  Larry Ewing  <lewing@ximian.com>
+
+	* gtkhtml.c (skip_host): fix this for base_urls with hosts but
+	without trailing /s.
+	(skip_host): clean up the logic slightly.
+	
+2002-05-13  Radek Doulik  <rodo@ximian.com>
+
+	* gtkhtml-properties.c (gtk_html_class_properties_update): suggest
+	gconf sync
 
 2002-05-17  Larry Ewing  <lewing@ximian.com>
 
@@ -124,6 +152,27 @@
 
 	* gtkhtml-properties.c (gtk_html_class_properties_update): suggest
 	gconf sync
+
+2002-05-09  Radek Doulik  <rodo@ximian.com>
+
+	* testgtkhtml.c (entry_goto_url): set base before goto_url call
+	which calls parse_href, which expects baseURL to be set
+
+2002-05-09  Dan Winship  <danw@ximian.com>
+
+	* testgtkhtml.c: Port to use soup instead of glibwww for
+	http/https. (And do file: URLs by hand.)
+
+	* Makefile.am (noinst_PROGRAMS): Redo this a bit so gtest is
+	always built, and testgtkhtml is built if you have soup.
+	(INCLUDES): s/GLIBWWW_CFLAGS/SOUP_CFLAGS/
+	(testgtkhtml_LDADD): s/GLIBWWW_LIBS/SOUP_LIBS/
+
+2002-05-07  Radek Doulik  <rodo@ximian.com>
+
+	* gtkhtml.c (client_notify_widget): use /keybindings_theme in
+	widget and not class notify
+
 
 2002-05-09  Radek Doulik  <rodo@ximian.com>
 
