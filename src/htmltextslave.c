@@ -436,28 +436,6 @@ hts_fit_line_old (HTMLObject *o, HTMLPainter *painter,
 }
 */
 
-static void
-dec_offset (HTMLTextPangoInfo *pi, gint *ii, gint *io, gint *offset)
-{
-	(*offset) --;
-	if ((*io) == 0) {
-		(*ii) --;
-		(*io) = pi->entries [*ii].item->num_chars - 1;
-	} else
-		(*io) --;
-}
-
-static gint
-remove_end_white_space (HTMLTextPangoInfo *pi, gint ii, gint io, gint offset, gint *w)
-{
-	dec_offset (pi, &ii, &io, &offset);
-	while (offset && pi->entries [ii].attrs [io].is_white) {
-		*w -= PANGO_PIXELS (pi->entries [ii].widths [io]);
-		dec_offset (pi, &ii, &io, &offset);
-	}
-	return offset;
-}
-
 static HTMLFitType
 hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	      gboolean lineBegin, gboolean firstRun, gboolean next_to_floating, gint widthLeft)

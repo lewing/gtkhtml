@@ -594,9 +594,12 @@ html_text_get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gin
 }
 
 static void
-update_asc_dsc (PangoItem *item, gint *asc, gint *dsc)
+update_asc_dsc (HTMLPainter *painter, PangoItem *item, gint *asc, gint *dsc)
 {
 	PangoFontMetrics *pfm;
+
+	if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter))
+		return;
 
 	pfm = pango_font_get_metrics (item->analysis.font, item->analysis.language);
 	if (asc)
@@ -609,39 +612,46 @@ update_asc_dsc (PangoItem *item, gint *asc, gint *dsc)
 gint
 html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gint len, gint *asc, gint *dsc)
 {
-	HTMLTextPangoInfo *pi;
 	gint idx, width = 0;
 
 	g_return_val_if_fail (offset >= 0, 0);
 	g_return_val_if_fail (offset + len <= text->text_len, 0);
-
-	pi = html_text_get_pango_info (text, painter);
 
 	if (asc)
 		*asc = html_painter_get_space_asc (painter, html_text_get_font_style (text), text->face);
 	if (dsc)
 		*dsc = html_painter_get_space_dsc (painter, html_text_get_font_style (text), text->face);
 
-	if (pi->n == 0)
+	if (text->text_len == 0 || len == 0)
 		return 0;
 
-	idx = html_text_get_item_index (text, painter, offset, &offset);
-	if (asc || dsc)
-		update_asc_dsc (pi->entries [idx].item, asc, dsc);
+	if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
+		HTMLTextPangoInfo *pi;
 
-	while (len > 0) {
-		width += pi->entries [idx].widths [offset];
-		len --;
-		if (offset >= pi->entries [idx].item->num_chars - 1) {
-			idx ++;
-			offset = 0;
-			if (len > 0 && (asc || dsc))
-				update_asc_dsc (pi->entries [idx].item, asc, dsc);
-		} else
-			offset ++;
+		pi = html_text_get_pango_info (text, painter);
+
+		idx = html_text_get_item_index (text, painter, offset, &offset);
+		if (asc || dsc)
+			update_asc_dsc (painter, pi->entries [idx].item, asc, dsc);
+
+		while (len > 0) {
+			width += pi->entries [idx].widths [offset];
+			len --;
+			if (offset >= pi->entries [idx].item->num_chars - 1) {
+				idx ++;
+				offset = 0;
+				if (len > 0 && (asc || dsc))
+					update_asc_dsc (painter, pi->entries [idx].item, asc, dsc);
+			} else
+				offset ++;
+		}
+		width = PANGO_PIXELS (width);
+	} else {
+		html_painter_calc_text_size (painter, html_text_get_text (text, offset), len, NULL, NULL, 0, NULL,
+					     html_text_get_font_style (text), text->face, &width, asc, dsc);
 	}
 
-	return PANGO_PIXELS (width);
+	return width;
 }
 
 static gint
@@ -838,8 +848,8 @@ html_text_pango_info_get_index (HTMLTextPangoInfo *pi, gint byte_offset, gint id
 HTMLTextPangoInfo *
 html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 {
-	if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter))
-		return NULL;
+	/*if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter))
+	  return NULL; */
 	if (!text->pi) {
 		PangoContext *pc = HTML_GDK_PAINTER (painter)->pc;
 		GList *items, *cur;
