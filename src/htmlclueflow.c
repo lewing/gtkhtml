@@ -112,6 +112,7 @@ copy (HTMLObject *self,
 	HTML_CLUEFLOW (dest)->style = HTML_CLUEFLOW (self)->style;
 	HTML_CLUEFLOW (dest)->item_type = HTML_CLUEFLOW (self)->item_type;
 	HTML_CLUEFLOW (dest)->item_number = HTML_CLUEFLOW (self)->item_number;
+	HTML_CLUEFLOW (dest)->clear = HTML_CLUEFLOW (self)->clear;
 }
 
 static inline gboolean
@@ -561,8 +562,8 @@ get_indent (HTMLClueFlow *flow,
 	return get_level_indent (flow, flow->levels->len - 1, painter);
 }
 
-
 /* HTMLObject methods.  */
+
 static void
 set_max_width (HTMLObject *o,
 	       HTMLPainter *painter,
@@ -609,20 +610,6 @@ calc_min_width (HTMLObject *o,
 	}
 
 	return MAX (aligned_min_width, min_width) + get_indent (HTML_CLUEFLOW (o), painter);
-}
-
-static gint
-set_line_x (HTMLObject **obj, HTMLObject *run, gint x, gboolean *changed)
-{
-	while (*obj != run) {
-		if ((*obj)->x != x) {
-			(*obj)->x = x;   
-			*changed = TRUE;
-		}
-		x   += (*obj)->width;
-		*obj = (*obj)->next;
-	}
-	return x;
 }
 
 static gint
@@ -682,18 +669,109 @@ object_nb_width (HTMLObject *o, HTMLPainter *painter, gboolean lineBegin)
 }
 
 static inline gboolean
-is_y_aligned (HTMLVAlignType valign)
+is_top_aligned (HTMLVAlignType valign)
 {
-	return valign == HTML_VALIGN_NONE || valign == HTML_VALIGN_BOTTOM;
+	return valign == HTML_VALIGN_TOP;
 }
+
+static inline void
+update_leafs_children_changed_size (HTMLObject *o, gboolean *leaf_children_changed_size)
+{
+	if (o && o->change & HTML_CHANGE_SIZE
+	    && HTML_OBJECT_TYPE (o) != HTML_TYPE_TEXTSLAVE && !html_object_is_container (o))
+		*leaf_children_changed_size = TRUE;
+}
+
+static inline void
+update_height (HTMLObject *o, HTMLVAlignType valign, gint *a, gint *d, gint *height, gboolean *top)
+{
+	switch (valign) {
+	case HTML_VALIGN_TOP:
+		*top = TRUE;
+		*height = MAX (*height, o->ascent + o->descent);
+		break;
+	case HTML_VALIGN_NONE:
+	case HTML_VALIGN_BOTTOM:
+		*a = MAX (*a, o->ascent);
+		*d = MAX (*d, o->descent);
+		*height = MAX (*height, *a + *d);
+		break;
+	case HTML_VALIGN_MIDDLE: {
+		gint h, h2;
+
+		h = o->ascent + o->descent;
+		h2 = h / 2;
+		*a = MAX (*a, h2);
+		*d = MAX (*d, h - h2);
+		*height = MAX (*height, *a + *d);
+		break;
+	}
+	}
+}
+
+static inline void
+update_top_height (HTMLObject *begin, HTMLObject *end, gint *a, gint *d, gint *height)
+{
+	while (begin && begin != end) {
+		if (html_object_get_valign (begin) == HTML_VALIGN_TOP) {
+			gint rest = begin->ascent + begin->descent - *a;
+
+			if (rest > *d) {
+				*a += rest - *d;
+				*d = rest;
+				*height = MAX (*height, *a + *d);
+			}
+		}
+		begin = begin->next;
+	}
+}
+
+static inline void
+update_line_positions (HTMLObject *clue, HTMLObject *begin, HTMLObject *end, gint left, gint a, gint d, gint height)
+{
+	gint xinc;
+
+	switch (html_clueflow_get_halignment (HTML_CLUEFLOW (clue))) {
+	case HTML_HALIGN_NONE:
+	case HTML_HALIGN_LEFT:
+		xinc = 0;
+		break;
+	case HTML_HALIGN_CENTER:
+		xinc = left / 2;
+		break;
+	case HTML_HALIGN_RIGHT:
+		xinc = left;
+		break;
+	}
+
+	while (begin && begin != end) {
+		begin->x += xinc;
+
+		switch (html_object_get_valign (begin)) {
+		case HTML_VALIGN_NONE:
+		case HTML_VALIGN_BOTTOM:
+			begin->y = clue->ascent + a;
+			break;
+		case HTML_VALIGN_MIDDLE:
+			begin->y = clue->ascent + (height - begin->ascent - begin->descent) / 2 + begin->ascent;
+			break;
+		case HTML_VALIGN_TOP:
+			begin->y = clue->ascent + begin->ascent;
+			break;
+		}
+		begin = begin->next;
+	}
+}
+
 
 static HTMLObject *
 layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
-	     GList **changed_objs, gboolean *leaf_childs_changed_size,
+	     GList **changed_objs, gboolean *leaf_children_changed_size,
 	     gint *lmargin, gint *rmargin, gint indent)
 {
 	HTMLObject *cur;
 	gboolean first = TRUE;
+	gboolean top_align = FALSE;
 	gint old_y;
 	gint x;
 	gint start_lmargin;
@@ -701,6 +779,7 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	gint nb_width;
 
 	if (html_object_is_text (begin)) {
+		update_leafs_children_changed_size (begin, leaf_children_changed_size);
 		/* this ever succeds and creates slaves */
 		html_object_fit_line (begin, painter, first, first, FALSE, 0);
 		begin = begin->next;
@@ -710,17 +789,12 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	old_y = o->y;
 	html_object_calc_size (begin, painter, changed_objs);
 
-	/* init vertical sizes */
-	if (is_y_aligned (html_object_get_valign (begin))) {
-		a = begin->ascent;
-		d = begin->descent;
-	} else
-		a = d = 0;
-	height = begin->ascent + begin->descent;
+	a = d = height = 0;
+	update_height (begin, html_object_get_valign (begin), &a, &d, &height, &top_align);
 
 	nb_width = object_nb_width (begin, painter, first);
 	if (*rmargin - *lmargin < nb_width)
-		html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
+		html_clue_find_free_area (HTML_CLUE (o->parent), painter, o->y,
 					  nb_width, height,
 					  indent, &o->y, lmargin, rmargin);
 
@@ -731,32 +805,30 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 		HTMLFitType fit;
 		HTMLVAlignType valign;
 
-		fit = html_object_fit_line (cur, painter, first, first, FALSE, width_left (o, x, *rmargin));
-		first = FALSE;
-		if (fit == HTML_FIT_NONE)
-			break;
+		update_leafs_children_changed_size (cur, leaf_children_changed_size);
 
 		cur->x = x;
 		html_object_calc_size (cur, painter, changed_objs);
 
 		valign = html_object_get_valign (cur);
-		if ((is_y_aligned (valign) && (cur->ascent > a || cur->descent > d))
+		if ((!is_top_aligned (valign) && (cur->ascent > a || cur->descent > d))
 		    || cur->ascent + cur->descent > height) {
+			nb_width = object_nb_width (cur, painter, first);
 			old_y = o->y;
-			if (is_y_aligned (valign)) {
-				a = MAX (a, cur->ascent);
-				d = MAX (d, cur->descent);
-				height = MAX (height, a + d);
-			} else
-				height = MAX (height, cur->ascent + cur->descent);
-			html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
-						  object_nb_width (cur, painter, first), height,
+			update_height (cur, valign, &a, &d, &height, &top_align);
+			html_clue_find_free_area (HTML_CLUE (o->parent), painter, o->y,
+						  nb_width, height,
 						  indent, &o->y, lmargin, rmargin);
 
 			/* is there enough space for this object? */
-			if (o->y != old_y || *rmargin - x < cur->min_width)
+			if (o->y != old_y || *rmargin - x < nb_width)
 				break;
 		}
+
+		fit = html_object_fit_line (cur, painter, first, first, FALSE, width_left (o, x, *rmargin));
+		first = FALSE;
+		if (fit == HTML_FIT_NONE)
+			break;
 
 		x += cur->width;
 		cur = cur->next;
@@ -765,45 +837,13 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 			break;
 	}
 
-	{
-		gint xinc, left;
-
-		left = MAX (0, *rmargin - start_lmargin - x);
-
-		switch (html_clueflow_get_halignment (HTML_CLUEFLOW (o))) {
-		case HTML_HALIGN_NONE:
-		case HTML_HALIGN_LEFT:
-			xinc = 0;
-			break;
-		case HTML_HALIGN_CENTER:
-			xinc = left / 2;
-			break;
-		case HTML_HALIGN_RIGHT:
-			xinc = left;
-			break;
-		}
-
-		while (begin && begin != cur) {
-			begin->x += xinc;
-
-			switch (html_object_get_valign (begin)) {
-			case HTML_VALIGN_NONE:
-			case HTML_VALIGN_BOTTOM:
-				begin->y = o->ascent + a;
-				break;
-			case HTML_VALIGN_MIDDLE:
-				begin->y = o->ascent + (height - begin->ascent - begin->descent) / 2 + begin->ascent;
-				break;
-			case HTML_VALIGN_TOP:
-				begin->y = o->ascent + begin->ascent;
-				break;
-			}
-			begin = begin->next;
-		}
-	}
+	if (top_align)
+		update_top_height (begin, cur, &a, &d, &height);
+	update_line_positions (o, begin, cur, MAX (0, *rmargin - start_lmargin - x), a, d, height);
 
 	o->y += height;
 	o->ascent += height;
+	//o->descent -= MAX (0, o->descent - height);
 
 	calc_margins (o, painter, indent, lmargin, rmargin);
 
@@ -812,24 +852,27 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 
 static HTMLObject *
 layout_aligned (HTMLObject *o, HTMLPainter *painter, HTMLObject *cur,
-		GList **changed_objs, gboolean *leaf_childs_changed_size,
+		GList **changed_objs, gboolean *leaf_children_changed_size,
 		gint *lmargin, gint *rmargin, gint indent, gboolean *changed)
 {
 	if (! html_clue_appended (HTML_CLUE (o->parent), HTML_CLUE (cur))) {
 		html_object_calc_size (cur, painter, changed_objs);
 
 		if (HTML_CLUE (cur)->halign == HTML_HALIGN_LEFT)
-			html_clue_append_left_aligned (HTML_CLUE (o->parent), HTML_CLUE (cur), lmargin, rmargin, indent);
+			html_clue_append_left_aligned (HTML_CLUE (o->parent), painter,
+						       HTML_CLUE (cur), lmargin, rmargin, indent);
 		else
-			html_clue_append_right_aligned (HTML_CLUE (o->parent), HTML_CLUE (cur), lmargin, rmargin, indent);
+			html_clue_append_right_aligned (HTML_CLUE (o->parent), painter,
+							HTML_CLUE (cur), lmargin, rmargin, indent);
 		*changed = TRUE;
+		//o->descent += cur->ascent + cur->descent;
 	}
 
 	return cur->next;
 }
 
 static gboolean
-layout (HTMLObject *o, HTMLPainter *painter, GList **changed_objs, gboolean *leaf_childs_changed_size)
+layout (HTMLObject *o, HTMLPainter *painter, GList **changed_objs, gboolean *leaf_children_changed_size)
 {
 	HTMLClueFlow *cf = HTML_CLUEFLOW (o);
 	HTMLObject *cur = HTML_CLUE (o)->head, *end;
@@ -842,13 +885,17 @@ layout (HTMLObject *o, HTMLPainter *painter, GList **changed_objs, gboolean *lea
 
 	while (cur) {
 		if (cur->flags & HTML_OBJECT_FLAG_ALIGNED)
-			end = layout_aligned (o, painter, cur, changed_objs, leaf_childs_changed_size,
+			end = layout_aligned (o, painter, cur, changed_objs, leaf_children_changed_size,
 					      &lmargin, &rmargin, indent, &changed);
 		else
-			end = layout_line (o, painter, cur, changed_objs, leaf_childs_changed_size,
+			end = layout_line (o, painter, cur, changed_objs, leaf_children_changed_size,
 					   &lmargin, &rmargin, indent);
 		cur = end;
 	}
+
+	//o->ascent += o->descent;
+	//o->y += o->descent;
+	//o->descent = 0;
 
 	return changed;
 }
@@ -858,7 +905,7 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 {
 	HTMLClueFlow *cf = HTML_CLUEFLOW (o);
 	gint oa, od, ow, padding;
-	gboolean leaf_childs_changed_size = FALSE;
+	gboolean leaf_children_changed_size = FALSE;
 	gboolean changed, changed_size = FALSE;
 
 	/* reset size */
@@ -872,14 +919,14 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 	/* calc size */
 	padding = calc_padding (painter);
 	add_pre_padding (cf, padding);
-	changed = layout (o, painter, changed_objs, &leaf_childs_changed_size);
+	changed = layout (o, painter, changed_objs, &leaf_children_changed_size);
 	add_post_padding (cf, padding);
 
 	/* take care about changes */
 	if (o->ascent != oa || o->descent != od || o->width != ow)
 		changed = changed_size = TRUE;
 
-	if (changed_size || leaf_childs_changed_size)
+	if (changed_size || leaf_children_changed_size)
 		if (changed_objs) {
 			if (ow > o->max_width && o->width < ow)
 				add_clear_area (changed_objs, o, o->width, ow - o->width);
@@ -889,460 +936,10 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 	return changed;
 }
 
-/* EP CHECK: should be mostly OK.  */
-/* FIXME: But it's awful.  Too big and ugly.  */
-static gboolean
-calc_size_old (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
+static HTMLClearType
+get_clear (HTMLObject *self)
 {
-	HTMLVSpace *vspace;
-	HTMLClue *clue;
-	HTMLClueFlow *flow;
-	HTMLObject *obj;
-	HTMLObject *line;
-	HTMLClearType clear;
-	gboolean newLine;
-	gboolean firstLine;
-	gint lmargin, rmargin;
-	gint orig_lmargin, orig_rmargin;
-	gint indent;
-	gint oldy;
-	gint w, a, d;
-	guint padding;
-	gboolean changed, leaf_childs_changed_size;
-	gint old_ascent, old_descent, old_width;
-	gint runWidth = 0;
-	gboolean have_valign_top;
-	gboolean no_fit = FALSE;
-	gboolean firstRun = FALSE;
-
-	html_clueflow_remove_text_slaves (HTML_CLUEFLOW (o));
-
-	changed = FALSE;
-	leaf_childs_changed_size = FALSE;
-	old_ascent = o->ascent;
-	old_descent = o->descent;
-	old_width = o->width;
-
-	/* if (changed_objs)
-		printf ("begin:   %d==%d %d==%d %d==%d\n",
-		o->width, old_width, o->ascent, old_ascent, o->descent, old_descent); */
-
-	clue = HTML_CLUE (o);
-	flow = HTML_CLUEFLOW (o);
-
-	obj = clue->head;
-	line = clue->head;
-	clear = HTML_CLEAR_NONE;
-	indent = get_indent (HTML_CLUEFLOW (o), painter);
-
-	o->ascent = 0;
-	o->descent = 0;
-	o->width = 0;
-
-	padding = calc_padding (painter);
-	add_pre_padding (HTML_CLUEFLOW (o), padding);
-
-	orig_lmargin = html_object_get_left_margin (o->parent, painter, o->y, FALSE);
-	lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
-	if (indent > lmargin)
-		lmargin = indent;
-	if (indent > orig_lmargin)
-		orig_lmargin = indent;
-	/* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
-	orig_rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, FALSE);
-	rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
-
-	w = lmargin;
-	a = 0;
-	d = 0;
-	newLine = FALSE;
-	firstLine = TRUE;
-
-	have_valign_top = FALSE;
-
-	while (obj != NULL) {
-
-		if (obj && obj->change & HTML_CHANGE_SIZE
-		    && HTML_OBJECT_TYPE (obj) != HTML_TYPE_TEXTSLAVE && !html_object_is_container (obj))
-			leaf_childs_changed_size = TRUE;
-
-		if (obj->flags & HTML_OBJECT_FLAG_NEWLINE) {
-			if (!a)
-				a = obj->ascent;
-			if (!a && (obj->descent > d))
-				d = obj->descent;
-			newLine = TRUE;
-			vspace = HTML_VSPACE (obj);
-			clear = vspace->clear;
-			obj = obj->next;
-		} else if (obj->flags & HTML_OBJECT_FLAG_SEPARATOR) {
-			if (obj->x != w) {
-				obj->x = w;
-				changed = TRUE;
-			}
-			if (TRUE /* w != lmargin */) {
-				w += obj->width;
-				if (obj->ascent > a)
-					a = obj->ascent;
-				if (obj->descent > d)
-					d = obj->descent;
-			}
-			obj = obj->next;
-		} else if (obj->flags & HTML_OBJECT_FLAG_ALIGNED) {
-			HTMLClueAligned *c = (HTMLClueAligned *)obj;
-			
-			if (! html_clue_appended (HTML_CLUE (o->parent), HTML_CLUE (c))) {
-				html_object_calc_size (obj, painter, changed_objs);
-
-				if (HTML_CLUE (c)->halign == HTML_HALIGN_LEFT) {
-					if (obj->x != lmargin) {
-						obj->x = lmargin;
-						changed = TRUE;
-					}
-					if (obj->y != o->ascent + obj->ascent + a + d) {
-						obj->y = o->ascent + obj->ascent + a + d;
-						changed = TRUE;
-					}
-					//html_clue_append_left_aligned (HTML_CLUE (o->parent), HTML_CLUE (c));
-
-					lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
-
-					if (indent > lmargin)
-						lmargin = indent;
-
-					if (a + d == 0)
-						w = lmargin;
-					else
-						w = runWidth + lmargin;
-				} else {
-					if (obj->x != rmargin - obj->width) {
-						obj->x = rmargin - obj->width;
-						changed = TRUE;
-					}
-					if (obj->y != o->ascent + obj->ascent + a + d) {
-						obj->y = o->ascent + obj->ascent + a + d;
-						changed = TRUE;
-					}
-					
-					//html_clue_append_right_aligned (HTML_CLUE (o->parent), HTML_CLUE (c));
-
-					/* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
-					rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
-				}
-			}
-
-			obj = obj->next;
-		}
-		/* This is a normal object.  We must add all objects upto the next
-		   separator/newline/aligned object. */
-		else {
-			HTMLObject *run;
-
-			/* By setting "newLine = true" we move the complete run
-			   to a new line.  We shouldn't set newLine if we are
-			   at the start of a line.  */
-			runWidth = 0;
-			run = obj;
-			
-			if (lmargin >= rmargin) {
-				gint new_y;
-
-				if (run && run->change & HTML_CHANGE_SIZE
-				    && HTML_OBJECT_TYPE (run) != HTML_TYPE_TEXTSLAVE && !html_object_is_container (run))
-					leaf_childs_changed_size = TRUE;
-				html_object_calc_size (run, painter, changed_objs);
-				html_clue_find_free_area (HTML_CLUE (o->parent), o->y, run->min_width,
-							  run->ascent + run->descent, indent, &new_y,
-							  &lmargin, &rmargin);
-				o->ascent += new_y - o->y;
-				o->y       = new_y;
-				w          = lmargin;
-			}
-
-			while ( run
-				&& ! (run->flags & HTML_OBJECT_FLAG_SEPARATOR)
-				&& ! (run->flags & HTML_OBJECT_FLAG_NEWLINE)
-				&& ! (run->flags & HTML_OBJECT_FLAG_ALIGNED)) {
-				HTMLFitType fit;
-				HTMLVAlignType valign;
-				gint width_left;
-
-				if (run && run->change & HTML_CHANGE_SIZE
-				    && HTML_OBJECT_TYPE (run) != HTML_TYPE_TEXTSLAVE && !html_object_is_container (run))
-					leaf_childs_changed_size = TRUE;
-
-				width_left = rmargin - runWidth - w;
-				firstRun = run == line || (HTML_IS_TEXT_SLAVE (run)
-							   && HTML_OBJECT (HTML_TEXT_SLAVE (run)->owner) == line
-							   && HTML_TEXT_SLAVE (run)->posStart == 0);
-
-				if (!firstRun && width_left < 0) {
-					fit = HTML_FIT_NONE;
-				} else {
-					fit = html_object_fit_line (run,
-								    painter,
-								    w + runWidth == lmargin,
-								    firstRun,
-								    lmargin != orig_lmargin || rmargin != orig_rmargin,
-								    flow->style == HTML_CLUEFLOW_STYLE_PRE ? G_MAXINT : width_left);
-					printf ("fit %d\n", fit);
-				}
-
-				if (fit == HTML_FIT_NONE) {
-
-					w = set_line_x (&obj, run, w, &changed);
-					newLine = TRUE;
-					no_fit = TRUE;
-					break;
-				}
-
-				html_object_calc_size (run, painter, changed_objs);
-				runWidth += run->width;
-				valign = html_object_get_valign (run);
-
-				/* Algorithm for dealing vertical alignment.
-				   Elements with `HTML_VALIGN_BOTTOM' and
-				   `HTML_VALIGN_MIDDLE' can be handled
-				   immediately.	 Objects with
-				   `HTML_VALIGN_TOP', instead, need to know the
-				   total height of the line, so need to be
-				   handled last.  */
-
-				switch (valign) {
-				case HTML_VALIGN_MIDDLE: {
-					gint height;
-					gint half_height;
-
-					height = run->ascent + run->descent;
-					half_height = height / 2;
-					if (half_height > a)
-						a = half_height;
-					if (height - half_height > d)
-						d = height - half_height;
-					break;
-				}
-				case HTML_VALIGN_BOTTOM:
-					if (run->ascent > a)
-						a = run->ascent;
-					if (run->descent > d)
-						d = run->descent;
-					break;
-				case HTML_VALIGN_TOP:
-					have_valign_top = TRUE;
-					/* Do nothing for now.	*/
-					break;
-				default:
-					g_assert_not_reached ();
-				}
-
-				run = run->next;
-
-				if (fit == HTML_FIT_PARTIAL) {
-					/* Implicit separator */
-					break;
-				}
-			}
-
-			if (! newLine) {
-				gint new_y, new_lmargin, new_rmargin;
-
-				/* Check if the run fits in the current flow area 
-				   especially with respect to its height.
-				   If not, find a rectangle with height a+b. The size of
-				   the rectangle will be rmargin-lmargin. */
-
-				html_clue_find_free_area (HTML_CLUE (o->parent),
-							  o->y,
-							  rmargin - lmargin, a+d, indent, &new_y,
-							  &new_lmargin, &new_rmargin);
-				
-				if (new_y != o->y
-				    || new_lmargin > lmargin
-				    || new_rmargin < rmargin) {
-					
-					/* We did not get the location we expected 
-					   we start building our current line again */
-					/* We got shifted downwards by "new_y - y"
-					   add this to both "y" and "ascent" */
-
-					new_y -= o->y;
-					o->ascent += new_y;
-
-					o->y += new_y;
-
-					lmargin = new_lmargin;
-					if (indent > lmargin)
-						lmargin = indent;
-					rmargin = new_rmargin;
-					obj = line;
-					
-					/* Reset this line */
-					w = lmargin;
-					d = 0;
-					a = 0;
-
-					newLine = FALSE;
-					clear = HTML_CLEAR_NONE;
-				} else {
-					w = set_line_x (&obj, run, w, &changed);
-					/* we've used up this line so insert a newline */
-					newLine = TRUE;
-
-					lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
-				
-					if (indent > lmargin)
-						lmargin = indent;
-
-				        /* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
-					rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
-				}
-			}
-		}
-		
-		/* if we need a new line, or all objects have been processed
-		   and need to be aligned. */
-		if ( newLine || !obj) {
-			HTMLHAlignType halign;
-			int extra;
-
-			extra = 0;
-			halign = html_clueflow_get_halignment (flow);
-
-			if (w > o->width)
-				o->width = w;
-
-			if (halign == HTML_HALIGN_CENTER) {
-				extra = (rmargin - w) / 2;
-				if (extra < 0)
-					extra = 0;
-			}
-			else if (halign == HTML_HALIGN_RIGHT) {
-				extra = rmargin - w;
-				if (extra < 0)
-					extra = 0;
-			}
-
-			o->ascent += a + d;
-			o->y += a + d;
-
-			/* Update the height for `HTML_VALIGN_TOP' objects.  */
-			if (have_valign_top) {
-				HTMLObject *p;
-
-				for (p = line; p != obj; p = p->next) {
-					gint height, rest;
-
-					if (html_object_get_valign (p) != HTML_VALIGN_TOP)
-						continue;
-
-					height = p->ascent + p->descent;
-					rest = height - a;
-
-					if (rest > d) {
-						o->ascent += rest - d;
-						o->y += rest - d;
-						d = rest;
-					}
-				}
-
-				have_valign_top = FALSE;
-			}
-
-			for (; line != obj; line = line->next) {
-				if (line->flags & HTML_OBJECT_FLAG_ALIGNED)
-					continue;
-
-				/* FIXME max_ascent/max_descent -- not quite
-				   sure what they are for. */
-
-				switch (html_object_get_valign (line)) {
-				case HTML_VALIGN_BOTTOM:
-					line->y = o->ascent - d;
-					html_object_set_max_ascent (line, painter, a);
-					html_object_set_max_descent (line, painter, d);
-					break;
-				case HTML_VALIGN_MIDDLE:
-					line->y = o->ascent - a - d + line->ascent;
-					break;
-				case HTML_VALIGN_TOP:
-					line->y = o->ascent - a - d + line->ascent;
-					break;
-				default:
-					g_assert_not_reached ();
-				}
-
-				if (halign == HTML_HALIGN_CENTER
-				    || halign == HTML_HALIGN_RIGHT)
-					line->x += extra;
-			}
-
-			oldy = o->y;
-			
-			if (clear == HTML_CLEAR_ALL) {
-				int new_lmargin, new_rmargin;
-				
-				html_clue_find_free_area (HTML_CLUE (o->parent),
-							  oldy,
-							  o->max_width,
-							  1, 0,
-							  &o->y,
-							  &new_lmargin,
-							  &new_rmargin);
-			} else if (clear == HTML_CLEAR_LEFT) {
-				o->y = html_clue_get_left_clear (HTML_CLUE (o->parent), oldy);
-			} else if (clear == HTML_CLEAR_RIGHT) {
-				o->y = html_clue_get_right_clear (HTML_CLUE (o->parent), oldy);
-			} else if (firstRun && no_fit && (lmargin != orig_lmargin || rmargin != orig_rmargin)) {
-				printf ("old y: %d lm %d rm %d\n", o->y, lmargin, rmargin);
-				html_clue_find_free_area (HTML_CLUE (o->parent),
-							  o->y, rmargin - lmargin + 1, 1, 0, &o->y,
-							  &lmargin, &rmargin);
-				printf ("new y: %d lm %d rm %d\n", o->y, lmargin, rmargin);
-				//o->ascent += o->y - oldy;
-			}
-			no_fit = FALSE;
-			firstRun = FALSE;
-
-			o->ascent += o->y - oldy;
-
-			lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
-			if (indent > lmargin)
-				lmargin = indent;
-			/* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
-			rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
-
-			w = lmargin;
-			d = 0;
-			a = 0;
-			
-			newLine = FALSE;
-			clear = HTML_CLEAR_NONE;
-		
-		}
-	}
-	
-       
-	if (o->width < o->max_width)
-		o->width = o->max_width;
-
-	add_post_padding (HTML_CLUEFLOW (o), padding);
-
-	if (o->ascent != old_ascent || o->descent != old_descent || o->width != old_width) {
-		changed = TRUE;
-	}
-	if (o->ascent != old_ascent || o->descent != old_descent || o->width != old_width || leaf_childs_changed_size) {
-		/* if (changed_objs)
-			printf ("changed: %d==%d %d==%d %d==%d %d\n",
-			o->width, old_width, o->ascent, old_ascent, o->descent, old_descent, leaf_childs_changed_size); */
-		if (changed_objs) {
-			if (old_width > o->max_width && o->width < old_width) {
-				add_clear_area (changed_objs, o, o->width, old_width - o->width);
-			}
-			html_object_add_to_changed (changed_objs, o);
-		}
-	}
-
-	return changed;
+	return HTML_CLUEFLOW (self)->clear;
 }
 
 static gint
@@ -2535,6 +2132,7 @@ html_clueflow_class_init (HTMLClueFlowClass *klass,
 	object_class->search_next = search_next;
 	object_class->relayout = relayout;
 	object_class->get_recursive_length = get_recursive_length;
+	object_class->get_clear = get_clear;
 
 	klass->get_default_font_style = get_default_font_style;
 
@@ -2543,7 +2141,8 @@ html_clueflow_class_init (HTMLClueFlowClass *klass,
 
 void
 html_clueflow_init (HTMLClueFlow *clueflow, HTMLClueFlowClass *klass,
-		    HTMLClueFlowStyle style, GByteArray *levels, HTMLListType item_type, gint item_number)
+		    HTMLClueFlowStyle style, GByteArray *levels, HTMLListType item_type, gint item_number,
+		    HTMLClearType clear)
 {
 	HTMLObject *object;
 	HTMLClue *clue;
@@ -2563,15 +2162,18 @@ html_clueflow_init (HTMLClueFlow *clueflow, HTMLClueFlowClass *klass,
 
 	clueflow->item_type   = item_type;
 	clueflow->item_number = item_number;
+
+	clueflow->clear = clear;
 }
 
 HTMLObject *
-html_clueflow_new (HTMLClueFlowStyle style, GByteArray *levels, HTMLListType item_type, gint item_number)
+html_clueflow_new (HTMLClueFlowStyle style, GByteArray *levels,
+		   HTMLListType item_type, gint item_number, HTMLClearType clear)
 {
 	HTMLClueFlow *clueflow;
 
 	clueflow = g_new (HTMLClueFlow, 1);
-	html_clueflow_init (clueflow, &html_clueflow_class, style, levels, item_type, item_number);
+	html_clueflow_init (clueflow, &html_clueflow_class, style, levels, item_type, item_number, clear);
 
 	return HTML_OBJECT (clueflow);
 }
@@ -2582,7 +2184,7 @@ html_clueflow_new_from_flow (HTMLClueFlow *flow)
 	HTMLObject *o;
 
 	o = html_clueflow_new (flow->style, html_clueflow_dup_levels (flow),
-			       flow->item_type, flow->item_number);
+			       flow->item_type, flow->item_number, flow->clear);
 	html_object_copy_data_from_object (o, HTML_OBJECT (flow));
 
 	return o;

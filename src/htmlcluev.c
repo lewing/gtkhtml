@@ -153,21 +153,14 @@ do_layout (HTMLObject *o, HTMLPainter *painter, gboolean calc_size, GList **chan
 	   continue from the last object done in previous call. */
 	
 	if (clue->curr != NULL) {
-		o->ascent = cluev->padding * pixel_size;
-		
-		/* Get the current ascent not including curr */
-		obj = clue->head;
-		while (obj != clue->curr) {
-			o->ascent += obj->ascent + obj->descent;
-			obj = obj->next;
-		}
-
-		/* Remove any aligned objects previously added by the current
-		   object.  */
+		if (clue->curr->prev)
+			o->ascent = clue->curr->prev->y + clue->curr->prev->descent;
+		else
+			o->ascent = padding;
 		remove_aligned_by_parent (cluev, clue->curr);
 	} else {
 		o->width = 0;
-		o->ascent = pixel_size * cluev->padding;
+		o->ascent = padding;
 		o->descent = 0;
 		clue->curr = clue->head;
 	}
@@ -180,13 +173,38 @@ do_layout (HTMLObject *o, HTMLPainter *painter, gboolean calc_size, GList **chan
 		old_y_off = clue->curr->y - clue->curr->ascent;
 		clue->curr->y = o->ascent;
 
+		switch (html_object_get_clear (clue->curr)) {
+		case HTML_CLEAR_ALL: {
+			gint y;
+
+			do {
+				y = clue->curr->y;
+				clue->curr->y = html_clue_get_left_clear (clue, clue->curr->y);
+				clue->curr->y = html_clue_get_right_clear (clue, clue->curr->y);
+			} while (clue->curr->y != y);
+			break;
+		}
+		case HTML_CLEAR_LEFT:
+			clue->curr->y = html_clue_get_left_clear (clue, clue->curr->y);
+			break;
+		case HTML_CLEAR_RIGHT:
+			clue->curr->y = html_clue_get_right_clear (clue, clue->curr->y);
+			break;
+		case HTML_CLEAR_NONE:
+			break;
+		}
+
+		o->ascent = clue->curr->y;
+		lmargin = get_lmargin (o, painter);
+
+
 		if (calc_size)
 			changed |= html_object_calc_size (clue->curr, painter, changed_objs);
 
 		if (o->width < clue->curr->width + padding2)
 			o->width = clue->curr->width + padding2;
-
 		o->ascent += clue->curr->ascent + clue->curr->descent;
+
 		new_y_off = o->ascent - clue->curr->descent - clue->curr->ascent;
 		if (clue->curr->x != lmargin || old_y_off != new_y_off) {
 			if (changed_objs) {
@@ -207,7 +225,7 @@ do_layout (HTMLObject *o, HTMLPainter *painter, gboolean calc_size, GList **chan
 		clue->curr = clue->curr->next;
 	}
 
-	o->ascent += pixel_size * cluev->padding;
+	o->ascent += padding;
 
 	/* Remember the last object so that we can start from here next time
 	   we are called. */
@@ -565,7 +583,7 @@ get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_
 /* HTMLClue methods.  */
 
 static void
-find_free_area (HTMLClue *clue, gint y, gint width, gint height,
+find_free_area (HTMLClue *clue, HTMLPainter *painter, gint y, gint width, gint height,
 		gint indent, gint *y_pos, gint *_lmargin, gint *_rmargin)
 {
 	HTMLClueV *cluev = HTML_CLUEV (clue);
@@ -576,11 +594,11 @@ find_free_area (HTMLClue *clue, gint y, gint width, gint height,
 	HTMLObject *aclue;
 	gint next_y, top_y, base_y=0;
 
+	next_y = 0;
 	while (1) {
 		lmargin = indent;
 		//rmargin = MAX (HTML_OBJECT (clue)->max_width, HTML_OBJECT (clue)->width)
-		rmargin = HTML_OBJECT (clue)->max_width - 2 * cluev->padding; //fix * html_painter_get_pixel_size (painter);
-		next_y = 0;
+		rmargin = HTML_OBJECT (clue)->max_width - 2 * cluev->padding * html_painter_get_pixel_size (painter);
 		
 		for (aclue = cluev->align_left_list; aclue != 0; aclue = cluev_next_aligned (aclue)) {
 			base_y = (aclue->y + aclue->parent->y
@@ -656,11 +674,11 @@ appended (HTMLClue *clue, HTMLClue *aclue)
 }
 
 static void
-append_left_aligned (HTMLClue *clue, HTMLClue *aclue, gint *lmargin, gint *rmargin, gint indent)
+append_left_aligned (HTMLClue *clue, HTMLPainter *painter, HTMLClue *aclue, gint *lmargin, gint *rmargin, gint indent)
 {
 	gint y_pos, y_inc;
 
-	html_clue_find_free_area (clue,
+	html_clue_find_free_area (clue, painter,
 				  HTML_OBJECT (aclue)->parent->y,
 				  HTML_OBJECT (aclue)->width, 
 				  HTML_OBJECT (aclue)->ascent + HTML_OBJECT (aclue)->descent,
@@ -668,7 +686,7 @@ append_left_aligned (HTMLClue *clue, HTMLClue *aclue, gint *lmargin, gint *rmarg
 
 	/* Set position */
 	y_inc = y_pos - HTML_OBJECT (aclue)->parent->y;
-	printf ("y_inc %d y_pos %d\n", y_inc, y_pos);
+
 	HTML_OBJECT (aclue)->x = *lmargin;
 	HTML_OBJECT (aclue)->y = HTML_OBJECT (aclue)->parent->ascent + HTML_OBJECT (aclue)->ascent + y_inc;
 
@@ -694,11 +712,11 @@ append_left_aligned (HTMLClue *clue, HTMLClue *aclue, gint *lmargin, gint *rmarg
 }
 
 static void
-append_right_aligned (HTMLClue *clue, HTMLClue *aclue, gint *lmargin, gint *rmargin, gint indent)
+append_right_aligned (HTMLClue *clue, HTMLPainter *painter, HTMLClue *aclue, gint *lmargin, gint *rmargin, gint indent)
 {
 	gint y_pos, y_inc;
 
-	html_clue_find_free_area (clue, HTML_OBJECT (aclue)->parent->y,
+	html_clue_find_free_area (clue, painter, HTML_OBJECT (aclue)->parent->y,
 				  HTML_OBJECT (aclue)->width, 
 				  HTML_OBJECT (aclue)->ascent + HTML_OBJECT (aclue)->descent, indent,
 				  &y_pos, lmargin, rmargin);
@@ -707,7 +725,7 @@ append_right_aligned (HTMLClue *clue, HTMLClue *aclue, gint *lmargin, gint *rmar
 
 	/* Set position */
 	y_inc = y_pos - HTML_OBJECT (aclue)->parent->y;
-	printf ("y_inc %d y_pos %d\n", y_inc, y_pos);
+
 	HTML_OBJECT (aclue)->x = *rmargin;
 	HTML_OBJECT (aclue)->y = HTML_OBJECT (aclue)->parent->ascent + HTML_OBJECT (aclue)->ascent + y_inc;
 
@@ -715,8 +733,7 @@ append_right_aligned (HTMLClue *clue, HTMLClue *aclue, gint *lmargin, gint *rmar
 	if (!HTML_CLUEV (clue)->align_right_list) {
 		HTML_CLUEV (clue)->align_right_list = HTML_OBJECT (aclue);
 		HTML_CLUEALIGNED (aclue)->next_aligned = NULL;
-	}
-	else {
+	} else {
 		HTMLClueAligned *obj = HTML_CLUEALIGNED (HTML_CLUEV (clue)->align_right_list);
 		while (obj->next_aligned) {
 			if (obj == HTML_CLUEALIGNED (aclue))
@@ -746,8 +763,8 @@ get_left_clear (HTMLClue *self,
 		base_y = p->y + p->parent->y - p->parent->ascent;
 		top_y = base_y - p->ascent;
 
-		if (top_y <= y && base_y > y)
-			y = base_y;
+		if (top_y <= y && y < base_y + p->descent)
+			y = base_y + p->descent;
 	}
 
 	return y;
@@ -768,8 +785,8 @@ get_right_clear (HTMLClue *self,
 		base_y = p->y + p->parent->y - p->parent->ascent;
 		top_y = base_y - p->ascent;
 
-		if (top_y <= y && base_y > y)
-			y = base_y;
+		if (top_y <= y && y < base_y + p->descent)
+			y = base_y + p->descent;
 	}
 
 	return y;

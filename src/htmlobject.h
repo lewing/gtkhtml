@@ -248,6 +248,8 @@ struct _HTMLObjectClass {
 	HTMLObject * (* prev)            (HTMLObject *self, HTMLObject *child);
 	HTMLObject * (* head)            (HTMLObject *self);
 	HTMLObject * (* tail)            (HTMLObject *self);
+
+	HTMLClearType (* get_clear) (HTMLObject *self);
 };
 
 
@@ -556,4 +558,5 @@ gboolean  html_object_engine_intersection  (HTMLObject *o,
 void  html_object_add_to_changed  (GList      **changed_objs,
 				   HTMLObject  *o);
 
+HTMLClearType html_object_get_clear (HTMLObject *self);
 #endif /* _HTMLOBJECT_H_ */

@@ -598,7 +598,12 @@ tail (HTMLObject *self)
 	return NULL;
 }
 
-
+static HTMLClearType
+get_clear (HTMLObject *self)
+{
+	return HTML_CLEAR_NONE;
+}
+
 /* Class initialization.  */
 
 void
@@ -670,6 +675,7 @@ html_object_class_init (HTMLObjectClass *klass,
 	klass->head = head;
 	klass->tail = tail;
 	klass->get_engine = get_engine;
+	klass->get_clear = get_clear;
 }
 
 void
@@ -1890,4 +1896,10 @@ html_object_add_to_changed (GList **changed_objs, HTMLObject *o)
 	}
 
 	*changed_objs = g_list_prepend (*changed_objs, o);
+}
+
+HTMLClearType
+html_object_get_clear (HTMLObject *self)
+{
+	return (* HO_CLASS (self)->get_clear) (self);
 }
