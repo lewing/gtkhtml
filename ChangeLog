@@ -1,3 +1,8 @@
+Thu Jul 15 10:11:08 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (GTKHTML_MODULES): Require GTK+-2.4
+	for GtkComboBox usage in src/tests.c.
+
 2004-06-25  JP Rosevear  <jpr@novell.com>
 
 	* configure.in: bump version, libtool numbers
