@@ -1,5 +1,9 @@
 2002-04-18  Larry Ewing  <lewing@ximian.com>
 
+	* configure.in: bump version number for snapshots.
+
+2002-04-18  Larry Ewing  <lewing@ximian.com>
+
 	* Make gtkhtml-1.0.3 release.
 	
 	* configure.in: bump versions for gtkhtml-1.0.3 release.
