@@ -182,12 +182,9 @@ gtk_html_replace_dialog_new (GtkHTML *html)
 	gnome_dialog_set_default (dialog->dialog, 0);
 	gtk_widget_grab_focus (dialog->entry_search);
 
-	gtk_signal_connect (GTK_OBJECT (dialog->entry_search), "changed",
-			    GTK_SIGNAL_FUNC (entry_changed), dialog);
-	gtk_signal_connect (GTK_OBJECT (dialog->entry_search), "activate",
-			    GTK_SIGNAL_FUNC (entry_activate), dialog);
-	gtk_signal_connect (GTK_OBJECT (dialog->entry_replace), "activate",
-			    GTK_SIGNAL_FUNC (entry_activate), dialog);
+	g_signal_connect (dialog->entry_search, "changed", G_CALLBACK (entry_changed), dialog);
+	g_signal_connect (dialog->entry_search, "activate", G_CALLBACK (entry_activate), dialog);
+	g_signal_connect (dialog->entry_replace, "activate", G_CALLBACK (entry_activate), dialog);
 
 	return dialog;
 }

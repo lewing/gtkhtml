@@ -643,14 +643,10 @@ menubar_setup (BonoboUIComponent  *uic,
 	g_return_if_fail (GTK_IS_HTML (cd->html));
 	g_return_if_fail (BONOBO_IS_UI_COMPONENT (uic));
 
-	gtk_signal_connect (GTK_OBJECT (cd->html), "current_paragraph_style_changed",
-			    GTK_SIGNAL_FUNC (menubar_update_paragraph_style), cd);
-
-	gtk_signal_connect (GTK_OBJECT (cd->html), "current_paragraph_alignment_changed",
-			    GTK_SIGNAL_FUNC (menubar_update_paragraph_alignment), cd);
-
-	gtk_signal_connect (GTK_OBJECT (cd->html), "insertion_font_style_changed",
-			    GTK_SIGNAL_FUNC (menubar_update_font_style), cd);
+	g_signal_connect (cd->html, "current_paragraph_style_changed", G_CALLBACK (menubar_update_paragraph_style), cd);
+	g_signal_connect (cd->html, "current_paragraph_alignment_changed",
+			  G_CALLBACK (menubar_update_paragraph_alignment), cd);
+	g_signal_connect (cd->html, "insertion_font_style_changed", G_CALLBACK (menubar_update_font_style), cd);
 
 	bonobo_ui_component_add_verb_list_with_data (uic, verbs, cd);
 

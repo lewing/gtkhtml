@@ -128,8 +128,8 @@ gtk_html_edit_properties_dialog_new (GtkHTMLControlData *cd, gboolean insert, gc
 		gnome_dialog_set_parent (GNOME_DIALOG (d->dialog), parent);
 	}
 	d->notebook = gtk_notebook_new ();
-	gtk_signal_connect (GTK_OBJECT (d->dialog), "destroy", GTK_SIGNAL_FUNC (destroy_dialog), d);
-	gtk_signal_connect (GTK_OBJECT (d->notebook), "switch_page", GTK_SIGNAL_FUNC (switch_page), d);
+	g_signal_connect (d->dialog, "destroy", G_CALLBACK (destroy_dialog), d);
+	g_signal_connect (d->notebook, "switch_page", G_CALLBACK (switch_page), d);
 	gtk_box_pack_start_defaults (GTK_BOX (GNOME_DIALOG (d->dialog)->vbox), d->notebook);
 	gtk_widget_show (d->notebook);
 
@@ -229,5 +229,5 @@ gtk_html_edit_properties_dialog_set_page (GtkHTMLEditPropertiesDialog *d, GtkHTM
 	gint pos = g_list_position (d->page_data, g_list_find_custom (d->page_data, GINT_TO_POINTER (t),
 								      (GCompareFunc) find_type));
 	if (pos >= 0)
-		gtk_notebook_set_page (GTK_NOTEBOOK (d->notebook), pos);
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (d->notebook), pos);
 }

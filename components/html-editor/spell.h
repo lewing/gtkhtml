@@ -32,7 +32,6 @@ gboolean                spell_check_word            (GtkHTML            *html,
 						     const gchar        *word,
 						     gpointer            data);
 void                    spell_suggestion_request    (GtkHTML            *html,
-						     const gchar        *word,
 						     gpointer            data);
 void                    spell_add_to_session        (GtkHTML            *html,
 						     const gchar        *word,

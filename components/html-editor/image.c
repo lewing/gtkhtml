@@ -342,7 +342,7 @@ fill_templates (GtkHTMLEditImageProperties *d)
 	menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template));
 
 	for (i = 0; i < TEMPLATES; i ++)
-		gtk_menu_append (GTK_MENU (menu), gtk_menu_item_new_with_label (_(image_templates [i].name)));
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_menu_item_new_with_label (_(image_templates [i].name)));
 	gtk_menu_set_active (GTK_MENU (menu), 0);
 	gtk_container_remove (GTK_CONTAINER (menu), gtk_menu_get_active (GTK_MENU (menu)));
 }
@@ -513,47 +513,47 @@ image_widget (GtkHTMLEditImageProperties *d, gboolean insert)
 	frame_template = glade_xml_get_widget (xml, "frame_image_template");
 
 	d->option_align = glade_xml_get_widget (xml, "option_image_align");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_align))),
-			    "selection-done", GTK_SIGNAL_FUNC (changed_align), d);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_align)),
+			  "selection-done", G_CALLBACK (changed_align), d);
 	d->option_width_percent = glade_xml_get_widget (xml, "option_image_width_percent");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width_percent))),
-			    "selection-done", GTK_SIGNAL_FUNC (changed_width_percent), d);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width_percent)),
+			  "selection-done", G_CALLBACK (changed_width_percent), d);
 	d->option_height_percent = glade_xml_get_widget (xml, "option_image_height_percent");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_height_percent))),
-			    "selection-done", GTK_SIGNAL_FUNC (changed_height_percent), d);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_height_percent)),
+			  "selection-done", G_CALLBACK (changed_height_percent), d);
 
 	d->spin_border = glade_xml_get_widget (xml, "spin_image_border");
 	UPPER_FIX (border);
-	gtk_signal_connect (GTK_OBJECT (d->spin_border), "changed", GTK_SIGNAL_FUNC (changed_border), d);
+	g_signal_connect (d->spin_border, "changed", G_CALLBACK (changed_border), d);
 	d->spin_width = glade_xml_get_widget (xml, "spin_image_width");
 	UPPER_FIX (width);
-	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", GTK_SIGNAL_FUNC (changed_width), d);
+	g_signal_connect (d->spin_width, "changed", G_CALLBACK (changed_width), d);
 	d->spin_height = glade_xml_get_widget (xml, "spin_image_height");
 	UPPER_FIX (height);
-	gtk_signal_connect (GTK_OBJECT (d->spin_height), "changed", GTK_SIGNAL_FUNC (changed_height), d);
+	g_signal_connect (d->spin_height, "changed", G_CALLBACK (changed_height), d);
 	d->spin_padh = glade_xml_get_widget (xml, "spin_image_padh");
 	UPPER_FIX (padh);
-	gtk_signal_connect (GTK_OBJECT (d->spin_padh), "changed", GTK_SIGNAL_FUNC (changed_padh), d);
+	g_signal_connect (d->spin_padh, "changed", G_CALLBACK (changed_padh), d);
 	d->spin_padv = glade_xml_get_widget (xml, "spin_image_padv");
 	UPPER_FIX (padv);
-	gtk_signal_connect (GTK_OBJECT (d->spin_padv), "changed", GTK_SIGNAL_FUNC (changed_padv), d);
+	g_signal_connect (d->spin_padv, "changed", G_CALLBACK (changed_padv), d);
 
 	d->option_template = glade_xml_get_widget (xml, "option_image_template");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template))),
-			    "selection-done", GTK_SIGNAL_FUNC (changed_template), d);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template)),
+			  "selection-done", G_CALLBACK (changed_template), d);
 	if (insert)
 		fill_templates (d);
 
 	gtk_container_add (GTK_CONTAINER (d->frame_sample), sample_frame (&d->sample));
-	gtk_signal_disconnect_by_func (GTK_OBJECT (d->sample), GTK_SIGNAL_FUNC (url_requested), NULL);
-	gtk_signal_connect (GTK_OBJECT (d->sample), "url_requested", GTK_SIGNAL_FUNC (image_url_requested), d);
+	g_signal_handlers_disconnect_matched (d->sample, G_SIGNAL_MATCH_FUNC, 0, 0, NULL, G_CALLBACK (url_requested), NULL);
+	g_signal_connect (GTK_OBJECT (d->sample), "url_requested", G_CALLBACK (image_url_requested), d);
 
 	d->entry_url = glade_xml_get_widget (xml, "entry_image_url");
-	gtk_signal_connect (GTK_OBJECT (d->entry_url), "changed", GTK_SIGNAL_FUNC (url_changed), d);
+	g_signal_connect (GTK_OBJECT (d->entry_url), "changed", G_CALLBACK (url_changed), d);
 
 	d->pentry = glade_xml_get_widget (xml, "pentry_image_location");
-	gtk_signal_connect (GTK_OBJECT (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (d->pentry))),
-			    "changed", GTK_SIGNAL_FUNC (pentry_changed), d);
+	g_signal_connect (GTK_OBJECT (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (d->pentry))),
+			    "changed", G_CALLBACK (pentry_changed), d);
 
 	gtk_widget_show_all (d->page);
 	if (!insert)

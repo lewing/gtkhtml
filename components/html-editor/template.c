@@ -43,7 +43,8 @@ struct _GtkHTMLEditTemplateProperties {
 	GtkHTML *sample;
 
 	gint template;
-	GtkWidget *clist_template;
+	GtkWidget *tview_template;
+	GtkListStore *store;
 
 	gint width;
 	gboolean width_percent;
@@ -183,7 +184,7 @@ set_ui (GtkHTMLEditTemplateProperties *d)
 {
 	d->disable_change = TRUE;
 
-	gtk_list_select_item (GTK_LIST (d->clist_template), d->template);
+	/* FIX2 gtk_list_select_item (GTK_LIST (d->clist_template), d->template); */
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width), d->width);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_halign), d->halign - HTML_HALIGN_LEFT);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width_percent), d->width_percent ? 1 : 0);
@@ -194,9 +195,14 @@ set_ui (GtkHTMLEditTemplateProperties *d)
 }
 
 static void
-changed_template (GtkWidget *w, GtkWidget *child, GtkHTMLEditTemplateProperties *d)
+selection_changed (GtkTreeSelection *selection, GtkHTMLEditTemplateProperties *d)
 {
-	d->template = gtk_list_child_position (GTK_LIST (w), child);
+	GtkTreeIter iter;
+	if (gtk_tree_selection_get_selected (selection, NULL, &iter)) {
+		g_print ("TODO");
+	}
+
+	/* FIX2 d->template = gtk_list_child_position (GTK_LIST (w), child);
 
 	if (!d->disable_change) {
 		gtk_widget_set_sensitive (d->spin_width, template_templates [d->template].has_width);
@@ -216,19 +222,20 @@ changed_template (GtkWidget *w, GtkWidget *child, GtkHTMLEditTemplateProperties 
 			FILL;
 		}
 		CHANGE;
-	}
+		} */
 }
 
 static void
 fill_templates (GtkHTMLEditTemplateProperties *d)
 {
 	GtkWidget *item;
+	GtkTreeIter iter;
 	gint i;
 
 	for (i = 0; i < TEMPLATES; i ++) {
-		item = gtk_list_item_new_with_label (template_templates [i].name);
-		gtk_widget_show (item);
-		gtk_container_add (GTK_CONTAINER (d->clist_template), item);
+		gtk_list_store_append (d->store, &iter);
+		gtk_list_store_set (d->store, &iter, 0, template_templates [i].name, -1);
+
 	}
 }
 
@@ -244,8 +251,16 @@ template_widget (GtkHTMLEditTemplateProperties *d, gboolean insert)
 
 	template_page = glade_xml_get_widget (xml, "vbox_template");
 
-	d->clist_template = glade_xml_get_widget (xml, "clist_templates");
-	gtk_signal_connect (GTK_OBJECT (d->clist_template), "select_child", GTK_SIGNAL_FUNC (changed_template), d);
+	d->tview_template = glade_xml_get_widget (xml, "treeview_template");
+	d->store = gtk_list_store_new (1, G_TYPE_STRING);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (d->tview_template), GTK_TREE_MODEL (d->store));
+
+	gtk_tree_view_append_column (GTK_TREE_VIEW (d->tview_template),
+				     gtk_tree_view_column_new_with_attributes ("Labels",
+									       gtk_cell_renderer_text_new (),
+									       "text", 0, NULL));
+	g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (d->tview_template)), "changed",
+			  G_CALLBACK (selection_changed), d);
 	fill_templates (d);
 
 	d->spin_width           = glade_xml_get_widget (xml, "spin_template_width");
@@ -273,7 +288,6 @@ template_insert (GtkHTMLControlData *cd, gpointer *set_data)
 	*set_data = data;
 	rv = template_widget (data, TRUE);
 	set_ui (data);
-	gtk_list_select_item (GTK_LIST (data->clist_template), 0);
 	gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
 
 	return rv;

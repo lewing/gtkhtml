@@ -198,7 +198,7 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	html_color_ref (data->color);
 
 	table = gtk_table_new (3, 2, FALSE);
-	gtk_container_border_width (GTK_CONTAINER (table), 3);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 3);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 3);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 2);
 
@@ -211,7 +211,7 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->check [i] = gtk_check_button_new_with_label (x); \
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (data->check [i]), data->style_or & styles [i]); \
         gtk_object_set_data (GTK_OBJECT (data->check [i]), "style", GUINT_TO_POINTER (styles [i])); \
-        gtk_signal_connect (GTK_OBJECT (data->check [i]), "toggled", GTK_SIGNAL_FUNC (set_style), data); \
+        g_signal_connect (data->check [i], "toggled", G_CALLBACK (set_style), data); \
 	gtk_table_attach (GTK_TABLE (t1), data->check [i], c, c + 1, r, r + 1, GTK_FILL | GTK_EXPAND, 0, 0, 0); \
         i++
 
@@ -238,7 +238,7 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 		gtk_container_add (GTK_CONTAINER (f1), data->entry_url);
 		gtk_container_add (GTK_CONTAINER (frame), f1);
 		gtk_box_pack_start_defaults (GTK_BOX (vbox), frame);
-		gtk_signal_connect (GTK_OBJECT (data->entry_url), "changed", GTK_SIGNAL_FUNC (set_url), data);
+		g_signal_connect (data->entry_url, "changed", G_CALLBACK (set_url), data);
 	}
 
 	gtk_table_attach_defaults (GTK_TABLE (table), vbox, 0, 1, 0, 2); //, GTK_FILL | GTK_EXPAND, 0, 0, 0);
@@ -249,9 +249,9 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 #undef ADD_ITEM
 #define ADD_ITEM(n) \
 	menuitem = gtk_menu_item_new_with_label (_(n)); \
-        gtk_menu_append (GTK_MENU (menu), menuitem); \
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem); \
         gtk_widget_show (menuitem); \
-        gtk_signal_connect (GTK_OBJECT (menuitem), "activate", GTK_SIGNAL_FUNC (set_size), data); \
+        g_signal_connect (menuitem, "activate", G_CALLBACK (set_size), data); \
         gtk_object_set_data (GTK_OBJECT (menuitem), "size", GINT_TO_POINTER (i)); i++;
 
 	i=GTK_HTML_FONT_STYLE_SIZE_1;
@@ -280,7 +280,7 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 					     &html_colorset_get_color (data->cd->html->engine->settings->color_set,
 								       HTMLTextColor)->color,
 					     color_group_fetch ("text", data->cd));
-        gtk_signal_connect (GTK_OBJECT (data->color_combo), "color_changed", GTK_SIGNAL_FUNC (color_changed), data);
+        g_signal_connect (data->color_combo, "color_changed", G_CALLBACK (color_changed), data);
 
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), data->color_combo, FALSE, FALSE, 0);

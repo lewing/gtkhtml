@@ -202,7 +202,7 @@ fill_templates (GtkHTMLEditBodyProperties *d)
 		GtkWidget *item;
 
 		item = gtk_menu_item_new_with_label (_(body_templates [i].name));
-		gtk_menu_append (GTK_MENU (menu), item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 		gdk_color_alloc (gdk_window_get_colormap (GTK_WIDGET (d->cd->html)->window), &body_templates [i].bg_color);
 		gdk_color_alloc (gdk_window_get_colormap (GTK_WIDGET (d->cd->html)->window), &body_templates [i].text_color);
@@ -224,7 +224,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->cd = cd;
 
 	table = gtk_table_new (2, 2, FALSE);
-	gtk_container_border_width (GTK_CONTAINER (table), 3);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 3);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 3);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 2);
 
@@ -234,8 +234,8 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	frame = gtk_frame_new (_("Template"));
 	data->option_template = gtk_option_menu_new ();
 	fill_templates (data);
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (data->option_template))),
-			    "selection-done", GTK_SIGNAL_FUNC (changed_template), data);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (data->option_template)),
+			  "selection-done", G_CALLBACK (changed_template), data);
 	gtk_box_pack_start (GTK_BOX (hbox), data->option_template, FALSE, TRUE, 0);
 	gtk_container_add (GTK_CONTAINER (frame), hbox);
 	gtk_box_pack_start (GTK_BOX (vb1), frame, FALSE, TRUE, 0);
@@ -247,7 +247,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 		e_utf8_gtk_entry_set_text (GTK_ENTRY (data->entry_title), 
 					   gtk_html_get_title (data->cd->html));
 	}
-	gtk_signal_connect (GTK_OBJECT (data->entry_title), "changed", GTK_SIGNAL_FUNC (entry_changed), data);
+	g_signal_connect (data->entry_title, "changed", G_CALLBACK (entry_changed), data);
 	gtk_box_pack_start_defaults (GTK_BOX (hbox), data->entry_title);
 	frame = gtk_frame_new (_("Document Title"));
 	gtk_container_add (GTK_CONTAINER (frame), hbox);
@@ -255,7 +255,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 
 	frame = gtk_frame_new (_("Background Image"));
 	vbox = gtk_vbox_new (FALSE, 2);
-	gtk_container_border_width (GTK_CONTAINER (vbox), 3);
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
 	data->pixmap_entry = gnome_pixmap_entry_new ("background_image", _("Background Image"), FALSE);
 
 	if (cd->html->engine->bgPixmapPtr) {
@@ -268,8 +268,8 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 				     ip->url + off);
 	}
 
-	gtk_signal_connect (GTK_OBJECT (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (data->pixmap_entry))),
-			    "changed", GTK_SIGNAL_FUNC (entry_changed), data);
+	g_signal_connect (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (data->pixmap_entry)),
+			  "changed", G_CALLBACK (entry_changed), data);
 
 	gtk_box_pack_start (GTK_BOX (vbox), data->pixmap_entry, FALSE, FALSE, 0);
 
@@ -280,7 +280,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 
 	frame = gtk_frame_new (_("Colors"));
 	vbox = gtk_vbox_new (FALSE, 2);
-	gtk_container_border_width (GTK_CONTAINER (vbox), 3);
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
 
 	group = NULL;
 	i = 0;
@@ -293,7 +293,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 				 color_group_fetch ("body_" g, cd)); \
         color_combo_set_color (COLOR_COMBO (combo), &data->color [ct]); \
         gtk_object_set_data (GTK_OBJECT (combo), "type", GINT_TO_POINTER (ct)); \
-        gtk_signal_connect (GTK_OBJECT (combo), "color_changed", GTK_SIGNAL_FUNC (color_changed), data); \
+        g_signal_connect (combo, "color_changed", G_CALLBACK (color_changed), data); \
 	hbox = gtk_hbox_new (FALSE, 3); \
 	gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE, FALSE, 0); \
 	gtk_box_pack_start (GTK_BOX (hbox), gtk_label_new (x), FALSE, FALSE, 0); \

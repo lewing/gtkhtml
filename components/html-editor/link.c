@@ -121,9 +121,9 @@ link_widget (GtkHTMLEditLinkProperties *data, gboolean insert)
 		set_ui (data);
 	}
 
-	gtk_signal_connect (GTK_OBJECT (data->entry_text), "changed", GTK_SIGNAL_FUNC (changed), data);
-	gtk_signal_connect (GTK_OBJECT (data->entry_url), "changed", GTK_SIGNAL_FUNC (changed), data);
-	gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (test_clicked), data);
+	g_signal_connect (data->entry_text, "changed", G_CALLBACK (changed), data);
+	g_signal_connect (data->entry_url, "changed", G_CALLBACK (changed), data);
+	g_signal_connect (button, "clicked", G_CALLBACK (test_clicked), data);
 
 	gtk_widget_show_all (vbox);
 

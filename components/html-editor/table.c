@@ -533,47 +533,47 @@ table_widget (GtkHTMLEditTableProperties *d)
 	html_color_alloc (color, d->cd->html->engine->painter);
 	d->combo_bg_color = color_combo_new (NULL, _("Automatic"), &color->color,
 					     color_group_fetch ("table_bg_color", d->cd));
-        gtk_signal_connect (GTK_OBJECT (d->combo_bg_color), "changed", GTK_SIGNAL_FUNC (changed_bg_color), d);
+        g_signal_connect (d->combo_bg_color, "changed", G_CALLBACK (changed_bg_color), d);
 	gtk_table_attach (GTK_TABLE (glade_xml_get_widget (xml, "bg_table")),
 			  d->combo_bg_color,
 			  1, 2, 0, 1, 0, 0, 0, 0);
 
 	d->check_bg_color  = glade_xml_get_widget (xml, "check_table_bg_color");
-	gtk_signal_connect (GTK_OBJECT (d->check_bg_color), "toggled", GTK_SIGNAL_FUNC (set_has_bg_color), d);
+	g_signal_connect (d->check_bg_color, "toggled", G_CALLBACK (set_has_bg_color), d);
 	d->check_bg_pixmap = glade_xml_get_widget (xml, "check_table_bg_pixmap");
-	gtk_signal_connect (GTK_OBJECT (d->check_bg_pixmap), "toggled", GTK_SIGNAL_FUNC (set_has_bg_pixmap), d);
+	g_signal_connect (d->check_bg_pixmap, "toggled", G_CALLBACK (set_has_bg_pixmap), d);
 	d->entry_bg_pixmap = glade_xml_get_widget (xml, "entry_table_bg_pixmap");
 
-	gtk_signal_connect (GTK_OBJECT (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (d->entry_bg_pixmap))),
-			    "changed", GTK_SIGNAL_FUNC (changed_bg_pixmap), d);
+	g_signal_connect (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (d->entry_bg_pixmap)),
+			  "changed", G_CALLBACK (changed_bg_pixmap), d);
 
 	d->spin_spacing = glade_xml_get_widget (xml, "spin_spacing");
-	gtk_signal_connect (GTK_OBJECT (d->spin_spacing), "changed", GTK_SIGNAL_FUNC (changed_spacing), d);
+	g_signal_connect (d->spin_spacing, "changed", G_CALLBACK (changed_spacing), d);
 	d->spin_padding = glade_xml_get_widget (xml, "spin_padding");
-	gtk_signal_connect (GTK_OBJECT (d->spin_padding), "changed", GTK_SIGNAL_FUNC (changed_padding), d);
+	g_signal_connect (d->spin_padding, "changed", G_CALLBACK (changed_padding), d);
 	d->spin_border  = glade_xml_get_widget (xml, "spin_border");
-	gtk_signal_connect (GTK_OBJECT (d->spin_border), "changed", GTK_SIGNAL_FUNC (changed_border), d);
+	g_signal_connect (d->spin_border, "changed", G_CALLBACK (changed_border), d);
 	UPPER_FIX (padding);
 	UPPER_FIX (spacing);
 	UPPER_FIX (border);
 
 	d->option_align = glade_xml_get_widget (xml, "option_table_align");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_align))), "selection-done",
-			    GTK_SIGNAL_FUNC (changed_align), d);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_align)), "selection-done",
+			  G_CALLBACK (changed_align), d);
 
 	d->spin_width   = glade_xml_get_widget (xml, "spin_table_width");
-	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", GTK_SIGNAL_FUNC (changed_width), d);
+	g_signal_connect (d->spin_width, "changed", G_CALLBACK (changed_width), d);
 	UPPER_FIX (width);
 	d->check_width  = glade_xml_get_widget (xml, "check_table_width");
-	gtk_signal_connect (GTK_OBJECT (d->check_width), "toggled", GTK_SIGNAL_FUNC (set_has_width), d);
+	g_signal_connect (d->check_width, "toggled", G_CALLBACK (set_has_width), d);
 	d->option_width = glade_xml_get_widget (xml, "option_table_width");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width))), "selection-done",
-			    GTK_SIGNAL_FUNC (changed_width_percent), d);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width)), "selection-done",
+			  G_CALLBACK (changed_width_percent), d);
 
 	d->spin_cols = glade_xml_get_widget (xml, "spin_table_columns");
-	gtk_signal_connect (GTK_OBJECT (d->spin_cols), "changed", GTK_SIGNAL_FUNC (changed_cols), d);
+	g_signal_connect (d->spin_cols, "changed", G_CALLBACK (changed_cols), d);
 	d->spin_rows = glade_xml_get_widget (xml, "spin_table_rows");
-	gtk_signal_connect (GTK_OBJECT (d->spin_rows), "changed", GTK_SIGNAL_FUNC (changed_rows), d);
+	g_signal_connect (d->spin_rows, "changed", G_CALLBACK (changed_rows), d);
 	UPPER_FIX (cols);
 	UPPER_FIX (rows);
 
@@ -595,7 +595,7 @@ fill_templates (GtkHTMLEditTableProperties *d)
 	menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template));
 
 	for (i = 0; i < TEMPLATES; i ++)
-		gtk_menu_append (GTK_MENU (menu), gtk_menu_item_new_with_label (_(table_templates [i].name)));
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_menu_item_new_with_label (_(table_templates [i].name)));
 	gtk_menu_set_active (GTK_MENU (menu), 0);
 	gtk_container_remove (GTK_CONTAINER (menu), gtk_menu_get_active (GTK_MENU (menu)));
 }
@@ -614,34 +614,34 @@ table_insert_widget (GtkHTMLEditTableProperties *d)
 	table_page = glade_xml_get_widget (xml, "table_insert_page");
 
 	d->spin_cols = glade_xml_get_widget (xml, "spin_table_columns");
-	gtk_signal_connect (GTK_OBJECT (d->spin_cols), "changed", GTK_SIGNAL_FUNC (changed_cols), d);
+	g_signal_connect (d->spin_cols, "changed", G_CALLBACK (changed_cols), d);
 	d->spin_rows = glade_xml_get_widget (xml, "spin_table_rows");
-	gtk_signal_connect (GTK_OBJECT (d->spin_rows), "changed", GTK_SIGNAL_FUNC (changed_rows), d);
+	g_signal_connect (d->spin_rows, "changed", G_CALLBACK (changed_rows), d);
 	UPPER_FIX (cols);
 	UPPER_FIX (rows);
 
 	d->spin_width   = glade_xml_get_widget (xml, "spin_table_width");
 	UPPER_FIX (width);
-	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", GTK_SIGNAL_FUNC (changed_width), d);
+	g_signal_connect (d->spin_width, "changed", G_CALLBACK (changed_width), d);
 	d->check_width  = glade_xml_get_widget (xml, "check_table_width");
-	gtk_signal_connect (GTK_OBJECT (d->check_width), "toggled", GTK_SIGNAL_FUNC (set_has_width), d);
+	g_signal_connect (d->check_width, "toggled", G_CALLBACK (set_has_width), d);
 	d->option_width = glade_xml_get_widget (xml, "option_table_width");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width))), "selection-done",
-			    GTK_SIGNAL_FUNC (changed_width_percent), d);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width)), "selection-done",
+			  G_CALLBACK (changed_width_percent), d);
 
 	d->spin_spacing = glade_xml_get_widget (xml, "spin_spacing");
-	gtk_signal_connect (GTK_OBJECT (d->spin_spacing), "changed", GTK_SIGNAL_FUNC (changed_spacing), d);
+	g_signal_connect (d->spin_spacing, "changed", G_CALLBACK (changed_spacing), d);
 	d->spin_padding = glade_xml_get_widget (xml, "spin_padding");
-	gtk_signal_connect (GTK_OBJECT (d->spin_padding), "changed", GTK_SIGNAL_FUNC (changed_padding), d);
+	g_signal_connect (d->spin_padding, "changed", G_CALLBACK (changed_padding), d);
 	d->spin_border  = glade_xml_get_widget (xml, "spin_border");
-	gtk_signal_connect (GTK_OBJECT (d->spin_border), "changed", GTK_SIGNAL_FUNC (changed_border), d);
+	g_signal_connect (d->spin_border, "changed", G_CALLBACK (changed_border), d);
 	UPPER_FIX (padding);
 	UPPER_FIX (spacing);
 	UPPER_FIX (border);
 
 	d->option_template = glade_xml_get_widget (xml, "option_table_template");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template))), "selection-done",
-			    GTK_SIGNAL_FUNC (changed_template), d);
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template)), "selection-done",
+			  G_CALLBACK (changed_template), d);
 	fill_templates (d);
 	gtk_box_pack_start (GTK_BOX (table_page), sample_frame (&d->sample), FALSE, FALSE, 0);
 

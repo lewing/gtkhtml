@@ -249,7 +249,7 @@ spell_suggest (GtkWidget *mi, GtkHTMLControlData *cd)
 
 	/* gtk_signal_emit_by_name (GTK_OBJECT (cd->html), "spell_suggestion_request",
 	   e->spell_checker, html_engine_get_word (e)); */
-	spell_suggestion_request (cd->html, html_engine_get_spell_word (e), cd);
+	spell_suggestion_request (cd->html, cd);
 }
 
 static void
@@ -308,9 +308,9 @@ insert_html (GtkWidget *mi, GtkHTMLControlData *cd)
 
 #define ADD_ITEM_BASE(f,t) \
                 gtk_object_set_data (GTK_OBJECT (menuitem), "type", GINT_TO_POINTER (GTK_HTML_EDIT_PROPERTY_ ## t)); \
-		gtk_menu_append (GTK_MENU (menu), menuitem); \
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem); \
 		gtk_widget_show (menuitem); \
-		gtk_signal_connect (GTK_OBJECT (menuitem), "activate", GTK_SIGNAL_FUNC (f), cd); \
+		g_signal_connect (menuitem, "activate", G_CALLBACK (f), cd); \
                 (*items)++; items_sep++
 
 #define ADD_ITEM(l,f,t) \
@@ -320,7 +320,7 @@ insert_html (GtkWidget *mi, GtkHTMLControlData *cd)
 #define ADD_SEP \
         if (items_sep) { \
                 menuitem = gtk_menu_item_new (); \
-                gtk_menu_append (GTK_MENU (menu), menuitem); \
+                gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem); \
                 gtk_widget_show (menuitem); \
 		items_sep = 0; \
         }
@@ -330,7 +330,7 @@ insert_html (GtkWidget *mi, GtkHTMLControlData *cd)
 
 #define SUBMENU(l) \
 		        menuitem = gtk_menu_item_new_with_label (_(l)); \
-			gtk_menu_append (GTK_MENU (menu), menuitem); \
+			gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem); \
 			gtk_widget_show (menuitem); \
 			(*items)++; items_sep++; \
 			submenu = gtk_menu_new (); \

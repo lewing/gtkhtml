@@ -221,7 +221,7 @@ release (GtkWidget *widget, GdkEventButton *event, GtkHTMLControlData *cd)
 			gtk_html_edit_properties_dialog_set_page (cd->properties_dialog, start);
 		}
 	}
-	gtk_signal_disconnect (GTK_OBJECT (widget), cd->releaseId);
+	g_signal_handler_disconnect (widget, cd->releaseId);
 
 	return FALSE;
 }
@@ -305,8 +305,8 @@ html_button_pressed (GtkWidget *html, GdkEventButton *event, GtkHTMLControlData 
 	switch (event->button) {
 	case 1:
 		if (event->type == GDK_2BUTTON_PRESS && cd->obj && event->state & GDK_CONTROL_MASK)
-			cd->releaseId = gtk_signal_connect (GTK_OBJECT (html), "button_release_event",
-							    GTK_SIGNAL_FUNC (release), cd);
+			cd->releaseId = g_signal_connect (html, "button_release_event",
+							  G_CALLBACK (release), cd);
 		else
 			return TRUE;
 		break;
@@ -370,6 +370,9 @@ editor_set_format (GtkHTMLControlData *cd, gboolean format_html)
 	
 	editor_init_painters (cd);
 	
+	/* RM2 */
+	format_html = 1;
+
 	html = cd->html;
 	cd->format_html = format_html;
 
@@ -382,6 +385,7 @@ editor_set_format (GtkHTMLControlData *cd, gboolean format_html)
 	}		
 
 	printf ("set format %d\n", format_html);
+
 	toolbar_update_format (cd);
 	menubar_update_format (cd);
 
@@ -520,12 +524,8 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 	   handle that.  */
 
 	g_signal_connect (control, "set_frame", G_CALLBACK (set_frame_cb), cd);
-
-	gtk_signal_connect (GTK_OBJECT (html_widget), "url_requested",
-			    GTK_SIGNAL_FUNC (url_requested_cb), cd);
-
-	gtk_signal_connect (GTK_OBJECT (html_widget), "button_press_event",
-			    GTK_SIGNAL_FUNC (html_button_pressed), cd);
+	g_signal_connect (html_widget, "url_requested", G_CALLBACK (url_requested_cb), cd);
+	g_signal_connect (html_widget, "button_press_event", G_CALLBACK (html_button_pressed), cd);
 
 	cd->control = control;
 }

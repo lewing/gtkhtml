@@ -277,17 +277,10 @@ open_or_save_as_dialog (BonoboWindow *app,
 	file_selection_info.control = control;
 	file_selection_info.operation = op;
 
-	gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (widget)->cancel_button),
-				   "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
-				   GTK_OBJECT (widget));
-
-	gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (widget)->ok_button),
-			    "clicked", GTK_SIGNAL_FUNC (file_selection_ok_cb),
-			    NULL);
-
-	gtk_signal_connect (GTK_OBJECT (file_selection_info.widget), "destroy",
-			    GTK_SIGNAL_FUNC (file_selection_destroy_cb),
-			    NULL);
+	g_signal_connect_object (GTK_FILE_SELECTION (widget)->cancel_button,
+				 "clicked", G_CALLBACK (gtk_widget_destroy), widget, G_CONNECT_AFTER);
+	g_signal_connect (GTK_FILE_SELECTION (widget)->ok_button, "clicked", G_CALLBACK (file_selection_ok_cb), NULL);
+	g_signal_connect (file_selection_info.widget, "destroy", G_CALLBACK (file_selection_destroy_cb), NULL);
 
 	gtk_widget_show (file_selection_info.widget);
 }
@@ -406,7 +399,6 @@ static char ui [] =
 "	</dockitem>"
 "</Root>";
 
-
 static void
 app_destroy_cb (GtkWidget *app, BonoboUIContainer *uic)
 {
@@ -439,11 +431,9 @@ container_create (void)
 
 	container = bonobo_window_get_ui_container (BONOBO_WINDOW (win));
 
-	gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			    GTK_SIGNAL_FUNC (app_delete_cb), NULL);
+	g_signal_connect (window, "delete_event", G_CALLBACK (app_delete_cb), NULL);
 
-	gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			    GTK_SIGNAL_FUNC (app_destroy_cb), container);
+	g_signal_connect (window, "destroy", G_CALLBACK (app_destroy_cb), container);
 
 	gtk_window_set_default_size (window, 500, 440);
 	gtk_window_set_policy (window, TRUE, TRUE, FALSE);
@@ -453,7 +443,7 @@ container_create (void)
 
 	bonobo_ui_component_set_container (component, BONOBO_OBJREF (container), NULL);
 	bonobo_ui_component_add_verb_list_with_data (component, verbs, win);
-	bonobo_ui_component_set_translate (component, "/", ui, NULL);
+	bonobo_ui_component_set (component, "/", ui, NULL);
 
 	control = bonobo_widget_new_control (CONTROL_ID, BONOBO_OBJREF (container));
 
