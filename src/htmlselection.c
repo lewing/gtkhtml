@@ -20,8 +20,6 @@
 */
 
 #include <gtk/gtkselection.h>
-#include <gtk/gtkmain.h>
-
 #include "htmlcursor.h"
 #include "htmlengine-edit-cursor.h"
 #include "htmlengine-edit-cut-and-paste.h"
@@ -30,6 +28,18 @@
 #include "htmlselection.h"
 #include "htmlengine-edit.h"
 #include "htmlengine-edit-selection-updater.h"
+
+guint32
+html_selection_current_time (void)
+{
+	GdkEvent *event;
+
+	event = gtk_get_current_event ();
+	if (event != NULL)
+		return gdk_event_get_time (event);
+
+	return GDK_CURRENT_TIME;
+}
 
 static gboolean
 optimize_selection (HTMLEngine *e, HTMLInterval *i)
@@ -50,9 +60,10 @@ optimize_selection (HTMLEngine *e, HTMLInterval *i)
 			if (max == &i->to) {
 				HTMLInterval *sel;
 
+				/* printf ("optimize 1\n"); */
 				sel = html_interval_new (s->to.object, i->to.object,
 							 i->from.object == s->to.object
-							 ? i->from.offset : 0, i->to.offset);
+							 ? i->from.offset : (html_object_is_container (s->to.object) ? s->to.offset : 0), i->to.offset);
 				html_interval_select (sel, e);
 				html_interval_destroy (sel);
 				html_interval_destroy (s);
@@ -61,10 +72,11 @@ optimize_selection (HTMLEngine *e, HTMLInterval *i)
 			} else {
 				HTMLInterval *usel;
 
+				/* printf ("optimize 2\n"); */
 				usel = html_interval_new (i->to.object, s->to.object,
-							  0, s->to.offset);
+							  html_object_is_container (i->to.object) ? i->to.offset : 0, s->to.offset);
 				html_interval_unselect (usel, e);
-				if (i->to.offset) {
+				if (!html_object_is_container (i->to.object) && i->to.offset) {
 					gint from = i->from.object == i->to.object ? i->from.offset : 0;
 					html_object_select_range (i->to.object, e,
 								  from, i->to.offset - from,
@@ -84,11 +96,12 @@ optimize_selection (HTMLEngine *e, HTMLInterval *i)
 			if (min == &i->from) {
 				HTMLInterval *sel;
 
+				/* printf ("optimize 3\n"); */
 				sel = html_interval_new (i->from.object, s->from.object,
 							 i->from.offset,
 							 i->to.object == s->from.object
 							 ? i->to.offset
-							 : html_object_get_length (s->from.object));
+							 : (html_object_is_container (s->from.object) ? s->from.offset : html_object_get_length (s->from.object)));
 				html_interval_select (sel, e);
 				html_interval_destroy (sel);
 				html_interval_destroy (s);
@@ -97,11 +110,12 @@ optimize_selection (HTMLEngine *e, HTMLInterval *i)
 			} else {
 				HTMLInterval *usel;
 
+				/* printf ("optimize 4\n"); */
 				usel = html_interval_new (s->from.object, i->from.object,
 							  s->from.offset,
-							  html_object_get_length (i->from.object));
+							  html_object_is_container (i->from.object) ? i->from.offset : html_object_get_length (i->from.object));
 				html_interval_unselect (usel, e);
-				if (i->from.offset != html_object_get_length (i->from.object)) {
+				if (!html_object_is_container (i->from.object) && i->from.offset != html_object_get_length (i->from.object)) {
 					gint to = i->to.object == i->from.object
 						? s->to.offset
 						: html_object_get_length (i->from.object);
@@ -410,7 +424,7 @@ void
 html_engine_update_selection_active_state (HTMLEngine *e, guint32 time)
 {
 	if (html_engine_is_selection_active (e))
-		html_engine_activate_selection (e, time ? time : gtk_get_current_event_time ());
+		html_engine_activate_selection (e, time ? time : html_selection_current_time ());
 	else
 		html_engine_deactivate_selection (e);
 }
