@@ -223,13 +223,18 @@ static void
 copy (HTMLObject *self,
       HTMLObject *dest)
 {
+	gint len;
+
         HTMLIFrame *s = HTML_IFRAME (self);
         HTMLIFrame *d = HTML_IFRAME (dest);
 
 	(* HTML_OBJECT_CLASS (parent_class)->copy) (self, dest);
 
 	d->scroll = NULL;
-	d->html = NULL;
+	d->html = gtk_html_new ();
+	GTK_HTML (d->html)->engine->clue =
+		html_object_op_copy (GTK_HTML (s->html)->engine->clue,
+				     GTK_HTML (s->html)->engine, NULL, NULL, &len);
 	d->gdk_painter = NULL;
 
 	d->url = g_strdup (s->url);
