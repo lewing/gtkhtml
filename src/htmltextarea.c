@@ -166,8 +166,6 @@ html_textarea_init (HTMLTextArea *ta,
 					GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add (GTK_CONTAINER (widget), ta->text);
 
-#define FONT_HEIGHT(f)              ((f)->ascent + (f)->descent)
-
 	layout = pango_layout_new (gtk_widget_get_pango_context (widget));
 	pango_layout_set_font_description (layout, widget->style->font_desc);
 	pango_layout_set_text (layout, "0", 1);
@@ -176,7 +174,6 @@ html_textarea_init (HTMLTextArea *ta,
 
 	gtk_widget_set_usize ( GTK_WIDGET (widget), (width / PANGO_SCALE) * col + 8, (height / PANGO_SCALE) * row + 4);
 
-#undef FONT_HEIGHT
 	ta->default_text = NULL;
 }
 
