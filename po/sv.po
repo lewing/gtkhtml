@@ -3,13 +3,13 @@
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002.
 # Martin Norbäck <d95mback@dtek.chalmers.se>, 2000.
 #
-# $Id: sv.po,v 1.49.2.4 2002/05/25 13:42:44 menthos Exp $
+# $Id: sv.po,v 1.49.2.5 2002/05/30 09:35:11 menthos Exp $
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2002-05-25 15:43+0200\n"
-"PO-Revision-Date: 2002-05-25 15:43+0200\n"
+"POT-Creation-Date: 2002-05-30 11:35+0200\n"
+"PO-Revision-Date: 2002-05-30 11:35+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -347,7 +347,7 @@ msgid "Insert Smiley 7 smiley into document..."
 msgstr "Infoga smilis 7-smilis i dokumentet..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:44
-msgid "Insert Surpriced smiley into document..."
+msgid "Insert Surprised smiley into document..."
 msgstr "Infoga överraskad smilis i dokumentet..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:45
@@ -534,7 +534,7 @@ msgstr "Markera hela innehållet i dokumentet"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:87
 msgid "Smiley _7"
-msgstr "Smilis_7"
+msgstr "Smilis _7"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:88
 #: components/html-editor/gtkhtml-editor-properties.glade.h:67
@@ -547,7 +547,7 @@ msgid "Su_perscript"
 msgstr "Upp_höjd"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:90
-msgid "Su_rpriced"
+msgid "Su_rprised"
 msgstr "_Överraskad"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:91
@@ -1551,7 +1551,7 @@ msgstr "Förhands_granska"
 msgid "Print preview"
 msgstr "Förhandsgranska"
 
-#~ msgid "Insert Surprised smiley into document..."
+#~ msgid "Insert Surpriced smiley into document..."
 #~ msgstr "Infoga överraskad smilis i dokumentet..."
 
 #~ msgid "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
