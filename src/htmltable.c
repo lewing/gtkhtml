@@ -175,8 +175,8 @@ op_copy (HTMLObject *self, HTMLObject *parent, HTMLEngine *e, GList *from, GList
 	t  = HTML_TABLE (self);
 	nt = g_new0 (HTMLTable, 1);
 
-	start = HTML_TABLE_CELL (from ? from->data : html_object_head (self));
-	end   = HTML_TABLE_CELL (to   ? to->data   : html_object_tail (self));
+	start = HTML_TABLE_CELL ((from && from->next) ? from->data : html_object_head (self));
+	end   = HTML_TABLE_CELL ((to && to->next)     ? to->data   : html_object_tail (self));
 	rows  = end->row - start->row + 1;
 	cols  = end->row == start->row ? end->col - start->col + 1 : t->totalCols;
 
@@ -223,67 +223,6 @@ op_copy (HTMLObject *self, HTMLObject *parent, HTMLEngine *e, GList *from, GList
 #endif
 
 	return HTML_OBJECT (nt);
-}
-
-static gint
-get_n_children (HTMLObject *self)
-{
-	HTMLTable *t = HTML_TABLE (self);
-	guint r, c, n_children = 0;
-
-	for (r = 0; r < t->totalRows; r++)
-		for (c = 0; c < t->totalCols; c++)
-			if (t->cells [r][c] && t->cells [r][c]->row == r && t->cells [r][c]->col == c)
-				n_children ++;
-
-	/* printf ("table n_children %d\n", n_children); */
-
-	return n_children;
-}
-
-static HTMLObject *
-get_child (HTMLObject *self, gint index)
-{
-	HTMLTable *t = HTML_TABLE (self);
-	HTMLObject *child = NULL;
-	guint r, c, n = 0;
-
-	for (r = 0; r < t->totalRows && !child; r++)
-		for (c = 0; c < t->totalCols; c++)
-			if (t->cells [r][c] && t->cells [r][c]->row == r && t->cells [r][c]->col == c) {
-				if (n == index) {
-					child = HTML_OBJECT (t->cells [r][c]);
-					break;
-				}
-				n ++;
-			}
-
-	/* printf ("table ref %d child %p\n", index, child); */
-
-	return child;
-}
-
-static gint
-get_child_index (HTMLObject *self, HTMLObject *child)
-{
-	HTMLTable *t = HTML_TABLE (self);
-	guint r, c;
-	gint n = 0;
-
-	for (r = 0; r < t->totalRows; r++)
-		for (c = 0; c < t->totalCols; c++) {
-			if (t->cells [r][c] && t->cells [r][c]->row == r && t->cells [r][c]->col == c) {
-				if (HTML_OBJECT (t->cells [r][c]) == child) {
-					/* printf ("table child %p index %d\n", child, n); */
-					return n;
-				}
-				n ++;
-			}
-		}
-
-	/* printf ("table child %p index %d\n", child, -1); */
-
-	return -1;
 }
 
 static guint
@@ -1794,25 +1733,47 @@ check_point (HTMLObject *self,
 	HTMLTableCell *cell;
 	HTMLObject *obj;
 	HTMLTable *table;
-	gint r, c, start_row, end_row, start_col, end_col;
+	gint r, c, start_row, end_row, start_col, end_col, hsb, hsa, tbc;
 
 	if (x < self->x || x >= self->x + self->width
 	    || y >= self->y + self->descent || y < self->y - self->ascent)
 		return NULL;
-	
-	table = HTML_TABLE (self);
 
-	if (!table->rowHeights->data || !table->columnOpt->data) {
-		g_warning ("HTMLTable::get_point called before HTMLTable::calc_size");
-		return NULL;
+	table = HTML_TABLE (self);
+	hsb = table->spacing >> 1;
+	hsa = hsb + (table->spacing & 1);
+	tbc = table->border ? 1 : 0;
+
+	if (for_cursor) {
+		/* table boundaries */
+		if (x == self->x || x == self->x + self->width - 1) {
+			if (offset_return)
+				*offset_return = x == self->x ? 0 : 1;
+			return self;
+		}
+
+		/* border */
+		if (x < self->x + table->border + hsb || y < self->y - self->ascent + table->border + hsb) {
+			if (offset_return)
+				*offset_return = 0;
+			return self;
+		}
+		if (x > self->x + self->width - table->border - hsa || y > self->y + self->descent - table->border - hsa) {
+			if (offset_return)
+				*offset_return = 1;
+			return self;
+		}
 	}
-	
+
 	x -= self->x;
 	y -= self->y - self->ascent;
 
 	get_bounds (table, x, y, 0, 0, &start_col, &end_col, &start_row, &end_row);
 	for (r = start_row; r <= end_row; r++) {
 		for (c = 0; c < table->totalCols; c++) {
+			HTMLObject *co;
+			gint cx, cy;
+
 			cell = table->cells[r][c];
 			if (cell == NULL)
 				continue;
@@ -1822,45 +1783,22 @@ check_point (HTMLObject *self,
 			if (r < end_row - 1 && table->cells[r+1][c] == cell)
 				continue;
 
-			obj = html_object_check_point (HTML_OBJECT (cell), painter, x, y, offset_return, for_cursor);
+			/* correct to include cell spacing */
+			co = HTML_OBJECT (cell);
+			cx = x;
+			cy = y;
+			if (x < co->x && x >= co->x - hsa - tbc)
+				cx = co->x;
+			if (x >= co->x + co->width && x < co->x + co->width + hsb + tbc)
+				cx = co->x + co->width - 1;
+			if (y < co->y - co->ascent && y >= co->y - co->ascent - hsa - tbc)
+				cy = co->y - co->ascent;
+			if (y >= co->y + co->descent && y < co->y + co->descent + hsb + tbc)
+				cy = co->y + co->descent - 1;
+
+			obj = html_object_check_point (HTML_OBJECT (cell), painter, cx, cy, offset_return, for_cursor);
 			if (obj != NULL)
 				return obj;
-		}
-	}
-
-	if (for_cursor) {
-
-		/* check before */
-		for (c=0; c<table->totalCols; c++)
-			if (table->cells [start_row][c])
-				break;
-		if (c < table->totalCols && table->cells [start_row][c]) {
-			cell = table->cells [start_row][c];
-			if (x < HTML_OBJECT (cell)->x || y < HTML_OBJECT (cell)->y - HTML_OBJECT (cell)->ascent) {
-				obj = html_object_check_point (HTML_OBJECT (cell), painter,
-							       HTML_OBJECT (cell)->x,
-							       HTML_OBJECT (cell)->y - HTML_OBJECT (cell)->ascent,
-							       offset_return, for_cursor);
-				if (obj)
-					return obj;
-			}
-		}
-
-		/* check after */
-		for (c=table->totalCols - 1; c >= 0; c--)
-			if (table->cells [start_row][c])
-				break;
-		if (c >=0 && table->cells [start_row][c]) {
-			cell = table->cells [start_row][c];
-			if (x > HTML_OBJECT (cell)->x + HTML_OBJECT (cell)->width - 1
-			    || y > HTML_OBJECT (cell)->y + HTML_OBJECT (cell)->descent - 1) {
-				obj = html_object_check_point (HTML_OBJECT (cell), painter,
-							       HTML_OBJECT (cell)->x + HTML_OBJECT (cell)->width - 1,
-							       HTML_OBJECT (cell)->y + HTML_OBJECT (cell)->descent - 1,
-							       offset_return, for_cursor);
-				if (obj)
-					return obj;
-			}
 		}
 	}
 
@@ -2262,9 +2200,6 @@ html_table_class_init (HTMLTableClass *klass,
 	object_class->get_bg_color = get_bg_color;
 	object_class->get_recursive_length = get_recursive_length;
 	object_class->remove_child = remove_child;
-	object_class->get_n_children = get_n_children;
-	object_class->get_child = get_child;
-	object_class->get_child_index = get_child_index;
 
 	parent_class = &html_object_class;
 }
