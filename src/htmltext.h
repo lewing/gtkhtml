@@ -168,7 +168,9 @@ gint              html_text_tail_white_space             (HTMLText          *tex
 							  gint               offset,
 							  gint               ii,
 							  gint               io,
-							  gint              *white_len);
+							  gint              *white_len,
+							  gint               line_offset,
+							  gchar             *s);
 
 /*
  * protected

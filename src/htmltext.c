@@ -953,7 +953,7 @@ html_text_pi_forward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
 }
 
 gint
-html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, gint offset, gint ii, gint io, gint *white_len)
+html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, gint offset, gint ii, gint io, gint *white_len, gint line_offset, gchar *s)
 {
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 	gint wl = 0;
@@ -961,15 +961,24 @@ html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, gint offset, g
 
 	if (html_text_pi_backward (pi, &ii, &io)) {
 		if (pi->entries [ii].attrs [io].is_white) {
-			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
-				ww += PANGO_PIXELS (pi->entries [ii].widths [io]);
+			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
+				if (*s == '\t') {
+					gint skip = 8 - (line_offset % 8);
+
+					ww += line_offset*(PANGO_PIXELS (pi->entries [ii].widths [io]));
+					line_offset -= skip;
+				} else {
+					ww += PANGO_PIXELS (pi->entries [ii].widths [io]);
+					line_offset --;
+				}
+			}
 			wl ++;
 		}
 	}
 
 	if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter) && wl)
 		html_painter_calc_text_size (painter, html_text_get_text (text, offset - wl),
-					     wl, NULL, NULL, 0, NULL, html_text_get_font_style (text), text->face,
+					     wl, NULL, NULL, 0, &line_offset, html_text_get_font_style (text), text->face,
 					     &ww, NULL, NULL);
 
 	if (white_len)
@@ -1065,26 +1074,40 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 	HTMLText *text = HTML_TEXT (self);
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 	gint mw = 0, ww;
-	gint ii, io, offset, last_offset;
+	gint ii, io, offset, last_offset, line_offset;
+	gchar *s;
 
 	ww = calc_nb_before (text, painter);
 
 	last_offset = offset = 0;
 	ii = io = 0;
+	line_offset = html_text_get_line_offset (text, painter, 0);
+	s = text->text;
 	while (offset < text->text_len) {
+		gint skip;
+
 		if (offset > 0 && pi->entries [ii].attrs [io].is_line_break) {
 			if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter))
 				html_painter_calc_text_size (painter, html_text_get_text (text, last_offset),
 							     offset - last_offset, NULL, NULL, 0, NULL, html_text_get_font_style (text), text->face,
 							     &ww, NULL, NULL);
-			ww -= html_text_tail_white_space (text, painter, offset, ii, io, NULL);
+			ww -= html_text_tail_white_space (text, painter, offset, ii, io, NULL, line_offset, s);
 			if (ww > mw)
 				mw = ww;
 			ww = 0;
 			last_offset = offset;
 		}
-		if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
-			ww += PANGO_PIXELS (pi->entries [ii].widths [io]);
+		if (*s == '\t') {
+			gint skip = 8 - (line_offset % 8);
+			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
+				ww += skip*(PANGO_PIXELS (pi->entries [ii].widths [io]));
+			line_offset += skip;
+		} else {
+			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
+				ww += PANGO_PIXELS (pi->entries [ii].widths [io]);
+			line_offset ++;
+		}
+		s = g_utf8_next_char (s);
 		offset ++;
 
 		html_text_pi_forward (pi, &ii, &io);
