@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-06 17:40+0100\n"
-"PO-Revision-Date: 2004-06-05 19:04+0900\n"
+"POT-Creation-Date: 2004-12-07 11:02+0900\n"
+"PO-Revision-Date: 2004-12-07 11:00+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -1640,6 +1640,8 @@ msgid ""
 "Unable to add word to dictionary,\n"
 "language settings are broken.\n"
 msgstr ""
+"単語を辞書に追加できません\n"
+"(言語設定がおかしいです)。\n"
 
 #: components/html-editor/spell.c:298
 msgid "No misspelled word found"
@@ -1920,95 +1922,3 @@ msgstr "印刷イメージのプレビューを表示します"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML テスト・アプリケーション"
-
-#~ msgid "<None>"
-#~ msgstr "<無し>"
-
-#~ msgid "\n"
-#~ msgstr "\n"
-
-#~ msgid "*********************"
-#~ msgstr "*********************"
-
-#~ msgid "Add Keyboard Shortcuts"
-#~ msgstr "キーボード・ショートカットの追加"
-
-#~ msgid "Automatically detect links"
-#~ msgstr "リンクの自動検出"
-
-#~ msgid "Behavior"
-#~ msgstr "動作"
-
-#~ msgid "Composer Properties"
-#~ msgstr "コンポーザ・プロパティ"
-
-#~ msgid "Composer Properties planned"
-#~ msgstr "構築済のコンポーザ・プロパティ"
-
-#~ msgid "Configure spell checking"
-#~ msgstr "スペルチェックの設定"
-
-#~ msgid "Enable spell checking"
-#~ msgstr "スペルチェックを有効にする"
-
-#~ msgid "Fixed width"
-#~ msgstr "等幅フォント"
-
-#~ msgid "Fonts"
-#~ msgstr "フォント"
-
-#~ msgid "For printing"
-#~ msgstr "印刷用"
-
-#~ msgid "Grab keys"
-#~ msgstr "キーの取得"
-
-#~ msgid "Information"
-#~ msgstr "情報"
-
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "キーボード・ショートカット"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "その他"
-
-#~ msgid "New shortcut:"
-#~ msgstr "新しいショートカット:"
-
-#~ msgid "On screen"
-#~ msgstr "画面表示用"
-
-#~ msgid "Select HTML fixed width font"
-#~ msgstr "HTML 等幅フォントの選択"
-
-#~ msgid "Select HTML fixed width font for printing"
-#~ msgstr "印刷用 HTML 等幅フォントの選択"
-
-#~ msgid "Select HTML variable width font"
-#~ msgstr "HTML 可変幅フォントの選択"
-
-#~ msgid "Select HTML variable width font for printing"
-#~ msgstr "印刷用 HTML 可変幅フォントの選択"
-
-#~ msgid "Shortcuts _type:"
-#~ msgstr "ショートカットの型(_T):"
-
-#~ msgid "Show animated images"
-#~ msgstr "画像のアニメーションを表示する"
-
-#~ msgid "Variable width"
-#~ msgstr "可変幅フォント"
-
-#~ msgid "_Add"
-#~ msgstr "追加(_A)"
-
-#~ msgid "_Delete"
-#~ msgstr "削除(_D)"
-
-#~ msgid ""
-#~ "Cannot execute GNOME Spell control applet\n"
-#~ "Try to install GNOME Spell if you don't have it installed."
-#~ msgstr ""
-#~ "GNOME スペルチェッカ・アプレットを実行できません\n"
-#~ "GNOME スペルチェッカがインストールされていない場合は、インストールしてみて"
-#~ "下さい。"
