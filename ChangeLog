@@ -1,3 +1,7 @@
+2002-03-15  Pablo Saratxaga <pablo@mandrakesoft.com>
+
+	* configure.in,po/eu.po: added Basque file
+
 2001-12-18  Larry Ewing  <lewing@ximian.com>
 
 	* configure.in (PACKAGE): bump version number for snapshots.
