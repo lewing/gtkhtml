@@ -35,6 +35,8 @@ struct _SpellError {
 };
 
 struct _Link {
+	guint start_index;
+	guint end_index;
 	gint start_offset;
 	gint end_offset;
 	gchar *url;
@@ -186,8 +188,15 @@ gint              html_text_tail_white_space             (HTMLText           *te
 void              html_text_add_link                     (HTMLText           *text,
 							  gchar              *url,
 							  gchar              *target,
-							  gint                start_index,
-							  gint                end_index);
+							  gint                start_offset,
+							  gint                end_offset);
+void              html_text_add_link_full                (HTMLText           *text,
+							  gchar              *url,
+							  gchar              *target,
+							  guint               start_index,
+							  guint               end_index,
+							  gint                start_offset,
+							  gint                end_offset);
 gboolean          html_text_get_link_rectangle           (HTMLText           *text,
 							  HTMLPainter        *painter,
 							  gint                offset,
@@ -214,13 +223,19 @@ gboolean          html_text_last_link_offset             (HTMLText           *te
 gchar            *html_text_get_link_text                (HTMLText           *text,
 							  gint                offset);
 
-void      html_link_set_url_and_target  (Link  *link,
-					 gchar *url,
-					 gchar *target);
+Link     *html_link_new                 (gchar *url,
+					 gchar *target,
+					 guint  start_index,
+					 guint  end_index,
+					 gint   start_offset,
+					 gint   end_offset);
 Link     *html_link_dup                 (Link  *link);
 void      html_link_free                (Link  *link);
 gboolean  html_link_equal               (Link  *l1,
 					 Link  *l2);
+void      html_link_set_url_and_target  (Link  *link,
+					 gchar *url,
+					 gchar *target);
 
 /*
  * protected

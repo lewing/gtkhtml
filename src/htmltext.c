@@ -1204,6 +1204,35 @@ save_close_attrs (HTMLEngineSaveState *state, GSList *attrs)
 }
 
 static gboolean
+save_text (HTMLText *text, HTMLEngineSaveState *state, guint start_index, guint end_index)
+{
+	gchar *str;
+	gint len;
+
+	str = g_strndup (text->text + start_index, end_index - start_index);
+	len = g_utf8_pointer_to_offset (text->text + start_index, text->text + end_index);
+
+	if (! html_engine_save_encode (state, str, len))
+		return FALSE;
+}
+
+static gboolean
+save_link_open (Link *link, HTMLEngineSaveState *state, GSList **attrs)
+{
+	/* TODO: remove underline and blue from attrs */
+
+	return html_engine_save_output_string (state, "<A HREF=\"%s\">", link->url);
+}
+
+static gboolean
+save_link_close (Link *link, HTMLEngineSaveState *state, GSList **attrs)
+{
+	/* TODO: remove underline and blue from attrs */
+
+	return html_engine_save_output_string (state, "%s", "</A>");
+}
+
+static gboolean
 save (HTMLObject *self, HTMLEngineSaveState *state)
 {
 	HTMLText *text = HTML_TEXT (self);
@@ -1213,31 +1242,48 @@ save (HTMLObject *self, HTMLEngineSaveState *state)
 	GSList *last_attrs = NULL;
 
 	if (iter) {
+		GSList *l, *links = g_slist_reverse (text->links);
+		gboolean link_started = FALSE;
+
+		l = links;
+
 		do {
-			GSList *l, *attrs;
+			GSList *attrs;
 			guint start_index, end_index;
-			gchar *str;
-			gint len;
 
 			attrs = pango_attr_iterator_get_attrs (iter);
 			pango_attr_iterator_range (iter, &start_index, &end_index);
 			if (end_index == G_MAXINT)
 				end_index = text->text_bytes;
 
+			if (l && link_started) {
+				Link *link = (Link *) l->data;
+
+				if (link->end_index == start_index) {
+					save_link_close (link, state, &last_attrs);
+					l = l->next;
+					link_started = FALSE;
+				}
+			}
 			if (last_attrs) {
 				save_close_attrs (state, last_attrs);
 				free_attrs (last_attrs);
+			}
+			if (l && !link_started) {
+				Link *link = (Link *) l->data;
+
+				if (link->start_index == start_index) {
+					save_link_open (link, state, &attrs);
+					link_started = TRUE;
+				}
 			}
 			if (attrs)
 				save_open_attrs (state, attrs);
 			last_attrs = attrs;
 
-			str = g_strndup (text->text + start_index, end_index - start_index);
-			len = g_utf8_pointer_to_offset (text->text + start_index, text->text + end_index);
-
-			if (! html_engine_save_encode (state, str, len))
-				return FALSE;
+			save_text (text, state, start_index, end_index);
 		} while (pango_attr_iterator_next (iter));
+		g_slist_free (links);
 	}
 
 	return TRUE;
@@ -2224,16 +2270,20 @@ html_text_append (HTMLText *text, const gchar *str, gint len)
 }
 
 void
+html_text_add_link_full (HTMLText *text, gchar *url, gchar *target, guint start_index, guint end_index, gint start_offset, gint end_offset)
+{
+	text->links = g_slist_prepend (text->links, html_link_new (url, target, start_index, end_index, start_offset, end_offset));
+}
+
+void
 html_text_add_link (HTMLText *text, gchar *url, gchar *target, gint start_offset, gint end_offset)
 {
-	Link *link = g_new0 (Link, 1);
+	guint start_index, end_index;
 
-	link->url = g_strdup (url);
-	link->target = g_strdup (target);
-	link->start_offset = start_offset;
-	link->end_offset = end_offset;
+	start_index = html_text_get_index (text, start_offset);
+	end_index = (g_utf8_offset_to_pointer (text->text + start_index, end_offset - start_offset) - text->text);
 
-	text->links = g_slist_prepend (text->links, link);
+	html_text_add_link_full (text, url, target, start_index, end_index, start_offset, end_offset);
 }
 
 HTMLTextSlave *
@@ -2395,6 +2445,8 @@ html_link_dup (Link *l)
 	nl->target = g_strdup (l->target);
 	nl->start_offset = l->start_offset;
 	nl->end_offset = l->end_offset;
+	nl->start_index = l->start_index;
+	nl->end_index = l->end_index;
 
 	return nl;
 }
@@ -2412,4 +2464,19 @@ html_link_equal (Link *l1, Link *l2)
 {
 	return l1->url && l2->url && !strcasecmp (l1->url, l2->url)
 		&& (l1->target == l2->target || (l1->target && l2->target && !strcasecmp (l1->target, l2->target)));
+}
+
+Link *
+html_link_new (gchar *url, gchar *target, guint start_index, guint end_index, gint start_offset, gint end_offset)
+{
+	Link *link = g_new0 (Link, 1);
+
+	link->url = g_strdup (url);
+	link->target = g_strdup (target);
+	link->start_offset = start_offset;
+	link->end_offset = end_offset;
+	link->start_index = start_index;
+	link->end_index = end_index;
+
+	return link;
 }
