@@ -37,7 +37,7 @@
 
 #include "htmlcursor.h"
 
-#define _HTML_CURSOR_DEBUG
+/* #define _HTML_CURSOR_DEBUG */
 
 #ifdef _HTML_CURSOR_DEBUG
 static void
@@ -927,19 +927,6 @@ move_right (HTMLCursor *cursor)
 			else
 				return move_to_next_object (cursor);
 		}
-/* 		HTMLObject *next; */
-
-/* 		if (html_object_get_direction (cursor->object) == HTML_DIRECTION_RTL) */
-/* 			next = html_object_prev_cursor (cursor->object, &cursor->offset); */
-/* 		else */
-/* 			next = html_object_next_cursor (cursor->object, &cursor->offset); */
-/* 		if (next) { */
-/* 			if (!html_object_is_container (next)) */
-/* 				cursor->offset = (next->parent == cursor->object->parent) ? 1 : 0; */
-/* 			cursor->object = next; */
-/* 			cursor->position ++; */
-/* 		} else */
-/* 			retval = FALSE; */
 	}
 	return retval;
 }

@@ -773,7 +773,7 @@ draw_text (HTMLTextSlave *self,
 
 			if (calc_glyph_range_size (text, &gi->glyph_item, selection_start_index, selection_end_index, &start_x, &width, &asc, &height)) {
 				html_painter_get_clip_rectangle (p, &cx, &cy, &cw, &ch);
-				printf ("run_width; %d start_x %d index %d\n", run_width, start_x, selection_start_index);
+/* 				printf ("run_width; %d start_x %d index %d\n", run_width, start_x, selection_start_index); */
 				html_painter_set_clip_rectangle (p,
 							obj->x + tx + html_painter_pango_to_engine (p, run_width + start_x),
 							obj->y + ty + get_ys (text, p) - html_painter_pango_to_engine (p, asc),
@@ -982,7 +982,7 @@ calc_offset (HTMLTextSlave *slave, HTMLPainter *painter, gint x)
 		}
 	}
 
-	printf ("offset %d\n", offset);
+/* 	printf ("offset %d\n", offset); */
 
 	return offset;
 }
@@ -1307,7 +1307,7 @@ html_text_slave_cursor_left_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 	int index;
 	HTMLTextSlaveGlyphItem *gi = html_text_slave_get_glyph_item_at_offset (slave, cursor->offset - slave->posStart, &prev, &next, NULL, &index);
 
-	printf ("gi: %p item num chars: %d\n", gi, gi ? gi->glyph_item.item->num_chars : -1);
+/* 	printf ("gi: %p item num chars: %d\n", gi, gi ? gi->glyph_item.item->num_chars : -1); */
 
 	if (!gi)
 		return FALSE;

@@ -2468,8 +2468,6 @@ html_text_cursor_right (HTMLObject *self, HTMLCursor *cursor)
 
 	slave = html_text_get_slave_at_offset (HTML_TEXT (self), NULL, cursor->offset);
 
-	printf ("cursor offset: %d slave: %p\n", cursor->offset, slave);
-
 	if (slave) {
 		if (html_text_slave_cursor_right (slave, cursor))
 			return TRUE;
