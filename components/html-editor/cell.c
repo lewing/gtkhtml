@@ -61,36 +61,13 @@ typedef struct
 
 	GtkWidget *combo_bg_color;
 	GtkWidget *entry_bg_pixmap;
-
-	gboolean        changed_halign;
-	HTMLHAlignType  halign;
-	GtkWidget      *option_halign;
-
-	gboolean        changed_valign;
-	HTMLVAlignType  valign;
-	GtkWidget      *option_valign;
-
-	gboolean   has_width;
-	gboolean   changed_width;
-	gint       width;
-	gboolean   width_percent;
+	GtkWidget *option_halign;
+	GtkWidget *option_valign;
 	GtkWidget *spin_width;
 	GtkWidget *check_width;
 	GtkWidget *option_width;
-
-	gboolean   has_height;
-	gboolean   changed_height;
-	gint       height;
-	gboolean   height_percent;
-	GtkWidget *spin_height;
-	GtkWidget *check_height;
-	GtkWidget *option_height;
-
-	gint cspan;
-	gint rspan;
 	GtkWidget *spin_cspan;
 	GtkWidget *spin_rspan;
-
 	GtkWidget *check_wrap;
 	GtkWidget *check_header;
 
@@ -99,13 +76,17 @@ typedef struct
 } GtkHTMLEditCellProperties;
 
 static GtkHTMLEditCellProperties *
-data_new (GtkHTMLControlData *cd)
+data_new (GtkHTMLControlData *cd, HTMLTableCell *cell)
 {
 	GtkHTMLEditCellProperties *data = g_new0 (GtkHTMLEditCellProperties, 1);
 
 	/* fill data */
 	data->cd = cd;
 	data->scope = CELL_SCOPE_CELL;
+	data->cell = cell;
+	g_return_if_fail (data->cell);
+	data->table = HTML_TABLE (HTML_OBJECT (data->cell)->parent);
+	g_return_if_fail (data->table && HTML_IS_TABLE (data->table));
 
 	return data;
 }
@@ -199,87 +180,88 @@ changed_bg_pixmap (GtkWidget *w, GtkHTMLEditCellProperties *d)
 }
 
 static void
+set_halign (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
+{
+	GtkWidget *menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_halign));
+	html_engine_table_cell_set_halign (d->cd->html->engine, cell,
+					   g_list_index (GTK_MENU_SHELL (menu)->children, gtk_menu_get_active (GTK_MENU (menu))) + HTML_HALIGN_LEFT);
+}
+
+static void
 changed_halign (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->halign = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) + HTML_HALIGN_LEFT;
-	if (!d->disable_change)
-		d->changed_halign = TRUE;
+	cell_set_prop (d, set_halign);
+}
+
+static void
+set_valign (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
+{
+	GtkWidget *menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_valign));
+	html_engine_table_cell_set_valign (d->cd->html->engine, cell,
+					   g_list_index (GTK_MENU_SHELL (menu)->children, gtk_menu_get_active (GTK_MENU (menu))) + HTML_VALIGN_TOP);
 }
 
 static void
 changed_valign (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->valign = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) + HTML_VALIGN_TOP;
-	if (!d->disable_change)
-		d->changed_valign = TRUE;
+	cell_set_prop (d, set_valign);
+}
+
+static void
+set_cspan (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
+{
+	html_engine_set_cspan (d->cd->html->engine, gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_cspan)));
 }
 
 static void
 changed_cspan (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->cspan = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_cspan));
+	cell_set_prop (d, set_cspan);
+}
+
+static void
+set_rspan (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
+{
+	html_engine_set_rspan (d->cd->html->engine, gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_rspan)));
 }
 
 static void
 changed_rspan (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->rspan = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_rspan));
+	cell_set_prop (d, set_rspan);
+}
+
+static void
+set_width (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
+{
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_width))) {
+		GtkWidget *menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width));
+		if (g_list_index (GTK_MENU_SHELL (menu)->children, gtk_menu_get_active (GTK_MENU (menu))))
+			html_engine_table_cell_set_width (d->cd->html->engine, cell,
+							  gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width)), TRUE);
+		else
+			html_engine_table_cell_set_width (d->cd->html->engine, cell,
+							  gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width)), FALSE);
+	} else
+		html_engine_table_cell_set_width (d->cd->html->engine, cell, 0, FALSE);
 }
 
 static void
 changed_width (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->width = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width));
-	if (!d->disable_change) {
-		d->disable_change = TRUE;
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), TRUE);
-		d->disable_change = FALSE;
-		d->changed_width = TRUE;
-	}
+	cell_set_prop (d, set_width);
 }
 
 static void
 set_has_width (GtkWidget *check, GtkHTMLEditCellProperties *d)
 {
-	d->has_width = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_width));
-	if (!d->disable_change)
-		d->changed_width = TRUE;
+	cell_set_prop (d, set_width);
 }
 
 static void
 changed_width_percent (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->width_percent = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
-	if (!d->disable_change)
-		d->changed_width = TRUE;
-}
-
-static void
-changed_height (GtkWidget *w, GtkHTMLEditCellProperties *d)
-{
-	d->height = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_height));
-	if (!d->disable_change) {
-		d->disable_change = TRUE;
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_height), TRUE);
-		d->disable_change = FALSE;
-		d->changed_height = TRUE;
-	}
-}
-
-static void
-set_has_height (GtkWidget *check, GtkHTMLEditCellProperties *d)
-{
-	d->has_height = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_height));
-	if (!d->disable_change)
-		d->changed_height = TRUE;
-}
-
-static void
-changed_height_percent (GtkWidget *w, GtkHTMLEditCellProperties *d)
-{
-	d->height_percent = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
-	if (!d->disable_change)
-		d->changed_height = TRUE;
+	cell_set_prop (d, set_width);
 }
 
 static void
@@ -391,15 +373,6 @@ cell_widget (GtkHTMLEditCellProperties *d)
 	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width)), "selection-done",
 			  G_CALLBACK (changed_width_percent), d);
 
-	d->spin_height   = glade_xml_get_widget (xml, "spin_cell_height");
-	UPPER_FIX (height);
-	g_signal_connect (d->spin_height, "value_changed", G_CALLBACK (changed_height), d);
-	d->check_height  = glade_xml_get_widget (xml, "check_cell_height");
-	g_signal_connect (d->check_height, "toggled", G_CALLBACK (set_has_height), d);
-	d->option_height = glade_xml_get_widget (xml, "option_cell_height");
-	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_height)), "selection-done",
-			  G_CALLBACK (changed_height_percent), d);
-
 	d->check_wrap = glade_xml_get_widget (xml, "check_cell_wrap");
 	d->check_header = glade_xml_get_widget (xml, "check_cell_header");
 	g_signal_connect (d->check_wrap, "toggled", G_CALLBACK (changed_wrap), d);
@@ -443,164 +416,43 @@ set_ui (GtkHTMLEditCellProperties *d)
 				    d->cell->bgPixmap->url + off);
 	}
 
-	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_halign), d->halign - HTML_HALIGN_LEFT);
-	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_valign), d->valign - HTML_VALIGN_TOP);
+	if (HTML_CLUE (d->cell)->halign == HTML_HALIGN_NONE)
+		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_halign), HTML_HALIGN_LEFT);
+	else
+		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_halign), HTML_CLUE (d->cell)->halign - HTML_HALIGN_LEFT);
+	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_valign), HTML_CLUE (d->cell)->valign - HTML_VALIGN_TOP);
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), d->has_width);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width),  d->width);
-	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width), d->width_percent ? 1 : 0);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_height), d->has_height);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_height),  d->height);
-	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_height), d->height_percent ? 1 : 0);
+	if (d->cell->percent_width) {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), TRUE);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width), d->cell->fixed_width);
+		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width), 1);
+	} else if (d->cell->fixed_width) {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), TRUE);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width), d->cell->fixed_width);
+		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width), 0);
+	} else
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), FALSE);
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_wrap), !d->cell->no_wrap);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_header), d->cell->heading);
 
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_cspan),  d->cspan);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_rspan),  d->rspan);
+	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_cspan),  d->cell->cspan);
+	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_rspan),  d->cell->rspan);
 
 	d->disable_change = FALSE;
-}
-
-static void
-get_data (GtkHTMLEditCellProperties *d)
-{
-	d->cell = html_engine_get_table_cell (d->cd->html->engine);
-	g_return_if_fail (d->cell);
-	d->table = HTML_TABLE (HTML_OBJECT (d->cell)->parent);
-	g_return_if_fail (d->table && HTML_IS_TABLE (d->table));
-
-	d->halign   = HTML_CLUE (d->cell)->halign;
-	d->valign   = HTML_CLUE (d->cell)->valign;
-
-	if (d->cell->percent_width) {
-		d->width = d->cell->fixed_width;
-		d->width_percent = TRUE;
-		d->has_width = TRUE;
-	} else if (d->cell->fixed_width) {
-		d->width = d->cell->fixed_width;
-		d->width_percent = FALSE;
-		d->has_width = TRUE;
-	}
-
-	d->cspan = d->cell->cspan;
-	d->rspan = d->cell->rspan;
 }
 
 GtkWidget *
 cell_properties (GtkHTMLControlData *cd, gpointer *set_data)
 {
-	GtkHTMLEditCellProperties *data = data_new (cd);
+	GtkHTMLEditCellProperties *data = data_new (cd, html_engine_get_table_cell (cd->html->engine));
 	GtkWidget *rv;
 
-	get_data (data);
 	*set_data = data;
 	rv        = cell_widget (data);
 	set_ui (data);
 
 	return rv;
-}
-
-static void
-cell_apply_1 (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
-{
-	if (d->changed_halign)
-		html_engine_table_cell_set_halign (d->cd->html->engine, cell, d->halign);
-
-	if (d->changed_valign)
-		html_engine_table_cell_set_valign (d->cd->html->engine, cell, d->valign);
-
-	if (d->changed_width)
-		html_engine_table_cell_set_width (d->cd->html->engine, cell,
-						  d->has_width ? d->width : 0, d->has_width ? d->width_percent : FALSE);
-	html_engine_set_cspan (d->cd->html->engine, d->cspan);
-	html_engine_set_rspan (d->cd->html->engine, d->rspan);
-}
-
-static void
-cell_apply_row (GtkHTMLEditCellProperties *d)
-{
-	HTMLTableCell *cell;
-	HTMLEngine *e = d->cd->html->engine;
-
-	if (html_engine_table_goto_row (e, HTML_TABLE (HTML_OBJECT (d->cell)->parent), d->cell->row)) {
-		cell = html_engine_get_table_cell (e);
-
-		while (cell && cell->row == d->cell->row) {
-			if (HTML_OBJECT (cell)->parent == HTML_OBJECT (d->cell)->parent)
-				cell_apply_1 (cell, d);
-			html_engine_next_cell (e, FALSE);
-			cell = html_engine_get_table_cell (e);
-		}
-	}
-}
-
-static void
-cell_apply_col (GtkHTMLEditCellProperties *d)
-{
-	HTMLTableCell *cell;
-	HTMLEngine *e = d->cd->html->engine;
-
-	if (html_engine_table_goto_col (e, HTML_TABLE (HTML_OBJECT (d->cell)->parent), d->cell->col)) {
-		cell = html_engine_get_table_cell (e);
-
-		while (cell) {
-			if (cell->col == d->cell->col && HTML_OBJECT (cell)->parent == HTML_OBJECT (d->cell)->parent)
-				cell_apply_1 (cell, d);
-			html_engine_next_cell (e, FALSE);
-			cell = html_engine_get_table_cell (e);
-		}
-	}
-}
-
-static void
-cell_apply_table (GtkHTMLEditCellProperties *d)
-{
-	HTMLTable *table;
-	HTMLTableCell *cell;
-	HTMLEngine *e = d->cd->html->engine;
-
-	table = html_engine_get_table (e);
-	if (table && html_engine_goto_table_0 (e, table)) {
-		cell = html_engine_get_table_cell (e);
-
-		while (cell) {
-			if (HTML_OBJECT (cell)->parent == HTML_OBJECT (d->cell)->parent)
-				cell_apply_1 (cell, d);
-			html_engine_next_cell (e, FALSE);
-			cell = html_engine_get_table_cell (e);
-		}
-	}
-}
-
-gboolean
-cell_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
-{
-	GtkHTMLEditCellProperties *d = (GtkHTMLEditCellProperties *) get_data;
-	HTMLEngine *e = d->cd->html->engine;
-	gint position;
-
-	position = e->cursor->position;
-
-	if (html_engine_get_table_cell (e) != d->cell) {
-		if (!html_engine_goto_table (e, HTML_TABLE (HTML_OBJECT (d->cell)->parent), d->cell->row, d->cell->col)) {
-			GtkWidget *dialog;
-
-			dialog = gtk_message_dialog_new (GTK_WINDOW (d->cd->properties_dialog->dialog),
-							 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-							 _("The editted cell was removed from the document.\nCannot apply your changes."));
-			gtk_dialog_run (GTK_DIALOG (dialog));
-			gtk_widget_destroy (dialog);
-			html_cursor_jump_to_position (e->cursor, e, position);
-
-			return FALSE;
-		}
-	}
-
-	html_cursor_jump_to_position (e->cursor, e, position);
-
-	return TRUE;
 }
 
 void
