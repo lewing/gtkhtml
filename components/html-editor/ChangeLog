@@ -1,5 +1,8 @@
 2002-05-21  Larry Ewing  <lewing@ximian.com>
 
+	* htmlsourceview.c (html_source_view_load): change the
+	e_text_to_html options to make the text preformatted.
+
 	* toolbar.c (toolbar_item_update_sensitivity): make the alignment
 	items sensitive now that alignment is reflected in the plain text
 	output.

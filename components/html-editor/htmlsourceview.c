@@ -81,7 +81,7 @@ html_source_view_load (HTMLSourceView *view)
         text = bonobo_stream_mem_get_buffer (BONOBO_STREAM_MEM (smem));
 	len  = bonobo_stream_mem_get_size (BONOBO_STREAM_MEM (smem));
 
-	html = e_text_to_html_full (text, E_TEXT_TO_HTML_CONVERT_NL | E_TEXT_TO_HTML_CONVERT_SPACES, 0);
+	html = e_text_to_html_full (text, E_TEXT_TO_HTML_PRE | E_TEXT_TO_HTML_CONVERT_SPACES, 0);
 
 	hstream = gtk_html_begin (view->priv->html);
 	view->priv->html->engine->newPage = FALSE;
