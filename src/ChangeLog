@@ -1,3 +1,9 @@
+Thu Sep 16 18:05:52 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkhtml.c (gtk_html_im_commit_cb): Commit text before
+	any preedit text, not after. This is needed to get partial
+	commits to work properly. (#65670, Leon Ho)
+
 Thu Sep 16 14:07:31 2004  Owen Taylor  <otaylor@redhat.com>
 
 	Bug #66127

@@ -3017,10 +3017,18 @@ gtk_html_im_commit_cb (GtkIMContext *context, const gchar *str, GtkHTML *html)
 
 	html->priv->im_block_reset = TRUE;
 	D_IM (printf ("IM commit %s\n", str);)
+	
+	/* Move cusor before preedit pos and commit the string */
+	html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos);
 	html_engine_paste_text (html->engine, str, -1);
+	/* Add preedit pos with number of str committed and move back */
+	html->priv->im_pre_pos += g_utf8_strlen (str, -1);
+	html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos);
+
 	html->priv->im_block_reset = state;
 
 	D_IM (printf ("IM commit pos: %d pre_pos: %d\n", pos, html->priv->im_pre_pos);)
+
 	if (html->priv->im_pre_pos >= pos)
 		html->priv->im_pre_pos += html->engine->cursor->position - pos;
 }
