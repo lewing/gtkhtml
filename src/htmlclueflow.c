@@ -716,7 +716,7 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	x = start_lmargin = *lmargin;
 	o->ascent += o->y - old_y;
 
-	while (cur && !(cur->flags & HTML_OBJECT_FLAG_ALIGNED) && x < *rmargin) {
+	while (cur && !(cur->flags & HTML_OBJECT_FLAG_ALIGNED) && (x < *rmargin || first)) {
 		HTMLFitType fit;
 
 		fit = html_object_fit_line (cur, painter, first, first, FALSE, width_left (o, x, *rmargin));
