@@ -1,3 +1,8 @@
+Mon Aug  9 16:52:07 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* htmlpainter.c (html_painter_pango_to_engine/engine_to_pango): 
+	Guard against overflow.
+
 2004-07-28  Radek Doulik  <rodo@ximian.com>
 
 	* htmlengine.c: ref embedded widget when pushing it to the
