@@ -1271,6 +1271,76 @@ html_text_get_pango_direction (HTMLText *text)
 	}
 }
 
+/**
+ * pango_glyph_string_get_logical_widths:
+ * @glyphs: a #PangoGlyphString
+ * @text: the text corresponding to the glyphs
+ * @length: the length of @text, in bytes
+ * @embedding_level: the embedding level of the string
+ * @logical_widths: an array whose length is g_utf8_strlen (text, length)
+ *                  to be filled in with the resulting character widths.
+ *
+ * Given a #PangoGlyphString resulting from pango_shape() and the corresponding
+ * text, determine the screen width corresponding to each character. When
+ * multiple characters compose a single cluster, the width of the entire
+ * cluster is divided equally among the characters.
+ **/
+
+static void
+html_tmp_fix_pango_glyph_string_get_logical_widths (PangoGlyphString *glyphs,
+						    const char       *text,
+						    int               length,
+						    int               embedding_level,
+						    int              *logical_widths)
+{
+  int i, j;
+  int last_cluster = 0;
+  int width = 0;
+  int last_cluster_width = 0;
+  const char *p = text;		/* Points to start of current cluster */
+  
+  for (i=0; i<=glyphs->num_glyphs; i++)
+    {
+      int glyph_index = (embedding_level % 2 == 0) ? i : glyphs->num_glyphs - i - 1;
+
+      /* If this glyph belongs to a new cluster, or we're at the end, find
+       * the start of the next cluster, and assign the widths for this cluster.
+       */
+      if (i == glyphs->num_glyphs || p != text + glyphs->log_clusters[glyph_index])
+	{
+	  int next_cluster = last_cluster;
+	  
+	  if (i < glyphs->num_glyphs)
+	    {
+	      while (p < text + glyphs->log_clusters[glyph_index])
+		{
+		  next_cluster++;
+		  p = g_utf8_next_char (p);
+		}
+	    }
+	  else
+	    {
+	      while (p < text + length)
+		{
+		  next_cluster++;
+		  p = g_utf8_next_char (p);
+		}
+	    }
+	  
+	  for (j = last_cluster; j < next_cluster; j++)
+	    logical_widths[j] = (width - last_cluster_width) / (next_cluster - last_cluster);
+	  
+	  if (last_cluster != next_cluster) {
+		  last_cluster = next_cluster;
+		  last_cluster_width = width;
+	  }
+	}
+      
+      if (i < glyphs->num_glyphs)
+	width += glyphs->glyphs[glyph_index].geometry.width;
+    }
+}
+
 HTMLTextPangoInfo *
 html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 {
@@ -1336,7 +1406,7 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 
 			text->pi->entries [i].widths = g_new (PangoGlyphUnit, item->num_chars);
 			pango_shape (text->text + item->offset, item->length, &item->analysis, glyphs);
-			pango_glyph_string_get_logical_widths (glyphs, text->text + item->offset, item->length,
+			html_tmp_fix_pango_glyph_string_get_logical_widths (glyphs, text->text + item->offset, item->length,
 							       item->analysis.level, text->pi->entries [i].widths);
 		}
 
@@ -1397,6 +1467,7 @@ html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, int offset, in
 
 	if (html_text_pi_backward (pi, &ii, &io)) {
 		s = g_utf8_prev_char (s);
+		offset --;
 		if (pi->attrs [offset].is_white) {
 			if (*s == '\t' && offset > 1) {
 				gint skip = 8, co = offset - 1;

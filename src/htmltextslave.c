@@ -61,7 +61,7 @@ html_text_slave_get_text (HTMLTextSlave *slave)
 
 /* Split this TextSlave at the specified offset.  */
 static void
-split (HTMLTextSlave *slave, guint offset, char *start_pointer)
+split (HTMLTextSlave *slave, guint offset, int skip, char *start_pointer)
 {
 	HTMLObject *obj;
 	HTMLObject *new;
@@ -72,8 +72,8 @@ split (HTMLTextSlave *slave, guint offset, char *start_pointer)
 	obj = HTML_OBJECT (slave);
 
 	new = html_text_slave_new (slave->owner,
-				   slave->posStart + offset,
-				   slave->posLen - offset);
+				   slave->posStart + offset + skip,
+				   slave->posLen - (offset + skip));
 
 	HTML_TEXT_SLAVE (new)->charStart = start_pointer;
 
@@ -350,12 +350,12 @@ html_text_slave_get_nb_width (HTMLTextSlave *slave, HTMLPainter *painter, gboole
  */
 static gboolean
 update_lb (HTMLTextSlave *slave, HTMLPainter *painter, gint widthLeft, gint offset, gchar *s, gint ii, gint io, gint line_offset,
-	   gint *w, gint *lwl, gint *lbw, gint *lbo, gchar **lbsp, gboolean *force_fit)
+	   gint w, gint *lwl, gint *lbw, gint *lbo, gchar **lbsp, gboolean *force_fit)
 {
 	gint new_ltw, new_lwl, aw;
 
 	new_ltw = html_text_tail_white_space (slave->owner, painter, offset, ii, io, &new_lwl, line_offset, s);
-	aw = *w - new_ltw;
+	aw = w - new_ltw;
 	
 	if (aw <= widthLeft || *force_fit) {
 		*lwl = new_lwl;
@@ -383,8 +383,8 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, painter);
 	gboolean force_fit = lineBegin;
 
-	if (rv == HTML_FIT_COMPLETE)
-		return rv;
+	if (slave->posLen == 0)
+		return HTML_FIT_COMPLETE;
 
 	widthLeft = html_painter_engine_to_pango (painter, widthLeft);
 
@@ -397,7 +397,7 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 
 	while ((force_fit || widthLeft > lbw) && offset < slave->posStart + slave->posLen) {
 		if (offset > slave->posStart && offset > lbo && html_text_is_line_break (pi->attrs [offset]))
-			if (update_lb (slave, painter, widthLeft, offset, s, ii, io, line_offset, &w, &lwl, &lbw, &lbo, &lbsp, &force_fit))
+			if (update_lb (slave, painter, widthLeft, offset, s, ii, io, line_offset, w, &lwl, &lbw, &lbo, &lbsp, &force_fit))
 				break;
 
 		if (*s == '\t') {
@@ -409,24 +409,25 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 			line_offset ++;
 		}
 
+		html_text_pi_forward (pi, &ii, &io);
 		s = g_utf8_next_char (s);
 		offset ++;
-
-		html_text_pi_forward (pi, &ii, &io);
 	}
 
 	if (offset == slave->posStart + slave->posLen && (widthLeft >= w || force_fit)) {
 		rv = HTML_FIT_COMPLETE;
 		if (slave->posLen)
 			o->width = html_painter_pango_to_engine (painter, w);
+		/* FIXME fix lwl calculation */
+		//o->change |= HTML_CHANGE_RECALC_PI;
+		//html_object_calc_size (o, painter, NULL);
 	} else if (lbo > slave->posStart) {
-		split (slave, lbo - slave->posStart, lbsp);
+		split (slave, lbo - slave->posStart - lwl, lwl, lbsp);
 		rv = HTML_FIT_PARTIAL;
 		o->width = html_painter_pango_to_engine (painter, lbw);
-		slave->posLen -= lwl;
 		/* FIXME fix lwl calculation */
 		o->change |= HTML_CHANGE_RECALC_PI;
-		html_object_calc_size (o, painter, NULL);
+		//html_object_calc_size (o, painter, NULL);
 	}
 
 	return rv;
