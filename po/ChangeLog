@@ -1,3 +1,7 @@
+2002-05-31  Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>
+
+	* sk.po: Updated Slovak translation.
+
 2002-05-28  Dan Winship  <danw@ximian.com>
 
 	* ru.po: Add a missing \n to make this compile.
