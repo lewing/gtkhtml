@@ -472,4 +472,8 @@ void        html_engine_draw_focus_object  (HTMLEngine       *e);
 HTMLMap *html_engine_get_map  (HTMLEngine  *e,
 			       const gchar *name);
 
+gboolean html_engine_selection_contains_object_type (HTMLEngine *e,
+						     HTMLType obj_type);
+gboolean html_engine_selection_contains_link        (HTMLEngine *e);
+
 #endif /* _HTMLENGINE_H_ */

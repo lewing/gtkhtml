@@ -1,3 +1,10 @@
+2002-09-16  Radek Doulik  <rodo@ximian.com>
+
+	* popup.c (prepare_properties_and_menu): check if selection
+	contains link before including remove link
+	(prepare_properties_and_menu): always include "Insert link" menu
+	item
+
 2002-09-12  Bastien Nocera  <hadess@hadess.net>
 
 	* Makefile.am: remove GTK_DISABLE_DEPRECATED definition for the

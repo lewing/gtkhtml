@@ -5605,3 +5605,50 @@ html_engine_get_map (HTMLEngine *e, const gchar *name)
 {
 	return e->map_table ? HTML_MAP (g_hash_table_lookup (e->map_table, name)) : NULL;
 }
+
+struct HTMLEngineCheckSelectionType
+{
+	HTMLType req_type;
+	gboolean has_type;
+};
+
+static void
+check_type_in_selection (HTMLObject *o, HTMLEngine *e, struct HTMLEngineCheckSelectionType *tmp)
+{
+	if (HTML_OBJECT_TYPE (o) == tmp->req_type)
+		tmp->has_type = TRUE;
+}
+
+gboolean
+html_engine_selection_contains_object_type (HTMLEngine *e, HTMLType obj_type)
+{
+	struct HTMLEngineCheckSelectionType tmp;
+
+	tmp.has_type = FALSE;
+	html_engine_edit_selection_updater_update_now (e->selection_updater);
+	if (e->selection)
+		html_interval_forall (e->selection, e, (HTMLObjectForallFunc) check_type_in_selection, &tmp);
+
+	return tmp.has_type;
+}
+
+static void
+check_link_in_selection (HTMLObject *o, HTMLEngine *e, gboolean *has_link)
+{
+	if (HTML_IS_LINK_TEXT (o) ||
+	    (HTML_IS_IMAGE (o) && (HTML_IMAGE (o)->url || HTML_IMAGE (o)->target)))
+		*has_link = TRUE;
+}
+
+gboolean
+html_engine_selection_contains_link (HTMLEngine *e)
+{
+	gboolean has_link;
+
+	has_link = FALSE;
+	html_engine_edit_selection_updater_update_now (e->selection_updater);
+	if (e->selection)
+		html_interval_forall (e->selection, e, (HTMLObjectForallFunc) check_link_in_selection, &has_link);
+
+	return has_link;
+}
