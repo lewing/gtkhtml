@@ -1,3 +1,8 @@
+2002-05-17  Larry Ewing  <lewing@ximian.com>
+
+	* gtkhtml.c (skip_host): fix this for base_urls with hosts but
+	without trailing /s.
+
 2002-05-16  Radek Doulik  <rodo@ximian.com>
 
 	* libgtkhtml.pc.in (Cflags): fix include directory
