@@ -1,12 +1,12 @@
 # Brazilian Translation of gtkhtml.
-# Copyright (C) 2000-2002 Free Software Foundation, Inc.
-# Gustavo Maciel Dias Vieira <gdvieira@zaz.com.br>, 2000-2002.
+# Copyright (C) 2000-2003 Free Software Foundation, Inc.
+# Gustavo Maciel Dias Vieira <gdvieira@zaz.com.br>, 2000-2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml 1.1.6\n"
-"POT-Creation-Date: 2003-03-31 13:23-0500\n"
-"PO-Revision-Date: 2002-11-13 10:37-0200\n"
+"Project-Id-Version: gtkhtml 1.1.10\n"
+"POT-Creation-Date: 2003-06-10 19:11-0300\n"
+"PO-Revision-Date: 2003-06-10 19:14-0300\n"
 "Last-Translator: Gustavo Maciel Dias Vieira <gdvieira@zaz.com.br>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "Não foi possível carregar arquivo glade."
 
 #: capplet/gtkhtml-capplet.glade.h:1
 msgid "\n"
-msgstr ""
+msgstr "\n"
 
 #: capplet/gtkhtml-capplet.glade.h:3
 msgid "*********************"
@@ -176,6 +176,118 @@ msgstr "Fábrica para o controle EBrowser"
 #: components/ebrowser/GNOME_GtkHTML_EBrowser.oaf.in.h:4
 msgid "HTML Browser control"
 msgstr "Controle do navegador HTML"
+
+#: components/html-editor/body.c:65
+#: components/html-editor/gtkhtml-editor-properties.glade.h:47
+msgid "None"
+msgstr "Nenhum"
+
+#: components/html-editor/body.c:73
+msgid "Perforated Paper"
+msgstr "Papel perfurado"
+
+#: components/html-editor/body.c:81
+msgid "Blue Ink"
+msgstr "Tinta azul"
+
+#: components/html-editor/body.c:89
+msgid "Rectangles"
+msgstr "Retângulos"
+
+#: components/html-editor/body.c:253
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:103
+#: components/html-editor/gtkhtml-editor-properties.glade.h:73
+#: components/html-editor/menubar.c:199
+msgid "Template"
+msgstr "Modelo"
+
+#: components/html-editor/body.c:271
+msgid "Document Title"
+msgstr "Título do documento"
+
+#: components/html-editor/body.c:275 components/html-editor/body.c:278
+#: components/html-editor/gtkhtml-editor-properties.glade.h:14
+msgid "Background Image"
+msgstr "Imagem de fundo"
+
+#: components/html-editor/body.c:304
+#: components/html-editor/gtkhtml-editor-properties.glade.h:24
+msgid "Colors"
+msgstr "Cores"
+
+#: components/html-editor/body.c:314 components/html-editor/cell.c:397
+#: components/html-editor/table.c:534 components/html-editor/text.c:295
+#: components/html-editor/toolbar.c:306
+msgid "Automatic"
+msgstr "Automático"
+
+#: components/html-editor/body.c:326
+#: components/html-editor/editor-control-factory.c:196
+#: components/html-editor/gtkhtml-editor-properties.glade.h:75
+#: components/html-editor/menubar.c:339 components/html-editor/popup.c:194
+msgid "Text"
+msgstr "Texto"
+
+#: components/html-editor/body.c:327
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:57
+#: components/html-editor/menubar.c:141 components/html-editor/popup.c:105
+#: components/html-editor/popup.c:201 components/html-editor/popup.c:274
+msgid "Link"
+msgstr "Vínculo"
+
+#: components/html-editor/body.c:328
+#: components/html-editor/gtkhtml-editor-properties.glade.h:13
+msgid "Background"
+msgstr "Fundo"
+
+#: components/html-editor/cell.c:164 components/html-editor/cell.c:166
+#: components/html-editor/text.c:105
+msgid "The quick brown fox jumps over the lazy dog."
+msgstr "Gazeta publica hoje breve anúncio de faxina na quermesse."
+
+#: components/html-editor/cell.c:169
+msgid "Other"
+msgstr "Outro"
+
+#: components/html-editor/editor-control-factory.c:176
+#: components/html-editor/menubar.c:318 components/html-editor/menubar.c:336
+#: components/html-editor/menubar.c:354 components/html-editor/popup.c:186
+#: components/html-editor/popup.c:271
+msgid "Properties"
+msgstr "Propriedades"
+
+#: components/html-editor/editor-control-factory.c:187
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:37
+#: components/html-editor/gtkhtml-editor-properties.glade.h:38
+#: components/html-editor/menubar.c:125 components/html-editor/popup.c:208
+msgid "Image"
+msgstr "Imagem"
+
+#: components/html-editor/editor-control-factory.c:207
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:91
+#: components/html-editor/gtkhtml-editor-properties.glade.h:62
+#: components/html-editor/menubar.c:159 components/html-editor/popup.c:229
+msgid "Rule"
+msgstr "Régua"
+
+#: components/html-editor/editor-control-factory.c:217
+#: components/html-editor/menubar.c:357 components/html-editor/popup.c:215
+msgid "Paragraph"
+msgstr "Parágrafo"
+
+#: components/html-editor/editor-control-factory.c:222
+#: components/html-editor/gtkhtml-editor-properties.glade.h:51
+#: components/html-editor/menubar.c:321 components/html-editor/popup.c:222
+msgid "Page"
+msgstr "Página"
+
+#: components/html-editor/editor-control-factory.c:815
+msgid "Could not initialize GNORBA"
+msgstr "Não foi possível iniciar GNORBA"
+
+#: components/html-editor/editor-control-factory.c:828
+msgid "Could not initialize Bonobo"
+msgstr "Não foi possível iniciar Bonobo"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.oaf.in.in.h:1
 msgid "GNOME HTML Editor"
@@ -345,13 +457,6 @@ msgstr "Cabeçalho _5"
 msgid "Header _6"
 msgstr "Cabeçalho _6"
 
-#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:37
-#: components/html-editor/editor-control-factory.c:187
-#: components/html-editor/gtkhtml-editor-properties.glade.h:38
-#: components/html-editor/menubar.c:125 components/html-editor/popup.c:208
-msgid "Image"
-msgstr "Imagem"
-
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:38
 msgid "Insert Crying smiley into document..."
 msgstr "Inserir carinha chorando no documento..."
@@ -428,13 +533,6 @@ msgstr "Justificar os parágrafos à esquerda"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:56
 msgid "Li_ck"
 msgstr "_Lamber"
-
-#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:57
-#: components/html-editor/body.c:327 components/html-editor/menubar.c:141
-#: components/html-editor/popup.c:105 components/html-editor/popup.c:201
-#: components/html-editor/popup.c:274
-msgid "Link"
-msgstr "Vínculo"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:58
 msgid "Make the current Paragraph style Normal"
@@ -577,13 +675,6 @@ msgstr "Justifica os parágrafos à direita"
 msgid "Roman Numeral List"
 msgstr "Lista com números romanos"
 
-#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:91
-#: components/html-editor/editor-control-factory.c:207
-#: components/html-editor/gtkhtml-editor-properties.glade.h:62
-#: components/html-editor/menubar.c:159 components/html-editor/popup.c:229
-msgid "Rule"
-msgstr "Régua"
-
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:92
 msgid "Select _All"
 msgstr "Selecionar _tudo"
@@ -632,13 +723,6 @@ msgstr "_Modelo..."
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:102
 msgid "Te_xt file..."
 msgstr "Arquivo te_xto..."
-
-#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:103
-#: components/html-editor/body.c:253
-#: components/html-editor/gtkhtml-editor-properties.glade.h:73
-#: components/html-editor/menubar.c:199
-msgid "Template"
-msgstr "Modelo"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:104
 #: components/html-editor/toolbar.c:526
@@ -837,90 +921,6 @@ msgstr "_Piscando"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:152
 msgid "etc..."
 msgstr "etc..."
-
-#: components/html-editor/body.c:65
-#: components/html-editor/gtkhtml-editor-properties.glade.h:47
-msgid "None"
-msgstr "Nenhum"
-
-#: components/html-editor/body.c:73
-msgid "Perforated Paper"
-msgstr "Papel perfurado"
-
-#: components/html-editor/body.c:81
-msgid "Blue Ink"
-msgstr "Tinta azul"
-
-#: components/html-editor/body.c:89
-msgid "Rectangles"
-msgstr "Retângulos"
-
-#: components/html-editor/body.c:271
-msgid "Document Title"
-msgstr "Título do documento"
-
-#: components/html-editor/body.c:275 components/html-editor/body.c:278
-#: components/html-editor/gtkhtml-editor-properties.glade.h:14
-msgid "Background Image"
-msgstr "Imagem de fundo"
-
-#: components/html-editor/body.c:304
-#: components/html-editor/gtkhtml-editor-properties.glade.h:24
-msgid "Colors"
-msgstr "Cores"
-
-#: components/html-editor/body.c:314 components/html-editor/cell.c:397
-#: components/html-editor/table.c:534 components/html-editor/text.c:295
-#: components/html-editor/toolbar.c:306
-msgid "Automatic"
-msgstr "Automático"
-
-#: components/html-editor/body.c:326
-#: components/html-editor/editor-control-factory.c:196
-#: components/html-editor/gtkhtml-editor-properties.glade.h:75
-#: components/html-editor/menubar.c:339 components/html-editor/popup.c:194
-msgid "Text"
-msgstr "Texto"
-
-#: components/html-editor/body.c:328
-#: components/html-editor/gtkhtml-editor-properties.glade.h:13
-msgid "Background"
-msgstr "Fundo"
-
-#: components/html-editor/cell.c:164 components/html-editor/cell.c:166
-#: components/html-editor/text.c:105
-msgid "The quick brown fox jumps over the lazy dog."
-msgstr "Gazeta publica hoje breve anúncio de faxina na quermesse."
-
-#: components/html-editor/cell.c:169
-msgid "Other"
-msgstr "Outro"
-
-#: components/html-editor/editor-control-factory.c:176
-#: components/html-editor/menubar.c:318 components/html-editor/menubar.c:336
-#: components/html-editor/menubar.c:354 components/html-editor/popup.c:186
-#: components/html-editor/popup.c:271
-msgid "Properties"
-msgstr "Propriedades"
-
-#: components/html-editor/editor-control-factory.c:217
-#: components/html-editor/menubar.c:357 components/html-editor/popup.c:215
-msgid "Paragraph"
-msgstr "Parágrafo"
-
-#: components/html-editor/editor-control-factory.c:222
-#: components/html-editor/gtkhtml-editor-properties.glade.h:51
-#: components/html-editor/menubar.c:321 components/html-editor/popup.c:222
-msgid "Page"
-msgstr "Página"
-
-#: components/html-editor/editor-control-factory.c:815
-msgid "Could not initialize GNORBA"
-msgstr "Não foi possível iniciar GNORBA"
-
-#: components/html-editor/editor-control-factory.c:828
-msgid "Could not initialize Bonobo"
-msgstr "Não foi possível iniciar Bonobo"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "************"
@@ -1457,9 +1457,8 @@ msgid "No misspelled word found"
 msgstr "Não foi encontrada palavra com ortografia errada"
 
 #: components/html-editor/spell.c:493
-#, fuzzy
 msgid "Current _Languages"
-msgstr "_Línguas para verificação ortográfica"
+msgstr "_Línguas atuais"
 
 #: components/html-editor/table.c:198
 msgid "Flat gray"
@@ -1550,9 +1549,21 @@ msgstr "Aumentar recuo dos parágrafos"
 msgid "Sample"
 msgstr "Amostra"
 
+#: src/htmlbutton.c:149
+msgid "Submit Query"
+msgstr "Enviar consulta"
+
+#: src/htmlbutton.c:152
+msgid "Reset"
+msgstr "Reconfigurar"
+
 #: src/htmlengine-print.c:199
 msgid "Cannot allocate default font for printing\n"
 msgstr "Não é possível alocar fonte padrão para impressão\n"
+
+#: src/htmlframe.c:561 src/htmliframe.c:685
+msgid "Error: maximium frame depth exceded"
+msgstr "Erro: profundidade máxima de quadro excedida"
 
 #: src/htmlprinter.c:62
 msgid "US-Letter"
