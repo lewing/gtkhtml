@@ -71,11 +71,12 @@ finalize (GObject *object)
 	}
 }
 
-GList *
-html_gdk_painter_text_itemize_and_prepare_glyphs (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *text, gint bytes, GList **glyphs)
+HTMLTextPangoInfo *
+html_gdk_painter_text_itemize_and_prepare_glyphs (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *text, gint bytes, GList **glyphs, gint *n_pi)
 {
 	PangoAttrList *attrs;
 	GList *items = NULL;
+	HTMLTextPangoInfo *pi = NULL;
 
 	/* printf ("itemize + glyphs\n"); */
 
@@ -88,19 +89,25 @@ html_gdk_painter_text_itemize_and_prepare_glyphs (HTMLGdkPainter *painter, Pango
 		PangoItem *item;
 		GList *il;
 		const gchar *end;
+		gint i = 0;
+
+		*n_pi = g_list_length (items);
+		pi = g_new0 (HTMLTextPangoInfo, *n_pi);
 
 		*glyphs = NULL;
 		for (il = items; il; il = il->next) {
 			item = (PangoItem *) il->data;
+			pi->entries [i].item = item;
 			end = g_utf8_offset_to_pointer (text, item->num_chars);
 			*glyphs = html_get_glyphs_non_tab (*glyphs, item, text, end - text, item->num_chars);
 			text = end;
+			i ++;
 		}
 		*glyphs = g_list_reverse (*glyphs);
 	} else
 		*glyphs = NULL;
 
-	return items;
+	return pi;
 }
 
 inline static void
@@ -126,13 +133,13 @@ glyphs_destroy (GList *glyphs)
 static gint
 text_width (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *text, gint bytes)
 {
-	GList *items;
+	HTMLTextPangoInfo *pi;
 	GList *glyphs;
-	gint width = 0;
+	gint width = 0, n_pi;
 
-	items = html_gdk_painter_text_itemize_and_prepare_glyphs (painter, desc, text, bytes, &glyphs);
+	pi = html_gdk_painter_text_itemize_and_prepare_glyphs (painter, desc, text, bytes, &glyphs, &n_pi);
 
-	if (items && glyphs) {
+	if (pi && glyphs) {
 		GList *list;
 		int i;
 		for (list = glyphs; list; list = list->next) {
@@ -143,8 +150,8 @@ text_width (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *te
 	}
 	if (glyphs)
 		glyphs_destroy (glyphs);
-	if (items)
-		items_destroy (items);
+	if (pi)
+		html_text_pango_info_destroy (pi);
 	/* printf ("text_width %d\n", PANGO_PIXELS (width)); */
 	return PANGO_PIXELS (width);
 }

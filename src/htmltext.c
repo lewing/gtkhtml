@@ -185,17 +185,34 @@ get_tags (const HTMLText *text,
 
 /* HTMLObject methods.  */
 
-inline static void
-pi_destroy (HTMLText *text)
+HTMLTextPangoInfo *
+html_text_pango_info_new (gint n)
+{
+	HTMLTextPangoInfo *pi;
+
+	pi = g_new (HTMLTextPangoInfo, 1);
+	pi->n = n;
+	pi->entries = g_new0 (HTMLTextPangoInfoEntry, n);
+}
+
+void
+html_text_pango_info_destroy (HTMLTextPangoInfo *pi)
+{
+	gint i;
+
+	for (i = 0; i < pi->n; i ++) {
+		pango_item_free (pi->entries [i].item);
+		g_free (pi->entries [i].attrs);
+		g_free (pi->entries [i].widths);
+	}
+	g_free (pi);
+}
+
+static void
+pango_info_destroy (HTMLText *text)
 {
 	if (text->pi) {
-		gint i;
-
-		for (i = 0; i < text->n_pi; i ++) {
-			pango_item_free (text->pi [i].item);
-			g_free (text->pi [i].attrs);
-			g_free (text->pi [i].widths);
-		}
+		html_text_pango_info_destroy (text->pi);
 		text->pi = NULL;
 	}
 }
@@ -607,8 +624,8 @@ get_item_index (HTMLText *text, gint offset, gint *item_offset)
 {
 	gint idx = 0;
 
-	while (offset > text->pi [idx].item->num_chars) {
-		offset -= text->pi [idx].item->num_chars;
+	while (offset > text->pi->entries [idx].item->num_chars) {
+		offset -= text->pi->entries [idx].item->num_chars;
 		idx ++;
 	}
 
@@ -627,8 +644,8 @@ html_text_calc_part_width (HTMLText *text, gint offset, gint len)
 
 	idx = get_item_index (text, offset, &offset);
 	while (len > 0) {
-		width += text->pi [idx].widths [offset];
-		if (offset >= text->pi [idx].item->num_chars - 1) {
+		width += text->pi->entries [idx].widths [offset];
+		if (offset >= text->pi->entries [idx].item->num_chars - 1) {
 			idx ++;
 			offset = 0;
 		} else
@@ -856,22 +873,21 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 		attrs = pango_attr_list_new ();
 		items = pango_itemize (pc, translated, 0, bytes, attrs, NULL);
 		pango_attr_list_unref (attrs);
-		text->n_pi = g_list_length (items);
-		text->pi = g_new (HTMLTextPangoInfo, text->n_pi);
+		text->pi = html_text_pango_info_new (g_list_length (items));
 
-		for (i = 0, cur = items; i < text->n_pi; i ++) {
+		for (i = 0, cur = items; i < text->pi->n; i ++) {
 			PangoGlyphString *glyphs;
 			PangoItem *item;
 
-			item = text->pi [i].item = (PangoItem *) items->data;
+			item = text->pi->entries [i].item = (PangoItem *) items->data;
 
-			text->pi [i].attrs = g_new (PangoLogAttr, item->num_chars + 1);;
-			pango_break (translated + item->offset, item->length, &item->analysis, text->pi [i].attrs, item->num_chars + 1);
+			text->pi->entries [i].attrs = g_new (PangoLogAttr, item->num_chars + 1);;
+			pango_break (translated + item->offset, item->length, &item->analysis, text->pi->entries [i].attrs, item->num_chars + 1);
 
 			glyphs = pango_glyph_string_new ();
-			text->pi [i].widths = g_new (PangoGlyphUnit, item->num_chars);
+			text->pi->entries [i].widths = g_new (PangoGlyphUnit, item->num_chars);
 			pango_shape (translated + item->offset, item->length, &item->analysis, glyphs);
-			pango_glyph_string_get_logical_widths (glyphs, translated + item->offset, item->length, item->analysis.level, text->pi [i].widths);
+			pango_glyph_string_get_logical_widths (glyphs, translated + item->offset, item->length, item->analysis.level, text->pi->entries [i].widths);
 			pango_glyph_string_free (glyphs);
 		}
 		g_free (heap);

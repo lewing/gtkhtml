@@ -34,10 +34,15 @@ struct _SpellError {
 	guint len;
 };
 
-struct _HTMLTextPangoInfo {
+struct _HTMLTextPangoInfoEntry {
 	PangoItem *item;
 	PangoLogAttr *attrs;
 	PangoGlyphUnit *widths;
+};
+
+struct _HTMLTextPangoInfo {
+	HTMLTextPangoInfoEntry *entries;
+	gint n;
 };
 
 struct _HTMLText {
@@ -56,7 +61,6 @@ struct _HTMLText {
 	GList *spell_errors;
 
 	HTMLTextPangoInfo *pi;
-	gint n_pi;
 };
 
 struct _HTMLTextClass {
@@ -148,7 +152,10 @@ gint              html_text_calc_part_width              (HTMLText         *text
 /*
  * protected
  */
-HTMLTextPangoInfo * html_text_get_pango_info (HTMLText *text, HTMLPainter *painter);
+HTMLTextPangoInfo *html_text_pango_info_new      (gint               n);
+void               html_text_pango_info_destroy  (HTMLTextPangoInfo *pi);
+HTMLTextPangoInfo *html_text_get_pango_info      (HTMLText          *text,
+						  HTMLPainter       *painter);
 
 typedef HTMLObject * (* HTMLTextHelperFunc)       (HTMLText *, gint begin, gint end);
 HTMLObject *html_text_op_copy_helper    (HTMLText           *text,
