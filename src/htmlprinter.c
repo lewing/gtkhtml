@@ -550,7 +550,7 @@ fill_rect (HTMLPainter *painter, gint x, gint y, gint width, gint height)
 }
 
 static gint
-draw_text (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, GList *items, GList *glyphs, gint start_byte_offset)
+draw_text (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, HTMLTextPangoInfo *pi, GList *glyphs, gint start_byte_offset)
 {
 	GnomeFont *font;
 	HTMLPrinter *printer;
@@ -647,7 +647,7 @@ draw_shade_line (HTMLPainter *painter,
 }
 
 static void
-calc_text_size (HTMLPainter *painter, const gchar *text, guint len, GList *items, GList *glyphs, gint start_byte_offset,
+calc_text_size (HTMLPainter *painter, const gchar *text, guint len, HTMLTextPangoInfo *pi, GList *glyphs, gint start_byte_offset,
 		GtkHTMLFontStyle style, HTMLFontFace *face, gint *width, gint *asc, gint *dsc)
 {
 	HTMLPrinter *printer;
@@ -661,12 +661,14 @@ calc_text_size (HTMLPainter *painter, const gchar *text, guint len, GList *items
 
 	*width = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_width_utf8_sized (font, text,
 									       g_utf8_offset_to_pointer (text, len) - text));
-	*asc = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_ascender (font));
-	*dsc = SCALE_GNOME_PRINT_TO_ENGINE (-gnome_font_get_descender (font));
+	if (asc)
+		*asc = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_ascender (font));
+	if (dsc)
+		*dsc = SCALE_GNOME_PRINT_TO_ENGINE (-gnome_font_get_descender (font));
 }
 
 static void
-calc_text_size_bytes (HTMLPainter *painter, const gchar *text, guint len, GList *items, GList *glyphs, gint start_byte_offset,
+calc_text_size_bytes (HTMLPainter *painter, const gchar *text, guint len, HTMLTextPangoInfo *pi, GList *glyphs, gint start_byte_offset,
 		      HTMLFont *font, GtkHTMLFontStyle style, gint *width, gint *asc, gint *dsc)
 {
 	HTMLPrinter *printer;

@@ -472,13 +472,24 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 
 	while ((force_fit || widthLeft > lbw) && offset < slave->posStart + slave->posLen) {
 		if (offset > slave->posStart && pi->entries [ii].attrs [io].is_line_break) {
-			gint new_ltw, new_lwl;
+			gint new_ltw, new_lwl, aw;
 
 			new_ltw = PANGO_PIXELS (html_text_tail_white_space (pi, ii, io, &new_lwl));
-			if (w - new_ltw <= widthLeft || force_fit) {
+			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
+				aw = w - new_lwl;
+			} else {
+				/* printf ("s: %s l: %d\n", html_text_get_text (slave->owner, lbo - lwl), offset - new_lwl - lbo + lwl); */
+				html_painter_calc_text_size (painter, html_text_get_text (slave->owner, lbo - lwl),
+							     offset - new_lwl - lbo + lwl, NULL, NULL, 0, NULL, html_text_get_font_style (slave->owner), slave->owner->face,
+							     &aw, NULL, NULL);
+				w += aw;
+				aw = w;
+				new_ltw = 0;
+			}
+			if (aw <= widthLeft || force_fit) {
 				ltw = new_ltw;
 				lwl = new_lwl;
-				lbw = w - ltw;
+				lbw = aw;
 				lbo = offset;
 				if (force_fit && lbw >= widthLeft)
 					break;
@@ -486,9 +497,19 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 			} else
 				break;
 		}
-		w += PANGO_PIXELS (pi->entries [ii].widths [io]);
+		if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
+			w += PANGO_PIXELS (pi->entries [ii].widths [io]);
 		offset ++;
 		html_text_pi_forward (pi, &ii, &io);
+	}
+
+	if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter)) {
+		gint aw;
+		/* printf ("s: %s l: %d\n", html_text_get_text (slave->owner, lbo - lwl), offset - lbo + lwl); */
+		html_painter_calc_text_size (painter, html_text_get_text (slave->owner, lbo - lwl),
+					     offset - lbo + lwl, NULL, NULL, 0, NULL, html_text_get_font_style (slave->owner), slave->owner->face,
+					     &aw, NULL, NULL);
+		w += aw;
 	}
 
 	if (offset == slave->posStart + slave->posLen && (widthLeft >= w || force_fit)) {
