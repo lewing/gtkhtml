@@ -123,6 +123,7 @@ gtkhtml.spec
 po/Makefile.in
 src/Makefile
 src/libgtkhtml.pc
+a11y/Makefile
 capplet/Makefile
 components/Makefile
 components/html-editor/Makefile

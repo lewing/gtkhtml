@@ -369,7 +369,7 @@ html_embedded_set_widget (HTMLEmbedded *emb, GtkWidget *w)
 	emb->widget = w;
 	
 	gtk_widget_show (w);
-	
+
 	gtk_object_set_data (GTK_OBJECT (w), "embeddedelement", emb);
 	g_signal_connect (w, "size_allocate", G_CALLBACK (html_embedded_allocate), emb);
 }

@@ -50,11 +50,11 @@ HTMLObjectClass html_object_class;
 
 /* HTMLObject virtual methods.  */
 
-static void
+/* RM2 static void
 free_data (GQuark id, gpointer data, gpointer user_data)
 {
 	g_free (data);
-}
+} */
 
 static void
 destroy (HTMLObject *self)
@@ -68,7 +68,7 @@ destroy (HTMLObject *self)
 	self->next = NULL;
 	self->prev = NULL;
 #endif
-	g_datalist_foreach (&self->object_data, free_data, NULL);
+	// RM2 g_datalist_foreach (&self->object_data, free_data, NULL);
 	g_datalist_clear (&self->object_data);
 	
 	if (self->redraw_pending) {
@@ -1549,7 +1549,13 @@ html_object_get_index (HTMLObject *self, guint offset)
 void
 html_object_set_data (HTMLObject *object, const gchar *key, const gchar *value)
 {
-	g_datalist_set_data (&object->object_data, key, g_strdup (value));
+	g_datalist_set_data_full (&object->object_data, key, g_strdup (value), g_free);
+}
+
+void
+html_object_set_data_full (HTMLObject *object, const gchar *key, const gpointer value, GDestroyNotify func)
+{
+	g_datalist_set_data_full (&object->object_data, key, value, func);
 }
 
 gpointer
@@ -1860,4 +1866,23 @@ html_object_add_to_changed (GList **changed_objs, HTMLObject *o)
 	}
 
 	*changed_objs = g_list_prepend (*changed_objs, o);
+}
+
+gint
+html_object_get_n_children (HTMLObject *self)
+{
+	return HO_CLASS (self)->get_n_children ? (* HO_CLASS (self)->get_n_children) (self) : 0;
+}
+
+HTMLObject *
+html_object_get_child (HTMLObject *self, gint index)
+{
+	return HO_CLASS (self)->get_child ? (* HO_CLASS (self)->get_child) (self, index) : NULL;
+}
+
+
+gint
+html_object_get_child_index (HTMLObject *self, HTMLObject *child)
+{
+	return HO_CLASS (self)->get_child_index ? (* HO_CLASS (self)->get_child_index) (self, child) : -1;
 }

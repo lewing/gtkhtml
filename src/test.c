@@ -36,6 +36,7 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtksignal.h>
 
+#include <libgnome/gnome-i18n.h>
 #include <libgnomeui/gnome-ui-init.h>
 
 #include "gtkhtml.h"
@@ -188,13 +189,13 @@ main (int argc, char **argv)
 	gtk_box_pack_end (GTK_BOX (hbox), debug, FALSE, FALSE, 0);
 	g_signal_connect (debug, "clicked", G_CALLBACK (dump_simple_cb), NULL);
 
-	gtk_window_set_title (GTK_WINDOW (window), "GtkHTML Test");
+	gtk_window_set_title (GTK_WINDOW (window), _("GtkHTML Test"));
 	gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
 
 	for (i = 0; i < BUTTON_INDEX -1; i++)
 		g_signal_connect (button [i], "clicked", G_CALLBACK (button_cb), GINT_TO_POINTER (i));
 	g_signal_connect (button [BUTTON_INDEX - 1], "clicked", G_CALLBACK (quit_cb), NULL);
-	
+
 	gtk_widget_show_all (window);
 		
 	gtk_main ();

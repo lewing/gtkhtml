@@ -55,6 +55,54 @@ destroy (HTMLObject *o)
 	HTML_OBJECT_CLASS (parent_class)->destroy (o);
 }
 
+static gint
+get_n_children (HTMLObject *o)
+{
+	HTMLObject *cur = HTML_CLUE (o)->head;
+	gint n_children = 0;
+
+	while (cur) {
+		n_children ++;
+		cur = cur->next;
+	}
+
+	return n_children;
+}
+
+static HTMLObject *
+get_child (HTMLObject *o, gint index)
+{
+	HTMLObject *cur = HTML_CLUE (o)->head;
+	gint n_children = 0;
+
+	g_return_val_if_fail (index >= 0, NULL);
+
+	while (cur) {
+		if (!index)
+			break;
+		index --;
+		cur = cur->next;
+	}
+
+	return cur;
+}
+
+static gint
+get_child_index (HTMLObject *self, HTMLObject *child)
+{
+	HTMLObject *cur = HTML_CLUE (self)->head;
+	gint index = 0;
+
+	while (cur) {
+		if (cur == child)
+			return index;
+		index ++;
+		cur = cur->next;
+	}
+
+	return -1;
+}
+
 static guint
 get_recursive_length (HTMLObject *self)
 {
@@ -625,6 +673,9 @@ html_clue_class_init (HTMLClueClass *klass,
 	object_class->head = head;
 	object_class->tail = tail;
 	object_class->get_recursive_length = get_recursive_length;
+	object_class->get_n_children = get_n_children;
+	object_class->get_child = get_child;
+	object_class->get_child_index = get_child_index;
 
 	/* HTMLClue methods.  */
 	klass->get_left_clear = get_left_clear;

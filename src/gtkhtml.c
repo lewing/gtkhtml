@@ -29,6 +29,8 @@
 
 #include <gnome.h>
 
+#include "../a11y/factory.h"
+
 #include "htmlcolorset.h"
 #include "htmlcursor.h"
 #include "htmldrawqueue.h"
@@ -2456,6 +2458,7 @@ gtk_html_class_init (GtkHTMLClass *klass)
 	init_properties (klass);
 
 	gdk_rgb_init ();
+	gtk_html_accessibility_init ();
 }
 
 static void

@@ -203,7 +203,7 @@ gtest_SOURCES = \
 	test.c
 gtest_LDFLAGS = -static
 gtest_LDADD =	\
-	libgtkhtml.la
+	libgtkhtml.la ../a11y/libgtkhtml-a11y.la
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libgtkhtml.pc
