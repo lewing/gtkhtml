@@ -37,11 +37,11 @@ static void html_a11y_class_init (HTMLA11YClass *klass);
 static void html_a11y_init       (HTMLA11Y *a11y_paragraph);
 
 static void atk_component_interface_init (AtkComponentIface *iface);
-static G_CONST_RETURN gchar * html_a11y_get_name (AtkObject *accessible);
-static G_CONST_RETURN gchar * html_a11y_get_description (AtkObject *accessible);
 static AtkObject*  html_a11y_get_parent (AtkObject *accessible);
 static gint html_a11y_get_index_in_parent (AtkObject *accessible);
 static AtkStateSet * html_a11y_ref_state_set (AtkObject *accessible);
+static gint html_a11y_get_n_children (AtkObject *accessible);
+static AtkObject * html_a11y_ref_child (AtkObject *accessible, gint index);
 
 static AtkObjectClass *parent_class = NULL;
 
@@ -71,7 +71,7 @@ html_a11y_get_type (void)
 		};
 
 		type = g_type_register_static (ATK_TYPE_OBJECT, "HTMLA11Y", &tinfo, 0);
-		//FIX2 g_type_add_interface_static (type, ATK_TYPE_COMPONENT, &atk_component_info);
+		g_type_add_interface_static (type, ATK_TYPE_COMPONENT, &atk_component_info);
 	}
 
 	return type;
@@ -120,11 +120,11 @@ html_a11y_class_init (HTMLA11YClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 
 	atk_class->initialize = html_a11y_initialize;
-	atk_class->get_name = html_a11y_get_name;
-	atk_class->get_description = html_a11y_get_description;
 	atk_class->get_parent = html_a11y_get_parent;
 	atk_class->get_index_in_parent = html_a11y_get_index_in_parent;
 	atk_class->ref_state_set = html_a11y_ref_state_set;
+	atk_class->get_n_children = html_a11y_get_n_children;
+	atk_class->ref_child = html_a11y_ref_child;
 
 	gobject_class->finalize = html_a11y_finalize;
 }
@@ -132,26 +132,6 @@ html_a11y_class_init (HTMLA11YClass *klass)
 static void
 html_a11y_init (HTMLA11Y *a11y_paragraph)
 {
-}
-
-static G_CONST_RETURN gchar*
-html_a11y_get_name (AtkObject *accessible)
-{
-	if (accessible->name)
-		return accessible->name;
-	else {
-		return _("Unknown HTML object");
-	}
-}
-
-static G_CONST_RETURN gchar*
-html_a11y_get_description (AtkObject *accessible)
-{
-	if (accessible->description)
-		return accessible->description;
-	else {
-		return _("No description available");
-	}
 }
 
 static HTMLObject *
@@ -220,4 +200,37 @@ html_a11y_ref_state_set (AtkObject *accessible)
 	printf ("html_a11y_ref_state_set resolves to %p\n", state_set);
 
 	return state_set;
+}
+
+static gint
+html_a11y_get_n_children (AtkObject *accessible)
+{
+	HTMLObject *clue;
+	gint n_children = 0;
+
+	/* clue = GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue;
+	if (clue)
+	n_children = html_object_get_n_children (GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue); */
+
+	printf ("html_a11y_get_n_children resolves to %d\n", n_children);
+
+	return n_children;
+}
+
+static AtkObject *
+html_a11y_ref_child (AtkObject *accessible, gint index)
+{
+	HTMLObject *child;
+	AtkObject *accessible_child = NULL;
+	
+	/* if (GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue) {
+		child = html_object_get_child (GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue, index);
+		if (child) {
+			accessible_child = html_utils_get_accessible (child, accessible);
+		}
+		} */
+
+	printf ("html_a11y_ref_child %d resolves to %p\n", index, accessible_child);
+
+	return accessible_child;
 }
