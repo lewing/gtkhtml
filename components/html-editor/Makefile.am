@@ -34,12 +34,10 @@ Editor-common.o: Editor.h
 Spell-common.o: Spell.h
 
 $(IDL_GENERATED): $(IDLS)
-	$(ORBIT_IDL) -I$(datadir)/idl `$(GNOME_CONFIG) --cflags idl`	\
-		-I$(srcdir) $(srcdir)/Editor.idl
+	$(ORBIT_IDL) $(BONOBO_IDL_INCLUDES) $(srcdir)/Editor.idl
 
 $(SPELL_IDL_GENERATED): $(SPELL_IDLS)
-	$(ORBIT_IDL) -I$(datadir)/idl `$(GNOME_CONFIG) --cflags idl`	\
-		-I$(srcdir) $(srcdir)/Spell.idl
+	$(ORBIT_IDL) $(BONOBO_IDL_INCLUDES) $(srcdir)/Spell.idl
 
 LDADD =	\
 	$(top_builddir)/src/libgtkhtml.la	\
