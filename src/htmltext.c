@@ -945,7 +945,7 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 		HTML_OBJECT (text)->change &= ~HTML_CHANGE_RECALC_PI;
 	}
 	if (!text->pi) {
-		PangoContext *pc = HTML_GDK_PAINTER (painter)->pc;
+		PangoContext *pc = gtk_widget_get_pango_context (painter->widget);;
 		GList *items, *cur;
 		PangoAttrList *attrs;
 		gchar *translated, *heap = NULL;

@@ -61,11 +61,6 @@ finalize (GObject *object)
 		painter->pixmap = NULL;
 	}
 
-	if (painter->widget) {
-		g_object_unref (painter->widget);
-		painter->widget = NULL;
-	}
-
 	if (painter->pc) {
 		g_object_unref (painter->pc);
 		painter->pc = NULL;
@@ -222,7 +217,7 @@ alloc_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, Gt
 		if (desc)
 			pango_font_description_free (desc);
 
-		desc = pango_font_description_copy (((HTMLGdkPainter *)painter)->widget->style->font_desc);
+		desc = pango_font_description_copy (painter->widget->style->font_desc);
 	}
 
 	pango_font_description_set_size (desc, size * PANGO_SCALE);
@@ -1103,7 +1098,7 @@ draw_text (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, HT
 			gl = gl->next;
 			ii = GPOINTER_TO_INT (gl->data);
 			bg_gc = NULL;
-			gc = item_gc (pi->entries [ii].item, gdk_painter->pixmap, gdk_painter->widget->style->text_gc [gdk_painter->widget->state],
+			gc = item_gc (pi->entries [ii].item, gdk_painter->pixmap, painter->widget->style->text_gc [painter->widget->state],
 				      &underline, &strikethrough, &bgcolor, &bg_gc);
 			if (bgcolor) {
 				PangoRectangle log_rect;
@@ -1225,7 +1220,6 @@ html_gdk_painter_init (GObject *object)
 	gdk_painter = HTML_GDK_PAINTER (object);
 
 	gdk_painter->window = NULL;
-	gdk_painter->widget = NULL;
 
 	gdk_painter->alpha = TRUE;
 	gdk_painter->gc = NULL;
@@ -1314,8 +1308,7 @@ html_gdk_painter_new (GtkWidget *widget, gboolean double_buffer)
 	new = g_object_new (HTML_TYPE_GDK_PAINTER, NULL);
 
 	new->double_buffer = double_buffer;
-	new->widget = widget;
-	g_object_ref (widget);
+	html_painter_set_widget (HTML_PAINTER (new), widget);
 	new->pc = gtk_widget_get_pango_context (widget);
 	g_object_ref (new->pc);
 
