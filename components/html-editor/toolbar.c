@@ -574,6 +574,7 @@ create_style_toolbar (GtkHTMLControlData *cd)
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
 
 	cd->toolbar_style = gtk_toolbar_new ();
+	gtk_toolbar_set_style (GTK_TOOLBAR (cd->toolbar_style), GTK_TOOLBAR_ICONS);
 
 	gtk_container_add (GTK_CONTAINER (frame), cd->toolbar_style);
 	gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);

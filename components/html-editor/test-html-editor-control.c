@@ -205,6 +205,7 @@ file_selection_ok_cb (GtkWidget *widget,
 {
 	CORBA_Object interface;
 	const gchar *interface_name;
+	CORBA_Environment ev;
 
 	if (file_selection_info.operation == OP_SAVE_THROUGH_PERSIST_FILE
 	    || file_selection_info.operation == OP_LOAD_THROUGH_PERSIST_FILE)
@@ -212,7 +213,10 @@ file_selection_ok_cb (GtkWidget *widget,
 	else
 		interface_name = "IDL:Bonobo/PersistStream:1.0";
 
-	interface = bonobo_object_query_interface (BONOBO_OBJECT (file_selection_info.control), interface_name, NULL);
+	CORBA_exception_init (&ev);
+	interface = Bonobo_Unknown_queryInterface (bonobo_widget_get_objref (file_selection_info.control),
+						   interface_name, &ev);
+	CORBA_exception_free (&ev);
 
 	if (interface == CORBA_OBJECT_NIL) {
 		g_warning ("The Control does not seem to support `%s'.", interface_name);
@@ -358,11 +362,18 @@ menu_format_html_cb (BonoboUIComponent           *component,
 		     gpointer                     user_data)
 
 {
+	BonoboArg *arg;
 	if (type != Bonobo_UIComponent_STATE_CHANGED)
 		return;
 	formatHTML = *state == '0' ? 0 : 1;
-	bonobo_widget_set_property (BONOBO_WIDGET (user_data), "FormatHTML", formatHTML, NULL);
-	bonobo_widget_set_property (BONOBO_WIDGET (user_data), "HTMLTitle", "testing", NULL);
+
+	arg = bonobo_arg_new_from (BONOBO_ARG_BOOLEAN, &formatHTML);
+	bonobo_widget_set_property (BONOBO_WIDGET (user_data), "FormatHTML", arg, NULL);
+	bonobo_arg_release (arg);
+
+	arg = bonobo_arg_new_from (BONOBO_ARG_STRING, "testing");
+	bonobo_widget_set_property (BONOBO_WIDGET (user_data), "HTMLTitle", arg, NULL);
+	bonobo_arg_release (arg);
 }
 
 /* A dirty, non-translatable hack */
@@ -426,13 +437,13 @@ container_create (void)
 	BonoboUIContainer *container;
 	CORBA_Environment ev;
 	GNOME_GtkHTML_Editor_Engine engine;
+	BonoboArg *arg;
 
 	win = bonobo_window_new ("test-editor",
 				 "HTML Editor Control Test");
 	window = GTK_WINDOW (win);
 
-	container = bonobo_ui_container_new ();
-	/* FIX2 bonobo_ui_container_set_win (container, BONOBO_WINDOW (win)); */
+	container = bonobo_window_get_ui_container (BONOBO_WINDOW (win));
 
 	gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			    GTK_SIGNAL_FUNC (app_delete_cb), NULL);
@@ -445,20 +456,18 @@ container_create (void)
 
 	component = bonobo_ui_component_new ("test-editor");
 
-	bonobo_ui_component_set_container (
-		component,
-		bonobo_object_corba_objref (BONOBO_OBJECT (container)), NULL);
-
+	bonobo_ui_component_set_container (component, BONOBO_OBJREF (container), NULL);
 	bonobo_ui_component_add_verb_list_with_data (component, verbs, win);
-
 	bonobo_ui_component_set_translate (component, "/", ui, NULL);
 
-	control = bonobo_widget_new_control (CONTROL_ID, bonobo_object_corba_objref (BONOBO_OBJECT (container)));
+	control = bonobo_widget_new_control (CONTROL_ID, BONOBO_OBJREF (container));
 
 	if (control == NULL)
 		g_error ("Cannot get `%s'.", CONTROL_ID);
 
-	bonobo_widget_set_property (BONOBO_WIDGET (control), "FormatHTML", formatHTML, NULL);
+	arg = bonobo_arg_new_from (BONOBO_ARG_BOOLEAN, &formatHTML);
+	bonobo_widget_set_property (BONOBO_WIDGET (control), "FormatHTML", arg, NULL);
+	bonobo_arg_release (arg);
 	bonobo_ui_component_set_prop (component, "/commands/FormatHTML", "state", formatHTML ? "1" : "0", NULL);
 	bonobo_ui_component_add_listener (component, "FormatHTML", menu_format_html_cb, control);
 
@@ -467,8 +476,8 @@ container_create (void)
 	gtk_widget_show_all (GTK_WIDGET (window));
 
 	CORBA_exception_init (&ev);
-	engine = (GNOME_GtkHTML_Editor_Engine) bonobo_object_query_interface
-		(BONOBO_OBJECT (control), "IDL:GNOME/GtkHTML/Editor/Engine:1.0", &ev);
+	engine = (GNOME_GtkHTML_Editor_Engine) Bonobo_Unknown_queryInterface
+		(bonobo_widget_get_objref (BONOBO_WIDGET (control)), "IDL:GNOME/GtkHTML/Editor/Engine:1.0", &ev);
 	GNOME_GtkHTML_Editor_Engine_runCommand (engine, "grab-focus", &ev);
 	Bonobo_Unknown_unref (engine, &ev);
 	CORBA_Object_release (engine, &ev);
@@ -481,9 +490,13 @@ static gint
 load_file (const gchar *fname)
 {
 	CORBA_Object interface;
+	CORBA_Environment ev;
 
 	printf ("loading: %s\n", fname);
-	interface = bonobo_object_query_interface (BONOBO_OBJECT (control), "IDL:Bonobo/PersistFile:1.0", NULL);
+	CORBA_exception_init (&ev);
+	interface = Bonobo_Unknown_queryInterface (bonobo_widget_get_objref (BONOBO_WIDGET (control)),
+						   "IDL:Bonobo/PersistFile:1.0", &ev);
+	CORBA_exception_free (&ev);
 	load_through_persist_file (fname, interface);
 
 	return FALSE;

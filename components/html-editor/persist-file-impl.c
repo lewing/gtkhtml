@@ -167,7 +167,7 @@ persist_file_impl_new (GtkHTML *html)
 
 	pf = bonobo_persist_file_new (pf_impl_load, pf_impl_save, CONTROL_FACTORY_ID, html);
 
-	gtk_signal_connect (GTK_OBJECT (pf), "destroy", GTK_SIGNAL_FUNC (pf_destroy), html);
+	g_signal_connect (G_OBJECT (pf), "destroy", G_CALLBACK (pf_destroy), html);
 
 	return pf;
 }

@@ -72,7 +72,6 @@
 
 #ifndef GNOME_GTKHTML_EDITOR_SHLIB
 static BonoboGenericFactory *factory;
-static gint active_controls = 0;
 
 #endif
 static void send_event_stream (GNOME_GtkHTML_Editor_Engine engine, 
@@ -329,22 +328,6 @@ html_button_pressed (GtkWidget *html, GdkEventButton *event, GtkHTMLControlData 
 }
 
 static void
-destroy_control_data_cb (GtkObject *control, GtkHTMLControlData *cd)
-{
-	gtk_html_control_data_destroy (cd);
-
-#ifndef GNOME_GTKHTML_EDITOR_SHLIB
-	active_controls --;
-
-	if (active_controls)
-		return;
-
-	bonobo_object_unref (BONOBO_OBJECT (factory));
-	gtk_main_quit ();
-#endif
-}
-
-static void
 editor_init_painters (GtkHTMLControlData *cd)
 {	
 	GtkHTMLClassProperties *prop;
@@ -465,9 +448,6 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 	BonoboPropertyBag  *pb;
 	BonoboArg          *def;
 
-#ifndef GNOME_GTKHTML_EDITOR_SHLIB
-	active_controls++;
-#endif
 	/* GtkHTML widget */
 	html_widget = gtk_html_new ();
 	gtk_html_load_empty (GTK_HTML (html_widget));
@@ -490,7 +470,6 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 
 	/* PropertyBag */
 	pb = bonobo_property_bag_new (editor_get_prop, editor_set_prop, cd);
-	bonobo_control_set_properties (control, BONOBO_OBJREF (pb), NULL);
 
 	def = bonobo_arg_new (BONOBO_ARG_BOOLEAN);
 	BONOBO_ARG_SET_BOOLEAN (def, TRUE);
@@ -520,17 +499,14 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 				 0);
 	*/
 
+	bonobo_control_set_properties (control, BONOBO_OBJREF (pb), NULL);
 	bonobo_object_unref (BONOBO_OBJECT (pb));
 
 	/* Part of the initialization must be done after the control is
 	   embedded in its control frame.  We use the "set_frame" signal to
 	   handle that.  */
 
-	gtk_signal_connect (GTK_OBJECT (control), "set_frame",
-			    GTK_SIGNAL_FUNC (set_frame_cb), cd);
-
-	gtk_signal_connect (GTK_OBJECT (control), "destroy",
-			    GTK_SIGNAL_FUNC (destroy_control_data_cb), cd);
+	g_signal_connect (control, "set_frame", G_CALLBACK (set_frame_cb), cd);
 
 	gtk_signal_connect (GTK_OBJECT (html_widget), "url_requested",
 			    GTK_SIGNAL_FUNC (url_requested_cb), cd);
@@ -757,8 +733,8 @@ main (int argc, char **argv)
 #endif
 
 	/* Initialize the i18n support */
-	//bindtextdomain(PACKAGE, GNOMELOCALEDIR);
-	//textdomain(PACKAGE);
+	bindtextdomain(PACKAGE, GNOMELOCALEDIR);
+	textdomain(PACKAGE);
 
 	if (!bonobo_ui_init ("gnome-gtkhtml-editor", VERSION, &argc, argv))
 		g_error (_("I could not initialize Bonobo"));
