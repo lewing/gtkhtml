@@ -3,34 +3,28 @@
 gladedir = $(datadir)/gtkhtml
 glade_DATA = 	gtkhtml-editor-properties.glade
 
-INCLUDES =						\
-        -DGNOMEDATADIR=\""$(datadir)"\"		\
-        -DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
-	-I$(top_srcdir)/src				\
-	-I$(srcdir)					\
-	-I.						\
-        $(GNOME_INCLUDEDIR)				\
-	$(EXTRA_GNOME_CFLAGS)				\
-	$(GTK_CFLAGS)					\
-	-DGLADE_DATADIR=\"$(gladedir)\"
+INCLUDES = -I$(top_srcdir)/src
 
-CFLAGS +=  $(GCONF_CFLAGS) $(PSPELL_CFLAGS) -DICONDIR=\"$(datadir)/gtkhtml/icons\"
+CFLAGS += \
+	$(EDITOR_CFLAGS)				\
+	-DICONDIR=\"$(datadir)/gtkhtml/icons\"		\
+        -DGNOMEDATADIR=\""$(datadir)"\"			\
+        -DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
+	-DGLADE_DATADIR=\"$(gladedir)\"
 
 # CORBA stuff
 
-IDLS = \
-	Editor.idl
+IDLS = Editor.idl
 
-SPELL_IDLS = \
-	Spell.idl
+SPELL_IDLS = Spell.idl
 
-IDL_GENERATED = \
+IDL_GENERATED = 		\
 	Editor.h		\
-	Editor-common.c	\
-	Editor-skels.c	\
+	Editor-common.c		\
+	Editor-skels.c		\
 	Editor-stubs.c
 
-SPELL_IDL_GENERATED = \
+SPELL_IDL_GENERATED = 		\
 	Spell.h			\
 	Spell-common.c		\
 	Spell-skels.c		\
@@ -49,10 +43,7 @@ $(SPELL_IDL_GENERATED): $(SPELL_IDLS)
 
 LDADD =	\
 	$(top_builddir)/src/libgtkhtml.la	\
-	$(EXTRA_GNOME_LIBS)			\
-	$(GNOMEUI_LIBS)				\
-	$(GNOME_LIBS)				\
-	$(GCONF_LIBS)
+	$(EDITOR_LIBS)
 
 # -lpspell-modules -lpspell_aspell -laspell -lpspell -lstdc++
 #	-lccmalloc -ldl
