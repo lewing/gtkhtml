@@ -224,12 +224,23 @@ gchar            *html_text_get_link_text                (HTMLText           *te
 							  gint                offset);
 void              html_text_calc_font_size               (HTMLText           *text,
 							  HTMLEngine         *e);
-GtkHTMLFontStyle  html_text_get_fontstyle_at_offset      (HTMLText           *text,
-							  gint                offset);
+GtkHTMLFontStyle  html_text_get_fontstyle_at_index       (HTMLText           *text,
+							  gint                index);
 GtkHTMLFontStyle  html_text_get_style_conflicts          (HTMLText           *text,
-						          GtkHTMLFontStyle    style,
-						          gint                start_index,
-						          gint                end_index);
+							  GtkHTMLFontStyle    style,
+							  gint                start_index,
+							  gint                end_index);
+void              html_text_set_style_in_range           (HTMLText           *text,
+							  GtkHTMLFontStyle    style,
+							  HTMLEngine         *e,
+							  gint                start_index,
+							  gint                end_index);
+void              html_text_set_style                    (HTMLText           *text,
+							  GtkHTMLFontStyle    style,
+							  HTMLEngine         *e);
+void              html_text_unset_style                  (HTMLText           *text,
+							  GtkHTMLFontStyle    style);
+
 
 
 Link     *html_link_new                 (gchar *url,
@@ -267,14 +278,12 @@ typedef HTMLObject * (* HTMLTextHelperFunc)       (HTMLText *, gint begin, gint 
 HTMLObject *html_text_op_copy_helper    (HTMLText           *text,
 					 GList              *from,
 					 GList              *to,
-					 guint              *len,
-					 HTMLTextHelperFunc  f);
+					 guint              *len);
 HTMLObject *html_text_op_cut_helper     (HTMLText           *text,
 					 HTMLEngine         *e,
 					 GList              *from,
 					 GList              *to,
 					 GList              *left,
 					 GList              *right,
-					 guint              *len,
-					 HTMLTextHelperFunc  f);
+					 guint              *len);
 #endif /* _HTMLTEXT_H_ */

@@ -66,9 +66,10 @@ get_font_style_from_selection (HTMLEngine *engine)
 	while (1) {
 		if (html_object_is_text (p.object) && p.offset != html_object_get_length (p.object)) {
 			if (first) {
-				style = html_text_get_fontstyle_at_offset (HTML_TEXT (p.object), offset);
+				gint index = g_utf8_offset_to_pointer (HTML_TEXT (p.object)->text, offset) - HTML_TEXT (p.object)->text;
+				style = html_text_get_fontstyle_at_index (HTML_TEXT (p.object), index);
 				first = FALSE;
-				conflicts |= html_text_get_style_conflicts (HTML_TEXT (p.object), style, g_utf8_offset_to_pointer (HTML_TEXT (p.object)->text, offset) - HTML_TEXT (p.object)->text,
+				conflicts |= html_text_get_style_conflicts (HTML_TEXT (p.object), style, index,
 									    p.object == engine->selection->to.object
 									    ? engine->selection->to.offset : HTML_TEXT (p.object)->text_bytes);
 			} else
@@ -144,7 +145,7 @@ html_engine_get_document_font_style (HTMLEngine *engine)
 
 			obj = html_engine_text_style_object (engine, &offset);
 			return obj
-				? html_text_get_fontstyle_at_offset (HTML_TEXT (obj), offset)
+				? html_text_get_fontstyle_at_index (HTML_TEXT (obj), g_utf8_offset_to_pointer (HTML_TEXT (obj)->text, offset) - HTML_TEXT (obj)->text)
 				: GTK_HTML_FONT_STYLE_DEFAULT;
 		}
 	}
@@ -268,17 +269,9 @@ object_set_font_style (HTMLObject *o, HTMLEngine *e, gpointer data)
 {
 	if (html_object_is_text (o)) {
 		struct tmp_font *tf = (struct tmp_font *) data;
-		HTMLObject *prev;
 
-		HTML_TEXT (o)->font_style &= tf->and_mask;
-		HTML_TEXT (o)->font_style |= tf->or_mask;
-
-		if (o->parent) {
-			prev = html_object_prev_not_slave (o);
-			if (prev) {
-				html_object_merge (prev, o, e, NULL, NULL, NULL);
-			}
-		}
+		html_text_unset_style (HTML_TEXT (o), ~tf->and_mask);
+		html_text_set_style (HTML_TEXT (o), tf->or_mask, e);
 	}
 }
 

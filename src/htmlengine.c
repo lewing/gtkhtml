@@ -869,34 +869,10 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 {
 	PangoAttribute *attr;
 
-	/* style */
-	if (style & GTK_HTML_FONT_STYLE_BOLD) {
-		attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-		attr->start_index = last_pos;
-		attr->end_index = text->text_bytes;
-		pango_attr_list_change (text->attr_list, attr);
-	}
+	if (link)
+		style |= GTK_HTML_FONT_STYLE_UNDERLINE;
 
-	if (style & GTK_HTML_FONT_STYLE_ITALIC) {
-		attr = pango_attr_style_new (PANGO_STYLE_ITALIC);
-		attr->start_index = last_pos;
-		attr->end_index = text->text_bytes;
-		pango_attr_list_change (text->attr_list, attr);
-	}
-
-	if (style & GTK_HTML_FONT_STYLE_UNDERLINE || link) {
-		attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-		attr->start_index = last_pos;
-		attr->end_index = text->text_bytes;
-		pango_attr_list_change (text->attr_list, attr);
-	}
-
-	if (style & GTK_HTML_FONT_STYLE_STRIKEOUT) {
-		attr = pango_attr_strikethrough_new (TRUE);
-		attr->start_index = last_pos;
-		attr->end_index = text->text_bytes;
-		pango_attr_list_change (text->attr_list, attr);
-	}
+	html_text_set_style_in_range (text, style, e, last_pos, text->text_bytes);
 
 	/* color */
 	if (link || color != html_colorset_get_color (e->settings->color_set, HTMLTextColor)) {
@@ -908,15 +884,6 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 
 	if (bg_color) {
 		attr = pango_attr_background_new (bg_color->red, bg_color->green, bg_color->blue);
-		attr->start_index = last_pos;
-		attr->end_index = text->text_bytes;
-		pango_attr_list_change (text->attr_list, attr);
-	}
-
-	/* size */
-	if (style & GTK_HTML_FONT_STYLE_SIZE_MASK) {
-		attr = html_pango_attr_font_size_new (style & GTK_HTML_FONT_STYLE_SIZE_MASK);
-		html_pango_attr_font_size_calc ((HTMLPangoAttrFontSize *) attr, e);
 		attr->start_index = last_pos;
 		attr->end_index = text->text_bytes;
 		pango_attr_list_change (text->attr_list, attr);
