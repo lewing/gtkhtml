@@ -1,20 +1,22 @@
 # Translations of gtkhtml into spanish.
 # Copyright © 2000-2003 Free Software Foundation, Inc.
-# Héctor García Álvarez <hector@scouts-es.org>, 2000-2001.
+# This file is distributed under the same license as the gtkhtml package.
 # QA by Carlos Perelló Marín <carlos@gnome-db.org>
+# Héctor García Álvarez <hector@scouts-es.org>, 2000-2001.
 # Héctor García Álvarez <hector@scouts-es.org>, 2003.
-# Francisco Javier Fernández <serrador@arrakis.es>
+# Francisco Javier Fernandez <serrador@arrakis.es>, 2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml 0.9.99.1\n"
+"Project-Id-Version: gtkhtml.gtkhtml-evolution-1-2-branch.es\n"
 "POT-Creation-Date: 2003-03-31 13:23-0500\n"
-"PO-Revision-Date: 2003-02-26 18:51+0100\n"
+"PO-Revision-Date: 2003-04-04 16:25GMT\n"
 "Last-Translator: Francisco Javier Fernandez <serrador@arrakis.es>\n"
-"Language-Team: Spanish <traductores@es.gnome.org>\n"
+"Language-Team: Español <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0.1\n"
 
 #: capplet/gnome-bindings-prop.c:156
 msgid "<None>"
@@ -29,7 +31,7 @@ msgstr "No se pudo cargar el archivo glade."
 
 #: capplet/gtkhtml-capplet.glade.h:1
 msgid "\n"
-msgstr ""
+msgstr "\n"
 
 #: capplet/gtkhtml-capplet.glade.h:3
 msgid "*********************"
@@ -634,7 +636,7 @@ msgstr "Pla_ntilla..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:102
 msgid "Te_xt file..."
-msgstr "Archivo de texto...."
+msgstr "Archivo de te_xto...."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:103
 #: components/html-editor/body.c:253
@@ -1460,9 +1462,8 @@ msgid "No misspelled word found"
 msgstr "No se encontró ninguna palabra errónea"
 
 #: components/html-editor/spell.c:493
-#, fuzzy
 msgid "Current _Languages"
-msgstr "_Lenguaje"
+msgstr "Idiomas _actuales"
 
 #: components/html-editor/table.c:198
 msgid "Flat gray"
@@ -1673,3 +1674,4 @@ msgstr "Previsualización de la impresión"
 
 #~ msgid "URL"
 #~ msgstr "URL"
+
