@@ -3,14 +3,14 @@
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004.
 # Martin Norbäck <d95mback@dtek.chalmers.se>, 2000.
 #
-# $Id: sv.po,v 1.90.2.3 2004/12/06 17:05:09 rodo Exp $
+# $Id: sv.po,v 1.90.2.4 2004/12/10 17:25:00 menthos Exp $
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-06 17:40+0100\n"
-"PO-Revision-Date: 2004-06-02 19:38+0200\n"
+"POT-Creation-Date: 2004-12-10 18:24+0100\n"
+"PO-Revision-Date: 2004-12-10 18:24+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1643,6 +1643,8 @@ msgid ""
 "Unable to add word to dictionary,\n"
 "language settings are broken.\n"
 msgstr ""
+"Kan inte lägga till ord i ordboken,\n"
+"språkinställningarna är trasiga.\n"
 
 #: components/html-editor/spell.c:298
 msgid "No misspelled word found"
