@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2002-05-16 00:24+0200\n"
-"PO-Revision-Date: 2002-05-16 02:04+0200\n"
+"POT-Creation-Date: 2002-05-25 18:10+0200\n"
+"PO-Revision-Date: 2002-05-25 18:17+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -318,12 +318,40 @@ msgid "Image"
 msgstr "Obraz"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert Frown smiley into document..."
+msgstr "Wstawia do dokumentu marszczącą się buźkę..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "Insert HTML link into document..."
 msgstr "Wstawia do dokumentu odnośnik w HTML-u..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "Insert HTML template into document..."
 msgstr "Wstawia do dokumentu szablon HTML-a..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert Laughing smiley into document..."
+msgstr "Wstawia do dokumentu śmiejącą się buźkę..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert Oh no! smiley into document..."
+msgstr "Wstawia do dokumentu buźkę \"o nie!\"..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert Smile smiley into document..."
+msgstr "Wstawia do dokumentu uśmiechniętą buźkę..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert Smiley 7 smiley into document..."
+msgstr "Wstawia do dokumentu buźkę \"buźka 7\"..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert Surpriced smiley into document..."
+msgstr "Wstawia do dokumentu zaskoczoną buźkę..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert Wink smiley into document..."
+msgstr "Wstawia do dokumentu mrugającą buźkę..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "Insert image into document..."
@@ -420,6 +448,10 @@ msgid "Numbered _List"
 msgstr "Lista _numerowana"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Oh _no!"
+msgstr "_O nie!"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "Orange"
 msgstr "Pomarańcz"
 
@@ -500,6 +532,10 @@ msgid "Select the entire contents of the document"
 msgstr "Zaznacza całą treść dokumentu"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Smiley _7"
+msgstr "Buźkę _7"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/text.c:1 components/html-editor/toolbar.c:1
 msgid "Strikeout"
@@ -508,6 +544,10 @@ msgstr "Przekreślenie"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "Su_perscript"
 msgstr "Indeks gó_rny"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Su_rpriced"
+msgstr "_Zaskoczoną"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "Subs_cript"
@@ -601,6 +641,10 @@ msgid "_Font Size"
 msgstr "_Rozmiar czcionki"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "_Frown"
+msgstr "M_arszczącą się"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "_Heading"
 msgstr "Se_kcja"
 
@@ -619,6 +663,10 @@ msgstr "_Wstaw"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "_Italic"
 msgstr "Po_chylenie"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "_Laughing"
+msgstr "Ś_miejącą się"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "_Left"
@@ -673,6 +721,14 @@ msgid "_Rule..."
 msgstr "_Linię..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "_Smile"
+msgstr "_Uśmiechniętą"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "_Smiley"
+msgstr "_Buźkę"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "_Spell Check Document..."
 msgstr "Sp_rawdź pisownię dokumentu..."
 
@@ -699,6 +755,10 @@ msgstr "Po_dkreślenie"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "_Undo"
 msgstr "_Cofnij"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "_Wink"
+msgstr "_Mrugającą"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "etc..."
