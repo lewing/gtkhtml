@@ -875,7 +875,7 @@ html_engine_insert_text (HTMLEngine *e, const gchar *text, guint len)
 	gtk_html_editor_event_command (e->widget, GTK_HTML_COMMAND_INSERT_PARAGRAPH, TRUE);
 
 	do {
-		nl   = g_utf8_strchr (text, '\n');
+		nl   = g_utf8_strchr (text, -1, '\n');
 		alen = nl ? g_utf8_pointer_to_offset (text, nl) : len;
 		if (alen) {
 			HTMLObject *o;

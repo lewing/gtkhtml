@@ -1,21 +1,13 @@
 NULL=
 
-INCLUDES = -I$(top_srcdir) -I$(srcdir) -I$(includedir) $(GNOME_INCLUDEDIR) \
-	$(EXTRA_GNOME_CFLAGS) \
-	$(IMLIB_CFLAGS)	\
-	-DG_LOG_DOMAIN=\"gtkhtml\" $(GLIBWWW_CFLAGS) \
+INCLUDES = -I$(top_srcdir) -I$(srcdir) -I$(includedir) $(GTKHTML_CFLAGS) \
+	-DG_LOG_DOMAIN=\"gtkhtml\" \
 	-DSRCDIR=\"$(srcdir)\" \
 	-DPREFIX=\"$(prefix)\"
 
-CFLAGS +=  $(GCONF_CFLAGS) -DICONDIR=\"$(datadir)/gtkhtml/icons\"
+CFLAGS += -DICONDIR=\"$(datadir)/gtkhtml/icons\" -DGTK_ENABLE_BROKEN
 
 lib_LTLIBRARIES = libgtkhtml.la
-
-if GLIBWWW
-noinst_PROGRAMS = testgtkhtml gtest
-else
-noinst_PROGRAMS = 
-endif
 
 libgtkhtmldir = $(includedir)/$(GTKHTML_VERSION_TAG)/gtkhtml
 
@@ -197,37 +189,7 @@ libgtkhtml_la_SOURCES =				\
 #	htmlengine-edit-table.c			\
 
 libgtkhtml_la_LDFLAGS = -release $(GTKHTML_RELEASE) -version-info $(GTKHTML_CURRENT):$(GTKHTML_REVISION):$(GTKHTML_AGE)
-
-libgtkhtml_la_LIBADD = $(EXTRA_GNOME_LIBS) $(GCONF_LIBS)
-
-# The test program.
-
-testgtkhtml_SOURCES = 		\
-	testgtkhtml.c		\
-	htmlurl.h		\
-	htmlurl.c
-
-testgtkhtml_CFLAGS = $(GLIBWWW_CFLAGS)
-# testgtkhtml_LDFLAGS = -static
-testgtkhtml_LDADD =				\
-	libgtkhtml.la				\
-	$(GNOMEUI_LIBS)				\
-	$(GNOME_LIBDIR)				\
-	$(EXTRA_GNOME_LIBS)                     \
-	$(GLIBWWW_LIBS)				\
-	$(GCONF_LIBS)
-#	-lccmalloc -ldl
-#
-
-gtest_SOURCES = \
-	test.c
-testgtkhtml_CFLAGS = 
-gtest_LDADD =					\
-	libgtkhtml.la				\
-	$(GNOMEUI_LIBS)				\
-	$(GNOME_LIBDIR)				\
-	$(GCONF_LIBS)				\
-	$(EXTRA_GNOME_LIBS)                     
+libgtkhtml_la_LIBADD = $(GTKHTML_LIBS)
 
 dist-hook:
 	mkdir $(distdir)/tests

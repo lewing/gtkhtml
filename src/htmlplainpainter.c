@@ -24,8 +24,6 @@
 #include <stdlib.h>
 #include <gdk/gdkx.h>
 #include <libart_lgpl/art_rect.h>
-#include <gal/unicode/gunicode.h>
-#include <gal/widgets/e-font.h>
 
 #include "htmlentity.h"
 #include "htmlgdkpainter.h"

@@ -26,7 +26,6 @@
 #include <stdlib.h>
 #include "gtkhtml-compat.h"
 
-#include <gal/unicode/gunicode.h>
 #include "htmlcolor.h"
 #include "htmlcolorset.h"
 #include "htmlentity.h"
@@ -35,7 +34,7 @@
 
 /* Convenience macro to extract the HTMLPainterClass from a GTK+ object.  */
 #define HP_CLASS(obj)					\
-	HTML_PAINTER_CLASS (GTK_OBJECT (obj)->klass)
+	HTML_PAINTER_CLASS (GTK_WIDGET_GET_CLASS (obj))
 
 /* Our parent class.  */
 static GtkObjectClass *parent_class = NULL;
@@ -47,7 +46,7 @@ static gint translate_text_special_chars (const gchar *text, gchar *translated, 
 /* GtkObject methods.  */
 
 static void
-finalize (GtkObject *object)
+finalize (GObject *object)
 {
 	HTMLPainter *painter;
 
@@ -58,7 +57,7 @@ finalize (GtkObject *object)
 
 	/* FIXME ownership of the color set?  */
 
-	(* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+	(* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 
@@ -123,7 +122,7 @@ init (GtkObject *object, HTMLPainterClass *real_klass)
 }
 
 static void
-class_init (GtkObjectClass *object_class)
+class_init (GObjectClass *object_class)
 {
 	HTMLPainterClass *class;
 

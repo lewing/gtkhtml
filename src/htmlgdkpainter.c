@@ -29,11 +29,8 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtksignal.h>
 
-#include <libgnome/gnome-defs.h>
 #include <libgnome/gnome-i18n.h>
 #include <libart_lgpl/art_rect.h>
-#include <gal/unicode/gunicode.h>
-#include <gal/widgets/e-font.h>
 
 #include "htmlentity.h"
 #include "htmlgdkpainter.h"

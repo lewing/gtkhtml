@@ -27,7 +27,6 @@
 #include <gtk/gtkscrolledwindow.h>
 #include "htmlselect.h"
 #include <string.h>
-#include <gal/widgets/e-unicode.h>
 
 
 HTMLSelectClass html_select_class;
@@ -126,7 +125,8 @@ reset (HTMLEmbedded *e)
 	} else if (s->size > 1) {
 		gtk_clist_select_row (GTK_CLIST(s->clist), s->default_selected, 0);
 	} else {
-		e_utf8_gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(e->widget)->entry), (gchar *)g_list_nth(s->strings, s->default_selected)->data);
+		gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(e->widget)->entry),
+				   (gchar *) g_list_nth(s->strings, s->default_selected)->data);
 	}
 }
 
@@ -136,7 +136,8 @@ encode (HTMLEmbedded *e)
 	HTMLSelect *s = HTML_SELECT(e);
 	GList *i;
 	GString *encoding = g_string_new ("");
-	gchar *txt, *ptr;
+	const gchar *txt;
+	gchar *ptr;
 
 	if(strlen (e->name)) {
 		if (s->size > 1) {
@@ -170,7 +171,7 @@ encode (HTMLEmbedded *e)
 			g_free (ptr);
 			encoding = g_string_append_c (encoding, '=');
 
-			txt = e_utf8_gtk_entry_get_text (GTK_ENTRY(GTK_COMBO(e->widget)->entry));
+			txt = gtk_entry_get_text (GTK_ENTRY(GTK_COMBO(e->widget)->entry));
 			i = s->strings;
 			item = 0;
 
@@ -329,7 +330,7 @@ void html_select_add_option (HTMLSelect *select,
 		select->default_selection = g_list_append (select->default_selection, GINT_TO_POINTER(selected));
 }
 
-static char *
+/* FIX2 static char *
 longest_string (HTMLSelect *s)
 {
 	GList *i = s->strings;
@@ -344,7 +345,7 @@ longest_string (HTMLSelect *s)
 		i = i->next;
 	}
 	return str;
-}
+} */
 
 void 
 html_select_set_text (HTMLSelect *select, gchar *text) 
@@ -353,12 +354,9 @@ html_select_set_text (HTMLSelect *select, gchar *text)
 	gint item;
 
 	if (select->size > 1 || select->multi) {
-		char *gtk_text;
-		item = GTK_CLIST(select->clist)->rows - 1;
+		item = GTK_CLIST (select->clist)->rows - 1;
 
-		gtk_text = e_utf8_from_gtk_string (select->clist, text);
-		gtk_clist_set_text (GTK_CLIST(select->clist), item, 0, gtk_text);
-		g_free (gtk_text);
+		gtk_clist_set_text (GTK_CLIST(select->clist), item, 0, text);
 
 		HTML_OBJECT(select)->width = gtk_clist_optimal_column_width (GTK_CLIST (select->clist), 0) + 12;
 		/* Add width of scrollbar */
@@ -375,14 +373,14 @@ html_select_set_text (HTMLSelect *select, gchar *text)
 		item = g_list_length (select->strings) - 1;
 
 		if (select->strings) {
-			g_list_last (select->strings)->data = e_utf8_to_gtk_string (w, text);
+			g_list_last (select->strings)->data = g_strdup (text);
 
 			select->needs_update = TRUE;
 			gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(w)->entry), 
 					   g_list_nth(select->strings, select->default_selected)->data);
 
-			HTML_OBJECT(select)->width = gdk_string_width(w->style->font, 
-								      longest_string(select)) + 30;
+			/* FIX2 HTML_OBJECT(select)->width = gdk_string_width (w->style->font, 
+			   longest_string (select)) + 30; */
 		}
 		gtk_widget_set_usize (GTK_WIDGET (w), HTML_OBJECT (select)->width, -2);
 	}

@@ -20,13 +20,12 @@
 */
 
 #include <config.h>
+#include <string.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtktext.h>
 #include "htmltextarea.h"
-#include <string.h>
-#include <gal/widgets/e-unicode.h>
 
 
 HTMLTextAreaClass html_textarea_class;
@@ -81,13 +80,11 @@ encode (HTMLEmbedded *e)
 		encoding = g_string_append_c (encoding, '=');
 
 		gtk_text = gtk_editable_get_chars (GTK_EDITABLE (HTML_TEXTAREA(e)->text), 0, -1);
-	        utf8_str = e_utf8_from_gtk_string (HTML_TEXTAREA(e)->text, gtk_text);
 
-		encoded_str = html_embedded_encode_string (utf8_str);
+		encoded_str = html_embedded_encode_string (gtk_text);
 		encoding = g_string_append (encoding, encoded_str);
 
 		g_free (encoded_str);
-		g_free (utf8_str);
 		g_free (gtk_text);
 	}
 
@@ -169,9 +166,9 @@ html_textarea_init (HTMLTextArea *ta,
 
 #define FONT_HEIGHT(f)              ((f)->ascent + (f)->descent)
 
-	gtk_widget_set_usize ( GTK_WIDGET (widget), 
+	/* FIX2 gtk_widget_set_usize ( GTK_WIDGET (widget), 
 			       gdk_char_width(widget->style->font, '0') * col + 8,
-			       FONT_HEIGHT(ta->text->style->font) * row + 4);
+			       FONT_HEIGHT(ta->text->style->font) * row + 4); */
 
 #undef FONT_HEIGHT
 	ta->default_text = NULL;
@@ -195,15 +192,11 @@ html_textarea_new (GtkWidget *parent,
 void html_textarea_set_text (HTMLTextArea *ta, 
 			   gchar *text) 
 {
-	char *gtk_text;
-
 	if (!ta->default_text)
 		ta->default_text = g_strdup (text);
 
-	gtk_text = e_utf8_to_gtk_string (ta->text, text);
 	gtk_editable_delete_text (GTK_EDITABLE (ta->text), 0, -1);
-	gtk_text_insert (GTK_TEXT (ta->text), NULL, NULL, NULL, gtk_text, strlen (gtk_text));
-	g_free (gtk_text);
+	gtk_text_insert (GTK_TEXT (ta->text), NULL, NULL, NULL, text, strlen (text));
 }
 
 

@@ -22,7 +22,6 @@
 #ifndef _GTKHTML_PRIVATE_H
 #define _GTKHTML_PRIVATE_H
 
-#include <libgnome/gnome-paper.h>
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-master.h>
 #include <gtk/gtkwidget.h>
@@ -55,11 +54,10 @@ struct _GtkHTMLPrivate {
 
 	GnomePrintMaster *print_master;
 
-#ifdef GTKHTML_HAVE_GCONF
 	guint set_font_id;
 	guint notify_id;
 	guint notify_spell_id;
-#endif
+
 #ifdef GTK_HTML_USE_XIM
 	GdkICAttr *ic_attr;
 	GdkIC *ic;
@@ -81,7 +79,7 @@ void  gtk_html_editor_event_command     (GtkHTML                 *html,
 					 gboolean                 before);
 void  gtk_html_editor_event             (GtkHTML                 *html,
 					 GtkHTMLEditorEventType   event,
-					 GtkArg                 **args);
+					 GtkArg                  *args);
 void  gtk_html_api_set_language         (GtkHTML                 *html);
 
 #endif /* _GTKHTML_PRIVATE_H */

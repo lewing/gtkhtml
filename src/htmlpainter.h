@@ -25,6 +25,7 @@
 #define _HTMLPAINTER_H_
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdktypes.h>
 #include <gtk/gtkobject.h>
 
 #include "gtkhtml-enums.h"

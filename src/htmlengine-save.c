@@ -26,7 +26,7 @@
 
 #include <config.h>
 #include <string.h>
-#include <gal/unicode/gunicode.h>
+
 #include "config.h"
 #include "htmlcolor.h"
 #include "htmlengine.h"

@@ -204,7 +204,7 @@ html_embedded_set_form (HTMLEmbedded *e, HTMLForm *form)
 }
 
 gchar *
-html_embedded_encode_string (gchar *str)
+html_embedded_encode_string (const gchar *str)
 {
         static gchar *safe = "$-._!*(),"; /* RFC 1738 */
         unsigned pos = 0;
@@ -343,7 +343,8 @@ html_embedded_new_widget (GtkWidget *parent, GtkHTMLEmbedded *eb, HTMLEngine *en
 	 */
 	gtk_signal_connect(GTK_OBJECT(eb), "button_press_event",
 			   GTK_SIGNAL_FUNC(html_embedded_grab_cursor), em);
-	em->changed_id = gtk_signal_connect (GTK_OBJECT (eb), "changed", html_embedded_object_changed, engine);
+	em->changed_id = gtk_signal_connect (GTK_OBJECT (eb), "changed",
+					     GTK_SIGNAL_FUNC (html_embedded_object_changed), engine);
 	/* printf ("id %u\n", em->changed_id); */
 
 	return em;

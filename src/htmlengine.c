@@ -38,8 +38,9 @@
 
 #include <gtk/gtkmain.h>
 #include <gtk/gtksignal.h>
+#include <gtk/gtkscrolledwindow.h>
 
-#include <gal/widgets/e-scroll-frame.h>
+/* FIX2 #include <gal/widgets/e-scroll-frame.h> */
 
 #include "gtkhtml-embedded.h"
 #include "gtkhtml-private.h"
@@ -3167,7 +3168,7 @@ html_engine_set_arg (GtkObject        *object,
 		engine->insertion_color = html_colorset_get_color (engine->settings->color_set, HTMLTextColor);
 		html_color_ref (engine->insertion_color);
 
-		prop = GTK_HTML_CLASS (GTK_OBJECT (engine->widget)->klass)->properties;
+		prop = GTK_HTML_CLASS (GTK_WIDGET_GET_CLASS (engine->widget))->properties;
 	}
 }
 
@@ -3180,7 +3181,7 @@ html_engine_class_init (HTMLEngineClass *klass)
 
 	parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
-	signals [SET_BASE] =
+	/* signals [SET_BASE] =
 		gtk_signal_new ("set_base",
 				GTK_RUN_FIRST,
 				object_class->type,
@@ -3262,7 +3263,7 @@ html_engine_class_init (HTMLEngineClass *klass)
 				GTK_TYPE_BOOL, 1,
 				GTK_TYPE_POINTER);
 
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+				gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL); */
 
 	gtk_object_add_arg_type ("HTMLEngine::html",
 				 GTK_TYPE_HTML,
@@ -3919,17 +3920,14 @@ html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
 				    && !GTK_WIDGET_VISIBLE (GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar)
 				    && GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
 					return;
-			} else if (E_IS_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)) {
+			} /* FIX2 else if (E_IS_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)) {
 				GtkPolicyType policy;
 
 				e_scroll_frame_get_policy (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent), NULL, &policy);
-				/* printf ("SHOW: policy %d visible %d\n",
-				   policy, e_scroll_frame_get_vscrollbar_visible
-				   (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent))); */
 				if (policy == GTK_POLICY_AUTOMATIC
 				    && !e_scroll_frame_get_vscrollbar_visible (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)))
 					return;
-			}
+					} */
 		}
 	}
 
@@ -3941,17 +3939,14 @@ html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
 				    && GTK_WIDGET_VISIBLE (GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar)
 				    && GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
 					return;
-			} else if (E_IS_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)) {
+			} /* FIX2 else if (E_IS_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)) {
 				GtkPolicyType policy;
 
 				e_scroll_frame_get_policy (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent), NULL, &policy);
-				/* printf ("HIDE: policy %d visible %d\n",
-				   policy, e_scroll_frame_get_vscrollbar_visible
-				   (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent))); */
 				if (policy == GTK_POLICY_AUTOMATIC
 				    && e_scroll_frame_get_vscrollbar_visible (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)))
 					return;
-			}
+					} */
 		}
 	}
 

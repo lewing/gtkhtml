@@ -20,6 +20,8 @@
 */
 
 #include <gtk/gtkselection.h>
+#include <gtk/gtkmain.h>
+
 #include "htmlcursor.h"
 #include "htmlengine-edit-cursor.h"
 #include "htmlentity.h"
@@ -27,18 +29,6 @@
 #include "htmlselection.h"
 #include "htmlengine-edit.h"
 #include "htmlengine-edit-selection-updater.h"
-
-guint32
-html_selection_current_time (void)
-{
-	GdkEvent *event;
-
-	event = gtk_get_current_event ();
-	if (event != NULL)
-		return gdk_event_get_time (event);
-
-	return GDK_CURRENT_TIME;
-}
 
 static gboolean
 optimize_selection (HTMLEngine *e, HTMLInterval *i)
@@ -407,7 +397,7 @@ void
 html_engine_update_selection_active_state (HTMLEngine *e, guint32 time)
 {
 	if (html_engine_is_selection_active (e))
-		html_engine_activate_selection (e, time ? time : html_selection_current_time ());
+		html_engine_activate_selection (e, time ? time : gtk_get_current_event_time ());
 	else
 		html_engine_deactivate_selection (e);
 }

@@ -24,7 +24,6 @@
 #define _GTK_HTML_EMBEDDED_H
 
 #include <gtk/gtkbin.h>
-#include <libgnome/gnome-defs.h>
 
 #include "gtkhtml-types.h"
 

@@ -25,7 +25,6 @@
 #include <sys/types.h>
 #include <gtk/gtkbindings.h>
 #include <gtk/gtklayout.h>
-#include <libgnome/gnome-paper.h>
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-master.h>
 
@@ -120,7 +119,7 @@ struct _GtkHTMLEditorAPI
 	/* unhandled commands */
 	gboolean  (* command)                 (GtkHTML *html, GtkHTMLCommandType com_type, gpointer data);
 
-	GtkArg  * (* event)                   (GtkHTML *html, GtkHTMLEditorEventType event_type, GtkArg **args, gpointer data);
+	GtkArg  * (* event)                   (GtkHTML *html, GtkHTMLEditorEventType event_type, GtkArg *args, gpointer data);
 
 	/* input line */
 	GtkWidget * (* create_input_line)     (GtkHTML *html, gpointer data);

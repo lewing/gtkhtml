@@ -1,9 +1,3 @@
-if BONOBO
-DIR_COMPONENTS = components
-else
-DIR_COMPONENTS =
-endif
-
 confexecdir = $(libdir)
 confexec_DATA = gtkhtmlConf.sh
 
@@ -20,10 +14,7 @@ SUBDIRS =					\
 	intl					\
 	macros					\
 	src					\
-	capplet					\
-	doc					\
 	art					\
-	$(DIR_COMPONENTS)			\
 	po
 
 EXTRA_DIST =					\
@@ -36,8 +27,3 @@ EXTRA_DIST =					\
 	xml-i18n-extract.in			\
 	xml-i18n-update.in			\
 	xml-i18n-merge.in
-
-if BONOBO
-gnorbadir = $(sysconfdir)/CORBA/servers
-gnorba_DATA = html-component.gnorba
-endif

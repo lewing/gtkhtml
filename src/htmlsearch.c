@@ -30,7 +30,7 @@
 */
 
 #include <config.h>
-#include <gal/unicode/gunicode.h>
+
 #include "htmlsearch.h"
 #include "htmlobject.h"
 #include "htmlentity.h"

@@ -21,7 +21,6 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
-#include <libgnome/gnome-defs.h>
 #include <libgnome/gnome-i18n.h>
 #include <libgnomeui/gnome-dialog-util.h>
 #include "gtkhtml.h"
@@ -156,7 +155,7 @@ print_with_header_footer (HTMLEngine *engine,
 {
 	HTMLPainter *printer;
 	HTMLPainter *old_painter;
-	GtkHTMLClassProperties *prop = GTK_HTML_CLASS (GTK_OBJECT (engine->widget)->klass)->properties;
+	GtkHTMLClassProperties *prop = GTK_HTML_CLASS (GTK_WIDGET_GET_CLASS (engine->widget))->properties;
 	gint pages = 0;
 
 	g_return_val_if_fail (engine->clue != NULL, 0);

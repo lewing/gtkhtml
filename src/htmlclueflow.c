@@ -30,8 +30,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <gal/widgets/e-unicode.h>
-
 #include "gtkhtml-properties.h"
 
 #include "htmlcolor.h"
@@ -2074,7 +2072,7 @@ search_text (HTMLObject **beg, HTMLSearch *info)
 				gint rv;
 #ifndef HAVE_GNU_REGEX
 				regmatch_t match;
-				guchar *p=par+pos;
+				/* guchar *p=par+pos; */
 
 				/* FIXME UTF8
 				   replace &nbsp;'s with spaces
@@ -2742,7 +2740,9 @@ end_of_word (gchar *ct, gboolean cited)
 	gboolean cited2;
 
 	cited2 = FALSE;
-	while (*ct && (cn = e_unicode_get_utf8 (ct, &uc))
+	while (*ct
+	       && (uc = g_utf8_get_char (ct))
+	       && (cn = g_utf8_next_char (ct)) && *cn
 	       && (html_selection_spell_word (uc, &cited2) || (!cited && cited2))) {
 		ct = cn;
 		cited2 = FALSE;
@@ -2775,7 +2775,7 @@ html_clueflow_spell_check (HTMLClueFlow *flow, HTMLEngine *e, HTMLInterval *inte
 
 	clue = HTML_CLUE (flow);
 	if (!e->widget->editor_api
-	    || !GTK_HTML_CLASS (GTK_OBJECT (e->widget)->klass)->properties->live_spell_check
+	    || !GTK_HTML_CLASS (GTK_WIDGET_GET_CLASS (e->widget))->properties->live_spell_check
 	    || !clue || !clue->tail)
 		return;
 

@@ -178,7 +178,7 @@ html_engine_spell_check_range (HTMLEngine *e, HTMLCursor *begin, HTMLCursor *end
 
 	e->need_spell_check = FALSE;
 
-	if (!e->widget->editor_api || !GTK_HTML_CLASS (GTK_OBJECT (e->widget)->klass)->properties->live_spell_check
+	if (!e->widget->editor_api || !GTK_HTML_CLASS (GTK_WIDGET_GET_CLASS (e->widget))->properties->live_spell_check
 	    || !begin->object->parent)
 		return;
 

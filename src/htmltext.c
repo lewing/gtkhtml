@@ -26,7 +26,6 @@
 #include <string.h>
 #include <sys/types.h>
 #include <regex.h>
-#include <gal/widgets/e-unicode.h>
 
 #include "htmltext.h"
 #include "htmlcolor.h"
@@ -784,7 +783,7 @@ is_convert_nbsp_needed (const gchar *s, gint *delta_out)
 
 	op = p = s;
 	white_space = 0;
-	while (*p && (p = e_unicode_get_utf8 (p, &uc))) {
+	while (*p && (uc = g_utf8_get_char (p)) && (p = g_utf8_next_char (p))) {
 		if (uc == ENTITY_NBSP || uc == ' ') {
 			rv = check_prev_white (rv, white_space, last_white, delta_out);
 			white_space ++;
@@ -836,7 +835,7 @@ convert_nbsp (gchar *fill, const gchar *p)
 	op = p;
 	white_space = 0;
 
-	while (*p && (p = e_unicode_get_utf8 (p, &uc))) {
+	while (*p && (uc = g_utf8_get_char (p)) && (p = g_utf8_next_char (p))) {
 		if (uc == ENTITY_NBSP || uc == ' ') {
 			write_prev_white_space (white_space, &fill);
 			white_space ++;
