@@ -45,6 +45,7 @@ struct _HTMLA11YHyperLink {
 	AtkHyperlink atk_hyper_link;
 
 	HTMLA11Y *a11y;
+	gchar *description;
 };
 
 GType html_a11y_hyper_link_get_type (void);

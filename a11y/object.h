@@ -35,6 +35,7 @@
 
 #define GTK_HTML_ID "gtk-html-widget"
 #define GTK_HTML_A11Y_GTKHTML(o) GTK_HTML (g_object_get_data (G_OBJECT (o), GTK_HTML_ID))
+#define GTK_HTML_A11Y_GTKHTML_POINTER(o) g_object_get_data (G_OBJECT (o), GTK_HTML_ID)
 
 typedef struct _GtkHTMLA11Y      GtkHTMLA11Y;
 typedef struct _GtkHTMLA11YClass GtkHTMLA11YClass;

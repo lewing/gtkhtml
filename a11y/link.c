@@ -141,8 +141,6 @@ html_a11y_link_new (HTMLObject *html_obj)
 static AtkHyperlink *
 html_a11y_link_get_link (AtkHypertext *hypertext, gint link_index)
 {
-	AtkHyperlink *link;
-
 	return html_a11y_hyper_link_new (HTML_A11Y (hypertext));
 }
 
@@ -155,4 +153,7 @@ html_a11y_link_get_n_links (AtkHypertext *hypertext)
 static gint
 html_a11y_link_get_link_index (AtkHypertext *hypertext, gint char_index)
 {
+	HTMLObject *obj = HTML_A11Y_HTML (hypertext);
+
+	return HTML_TEXT (obj)->text_len > 0 && char_index >= 0 && char_index < HTML_TEXT (obj)->text_len ? 0 : -1;
 }

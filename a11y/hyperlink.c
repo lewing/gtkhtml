@@ -26,13 +26,14 @@
 
 #include "htmllinktext.h"
 
+#include "object.h"
 #include "html.h"
 #include "hyperlink.h"
 
 static void html_a11y_hyper_link_class_init    (HTMLA11YHyperLinkClass *klass);
 static void html_a11y_hyper_link_init          (HTMLA11YHyperLink *a11y_hyper_link);
 
-static void atk_action_interface_init (AtkHypertextIface *iface);
+static void atk_action_interface_init (AtkActionIface *iface);
 
 static void html_a11y_hyper_link_get_extents   (AtkComponent *component,
 					  gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type);
@@ -40,6 +41,12 @@ static void html_a11y_hyper_link_get_size      (AtkComponent *component, gint *w
 
 static gint html_a11y_hyper_link_get_n_hyper_links (AtkHypertext *hypertext);
 static gint html_a11y_hyper_link_get_hyper_link_index (AtkHypertext *hypertext, gint char_index);
+
+static gboolean html_a11y_hyper_link_do_action (AtkAction *action, gint i);
+static gint html_a11y_hyper_link_get_n_actions (AtkAction *action);
+static G_CONST_RETURN gchar * html_a11y_hyper_link_get_description (AtkAction *action, gint i);
+static G_CONST_RETURN gchar * html_a11y_hyper_link_get_name (AtkAction *action, gint i);
+static gboolean html_a11y_hyper_link_set_description (AtkAction *action, gint i, const gchar *description);
 
 static AtkObjectClass *parent_class = NULL;
 
@@ -76,9 +83,15 @@ html_a11y_hyper_link_get_type (void)
 }
 
 static void
-atk_action_interface_init (AtkHypertextIface *iface)
+atk_action_interface_init (AtkActionIface *iface)
 {
 	g_return_if_fail (iface != NULL);
+
+	iface->do_action       = html_a11y_hyper_link_do_action;
+	iface->get_n_actions   = html_a11y_hyper_link_get_n_actions;
+	iface->get_description = html_a11y_hyper_link_get_description;
+	iface->get_name        = html_a11y_hyper_link_get_name;
+	iface->set_description = html_a11y_hyper_link_set_description;
 }
 
 static void
@@ -107,6 +120,7 @@ html_a11y_hyper_link_class_init (HTMLA11YHyperLinkClass *klass)
 static void
 html_a11y_hyper_link_init (HTMLA11YHyperLink *a11y_hyper_link)
 {
+	a11y_hyper_link->description = NULL;
 }
 
 AtkHyperlink * 
@@ -114,7 +128,7 @@ html_a11y_hyper_link_new (HTMLA11Y *a11y)
 {
 	HTMLA11YHyperLink *hl;
 
-	g_return_val_if_fail (HTML_IS_HTML_A11Y (a11y), NULL);
+	g_return_val_if_fail (G_IS_HTML_A11Y (a11y), NULL);
 
 	hl = HTML_A11Y_HYPER_LINK (g_object_new (G_TYPE_HTML_A11Y_HYPER_LINK, NULL));
 
@@ -122,4 +136,76 @@ html_a11y_hyper_link_new (HTMLA11Y *a11y)
 	g_object_add_weak_pointer (G_OBJECT (hl->a11y), (gpointer *) &hl->a11y);
 
 	return ATK_HYPERLINK (hl);
+}
+
+/*
+ * Action interface
+ */
+
+static gboolean
+html_a11y_hyper_link_do_action (AtkAction *action, gint i)
+{
+	HTMLA11YHyperLink *hl;
+
+	hl = HTML_A11Y_HYPER_LINK (action);
+
+	if (i == 0 && hl->a11y) {
+		HTMLLinkText *link = HTML_LINK_TEXT (HTML_A11Y_HTML (hl->a11y));
+
+		if (link->url && *link->url) {
+			GObject *gtkhtml = GTK_HTML_A11Y_GTKHTML_POINTER
+				(html_a11y_get_gtkhtml_parent (HTML_A11Y (hl->a11y)));
+			gchar *url;
+
+			url = g_strconcat (link->url, link->target && *link->target ? "#" : NULL, link->target, NULL);
+			g_signal_emit_by_name (gtkhtml, "link_clicked", url);
+			g_free (url);
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+static gint
+html_a11y_hyper_link_get_n_actions (AtkAction *action)
+{
+	return 1;
+}
+
+static G_CONST_RETURN gchar *
+html_a11y_hyper_link_get_description (AtkAction *action, gint i)
+{
+	if (i == 0) {
+		HTMLA11YHyperLink *hl;
+
+		hl = HTML_A11Y_HYPER_LINK (action);
+
+		return hl->description;
+	}
+
+	return NULL;
+}
+
+static G_CONST_RETURN gchar *
+html_a11y_hyper_link_get_name (AtkAction *action, gint i)
+{
+	return i == 0 ? "link click" : NULL;
+}
+
+static gboolean
+html_a11y_hyper_link_set_description (AtkAction *action, gint i, const gchar *description)
+{
+	if (i == 0) {
+		HTMLA11YHyperLink *hl;
+
+		hl = HTML_A11Y_HYPER_LINK (action);
+
+		g_free (hl->description);
+		hl->description = g_strdup (description);
+
+		return TRUE;	
+	}
+
+	return FALSE;
 }
