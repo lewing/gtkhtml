@@ -113,7 +113,7 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 	HTMLTableCell *c1 = HTML_TABLE_CELL (self);
 	HTMLTableCell *c2 = HTML_TABLE_CELL (with);
 
-	g_print ("merge cells %d,%d %d,%d\n", c1->row, c1->col, c2->row, c2->col);
+	/* g_print ("merge cells %d,%d %d,%d\n", c1->row, c1->col, c2->row, c2->col); */
 
 	if (HTML_OBJECT_TYPE (with) == HTML_TYPE_CLUEV || (c1->col == c2->col && c1->row == c2->row)) {
 		gboolean rv;

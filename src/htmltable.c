@@ -40,7 +40,7 @@
 #include "htmltablepriv.h"
 #include "htmltablecell.h"
 
-#define GTKHTML_DEBUG_TABLE
+/* #define GTKHTML_DEBUG_TABLE */
 
 #define COLUMN_MIN(table, i)				\
 	(g_array_index (table->columnMin, gint, i))
@@ -263,8 +263,9 @@ cut_whole (HTMLObject *self, guint *len)
 		html_object_remove_child (self->parent, self);
 	*len = html_object_get_recursive_length (self) + 1;
 
+#ifdef GTKHTML_DEBUG_TABLE
 	printf ("removed whole table len: %d\n", *len);
-
+#endif
 	return self;
 }
 
@@ -278,8 +279,9 @@ cut_partial (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *lef
 	gint r, c;
 	gint start_row, start_col, end_row, end_col;
 
+#ifdef GTKHTML_DEBUG_TABLE
 	printf ("partial cut\n");
-
+#endif
 	start = HTML_TABLE_CELL (from && from->next ? from->data : html_object_head (self));
 	end   = HTML_TABLE_CELL (to   && to->next   ? to->data   : html_object_tail (self));
 
@@ -293,7 +295,7 @@ cut_partial (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *lef
 	nt   = HTML_TABLE (rv);
 	copy_sized (self, rv, t->totalRows, t->totalCols);
 
-	for (r = 0; r <= t->totalRows; r++) {
+	for (r = 0; r < t->totalRows; r++) {
 		for (c = 0; c < t->totalCols; c++) {
 			cell = t->cells [r][c];
 			if (cell && cell->row == r && cell->col == c) {
@@ -602,10 +604,6 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 
 #ifdef GTKHTML_DEBUG_TABLE
 	printf ("before merge\n");
-	printf ("left\n");
-	gtk_html_debug_dump_tree_simple ((*left)->data, 0);
-	printf ("right\n");
-	gtk_html_debug_dump_tree_simple ((*right)->data, 0);
 	printf ("-- self --\n");
 	gtk_html_debug_dump_tree_simple (self, 0);
 	printf ("-- with --\n");
@@ -645,7 +643,7 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 						*left  = html_object_tails_list (HTML_OBJECT (c1));
 						*right = html_object_heads_list (HTML_OBJECT (c2));
 						html_object_remove_child (HTML_OBJECT (t2), HTML_OBJECT (c2));
-						if (e->cursor->object == t1) {
+						if (e->cursor->object == HTML_OBJECT (t1)) {
 							e->cursor->object = html_object_get_tail_leaf (HTML_OBJECT (c1));
 							e->cursor->offset = html_object_get_length (e->cursor->object);
 							e->cursor->position -= (t1->totalRows - c1->row - 1)*t1->totalCols
@@ -687,8 +685,8 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 		   cursor_cell_2->row, cursor_cell_2->col); */
 	}
 
-	if (cursor && cursor->object == t2)
-		cursor->object = t1;
+	if (cursor && cursor->object == with)
+		cursor->object = self;
 
 	return TRUE;
 }
@@ -936,7 +934,9 @@ void
 html_table_set_cell (HTMLTable *table, gint r, gint c, HTMLTableCell *cell)
 {
 	if (!table->cells [r][c]) {
+#ifdef GTKHTML_DEBUG_TABLE
 		printf ("set cell:    %d,%d %p\n", r, c, cell);
+#endif
 		table->cells [r][c] = cell;
 		HTML_OBJECT (cell)->parent = HTML_OBJECT (table);
 	}

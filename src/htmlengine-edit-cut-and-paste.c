@@ -55,6 +55,8 @@ static void        insert_empty_paragraph (HTMLEngine *e, HTMLUndoDirection dir)
 
 /* helper functions -- need refactor */
 
+/* #define OP_DEBUG */
+
 static void
 html_cursor_get_left (HTMLCursor *cursor, HTMLObject **obj, gint *off)
 {
@@ -224,6 +226,7 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 {
 	HTMLObject *lo, *ro, *prev;
 
+#ifdef OP_DEBUG
 	printf ("before merge\n");
 	gtk_html_debug_dump_tree_simple (e->clue, 0);
 	if (left && left->data) {
@@ -235,7 +238,7 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 		printf ("right\n");
 		gtk_html_debug_dump_tree_simple (right->data, 0);
 	}
-
+#endif
 	while (left && left->data && right && right->data) {
 
 		lo  = HTML_OBJECT (left->data);
@@ -287,22 +290,28 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 		e->cursor->object = prev;
 		e->cursor->offset = html_object_get_length (e->cursor->object);
 	}
+#ifdef OP_DEBUG
 	printf ("-- after\n");
 	gtk_html_debug_dump_tree_simple (e->clue, 0);
 	printf ("-- END merge\n");
+#endif
 }
 
 static void
 split_and_add_empty_texts (HTMLEngine *e, gint level, GList **left, GList **right)
 {
+#ifdef OP_DEBUG
 	printf ("-- SPLIT begin\n");
 	gtk_html_debug_dump_tree_simple (e->clue, 0);
 	printf ("-- SPLIT middle\n");
+#endif
 	html_object_split (e->cursor->object, e, *right ? HTML_OBJECT ((*right)->data) : NULL,
 			   e->cursor->offset, level, left, right);
+#ifdef OP_DEBUG
 	printf ("-- SPLIT middle\n");
 	gtk_html_debug_dump_tree_simple (e->clue, 0);
 	printf ("-- SPLIT end\n");
+#endif
 }
 
 /* end of helper */
@@ -318,7 +327,7 @@ html_engine_copy_object (HTMLEngine *e, HTMLObject **o, guint *len)
 		*len = 0;
 		*o    = html_object_op_copy (HTML_OBJECT (from->data), e,
 				from->next, to->next, len);
-#ifdef GTKHTML_DEBUG_TABLE
+#ifdef OP_DEBUG
 		printf ("copy len: %d (parent %p)\n", *len, (*o)->parent);
 		gtk_html_debug_dump_tree_simple (*o, 0);
 #endif
@@ -538,7 +547,7 @@ html_engine_cut (HTMLEngine *e)
 	html_engine_clipboard_clear (e);
 	delete_object (e, &e->clipboard, &e->clipboard_len, HTML_UNDO_UNDO);
 
-#ifdef GTKHTML_DEBUG_TABLE
+#ifdef OP_DEBUG
 	printf ("cut  len: %d\n", e->clipboard_len);
 	gtk_html_debug_dump_tree_simple (e->clipboard, 0);
 #endif
@@ -572,7 +581,7 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint *len, gboolean check, HT
 
 	html_engine_freeze (e);
 
-	if (HTML_IS_TABLE (e->cursor->object)) {
+	/* if (HTML_IS_TABLE (e->cursor->object)) {
 		if (e->cursor->offset) {
 			HTMLObject *head = html_object_get_head_leaf (obj);
 
@@ -588,7 +597,7 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint *len, gboolean check, HT
 				html_cursor_backward (e->cursor, e);
 			}
 		}
-	}
+		} */
 
 	level = 0;
 	cur   = html_object_get_head_leaf (obj);
@@ -628,10 +637,14 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint *len, gboolean check, HT
 
 	//e->cursor->position += len;
 
+#ifdef OP_DEBUG
 	printf ("position before merge %d\n", e->cursor->position);
+#endif
 	remove_empty_and_merge (e, TRUE, last, right, orig);
 	remove_empty_and_merge (e, TRUE, left, first, orig);
+#ifdef OP_DEBUG
 	printf ("position after merge %d\n", e->cursor->position);
+#endif
 
 	*len = e->cursor->position - orig->position;
 
