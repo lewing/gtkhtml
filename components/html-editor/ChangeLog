@@ -1,3 +1,11 @@
+2004-10-15  Radek Doulik  <rodo@ximian.com>
+
+	* spell.c (spell_add_to_personal_no_language): new helper method
+	to report broken language settings
+	(spell_add_to_personal): call spell_add_to_personal_no_language if
+	language is null
+	(add_cb): ditto
+
 2004-09-20  Radek Doulik  <rodo@ximian.com>
 
 	* menubar.c (font_style_cb): toggle style instead of setting it on
@@ -852,10 +860,6 @@ Sat Jun  5 12:20:42 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* GNOME_GtkHTML_Editor.oaf.in: add Editor interface to the oaf
 	list.
-
-	* test-html-editor-control.c (save_through_plain_persist_stream):
-	give a reasonable mode for the new file.
-	add missing includes.
 
 2002-05-08  Radek Doulik  <rodo@ximian.com>
 
