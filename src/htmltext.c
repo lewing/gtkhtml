@@ -329,7 +329,12 @@ cut_attr_list_filter (PangoAttribute *attr, gpointer data)
 		attr->end_index -= delta;
 		if (attr->end_index <= attr->start_index)
 			return TRUE;
-	}
+	} else if (attr->end_index >= range->end_index)
+		attr->end_index -= delta;
+	else if (attr->end_index >= range->start_index)
+		attr->end_index = range->start_index;
+
+	return FALSE;
 }
 
 static void

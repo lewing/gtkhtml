@@ -348,5 +348,6 @@ gtk_html_debug_list_text_attrs (HTMLText *text)
 		D_ATTR_TYPE (RISE, "Rise");
 		D_ATTR_TYPE (SHAPE, "Shape");
 		D_ATTR_TYPE (SCALE, "Scale");
+		g_print ("------------\n");
 	} while (pango_attr_iterator_next (iter));
 }
