@@ -2517,50 +2517,13 @@
                     <property name="visible">yes</property>
 
                     <child>
-                      <widget class="GtkScrolledWindow" id="scrolledwindow1">
-                        <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="shadow_type">GTK_SHADOW_IN</property>
-                        <property name="visible">yes</property>
-
-                        <child>
-                          <widget class="GtkTreeView" id="clist_templates">
+                          <widget class="GtkList" id="clist_templates">
                             <property name="can_focus">yes</property>
-                            <property name="headers-visible">no</property>
                             <property name="width-request">200</property>
                             <property name="height-request">70</property>
                             <property name="visible">yes</property>
 
-                            <child>
-                              <widget class="GtkLabel" id="label25">
-                                <property name="child_name">CList:title</property>
-                                <property name="label" translatable="yes">Template</property>
-                                <property name="justify">GTK_JUSTIFY_CENTER</property>
-                                <property name="wrap">no</property>
-                                <property name="xalign">0.5</property>
-                                <property name="yalign">0.5</property>
-                                <property name="xpad">0</property>
-                                <property name="ypad">0</property>
-                                <property name="visible">yes</property>
-                              </widget>
-                            </child>
                           </widget>
-                        </child>
-
-                        <child internal-child="hscrollbar">
-                          <widget class="GtkHScrollbar" id="convertwidget55">
-                            <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-                            <property name="visible">yes</property>
-                          </widget>
-                        </child>
-
-                        <child internal-child="vscrollbar">
-                          <widget class="GtkVScrollbar" id="convertwidget56">
-                            <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-                            <property name="visible">yes</property>
-                          </widget>
-                        </child>
-                      </widget>
                       <packing>
                         <property name="padding">0</property>
                         <property name="expand">yes</property>
