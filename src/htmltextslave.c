@@ -435,11 +435,68 @@ hts_fit_line_old (HTMLObject *o, HTMLPainter *painter,
 	return rv;	
 }
 */
+
+static void
+dec_offset (HTMLTextPangoInfo *pi, gint *ii, gint *io, gint *offset)
+{
+	(*offset) --;
+	if ((*io) == 0) {
+		(*ii) --;
+		(*io) = pi->entries [*ii].item->num_chars - 1;
+	} else
+		(*io) --;
+}
+
+static gint
+remove_end_white_space (HTMLTextPangoInfo *pi, gint ii, gint io, gint offset, gint *w)
+{
+	dec_offset (pi, &ii, &io, &offset);
+	while (offset && pi->entries [ii].attrs [io].is_white) {
+		*w -= PANGO_PIXELS (pi->entries [ii].widths [io]);
+		dec_offset (pi, &ii, &io, &offset);
+	}
+	return offset;
+}
+
 static HTMLFitType
 hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	      gboolean lineBegin, gboolean firstRun, gboolean next_to_floating, gint widthLeft)
 {
-	return TRUE;
+	HTMLTextSlave *slave = HTML_TEXT_SLAVE (o);
+	gint lbw, w, lbo, offset;
+	gint ii, io;
+	HTMLFitType rv = (!firstRun && lineBegin) ? HTML_FIT_COMPLETE : HTML_FIT_NONE;
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, painter);
+
+	lbw = w = 0;
+	offset = lbo = slave->posStart;
+	ii = html_text_get_item_index (slave->owner, painter, offset, &io);
+
+	while (widthLeft >= 0 && offset < slave->posStart + slave->posLen) {
+		if (pi->entries [ii].attrs [io].is_line_break) {
+			lbw = w;
+			lbo = offset; //remove_end_white_space (pi, ii, io, offset, &lbw);
+		}
+		w += PANGO_PIXELS (pi->entries [ii].widths [io]);
+		widthLeft -= PANGO_PIXELS (pi->entries [ii].widths [io]);
+		io ++;
+		offset ++;
+		if (io >= pi->entries [ii].item->num_chars) {
+			ii ++;
+			io = 0;
+		}
+	}
+
+	if (offset == slave->posStart + slave->posLen && widthLeft >= 0) {
+		rv = HTML_FIT_COMPLETE;
+		o->width = w;
+	} else if (lbo > slave->posStart) {
+		split (slave, lbo - slave->posStart, NULL);
+		rv = HTML_FIT_PARTIAL;
+		o->width = lbw;
+	}
+
+	return rv;
 }
 
 static gboolean

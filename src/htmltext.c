@@ -621,8 +621,8 @@ word_size (gint cl, gint so, gint eo, GList **items, GList **glyphs, gint *width
 	return cl;
 }
 
-static gint
-get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gint *item_offset)
+gint
+html_text_get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gint *item_offset)
 {
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 	gint idx = 0;
@@ -669,7 +669,7 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gi
 	if (pi->n == 0)
 		return 0;
 
-	idx = get_item_index (text, painter, offset, &offset);
+	idx = html_text_get_item_index (text, painter, offset, &offset);
 	if (asc || dsc)
 		update_asc_dsc (pi->entries [idx].item, asc, dsc);
 
@@ -942,6 +942,31 @@ static gint
 calc_min_width (HTMLObject *self, HTMLPainter *painter)
 {
 	HTMLText *text = HTML_TEXT (self);
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
+	gint mw, ww = 0;
+	gint ii, io, offset;
+
+	offset = 0;
+	ii = io = 0;
+	while (offset < text->text_len) {
+		if (pi->entries [ii].attrs [io].is_line_break) {
+			if (ww > mw)
+				mw = ww;
+			ww = 0;
+		}
+		ww += pi->entries [ii].widths [io];
+		io ++;
+		offset ++;
+		if (io >= pi->entries [ii].item->num_chars) {
+			ii ++;
+			io = 0;
+		}
+	}
+
+	if (ww > mw)
+		mw = ww;
+
+	/* FIXME-words HTMLText *text = HTML_TEXT (self);
 	HTMLObject *prev, *next, *obj;
 	guint i, w, mw;
 
@@ -949,7 +974,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 	html_text_get_pango_info (text, painter);
 	mw = 0;
 
-	/* FIXME-words for (i = 0; i < text->words; i++) {
+	for (i = 0; i < text->words; i++) {
 		w = min_word_width (text, painter, i);
 		prev = next = NULL;
 		if (i == 0) {
@@ -976,7 +1001,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 			mw = w;
 			} */
 
-	return MAX (1, mw);
+	return MAX (1, PANGO_PIXELS (mw));
 }
 
 static void

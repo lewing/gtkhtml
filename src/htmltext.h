@@ -125,7 +125,7 @@ gunichar          html_text_get_char                     (HTMLText         *text
 							  guint             offset);
 gchar            *html_text_get_text                     (HTMLText         *text,
 							  guint             offset);
-GList *           html_text_get_items                    (HTMLText         *text,
+GList            *html_text_get_items                    (HTMLText         *text,
 							  HTMLPainter      *painter);
 void              html_text_spell_errors_clear           (HTMLText         *text);
 void              html_text_spell_errors_clear_interval  (HTMLText         *text,
@@ -152,6 +152,11 @@ gint              html_text_calc_part_width              (HTMLText         *text
 							  gint              len,
 							  gint             *asc,
 							  gint             *dsc);
+gint              html_text_get_item_index               (HTMLText         *text,
+							  HTMLPainter      *painter,
+							  gint              offset,
+							  gint             *item_offset);
+
 /*
  * protected
  */
