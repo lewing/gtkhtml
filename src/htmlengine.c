@@ -5275,12 +5275,10 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 			if (HTML_IS_LINK_TEXT (cur)) {
 				e->focus_object = cur;
 				printf ("focus link: %s\n", HTML_LINK_TEXT (cur)->url);
+				
 				return TRUE;
 				break;
 			} else if (html_object_is_embedded (cur) && !html_object_is_frame (cur)) {
-				printf ("try focus embedded: %d %d\n", GTK_WIDGET_DRAWABLE (HTML_EMBEDDED (cur)->widget) &&
-					gtk_widget_is_ancestor (HTML_EMBEDDED (cur)->widget, HTML_EMBEDDED (cur)->parent));
-				
 				if (!GTK_WIDGET_DRAWABLE (HTML_EMBEDDED (cur)->widget)) {
 					gint x, y;
 
