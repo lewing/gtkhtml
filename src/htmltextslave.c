@@ -158,7 +158,7 @@ hts_calc_width (HTMLTextSlave *slave, HTMLPainter *painter, gint *asc, gint *dsc
 
 	width = html_painter_pango_to_engine (painter, width);
 
-	printf ("hts width: %d\n", width);
+	/* printf ("hts width: %d\n", width); */
 
 	return width;
 }
@@ -349,18 +349,18 @@ html_text_slave_get_nb_width (HTMLTextSlave *slave, HTMLPainter *painter, gboole
  * We'll actually break the item at the last break position that still fits.
  */
 static gboolean
-update_lb (HTMLTextSlave *slave, HTMLPainter *painter, gint widthLeft, gint offset, gchar *s, gint ii, gint io, int char_offset, gint line_offset,
+update_lb (HTMLTextSlave *slave, HTMLPainter *painter, gint widthLeft, gint offset, gchar *s, gint ii, gint io, gint line_offset,
 	   gint *w, gint *lwl, gint *lbw, gint *lbo, gchar **lbsp, gboolean *force_fit)
 {
 	gint new_ltw, new_lwl, aw;
 
-	new_ltw = html_text_tail_white_space (slave->owner, painter, offset, ii, io, char_offset, &new_lwl, line_offset, s);
+	new_ltw = html_text_tail_white_space (slave->owner, painter, offset, ii, io, &new_lwl, line_offset, s);
 	aw = *w - new_ltw;
 	
 	if (aw <= widthLeft || *force_fit) {
 		*lwl = new_lwl;
 		*lbw = aw;
-		*lbo = char_offset;
+		*lbo = offset;
 		*lbsp = s;
 		if (*force_fit && *lbw >= widthLeft)
 			return TRUE;
@@ -377,7 +377,7 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 {
 	HTMLTextSlave *slave = HTML_TEXT_SLAVE (o);
 	gint lbw, w, lbo, lwl, offset;
-	gint ii, io, line_offset, char_offset;
+	gint ii, io, line_offset;
 	gchar *s, *lbsp;
 	HTMLFitType rv = HTML_FIT_NONE;
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, painter);
@@ -390,14 +390,14 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 
 	lbw = lwl = w = 0;
 	offset = lbo = slave->posStart;
-	ii = html_text_get_item_index (slave->owner, painter, offset, &io, &char_offset);
+	ii = html_text_get_item_index (slave->owner, painter, offset, &io);
 
 	line_offset = html_text_get_line_offset (slave->owner, painter, offset);
 	lbsp = s = html_text_slave_get_text (slave);
 
 	while ((force_fit || widthLeft > lbw) && offset < slave->posStart + slave->posLen) {
-		if (offset > slave->posStart && offset > lbo && html_text_is_line_break (pi->attrs [char_offset]))
-			if (update_lb (slave, painter, widthLeft, offset, s, ii, io, char_offset, line_offset, &w, &lwl, &lbw, &lbo, &lbsp, &force_fit))
+		if (offset > slave->posStart && offset > lbo && html_text_is_line_break (pi->attrs [offset]))
+			if (update_lb (slave, painter, widthLeft, offset, s, ii, io, line_offset, &w, &lwl, &lbw, &lbo, &lbsp, &force_fit))
 				break;
 
 		if (*s == '\t') {
@@ -412,7 +412,7 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 		s = g_utf8_next_char (s);
 		offset ++;
 
-		html_text_pi_forward (pi, &ii, &io, &char_offset);
+		html_text_pi_forward (pi, &ii, &io);
 	}
 
 	if (offset == slave->posStart + slave->posLen && (widthLeft >= w || force_fit)) {

@@ -173,23 +173,19 @@ gint              html_text_calc_part_width              (HTMLText           *te
 gint              html_text_get_item_index               (HTMLText           *text,
 							  HTMLPainter        *painter,
 							  int                 offset,
-							  int                *item_offset,
-							  int                *char_offset);
+							  int                *item_offset);
 gboolean          html_text_pi_backward                  (HTMLTextPangoInfo  *pi,
 							  int                *ii,
-							  int                *io,
-							  int                *char_offset);
+							  int                *io);
 gboolean          html_text_pi_forward                   (HTMLTextPangoInfo  *pi,
 							  int                *ii,
-							  int                *io,
-							  int                *char_offset);
+							  int                *io);
 void              html_text_free_attrs                   (GSList             *attrs);
 gint              html_text_tail_white_space             (HTMLText           *text,
 							  HTMLPainter        *painter,
 							  int                 offset,
 							  int                 ii,
 							  int                 io,
-							  int                 char_offset,
 							  int                *white_len,
 							  int                 line_offset,
 							  char               *s);
