@@ -1,5 +1,17 @@
 2000-10-10  Radek Doulik  <rodo@helixcode.com>
 
+	* new spell checking API GtkHTMLEditSpellAPI, it's here as I don't
+	want to make libgtkhtml depend on Bonobo, just editor component
+	which will use this API
+
+	* removed pspell checking #ifdef's
+
+	* gtkhtml-private.h: like below
+
+	* gtkhtml.c (set_fonts_idle): test for GTKHTML_HAVE_GCONF instead
+	of PSPELL which was mistaken
+	(set_fonts): likewise
+
 	* htmltable.c (expand_columns): use g_renew
 	(expand_rows): likewise
 	(inc_rows): expand rows by .25*allocRows instead of +10
