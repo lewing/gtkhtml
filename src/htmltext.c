@@ -1219,7 +1219,24 @@ save_text (HTMLText *text, HTMLEngineSaveState *state, guint start_index, guint 
 static gboolean
 save_link_open (Link *link, HTMLEngineSaveState *state, GSList **attrs)
 {
-	/* TODO: remove underline and blue from attrs */
+	GSList *l, *next;
+
+	for (l = *attrs; l; l = next) {
+		PangoAttribute *attr = (PangoAttribute *) l->data;
+		next = l->next;
+		if (attr->klass->type == PANGO_ATTR_UNDERLINE) {
+			*attrs = g_slist_delete_link (*attrs, l);
+			pango_attribute_destroy (attr);
+		} else if (attr->klass->type == PANGO_ATTR_FOREGROUND) {
+			GdkColor *color = &html_colorset_get_color (state->engine->settings->color_set, HTMLLinkColor)->color;
+			PangoAttrColor *ac = (PangoAttrColor *) attr;
+
+			if (ac->color.red == color->red && ac->color.green == color->green && ac->color.blue == color->blue) {
+				*attrs = g_slist_delete_link (*attrs, l);
+				pango_attribute_destroy (attr);
+			}
+		}
+	}
 
 	return html_engine_save_output_string (state, "<A HREF=\"%s\">", link->url);
 }
