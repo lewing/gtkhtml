@@ -1142,9 +1142,12 @@ accepts_cursor (HTMLObject *object)
 static gboolean
 save_open_attrs (HTMLEngineSaveState *state, GSList *attrs)
 {
+	gboolean rv = TRUE;
+
 	for (; attrs; attrs = attrs->next) {
 		PangoAttribute *attr = (PangoAttribute *) attrs->data;
 		gchar *tag = NULL;
+		gboolean free_tag = FALSE;
 
 		switch (attr->klass->type) {
 		case PANGO_ATTR_WEIGHT:
@@ -1159,11 +1162,29 @@ save_open_attrs (HTMLEngineSaveState *state, GSList *attrs)
 		case PANGO_ATTR_STRIKETHROUGH:
 			tag = "<S>";
 			break;
+		case PANGO_ATTR_SIZE:
+			/* TODO */
+			break;
+		case PANGO_ATTR_FAMILY:
+			/* TODO */
+			break;
+		case PANGO_ATTR_FOREGROUND: {
+			PangoAttrColor *color = (PangoAttrColor *) attr;
+			tag = g_strdup_printf ("<FONT COLOR=\"#%02x%02x%02x\">",
+					       (color->color.red >> 8) & 0xff, (color->color.green >> 8) & 0xff, (color->color.blue >> 8) & 0xff);
+			free_tag = TRUE;
+		}
+			break;
 		}
 
-		if (tag)
+		if (tag) {
 			if (!html_engine_save_output_string (state, "%s", tag))
-				return FALSE;
+				rv = FALSE;
+			if (free_tag)
+				g_free (tag);
+			if (!rv)
+				break;
+		}
 	}
 
 	return TRUE;
@@ -1190,6 +1211,10 @@ save_close_attrs (HTMLEngineSaveState *state, GSList *attrs)
 		case PANGO_ATTR_STRIKETHROUGH:
 			tag = "</S>";
 			break;
+		case PANGO_ATTR_SIZE:
+		case PANGO_ATTR_FAMILY:
+		case PANGO_ATTR_FOREGROUND:
+			tag = "</FONT>";
 		}
 
 		if (tag)
@@ -1254,7 +1279,6 @@ save (HTMLObject *self, HTMLEngineSaveState *state)
 	PangoAttrIterator *iter = pango_attr_list_get_iterator (text->attr_list);;
 	guint last_index = 0;
 	guint last_written = 0;
-	GSList *last_attrs = NULL;
 
 	if (iter) {
 		GSList *l, *links = g_slist_reverse (text->links);
@@ -1271,19 +1295,6 @@ save (HTMLObject *self, HTMLEngineSaveState *state)
 			if (end_index == G_MAXINT)
 				end_index = text->text_bytes;
 
-			if (last_attrs) {
-				save_close_attrs (state, last_attrs);
-				free_attrs (last_attrs);
-			}
-			if (l && link_started) {
-				Link *link = (Link *) l->data;
-
-				if (link->end_index == start_index) {
-					save_link_close (link, state);
-					l = l->next;
-					link_started = FALSE;
-				}
-			}
 			if (l && !link_started) {
 				Link *link = (Link *) l->data;
 
@@ -1294,9 +1305,20 @@ save (HTMLObject *self, HTMLEngineSaveState *state)
 			}
 			if (attrs)
 				save_open_attrs (state, attrs);
-			last_attrs = attrs;
-
 			save_text (text, state, start_index, end_index);
+			if (attrs) {
+				save_close_attrs (state, attrs);
+				free_attrs (attrs);
+			}
+			if (l && link_started) {
+				Link *link = (Link *) l->data;
+
+				if (link->end_index == end_index) {
+					save_link_close (link, state);
+					l = l->next;
+					link_started = FALSE;
+				}
+			}
 		} while (pango_attr_iterator_next (iter));
 		g_slist_free (links);
 	}
