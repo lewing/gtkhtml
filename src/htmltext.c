@@ -940,8 +940,10 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, char *start, gi
 	g_return_val_if_fail (offset + len <= text->text_len, 0);
 
 	if (need_ascent_descent) {
-		ascent = html_painter_get_space_asc (painter, html_text_get_font_style (text), text->face);
-		descent = html_painter_get_space_dsc (painter, html_text_get_font_style (text), text->face);
+		ascent = html_painter_engine_to_pango (painter,
+						       html_painter_get_space_asc (painter, html_text_get_font_style (text), text->face));
+		descent = html_painter_engine_to_pango (painter,
+							html_painter_get_space_dsc (painter, html_text_get_font_style (text), text->face));
 	}
 
 	if (text->text_len == 0 || len == 0)
