@@ -1199,6 +1199,12 @@ html_text_slave_cursor_right_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 		}
 	} else {
 		/* RTL */
+		if (index - gi->glyph_item.item->offset > 1 || (!prev && index - gi->glyph_item.item->offset > 0)) {
+			cursor->offset --;
+			cursor->position --;
+
+			return TRUE;
+		}
 	}
 
 	return FALSE;
@@ -1239,6 +1245,12 @@ html_text_slave_cursor_left_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 		}
 	} else {
 		/* RTL */
+		if (index < gi->glyph_item.item->offset + gi->glyph_item.item->length) {
+			cursor->offset ++;
+			cursor->position ++;
+
+			return TRUE;
+		}
 	}
 
 	return FALSE;
@@ -1270,10 +1282,10 @@ html_text_slave_cursor_head (HTMLTextSlave *slave, HTMLCursor *cursor)
 
 		if (gi->glyph_item.item->analysis.level % 2 == 0) {
 			/* LTR */
-			cursor->offset = 0;
+			cursor->offset = slave->posStart;
 		} else {
 			/* RTL */
-			cursor->offset = gi->glyph_item.item->num_chars;
+			cursor->offset = slave->posStart + gi->glyph_item.item->num_chars;
 		}
 
 		if (pi->attrs [cursor->offset].is_cursor_position)
@@ -1297,10 +1309,10 @@ html_text_slave_cursor_tail (HTMLTextSlave *slave, HTMLCursor *cursor)
 
 		if (gi->glyph_item.item->analysis.level % 2 == 0) {
 			/* LTR */
-			cursor->offset = gi->glyph_item.item->num_chars;
+			cursor->offset = slave->posStart + slave->posLen;
 		} else {
 			/* RTL */
-			cursor->offset = 0;
+			cursor->offset = slave->posStart + slave->posLen - gi->glyph_item.item->num_chars;
 		}
 
 		if (pi->attrs [cursor->offset].is_cursor_position)
@@ -1321,15 +1333,15 @@ html_text_slave_get_cursor_base (HTMLTextSlave *slave, HTMLPainter *painter, gui
 
 	gi = html_text_slave_get_glyph_item_at_offset (slave, (int) offset, NULL, NULL, &start_width, &index);
 
-	printf ("gi: %p index: %d start_width: %d item indexes %d %d\n",
-		gi, index, start_width, gi ? gi->glyph_item.item->offset : -1,
-		gi ? gi->glyph_item.item->offset + gi->glyph_item.item->length : -1);
+/* 	printf ("gi: %p index: %d start_width: %d item indexes %d %d\n", */
+/* 		gi, index, start_width, gi ? gi->glyph_item.item->offset : -1, */
+/* 		gi ? gi->glyph_item.item->offset + gi->glyph_item.item->length : -1); */
 
 	if (gi) {
 		int start_x;
 
 		if (calc_glyph_range_size (slave->owner, &gi->glyph_item, index, index, &start_x, NULL, NULL, NULL) && x) {
-			printf ("start_width: %d start_x: %d\n", start_width, start_x);
+/* 			printf ("start_width: %d start_x: %d\n", start_width, start_x); */
 			*x += html_painter_pango_to_engine (painter, start_width + start_x);
 		}
 	}

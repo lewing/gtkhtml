@@ -2435,13 +2435,18 @@ html_text_cursor_right (HTMLObject *self, HTMLCursor *cursor)
 	printf ("cursor offset: %d slave: %p\n", cursor->offset, slave);
 
 	if (slave) {
-		if (html_text_slave_cursor_left (slave, cursor))
+		if (html_text_slave_cursor_right (slave, cursor))
 			return TRUE;
 		else {
 			HTMLObject *next = HTML_OBJECT (slave)->next;
+			int offset = cursor->offset;
 
-			if (next && HTML_IS_TEXT_SLAVE (next))
-				return html_text_slave_cursor_head (HTML_TEXT_SLAVE (next), cursor);
+			if (next && HTML_IS_TEXT_SLAVE (next)) {
+				if (html_text_slave_cursor_head (HTML_TEXT_SLAVE (next), cursor)) {
+					cursor->position += cursor->offset - offset;
+					return TRUE;
+				}
+			}
 		}
 	}
 
@@ -2463,9 +2468,13 @@ html_text_cursor_left (HTMLObject *self, HTMLCursor *cursor)
 			return TRUE;
 		else {
 			HTMLObject *prev = HTML_OBJECT (slave)->prev;
+			int offset = cursor->offset;
 
-			if (prev && HTML_IS_TEXT_SLAVE (prev))
-				return html_text_slave_cursor_tail (HTML_TEXT_SLAVE (prev), cursor);
+			if (prev && HTML_IS_TEXT_SLAVE (prev)) {
+				if (html_text_slave_cursor_tail (HTML_TEXT_SLAVE (prev), cursor)) {
+					cursor->position += cursor->offset - offset;
+				}
+			}
 		}
 	}
 
