@@ -69,120 +69,6 @@ is_in_the_save_cluev (HTMLObject *text, HTMLObject *o)
 	return html_object_nth_parent (o, 2) == html_object_nth_parent (text, 2);
 }
 
-static void
-get_tags (const HTMLText *text,
-	  const HTMLEngineSaveState *state,
-	  gchar **opening_tags,
-	  gchar **closing_tags)
-{
-	GtkHTMLFontStyle font_style;
-	GString *ot, *ct;
-	HTMLObject *prev, *next;
-	HTMLText *pt = NULL, *nt = NULL;
-	gboolean font_tag = FALSE;
-	gboolean std_color, std_size;
-
-	font_style = text->font_style;
-
-	ot = g_string_new (NULL);
-	ct = g_string_new (NULL);
-
-	prev = html_object_prev_cursor_leaf (HTML_OBJECT (text), state->engine);
-	while (prev && !html_object_is_text (prev))
-		prev = html_object_prev_cursor_leaf (prev, state->engine);
-
-	next = html_object_next_cursor_leaf (HTML_OBJECT (text), state->engine);
-	while (next && !html_object_is_text (next))
-		next = html_object_next_cursor_leaf (next, state->engine);
-
-	if (prev && is_in_the_save_cluev (HTML_OBJECT (text), prev) && html_object_is_text (prev))
-		pt = HTML_TEXT (prev);
-	if (next && is_in_the_save_cluev (HTML_OBJECT (text), next) && html_object_is_text (next))
-		nt = HTML_TEXT (next);
-
-	/* font tag */
-	/* FIXME-link std_color = (HTML_IS_TEXT (text) && html_color_equal (text->color, html_colorset_get_color (state->engine->settings->color_set,
-												    HTMLTextColor)))
-		|| (HTML_IS_LINK_TEXT (text) && html_color_equal (text->color,
-		html_colorset_get_color (state->engine->settings->color_set, HTMLLinkColor))); */
-	std_color = TRUE;
-
-	std_size = (font_style & GTK_HTML_FONT_STYLE_SIZE_MASK) == 0;
-
-
-	if ((!std_color || !std_size)
-	    && (!pt
-		|| !html_color_equal (text->color, pt->color)
-		|| (pt->font_style & GTK_HTML_FONT_STYLE_SIZE_MASK) != (font_style & GTK_HTML_FONT_STYLE_SIZE_MASK))) {
-		if (!std_color) {
-			g_string_append_printf (ot, "<FONT COLOR=\"#%02x%02x%02x\"",
-						text->color->color.red   >> 8,
-						text->color->color.green >> 8,
-						text->color->color.blue  >> 8);
-			font_tag = TRUE;
-		}
-		if (!std_size) {
-			if (!font_tag)
-				g_string_append (ot, "<FONT");
-			g_string_append_printf (ot, " SIZE=\"%d\"", font_style & GTK_HTML_FONT_STYLE_SIZE_MASK);
-		}
-		g_string_append_c (ot, '>');
-	}
-
-	if ((!std_color || !std_size)
-	    && (!nt
-		|| !html_color_equal (text->color, nt->color)
-		|| (nt->font_style & GTK_HTML_FONT_STYLE_SIZE_MASK) != (font_style & GTK_HTML_FONT_STYLE_SIZE_MASK))) {
-  		g_string_append (ct, "</FONT>");
-  	}
-
-	/* bold tag */
-	if (font_style & GTK_HTML_FONT_STYLE_BOLD) {
-		if (!pt || !(pt->font_style & GTK_HTML_FONT_STYLE_BOLD))
-			g_string_append (ot, "<B>");
-		if (!nt || !(nt->font_style & GTK_HTML_FONT_STYLE_BOLD))
-			g_string_prepend (ct, "</B>");
-	}
-
-	/* italic tag */
-	if (font_style & GTK_HTML_FONT_STYLE_ITALIC) {
-		if (!pt || !(pt->font_style & GTK_HTML_FONT_STYLE_ITALIC))
-			g_string_append (ot, "<I>");
-		if (!nt || !(nt->font_style & GTK_HTML_FONT_STYLE_ITALIC))
-			g_string_prepend (ct, "</I>");
-	}
-
-	/* underline tag */
-	if (font_style & GTK_HTML_FONT_STYLE_UNDERLINE) {
-		if (!pt || !(pt->font_style & GTK_HTML_FONT_STYLE_UNDERLINE))
-			g_string_append (ot, "<U>");
-		if (!nt || !(nt->font_style & GTK_HTML_FONT_STYLE_UNDERLINE))
-			g_string_prepend (ct, "</U>");
-	}
-
-	/* strikeout tag */
-	if (font_style & GTK_HTML_FONT_STYLE_STRIKEOUT) {
-		if (!pt || !(pt->font_style & GTK_HTML_FONT_STYLE_STRIKEOUT))
-			g_string_append (ot, "<S>");
-		if (!nt || !(nt->font_style & GTK_HTML_FONT_STYLE_STRIKEOUT))
-			g_string_prepend (ct, "</S>");
-	}
-
-	/* fixed tag */
-	if (font_style & GTK_HTML_FONT_STYLE_FIXED) {
-		if (!pt || !(pt->font_style & GTK_HTML_FONT_STYLE_FIXED))
-			g_string_append (ot, "<TT>");
-		if (!nt || !(nt->font_style & GTK_HTML_FONT_STYLE_FIXED))
-			g_string_prepend (ct, "</TT>");
-	}
-
-	*opening_tags = ot->str;
-	*closing_tags = ct->str;
-
-	g_string_free (ot, FALSE);
-	g_string_free (ct, FALSE);
-}
-
 /* HTMLObject methods.  */
 
 HTMLTextPangoInfo *
@@ -227,6 +113,16 @@ free_links (GSList *list)
 	for (l = list; l; l = l->next)
 		html_link_free ((Link *) l->data);
 	g_slist_free (list);
+}
+
+static void
+free_attrs (GSList *attrs)
+{
+	GSList *l;
+
+	for (l = attrs; l; l = l->next)
+		pango_attribute_destroy ((PangoAttribute *) l->data);
+	g_slist_free (attrs);
 }
 
 static void
@@ -1244,35 +1140,105 @@ accepts_cursor (HTMLObject *object)
 }
 
 static gboolean
-save (HTMLObject *self,
-      HTMLEngineSaveState *state)
+save_open_attrs (HTMLEngineSaveState *state, GSList *attrs)
 {
-	gchar *opening_tags;
-	gchar *closing_tags;
-	HTMLText *text;
+	for (; attrs; attrs = attrs->next) {
+		PangoAttribute *attr = (PangoAttribute *) attrs->data;
+		gchar *tag = NULL;
 
-	text = HTML_TEXT (self);
+		switch (attr->klass->type) {
+		case PANGO_ATTR_WEIGHT:
+			tag = "<B>";
+			break;
+		case PANGO_ATTR_STYLE:
+			tag = "<I>";
+			break;
+		case PANGO_ATTR_UNDERLINE:
+			tag = "<U>";
+			break;
+		case PANGO_ATTR_STRIKETHROUGH:
+			tag = "<S>";
+			break;
+		}
 
-	get_tags (text, state, &opening_tags, &closing_tags);
-
-	if (! html_engine_save_output_string (state, "%s", opening_tags)) {
-		g_free (opening_tags);
-		g_free (closing_tags);
-		return FALSE;
+		if (tag)
+			if (!html_engine_save_output_string (state, "%s", tag))
+				return FALSE;
 	}
-	g_free (opening_tags);
 
-	if (! html_engine_save_encode (state, text->text, text->text_len)) {
-		g_free (closing_tags);
-		return FALSE;
+	return TRUE;
+}
+
+static gboolean
+save_close_attrs (HTMLEngineSaveState *state, GSList *attrs)
+{
+	attrs = g_slist_reverse (attrs);
+	for (; attrs; attrs = attrs->next) {
+		PangoAttribute *attr = (PangoAttribute *) attrs->data;
+		gchar *tag = NULL;
+
+		switch (attr->klass->type) {
+		case PANGO_ATTR_WEIGHT:
+			tag = "</B>";
+			break;
+		case PANGO_ATTR_STYLE:
+			tag = "</I>";
+			break;
+		case PANGO_ATTR_UNDERLINE:
+			tag = "</U>";
+			break;
+		case PANGO_ATTR_STRIKETHROUGH:
+			tag = "</S>";
+			break;
+		}
+
+		if (tag)
+			if (!html_engine_save_output_string (state, "%s", tag)) {
+				g_slist_free (attrs);
+				return FALSE;
+			}
 	}
 
-	if (! html_engine_save_output_string (state, "%s", closing_tags)) {
-		g_free (closing_tags);
-		return FALSE;
-	}
+	g_slist_free (attrs);
+	return TRUE;
+}
 
-	g_free (closing_tags);
+static gboolean
+save (HTMLObject *self, HTMLEngineSaveState *state)
+{
+	HTMLText *text = HTML_TEXT (self);
+	PangoAttrIterator *iter = pango_attr_list_get_iterator (text->attr_list);;
+	guint last_index = 0;
+	guint last_written = 0;
+	GSList *last_attrs = NULL;
+
+	if (iter) {
+		do {
+			GSList *l, *attrs;
+			guint start_index, end_index;
+			gchar *str;
+			gint len;
+
+			attrs = pango_attr_iterator_get_attrs (iter);
+			pango_attr_iterator_range (iter, &start_index, &end_index);
+			if (end_index == G_MAXINT)
+				end_index = text->text_bytes;
+
+			if (last_attrs) {
+				save_close_attrs (state, last_attrs);
+				free_attrs (last_attrs);
+			}
+			if (attrs)
+				save_open_attrs (state, attrs);
+			last_attrs = attrs;
+
+			str = g_strndup (text->text + start_index, end_index - start_index);
+			len = g_utf8_pointer_to_offset (text->text + start_index, text->text + end_index);
+
+			if (! html_engine_save_encode (state, str, len))
+				return FALSE;
+		} while (pango_attr_iterator_next (iter));
+	}
 
 	return TRUE;
 }
