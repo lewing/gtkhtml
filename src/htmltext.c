@@ -231,6 +231,7 @@ copy (HTMLObject *s,
 
 	dest->text = g_strdup (src->text);
 	dest->text_len      = src->text_len;
+	dest->text_bytes    = src->text_bytes;
 	dest->font_style    = src->font_style;
 	dest->face          = g_strdup (src->face);
 	dest->color         = src->color;
@@ -328,6 +329,7 @@ html_text_op_cut_helper (HTMLText *text, HTMLEngine *e, GList *from, GList *to, 
 	remove_text_slaves (HTML_OBJECT (text));
 	if (!html_object_could_remove_whole (HTML_OBJECT (text), from, to, left, right) || begin || end < text->text_len) {
 		gchar *nt, *tail;
+		gint begin_index;
 
 		if (begin == end)
 			return (*f) (text, 0, 0);
@@ -335,11 +337,13 @@ html_text_op_cut_helper (HTMLText *text, HTMLEngine *e, GList *from, GList *to, 
 		rv = (*f) (text, begin, end);
 
 		tail = html_text_get_text (text, end);
-		text->text [html_text_get_index (text, begin)] = 0;
+		begin_index = html_text_get_index (text, begin);
+		text->text [begin_index] = 0;
 		nt = g_strconcat (text->text, tail, NULL);
 		g_free (text->text);
 		text->text = nt;
 		text->text_len -= end - begin;
+		text->text_bytes -= tail - (text->text + begin_index);
 		*len           += end - begin;
 
 		text->spell_errors = remove_spell_errors (text->spell_errors, begin, end - begin);
@@ -413,6 +417,7 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, G
 	to_free       = t1->text;
 	t1->text      = g_strconcat (t1->text, t2->text, NULL);
 	t1->text_len += t2->text_len;
+	t1->text_bytes += t2->text_bytes;
 	g_free (to_free);
 	html_text_convert_nbsp (t1, TRUE);
 	html_object_change_set (self, HTML_CHANGE_ALL_CALC);
@@ -434,6 +439,7 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	HTMLObject *dup, *prev;
 	HTMLText *t1, *t2;
 	gchar *tt;
+	gint split_index;
 
 	g_assert (self->parent);
 
@@ -442,8 +448,10 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	t1              = HTML_TEXT (self);
 	dup             = html_object_dup (self);
 	tt              = t1->text;
-	t1->text        = g_strndup (tt, html_text_get_index (t1, offset));
+	split_index     = html_text_get_index (t1, offset);
+	t1->text        = g_strndup (tt, split_index);
 	t1->text_len    = offset;
+	t1->text_bytes  = split_index;
 	g_free (tt);
 	html_text_convert_nbsp (t1, TRUE);
 
@@ -451,6 +459,7 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	tt              = t2->text;
 	t2->text        = html_text_get_text (t2, offset);
 	t2->text_len   -= offset;
+	t2->text_bytes -= split_index;
 	if (!html_text_convert_nbsp (t2, FALSE))
 		t2->text = g_strdup (t2->text);
 	g_free (tt);
@@ -1682,6 +1691,7 @@ html_text_init (HTMLText *text,
 	html_object_init (HTML_OBJECT (text), HTML_OBJECT_CLASS (klass));
 
 	text->text_len      = text_len (&str, len);
+	text->text_bytes    = strlen (str);
 	text->text          = g_strndup (str, g_utf8_offset_to_pointer (str, text->text_len) - str);
 	text->font_style    = font_style;
 	text->face          = NULL;
@@ -1782,6 +1792,7 @@ html_text_set_text (HTMLText *text, const gchar *new_text)
 	g_free (text->text);
 	text->text_len = text_len (&new_text, -1);
 	text->text = g_strdup (new_text);
+	text->text_bytes = strlen (text->text);
 	html_object_change_set (HTML_OBJECT (text), HTML_CHANGE_ALL);
 }
 
@@ -2050,6 +2061,7 @@ html_text_append (HTMLText *text, const gchar *str, gint len)
 
 	to_delete       = text->text;
 	text->text_len += text_len (&str, len);
+	text->text_bytes += strlen (str);
 	text->text      = g_strconcat (to_delete, str, NULL);
 
 	g_free (to_delete);

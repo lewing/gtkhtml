@@ -816,15 +816,6 @@ style_set (GtkWidget *widget, GtkStyle  *previous_style)
 	html_engine_schedule_update (engine);
 }
 
-void
-gtk_html_im_reset (GtkHTML *html)
-{
-	if (html->priv->need_im_reset) {
-		html->priv->need_im_reset = FALSE;
-		gtk_im_context_reset (html->priv->im_context);
-	}
-}
-
 static gint
 key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
@@ -849,7 +840,7 @@ key_press_event (GtkWidget *widget, GdkEventKey *event)
 
 	if (!html->binding_handled)
 		GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
-	
+
 	retval = html->binding_handled;
 	update = html->priv->update_styles;
 
@@ -2752,16 +2743,77 @@ init_properties_widget (GtkHTML *html)
 	}
 }
 
+void
+gtk_html_im_reset (GtkHTML *html)
+{
+	if (!html->priv->im_block_reset) {
+		printf ("IM reset requested\n");
+		if (html->priv->need_im_reset) {
+			if (html->engine->freeze_count == 1)
+				html_engine_thaw_idle_flush (html->engine);
+			html->priv->need_im_reset = FALSE;
+			gtk_im_context_reset (html->priv->im_context);
+			printf ("IM reset called\n");
+		}
+	}
+}
+
 static void
 gtk_html_im_commit_cb (GtkIMContext *context, const gchar *str, GtkHTML *html)
 {
+	gboolean state = html->priv->im_block_reset;
+
+	html->priv->im_block_reset = TRUE;
+	printf ("IM commit %s\n", str);
 	html_engine_paste_text (html->engine, str, -1);
+	html->priv->im_block_reset = state;
 }
 
 static void
 gtk_html_im_preedit_changed_cb (GtkIMContext *context, GtkHTML *html)
 {
-	g_warning ("preedit changed callback: implement me");
+	gchar *preedit_string;
+	gint cursor_pos;
+	gboolean state = html->priv->im_block_reset;
+
+	html->priv->im_block_reset = TRUE;
+
+	if (html->priv->im_pre_len > 0) {
+		printf ("IM delete last preedit %d + %d\n", html->priv->im_pre_pos, html->priv->im_pre_len);
+		
+		html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos);
+		html_engine_set_mark (html->engine);
+		html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos + html->priv->im_pre_len);
+		html_engine_delete (html->engine);
+	} else
+		html->priv->im_orig_style = html_engine_get_font_style (html->engine);
+
+	/* FIXME: retrieve pango attributes list and set style approprietly */
+	gtk_im_context_get_preedit_string (html->priv->im_context, &preedit_string, NULL, &cursor_pos);
+
+	printf ("IM preedit changed to %s\n", preedit_string);
+	html->priv->im_pre_len = g_utf8_strlen (preedit_string, -1);
+
+	if (html->priv->im_pre_len > 0) {
+		cursor_pos = CLAMP (cursor_pos, 0, html->priv->im_pre_len);
+		html->priv->im_pre_pos = html->engine->cursor->position;
+		html_engine_paste_text (html->engine, preedit_string, html->priv->im_pre_len);
+		html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos);
+		html_engine_set_mark (html->engine);
+		html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos + html->priv->im_pre_len);
+
+		/* FIXME: use pango attributes */
+		html_engine_set_font_style (html->engine, GTK_HTML_FONT_STYLE_MAX, GTK_HTML_FONT_STYLE_UNDERLINE);
+		html_engine_unselect_all (html->engine);
+		html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos + cursor_pos);
+	} else
+		html_engine_set_font_style (html->engine, 0, html->priv->im_orig_style);
+	g_free (preedit_string);
+
+	if (html->engine->freeze_count == 1)
+		html_engine_thaw_idle_flush (html->engine);
+	/* FIXME gtk_im_context_set_cursor_location (im_context, &area); */
+	html->priv->im_block_reset = state;
 }
 
 static gchar *
@@ -2810,7 +2862,7 @@ gtk_html_im_retrieve_surrounding_cb (GtkIMContext *context, GtkHTML *html)
 {
 	gint offset;
 
-	printf ("gtk_html_im_retrieve_surrounding_cb\n");
+	printf ("IM gtk_html_im_retrieve_surrounding_cb\n");
 	gtk_im_context_set_surrounding (context, get_surrounding_text (html->engine, &offset), -1, offset);
 
 	return TRUE;
@@ -2819,7 +2871,7 @@ gtk_html_im_retrieve_surrounding_cb (GtkIMContext *context, GtkHTML *html)
 static gboolean
 gtk_html_im_delete_surrounding_cb (GtkIMContext *slave, gint offset, gint n_chars, GtkHTML *html)
 {
-	printf ("gtk_html_im_delete_surrounding_cb\n");
+	printf ("IM gtk_html_im_delete_surrounding_cb\n");
 	if (html_engine_get_editable (html->engine) && !html_engine_is_selection_active (html->engine)) {
 		gint orig_position = html->engine->cursor->position;
 
@@ -2888,6 +2940,8 @@ gtk_html_init (GtkHTML* html)
 	/* IM Context */
 	html->priv->im_context = gtk_im_multicontext_new ();
 	html->priv->need_im_reset = FALSE;
+	html->priv->im_block_reset = FALSE;
+	html->priv->im_pre_len = 0;
   
 	g_signal_connect (G_OBJECT (html->priv->im_context), "commit",
 			  G_CALLBACK (gtk_html_im_commit_cb), html);

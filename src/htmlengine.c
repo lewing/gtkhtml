@@ -855,28 +855,28 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 	if (style & GTK_HTML_FONT_STYLE_BOLD) {
 		attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
 		attr->start_index = last_pos;
-		attr->end_index = text->text_len;
+		attr->end_index = text->text_bytes;
 		pango_attr_list_change (text->attr_list, attr);
 	}
 
 	if (style & GTK_HTML_FONT_STYLE_ITALIC) {
 		attr = pango_attr_style_new (PANGO_STYLE_ITALIC);
 		attr->start_index = last_pos;
-		attr->end_index = text->text_len;
+		attr->end_index = text->text_bytes;
 		pango_attr_list_change (text->attr_list, attr);
 	}
 
 	if (style & GTK_HTML_FONT_STYLE_UNDERLINE || link) {
 		attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
 		attr->start_index = last_pos;
-		attr->end_index = text->text_len;
+		attr->end_index = text->text_bytes;
 		pango_attr_list_change (text->attr_list, attr);
 	}
 
 	if (style & GTK_HTML_FONT_STYLE_STRIKEOUT) {
 		attr = pango_attr_strikethrough_new (TRUE);
 		attr->start_index = last_pos;
-		attr->end_index = text->text_len;
+		attr->end_index = text->text_bytes;
 		pango_attr_list_change (text->attr_list, attr);
 	}
 
@@ -884,7 +884,7 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 	if (link || color != html_colorset_get_color (e->settings->color_set, HTMLTextColor)) {
 		attr = pango_attr_foreground_new (color->color.red, color->color.green, color->color.blue);
 		attr->start_index = last_pos;
-		attr->end_index = text->text_len;
+		attr->end_index = text->text_bytes;
 		pango_attr_list_change (text->attr_list, attr);
 	}
 
@@ -903,6 +903,7 @@ insert_text (HTMLEngine *e,
 	gchar *face;
 	gboolean create_link;
 	gint last_pos = 0;
+	gint last_bytes = 0;
 
 	if (text [0] == ' ' && text [1] == 0) {
 		if (e->eat_space)
@@ -939,11 +940,12 @@ insert_text (HTMLEngine *e,
 		append_element (e, clue, prev);
 	} else {
 		last_pos = HTML_TEXT (prev)->text_len;
+		last_bytes = HTML_TEXT (prev)->text_bytes;
 		html_text_append (HTML_TEXT (prev), text, -1);
 	}
 
 	if (prev && HTML_IS_TEXT (prev)) {
-		apply_attributes (HTML_TEXT (prev), e, font_style, color, last_pos, create_link);
+		apply_attributes (HTML_TEXT (prev), e, font_style, color, last_bytes, create_link);
 		if (create_link)
 			html_text_add_link (HTML_TEXT (prev), e->url, e->target, last_pos, HTML_TEXT (prev)->text_len);
 	}
