@@ -32,14 +32,6 @@
 struct _GtkHTMLEditParagraphProperties {
 	GtkHTMLControlData *cd;
 	GtkWidget *style_option;
-
-	GtkHTMLParagraphAlignment align;
-	gboolean align_changed;
-
-	GtkHTMLParagraphStyle     style;
-	gboolean style_changed;
-
-	HTMLClueFlow *flow;
 };
 typedef struct _GtkHTMLEditParagraphProperties GtkHTMLEditParagraphProperties;
 
@@ -48,22 +40,17 @@ set_style (GtkWidget *w, GtkHTMLEditParagraphProperties *data)
 {
 	GtkHTMLParagraphStyle style = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (w), "style"));
 
-	if (data->style != style) {
-		gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
-		data->style_changed = TRUE;
-		data->style = style;
-	}
+	if (gtk_html_get_paragraph_style (data->cd->html) != style)
+		gtk_html_set_paragraph_style (data->cd->html, style);
 }
 
 static void
 set_align (GtkWidget *w, GtkHTMLEditParagraphProperties *data)
 {
 	GtkHTMLParagraphAlignment align = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (w), "align"));
-	if (align != data->align && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
-		data->align = align;
-		data->align_changed = TRUE;
-		gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
-	}
+
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)) && gtk_html_get_paragraph_alignment (data->cd->html) != align)
+		gtk_html_set_paragraph_alignment (data->cd->html, align);
 }
 
 GtkWidget *
@@ -76,9 +63,6 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 
 	*set_data = data;
 	data->cd = cd;
-	data->align = gtk_html_get_paragraph_alignment (cd->html);
-	data->style = gtk_html_get_paragraph_style     (cd->html);
-	data->flow  = HTML_CLUEFLOW (cd->html->engine->cursor->object->parent);
 
 	table = gtk_table_new (2, 1, FALSE);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 18);
@@ -92,7 +76,7 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	menuitem = gtk_menu_item_new_with_label (n); \
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem); \
         gtk_widget_show (menuitem); \
-        if (data->style == s) h=i; i++; \
+        if (gtk_html_get_paragraph_style (data->cd->html) == s) h=i; i++; \
         g_signal_connect (menuitem, "activate", G_CALLBACK (set_style), data); \
         g_object_set_data (G_OBJECT (menuitem), "style", GINT_TO_POINTER (s));
 
@@ -135,7 +119,7 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
         icon = gtk_image_new_from_file (ICONDIR "/align-" icon_name "-16.png"); \
 	gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0); \
 	gtk_box_pack_start (GTK_BOX (hbox), radio, FALSE, FALSE, 0); \
-        if (a == data->align) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE); \
+        if (a == gtk_html_get_paragraph_alignment (data->cd->html)) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE); \
         g_signal_connect (radio, "toggled", G_CALLBACK (set_align), data); \
         g_object_set_data (G_OBJECT (radio), "align", GINT_TO_POINTER (a));
 
@@ -152,40 +136,6 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	gtk_widget_show_all (vbox);
 
 	return vbox;
-}
-
-gboolean
-paragraph_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
-{
-	GtkHTMLEditParagraphProperties *data = (GtkHTMLEditParagraphProperties *) get_data;
-
-	if (data->align_changed || data->style_changed) {
-		HTMLEngine *e = cd->html->engine;
-		gint position;
-
-		position = e->cursor->position;
-
-		if (!html_engine_is_selection_active (e) && e->cursor->object->parent != HTML_OBJECT (data->flow))
-			if (!html_cursor_jump_to (e->cursor, e, html_object_head (HTML_OBJECT (data->flow)), 0)) {
-				GtkWidget *dialog;
-				printf ("d: %p\n", data->cd->properties_dialog);
-				dialog = gtk_message_dialog_new (GTK_WINDOW (data->cd->properties_dialog->dialog),
-								 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-								 _("The editted paragraph was removed from the document.\nCannot apply your changes."));
-				gtk_dialog_run (GTK_DIALOG (dialog));
-				gtk_widget_destroy (dialog);
-				html_cursor_jump_to_position (e->cursor, e, position);
-				return FALSE;
-			}
-
-		if (data->align_changed)
-			gtk_html_set_paragraph_alignment (cd->html, data->align);
-		if (data->style_changed)
-			gtk_html_set_paragraph_style (cd->html, data->style);
-		html_cursor_jump_to_position (e->cursor, e, position);
-	}
-
-	return TRUE;
 }
 
 void
