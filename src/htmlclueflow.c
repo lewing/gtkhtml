@@ -660,6 +660,7 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	HTMLObject *cur;
 	gboolean first = TRUE;
 	gboolean top_align = FALSE;
+	gboolean need_update_height = FALSE;
 	gint old_y;
 	gint x;
 	gint start_lmargin;
@@ -704,7 +705,6 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 		    || cur->ascent + cur->descent > height) {
 			nb_width = object_nb_width (cur, painter, first);
 			old_y = o->y;
-			update_height (cur, valign, &a, &d, &height, &top_align);
 			html_clue_find_free_area (HTML_CLUE (o->parent), painter, o->y,
 						  nb_width, height,
 						  indent, &o->y, lmargin, rmargin);
@@ -712,6 +712,7 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 			/* is there enough space for this object? */
 			if (o->y != old_y && *rmargin - x < nb_width)
 				break;
+			need_update_height = TRUE;
 		}
 
 		fit = html_object_fit_line (cur, painter, first, first, FALSE, width_left (o, x, *rmargin));
@@ -719,6 +720,9 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 		if (fit == HTML_FIT_NONE)
 			break;
 
+		if (need_update_height)
+			update_height (cur, valign, &a, &d, &height, &top_align);
+		need_update_height = FALSE;
 		x += cur->width;
 		cur = cur->next;
 
