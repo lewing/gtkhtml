@@ -1,19 +1,20 @@
 # gtkhtml's Portuguese translation
-# Copyright © 1999-2004 gtkhtml
+# Copyright © 1999, 2001, 2002, 2003, 2004 gtkhtml
 # Distributed under the same licence as the gtkhtml package
-# Duarte Loreto <happyguy_pt@hotmail.com>, 2001, 2004
+# Duarte Loreto <happyguy_pt@hotmail.com>, 2001, 2002, 2003, 2004.
+# Nuno Ferreira <nmrf@rnl.ist.utl.pt>, 1999.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.6\n"
-"POT-Creation-Date: 2004-08-02 11:38-0400\n"
-"PO-Revision-Date: 2004-05-16 16:45+0000\n"
+"Project-Id-Version: 2.8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-26 15:35+0200\n"
+"PO-Revision-Date: 2004-08-05 01:25+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -434,7 +435,7 @@ msgstr "Lam_ber"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:55
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:56
-#: components/html-editor/menubar.c:115 components/html-editor/popup.c:106
+#: components/html-editor/menubar.c:136 components/html-editor/popup.c:106
 #: components/html-editor/popup.c:201 components/html-editor/popup.c:267
 msgid "Link"
 msgstr "Link"
@@ -612,7 +613,7 @@ msgstr "Lista Numerada em Romanos"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:90
 #: components/html-editor/editor-control-factory.c:207
 #: components/html-editor/gtkhtml-editor-properties.glade.h:48
-#: components/html-editor/menubar.c:134 components/html-editor/popup.c:225
+#: components/html-editor/menubar.c:155 components/html-editor/popup.c:225
 msgid "Rule"
 msgstr "Separador"
 
@@ -660,7 +661,7 @@ msgstr "Elevado"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:98
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:100
 #: components/html-editor/gtkhtml-editor-properties.glade.h:52
-#: components/html-editor/menubar.c:155 components/html-editor/popup.c:231
+#: components/html-editor/menubar.c:176 components/html-editor/popup.c:231
 #: components/html-editor/popup.c:501 components/html-editor/popup.c:513
 msgid "Table"
 msgstr "Tabela"
@@ -677,7 +678,7 @@ msgstr "Ficheiro de te_xto..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:101
 #: components/html-editor/gtkhtml-editor-properties.glade.h:53
-#: components/html-editor/menubar.c:177
+#: components/html-editor/menubar.c:198
 msgid "Template"
 msgstr "Modelo"
 
@@ -1002,9 +1003,8 @@ msgid "Graph paper"
 msgstr "Papel de gráfico"
 
 #: components/html-editor/body.c:246
-#, fuzzy
 msgid "T_emplate:"
-msgstr "Modelo"
+msgstr "Mod_elo:"
 
 #. data->entry_title = gtk_entry_new ();
 #. if (gtk_html_get_title (data->cd->html)) {
@@ -1014,9 +1014,8 @@ msgstr "Modelo"
 #. g_signal_connect (data->entry_title, "changed", G_CALLBACK (entry_changed), data);
 #. editor_hig_attach_row (t1, _("T_itle:"), data->entry_title, 1);
 #: components/html-editor/body.c:256 components/html-editor/paragraph.c:112
-#, fuzzy
 msgid "General"
-msgstr "Centrar"
+msgstr "Geral"
 
 #: components/html-editor/body.c:267 components/html-editor/text.c:162
 #: components/html-editor/toolbar.c:301
@@ -1024,19 +1023,16 @@ msgid "Automatic"
 msgstr "Automático"
 
 #: components/html-editor/body.c:279
-#, fuzzy
 msgid "_Text:"
-msgstr "Texto"
+msgstr "_Texto:"
 
 #: components/html-editor/body.c:280
-#, fuzzy
 msgid "_Link:"
-msgstr "Link"
+msgstr "_Link:"
 
 #: components/html-editor/body.c:281
-#, fuzzy
 msgid "_Background:"
-msgstr "Fundo"
+msgstr "_Fundo:"
 
 #: components/html-editor/body.c:283
 #: components/html-editor/gtkhtml-editor-properties.glade.h:30
@@ -1051,33 +1047,33 @@ msgstr "Imagem de Fundo"
 #: components/html-editor/body.c:298
 #: components/html-editor/gtkhtml-editor-properties.glade.h:71
 msgid "_Source:"
-msgstr ""
+msgstr "Código _Fonte:"
 
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
-msgstr ""
+msgstr "Transparente"
 
 #: components/html-editor/editor-control-factory.c:178
-#: components/html-editor/menubar.c:328 components/html-editor/menubar.c:346
-#: components/html-editor/menubar.c:364 components/html-editor/popup.c:186
+#: components/html-editor/menubar.c:354 components/html-editor/menubar.c:372
+#: components/html-editor/menubar.c:390 components/html-editor/popup.c:186
 #: components/html-editor/popup.c:264
 msgid "Properties"
 msgstr "Propriedades"
 
 #: components/html-editor/editor-control-factory.c:197
 #: components/html-editor/gtkhtml-editor-properties.glade.h:54
-#: components/html-editor/menubar.c:350 components/html-editor/popup.c:195
+#: components/html-editor/menubar.c:376 components/html-editor/popup.c:195
 msgid "Text"
 msgstr "Texto"
 
 #: components/html-editor/editor-control-factory.c:216
-#: components/html-editor/menubar.c:368 components/html-editor/popup.c:213
+#: components/html-editor/menubar.c:394 components/html-editor/popup.c:213
 msgid "Paragraph"
 msgstr "Parágrafo"
 
 #: components/html-editor/editor-control-factory.c:220
 #: components/html-editor/gtkhtml-editor-properties.glade.h:43
-#: components/html-editor/menubar.c:332 components/html-editor/popup.c:219
+#: components/html-editor/menubar.c:358 components/html-editor/popup.c:219
 msgid "Page"
 msgstr "Página"
 
@@ -1286,12 +1282,12 @@ msgstr "Controlo de Editor GtkHTML"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "    "
-msgstr ""
+msgstr "    "
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:3
 #, no-c-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1299,48 +1295,47 @@ msgstr "+4"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:11
 msgid "<b>Alignment &amp; Behaviour</b>"
-msgstr ""
+msgstr "<b>Alinhamento &amp; Comportamento</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:12
-#, fuzzy
 msgid "<b>Background</b>"
-msgstr "Fundo"
+msgstr "<b>Fundo</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:13
 msgid "<b>General</b>"
-msgstr ""
+msgstr "<b>Geral</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:14
 msgid "<b>Layout</b>"
-msgstr ""
+msgstr "<b>Disposição</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:15
 msgid "<b>Scope</b>"
-msgstr ""
+msgstr "<b>Âmbito</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
 msgid "<span weight=\"bold\">General</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Geral</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:17
 msgid "<span weight=\"bold\">Layout</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Disposição</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:18
 msgid "<span weight=\"bold\">Link</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Link</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:19
 msgid "<span weight=\"bold\">Size</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Tamanho</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:20
 msgid "<span weight=\"bold\">Style</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Estilo</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
 msgid "<span weight=\"bold\">Template</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Modelo</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:22
 #: components/html-editor/paragraph.c:131
@@ -1352,14 +1347,12 @@ msgid "Bottom"
 msgstr "Fundo"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:25
-#, fuzzy
 msgid "C_ell"
-msgstr "Célula"
+msgstr "Cél_ula"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:26
-#, fuzzy
 msgid "C_olor:"
-msgstr "Cor:"
+msgstr "C_or:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:27
 #: components/html-editor/popup.c:237
@@ -1372,9 +1365,8 @@ msgid "Center"
 msgstr "Centrar"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:29
-#, fuzzy
 msgid "Col_umn"
-msgstr "Coluna"
+msgstr "Col_una"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:31
 msgid "Column span:"
@@ -1385,9 +1377,8 @@ msgid "Enable"
 msgstr "Activar"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:33
-#, fuzzy
 msgid "Hea_der style"
-msgstr "Cabeçalho 6"
+msgstr "Estilo _de cabeçalho"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:34
 msgid "Horizontal alignment:"
@@ -1398,9 +1389,8 @@ msgid "Horizontal:"
 msgstr "Horizontal:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:36
-#, fuzzy
 msgid "I_mage:"
-msgstr "Imagem"
+msgstr "I_magem:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:38
 #: components/html-editor/paragraph.c:127
@@ -1441,13 +1431,12 @@ msgid "Shaded"
 msgstr "Sombreado"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:50
-#, fuzzy
 msgid "Si_ze:"
-msgstr "Tamanho"
+msgstr "Taman_ho:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:51
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:55
 msgid "Thickness:"
@@ -1466,123 +1455,105 @@ msgid "Width:"
 msgstr "Largura:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:59
-#, fuzzy
 msgid "_Alignment:"
-msgstr "Alinhamento:"
+msgstr "_Alinhamento:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:61
-#, fuzzy
 msgid "_Border:"
-msgstr "Margem:"
+msgstr "Mar_gem:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:62
-#, fuzzy
 msgid "_Color:"
-msgstr "Cor:"
+msgstr "_Cor:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:63
-#, fuzzy
 msgid "_Columns:"
-msgstr "Colunas:"
+msgstr "_Colunas:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:64
-#, fuzzy
 msgid "_Description:"
-msgstr "Descrição:"
+msgstr "_Descrição:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:65
-#, fuzzy
 msgid "_Height:"
-msgstr "Altura:"
+msgstr "_Altura:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:66
-#, fuzzy
 msgid "_Image:"
-msgstr "Imagem"
+msgstr "_Imagem:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:68
-#, fuzzy
 msgid "_Padding:"
-msgstr "Espaçamento:"
+msgstr "_Espaçamento:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
-#, fuzzy
 msgid "_Row"
-msgstr "Linha"
+msgstr "_Linha"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:70
-#, fuzzy
 msgid "_Rows:"
-msgstr "Linhas:"
+msgstr "_Linhas:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:72
-#, fuzzy
 msgid "_Spacing:"
-msgstr "Espaçamento:"
+msgstr "_Espaçamento:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:74
-#, fuzzy
 msgid "_Table"
-msgstr "Tabela"
+msgstr "_Tabela"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:75
 msgid "_URL:"
-msgstr ""
+msgstr "_URL:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:77
-#, fuzzy
 msgid "_Width:"
-msgstr "Largura:"
+msgstr "_Largura:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:78
-#, fuzzy
 msgid "_Wrap Text"
 msgstr "_Quebrar Linhas"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:79
-#, fuzzy
 msgid "_X-Padding:"
-msgstr "Espaçamento:"
+msgstr "Espaçamento-_X:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:80
-#, fuzzy
 msgid "_Y-Padding:"
-msgstr "Espaçamento:"
+msgstr "Espaçamento-_Y:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:81
-#, fuzzy
 msgid "follow"
-msgstr "Seguir"
+msgstr "seguir"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:82
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:83
 msgid "xxxxxxxxxxxxxx"
 msgstr "xxxxxxxxxxxxxx"
 
-#: components/html-editor/menubar.c:86
-#, fuzzy
+#: components/html-editor/menubar.c:96 components/html-editor/menubar.c:104
 msgid "Insert image"
-msgstr "Inserir Link"
+msgstr "Inserir imagem"
 
-#: components/html-editor/menubar.c:112 components/html-editor/menubar.c:131
-#: components/html-editor/menubar.c:152 components/html-editor/menubar.c:174
+#: components/html-editor/menubar.c:133 components/html-editor/menubar.c:152
+#: components/html-editor/menubar.c:173 components/html-editor/menubar.c:195
 #: components/html-editor/popup.c:103
 msgid "Insert"
 msgstr "Inserir"
 
-#: components/html-editor/menubar.c:263
+#: components/html-editor/menubar.c:282
 #, c-format
 msgid "Error loading file '%s': %s"
 msgstr "Erro ao ler o ficheiro '%s': %s"
 
-#: components/html-editor/menubar.c:290
+#: components/html-editor/menubar.c:308 components/html-editor/menubar.c:317
 msgid "Insert: HTML File"
 msgstr "Inserir: Ficheiro HTML"
 
-#: components/html-editor/menubar.c:290
+#: components/html-editor/menubar.c:308 components/html-editor/menubar.c:317
 msgid "Insert: Text File"
 msgstr "Inserir: Ficheiro de Texto"
 
@@ -1631,9 +1602,8 @@ msgid "Address"
 msgstr "Endereço"
 
 #: components/html-editor/paragraph.c:109
-#, fuzzy
 msgid "_Style:"
-msgstr "E_stilo"
+msgstr "E_stilo:"
 
 #: components/html-editor/popup.c:438
 msgid "Paste Quotation"
@@ -1783,9 +1753,8 @@ msgid "_Backward"
 msgstr "_Atrás"
 
 #: components/html-editor/search.c:115
-#, fuzzy
 msgid "_Regular Expression"
-msgstr "Procurar Expressão Regular"
+msgstr "Expressão _Regular"
 
 #: components/html-editor/spell.c:278
 msgid "No misspelled word found"
@@ -1893,15 +1862,14 @@ msgstr "Amostra"
 
 #: components/html-editor/utils.c:192
 msgid "_Visit..."
-msgstr ""
+msgstr "_Visitar..."
 
 #: components/html-editor/utils.c:232
-#, fuzzy
 msgid ""
 "The editted object was removed from the document.\n"
 "Cannot apply your changes."
 msgstr ""
-"O texto editado foi removido do documento.\n"
+"O objecto editado foi removido do documento.\n"
 "Incapaz de aplicar as alterações."
 
 #: src/gtkhtml.c:2531
@@ -1911,83 +1879,83 @@ msgstr ""
 "URL Mozilla largado no Compositor possuia um formato (%d) ou comprimento (%"
 "d) incorrecto\n"
 
-#: src/gtkhtml.c:2852
+#: src/gtkhtml.c:2853
 msgid "Editable"
 msgstr "Editável"
 
-#: src/gtkhtml.c:2853
+#: src/gtkhtml.c:2854
 msgid "Whether the html can be edited"
 msgstr "Se o html pode ou não ser editado"
 
-#: src/gtkhtml.c:2859
+#: src/gtkhtml.c:2860
 msgid "Document Title"
 msgstr "Título do Documento"
 
-#: src/gtkhtml.c:2860
+#: src/gtkhtml.c:2861
 msgid "The title of the current document"
 msgstr "O título do documento actual"
 
-#: src/gtkhtml.c:2866
+#: src/gtkhtml.c:2867
 msgid "Document Base"
 msgstr "Base do Documento"
 
-#: src/gtkhtml.c:2867
+#: src/gtkhtml.c:2868
 msgid "The base URL for relative references"
 msgstr "O URL base para referências relativas"
 
-#: src/gtkhtml.c:2873
+#: src/gtkhtml.c:2874
 msgid "Target Base"
 msgstr "Base do Destino"
 
-#: src/gtkhtml.c:2874
+#: src/gtkhtml.c:2875
 msgid "The base URL of the targe frame"
 msgstr "O URL base para a frame de destino"
 
-#: src/gtkhtml.c:2883
+#: src/gtkhtml.c:2884
 msgid "Fixed Width Font"
 msgstr "Fonte de Largura Fixa"
 
-#: src/gtkhtml.c:2884
+#: src/gtkhtml.c:2885
 msgid "The Monospace font to use for typewriter text"
 msgstr "A fonte Monoespaçada a utilizar para o texto dactilografado"
 
-#: src/gtkhtml.c:2890
+#: src/gtkhtml.c:2891
 msgid "New Link Color"
 msgstr "Cor de Novo Link"
 
-#: src/gtkhtml.c:2891
+#: src/gtkhtml.c:2892
 msgid "The color of new link elements"
 msgstr "A cor de novos elementos de link"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2897
 msgid "Visited Link Color"
 msgstr "Cor de Link Visitado"
 
-#: src/gtkhtml.c:2897
+#: src/gtkhtml.c:2898
 msgid "The color of visited link elements"
 msgstr "A cor de elementos de link visitados"
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2903
 msgid "Active Link Color"
 msgstr "Cor de Link Activo"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2904
 msgid "The color of active link elements"
 msgstr "A cor de elementos de link activos"
 
-#: src/gtkhtml.c:2908
+#: src/gtkhtml.c:2909
 msgid "Spelling Error Color"
 msgstr "Cor de Erros Ortográficos"
 
-#: src/gtkhtml.c:2909
+#: src/gtkhtml.c:2910
 msgid "The color of the spelling error markers"
 msgstr "A cor de realce de erros ortográficos"
 
-#: src/gtkhtml.c:2914
+#: src/gtkhtml.c:2915
 msgid "Cite Quotation Color"
 msgstr "Cor da Citação"
 
-#: src/gtkhtml.c:2915
+#: src/gtkhtml.c:2916
 msgid "The color of the cited text"
 msgstr "A cor do texto citado"
 

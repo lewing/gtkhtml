@@ -1,3 +1,72 @@
+2004-08-28  Ales Nyakhaychyk  <nab@mail.by>
+
+	* be.po: Updated Belarusian translation.
+
+2004-08-28  Laurent Dhima  <laurenti@alblinux.net>
+
+	* sq.po: Updated Albanian translation.
+
+2004-08-27  Hasbullah Bin Pit <sebol@myi-penguin.org>
+
+	* ms.po: Updated Malay Translation.
+
+2004-08-26  Funda Wang  <fundawang@linux.net.cn>
+
+	* zh_CN.po: Updated Simplified Chinese translation.
+
+2004-08-22  Maxim Dziumanenko <mvd@mylinux.com.ua>
+
+	* uk.po:  Updated Ukrainian translation.
+
+2004-08-22  Changwoo Ryu  <cwryu@debian.org>
+
+	* ko.po: Updated Korean translation.
+
+2004-08-21  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* nb.po: Add.
+	* no.po: Update.
+
+2004-08-20  Laurent Dhima  <laurenti@alblinux.net>
+
+	* sq.po: Updated Albanian translation.
+
+2004-08-19  Leonid Kanter <leon@asplinux.ru>
+
+	* ru.po: Updated Russian translation
+
+2004-08-18  Pauli Virtanen  <pauli.virtanen@hut.fi>
+
+	* fi.po: Updated Finnish translation.
+
+2004-08-18  Metin Amiroff  <metin@karegen.com>
+
+	* az.po: Translation updated by Mətin Əmirov.
+
+2004-08-13  Tommi Vainikainen  <thv@iki.fi>
+
+	* fi.po: Unified some fields in po headers for Finnish team.
+
+2004-08-09  Ankit Patel <ankit@redhat.com>
+
+	* gu.po: Updated Gujarati translation.
+
+2004-08-09  Amanpreet Singh Alam  <aalam@redhat.com>
+
+	* pa.po: Updated Panjabi translation.
+
+2004-08-07  Danilo Šegan  <dsegan@gmx.net>
+
+	* sr.po, sr@Latn.po: Updated Serbian translation.
+
+2004-08-07  Runa Bhattacharjee  <runab@redhat.com>
+
+	* bn.po: Added Bengali (bn) Translation
+
+2004-08-05  Duarte Loreto <happyguy_pt@hotmail.com>
+
+	* pt.po: Updated Portuguese translation.
+
 2004-07-30  Christophe Merlet  <redfox@redfoxcenter.org>
 
 	* fr.po: Updated French translation from

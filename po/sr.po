@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2004-08-02 11:38-0400\n"
-"PO-Revision-Date: 2004-02-20 07:50+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-26 15:35+0200\n"
+"PO-Revision-Date: 2004-08-07 23:00+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
-"Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
+"Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -437,7 +437,7 @@ msgstr "_Исплази"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:55
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:56
-#: components/html-editor/menubar.c:115 components/html-editor/popup.c:106
+#: components/html-editor/menubar.c:136 components/html-editor/popup.c:106
 #: components/html-editor/popup.c:201 components/html-editor/popup.c:267
 msgid "Link"
 msgstr "Веза"
@@ -616,7 +616,7 @@ msgstr "Побројани списак са римским бројевима"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:90
 #: components/html-editor/editor-control-factory.c:207
 #: components/html-editor/gtkhtml-editor-properties.glade.h:48
-#: components/html-editor/menubar.c:134 components/html-editor/popup.c:225
+#: components/html-editor/menubar.c:155 components/html-editor/popup.c:225
 msgid "Rule"
 msgstr "Линија"
 
@@ -664,7 +664,7 @@ msgstr "Експонент"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:98
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:100
 #: components/html-editor/gtkhtml-editor-properties.glade.h:52
-#: components/html-editor/menubar.c:155 components/html-editor/popup.c:231
+#: components/html-editor/menubar.c:176 components/html-editor/popup.c:231
 #: components/html-editor/popup.c:501 components/html-editor/popup.c:513
 msgid "Table"
 msgstr "Табела"
@@ -681,7 +681,7 @@ msgstr "Текстуална датотека..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:101
 #: components/html-editor/gtkhtml-editor-properties.glade.h:53
-#: components/html-editor/menubar.c:177
+#: components/html-editor/menubar.c:198
 msgid "Template"
 msgstr "Шаблон"
 
@@ -1007,9 +1007,8 @@ msgid "Graph paper"
 msgstr "Папир за графике"
 
 #: components/html-editor/body.c:246
-#, fuzzy
 msgid "T_emplate:"
-msgstr "Шаблон"
+msgstr "_Шаблон:"
 
 #. data->entry_title = gtk_entry_new ();
 #. if (gtk_html_get_title (data->cd->html)) {
@@ -1019,9 +1018,8 @@ msgstr "Шаблон"
 #. g_signal_connect (data->entry_title, "changed", G_CALLBACK (entry_changed), data);
 #. editor_hig_attach_row (t1, _("T_itle:"), data->entry_title, 1);
 #: components/html-editor/body.c:256 components/html-editor/paragraph.c:112
-#, fuzzy
 msgid "General"
-msgstr "Центрирај"
+msgstr "Опште"
 
 #: components/html-editor/body.c:267 components/html-editor/text.c:162
 #: components/html-editor/toolbar.c:301
@@ -1029,19 +1027,16 @@ msgid "Automatic"
 msgstr "Препознај по наставку"
 
 #: components/html-editor/body.c:279
-#, fuzzy
 msgid "_Text:"
-msgstr "Текст"
+msgstr "_Текст:"
 
 #: components/html-editor/body.c:280
-#, fuzzy
 msgid "_Link:"
-msgstr "Веза"
+msgstr "_Веза:"
 
 #: components/html-editor/body.c:281
-#, fuzzy
 msgid "_Background:"
-msgstr "Позадина"
+msgstr "_Позадина:"
 
 #: components/html-editor/body.c:283
 #: components/html-editor/gtkhtml-editor-properties.glade.h:30
@@ -1056,33 +1051,33 @@ msgstr "Позадинска слика"
 #: components/html-editor/body.c:298
 #: components/html-editor/gtkhtml-editor-properties.glade.h:71
 msgid "_Source:"
-msgstr ""
+msgstr "_Извор:"
 
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
-msgstr ""
+msgstr "Провидно"
 
 #: components/html-editor/editor-control-factory.c:178
-#: components/html-editor/menubar.c:328 components/html-editor/menubar.c:346
-#: components/html-editor/menubar.c:364 components/html-editor/popup.c:186
+#: components/html-editor/menubar.c:354 components/html-editor/menubar.c:372
+#: components/html-editor/menubar.c:390 components/html-editor/popup.c:186
 #: components/html-editor/popup.c:264
 msgid "Properties"
-msgstr "Поставке"
+msgstr "Особине"
 
 #: components/html-editor/editor-control-factory.c:197
 #: components/html-editor/gtkhtml-editor-properties.glade.h:54
-#: components/html-editor/menubar.c:350 components/html-editor/popup.c:195
+#: components/html-editor/menubar.c:376 components/html-editor/popup.c:195
 msgid "Text"
 msgstr "Текст"
 
 #: components/html-editor/editor-control-factory.c:216
-#: components/html-editor/menubar.c:368 components/html-editor/popup.c:213
+#: components/html-editor/menubar.c:394 components/html-editor/popup.c:213
 msgid "Paragraph"
 msgstr "Пасус"
 
 #: components/html-editor/editor-control-factory.c:220
 #: components/html-editor/gtkhtml-editor-properties.glade.h:43
-#: components/html-editor/menubar.c:332 components/html-editor/popup.c:219
+#: components/html-editor/menubar.c:358 components/html-editor/popup.c:219
 msgid "Page"
 msgstr "Страна"
 
@@ -1295,12 +1290,12 @@ msgstr "GtkHTML елемент за уређивање"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "    "
-msgstr ""
+msgstr "    "
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:3
 #, no-c-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1308,48 +1303,47 @@ msgstr "+4"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:11
 msgid "<b>Alignment &amp; Behaviour</b>"
-msgstr ""
+msgstr "<b>Поравнање &amp; понашање</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:12
-#, fuzzy
 msgid "<b>Background</b>"
-msgstr "Позадина"
+msgstr "<b>Позадина</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:13
 msgid "<b>General</b>"
-msgstr ""
+msgstr "<b>Опште</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:14
 msgid "<b>Layout</b>"
-msgstr ""
+msgstr "<b>Изглед</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:15
 msgid "<b>Scope</b>"
-msgstr ""
+msgstr "<b>Опсег</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
 msgid "<span weight=\"bold\">General</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Опште</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:17
 msgid "<span weight=\"bold\">Layout</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Изглед</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:18
 msgid "<span weight=\"bold\">Link</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Веза</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:19
 msgid "<span weight=\"bold\">Size</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Величина</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:20
 msgid "<span weight=\"bold\">Style</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Стил</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
 msgid "<span weight=\"bold\">Template</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Шаблон</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:22
 #: components/html-editor/paragraph.c:131
@@ -1361,14 +1355,12 @@ msgid "Bottom"
 msgstr "Дно"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:25
-#, fuzzy
 msgid "C_ell"
-msgstr "Ћелија"
+msgstr "Ћ_елија"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:26
-#, fuzzy
 msgid "C_olor:"
-msgstr "Боја:"
+msgstr "Бо_ја:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:27
 #: components/html-editor/popup.c:237
@@ -1381,9 +1373,8 @@ msgid "Center"
 msgstr "Центрирај"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:29
-#, fuzzy
 msgid "Col_umn"
-msgstr "Колона"
+msgstr "Ко_лона"
 
 # „Распон колоне“ или „обухвата колоне“?
 #: components/html-editor/gtkhtml-editor-properties.glade.h:31
@@ -1395,9 +1386,8 @@ msgid "Enable"
 msgstr "Омогући"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:33
-#, fuzzy
 msgid "Hea_der style"
-msgstr "Заглавље 6"
+msgstr "С_тил заглавља"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:34
 msgid "Horizontal alignment:"
@@ -1408,9 +1398,8 @@ msgid "Horizontal:"
 msgstr "Водоравно:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:36
-#, fuzzy
 msgid "I_mage:"
-msgstr "Слика"
+msgstr "Сли_ка:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:38
 #: components/html-editor/paragraph.c:127
@@ -1451,13 +1440,12 @@ msgid "Shaded"
 msgstr "Замотан"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:50
-#, fuzzy
 msgid "Si_ze:"
-msgstr "Величина"
+msgstr "_Величина:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:51
 msgid "Standard"
-msgstr ""
+msgstr "Обична"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:55
 msgid "Thickness:"
@@ -1476,123 +1464,105 @@ msgid "Width:"
 msgstr "Ширина:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:59
-#, fuzzy
 msgid "_Alignment:"
-msgstr "Поравнање:"
+msgstr "Пор_авнање:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:61
-#, fuzzy
 msgid "_Border:"
-msgstr "Ивица:"
+msgstr "Иви_ца:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:62
-#, fuzzy
 msgid "_Color:"
-msgstr "Боја:"
+msgstr "_Боја:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:63
-#, fuzzy
 msgid "_Columns:"
-msgstr "Колона:"
+msgstr "_Колоне:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:64
-#, fuzzy
 msgid "_Description:"
-msgstr "Опис:"
+msgstr "_Опис:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:65
-#, fuzzy
 msgid "_Height:"
-msgstr "Висина:"
+msgstr "В_исина:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:66
-#, fuzzy
 msgid "_Image:"
-msgstr "Слика"
+msgstr "_Слика:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:68
-#, fuzzy
 msgid "_Padding:"
-msgstr "Попуна:"
+msgstr "_Попуна:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
-#, fuzzy
 msgid "_Row"
-msgstr "Ред"
+msgstr "_Ред"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:70
-#, fuzzy
 msgid "_Rows:"
-msgstr "Редова:"
+msgstr "_Редова:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:72
-#, fuzzy
 msgid "_Spacing:"
-msgstr "Размак:"
+msgstr "_Размак:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:74
-#, fuzzy
 msgid "_Table"
-msgstr "Табела"
+msgstr "_Табела"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:75
 msgid "_URL:"
-msgstr ""
+msgstr "_Адреса:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:77
-#, fuzzy
 msgid "_Width:"
-msgstr "Ширина:"
+msgstr "_Ширина:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:78
-#, fuzzy
 msgid "_Wrap Text"
 msgstr "Пре_лом реда"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:79
-#, fuzzy
 msgid "_X-Padding:"
-msgstr "Попуна:"
+msgstr "_Вод. попуна:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:80
-#, fuzzy
 msgid "_Y-Padding:"
-msgstr "Попуна:"
+msgstr "_Усп. попуна:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:81
-#, fuzzy
 msgid "follow"
-msgstr "Прати"
+msgstr "прати"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:82
 msgid "px"
-msgstr ""
+msgstr "тч"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:83
 msgid "xxxxxxxxxxxxxx"
 msgstr "xxxxxxxxxxxxxx"
 
-#: components/html-editor/menubar.c:86
-#, fuzzy
+#: components/html-editor/menubar.c:96 components/html-editor/menubar.c:104
 msgid "Insert image"
-msgstr "Убаци везу"
+msgstr "Убаци слику"
 
-#: components/html-editor/menubar.c:112 components/html-editor/menubar.c:131
-#: components/html-editor/menubar.c:152 components/html-editor/menubar.c:174
+#: components/html-editor/menubar.c:133 components/html-editor/menubar.c:152
+#: components/html-editor/menubar.c:173 components/html-editor/menubar.c:195
 #: components/html-editor/popup.c:103
 msgid "Insert"
 msgstr "Убаци"
 
-#: components/html-editor/menubar.c:263
+#: components/html-editor/menubar.c:282
 #, c-format
 msgid "Error loading file '%s': %s"
 msgstr "Грешка при учитавању датотеке „%s“: %s"
 
-#: components/html-editor/menubar.c:290
+#: components/html-editor/menubar.c:308 components/html-editor/menubar.c:317
 msgid "Insert: HTML File"
 msgstr "Уметни: HTML датотеку"
 
-#: components/html-editor/menubar.c:290
+#: components/html-editor/menubar.c:308 components/html-editor/menubar.c:317
 msgid "Insert: Text File"
 msgstr "Уметни: текстуалну датотеку"
 
@@ -1641,7 +1611,6 @@ msgid "Address"
 msgstr "Адреса"
 
 #: components/html-editor/paragraph.c:109
-#, fuzzy
 msgid "_Style:"
 msgstr "_Стил:"
 
@@ -1793,9 +1762,8 @@ msgid "_Backward"
 msgstr "Уна_зад"
 
 #: components/html-editor/search.c:115
-#, fuzzy
 msgid "_Regular Expression"
-msgstr "Нађи према регулараном изразу"
+msgstr "_Регуларни израз"
 
 #: components/html-editor/spell.c:278
 msgid "No misspelled word found"
@@ -1903,103 +1871,102 @@ msgstr "Пример"
 
 #: components/html-editor/utils.c:192
 msgid "_Visit..."
-msgstr ""
+msgstr "Посе_ти..."
 
 #: components/html-editor/utils.c:232
-#, fuzzy
 msgid ""
 "The editted object was removed from the document.\n"
 "Cannot apply your changes."
 msgstr ""
-"Измењени текст је уклоњен из документа.\n"
-"Не може да примени ваше измене."
+"Измењени објекат је уклоњен из документа.\n"
+"Не могу да применим ваше измене."
 
 #: src/gtkhtml.c:2531
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr ""
+"Адреса из Мозиле убачена у Састављач је била погрешног облике (%d) или "
+"дужине (%d)\n"
 
-#: src/gtkhtml.c:2852
+#: src/gtkhtml.c:2853
 msgid "Editable"
 msgstr "Измењив"
 
-#: src/gtkhtml.c:2853
+#: src/gtkhtml.c:2854
 msgid "Whether the html can be edited"
 msgstr "Да ли се HTML може мењати"
 
-#: src/gtkhtml.c:2859
+#: src/gtkhtml.c:2860
 msgid "Document Title"
 msgstr "Наслов документа"
 
-#: src/gtkhtml.c:2860
+#: src/gtkhtml.c:2861
 msgid "The title of the current document"
 msgstr "Наслов текућег документа"
 
-#: src/gtkhtml.c:2866
+#: src/gtkhtml.c:2867
 msgid "Document Base"
 msgstr "Основа документа"
 
-#: src/gtkhtml.c:2867
+#: src/gtkhtml.c:2868
 msgid "The base URL for relative references"
 msgstr "Основна адреса за релативне референце"
 
-#: src/gtkhtml.c:2873
+#: src/gtkhtml.c:2874
 msgid "Target Base"
 msgstr "Циљна основа"
 
-#: src/gtkhtml.c:2874
+#: src/gtkhtml.c:2875
 msgid "The base URL of the targe frame"
 msgstr "Основна адреса за циљни оквир"
 
-#: src/gtkhtml.c:2883
+#: src/gtkhtml.c:2884
 msgid "Fixed Width Font"
 msgstr "Писмо утврђене ширине"
 
-#: src/gtkhtml.c:2884
+#: src/gtkhtml.c:2885
 msgid "The Monospace font to use for typewriter text"
 msgstr "Писмо које треба користити за куцани текст"
 
-#: src/gtkhtml.c:2890
+#: src/gtkhtml.c:2891
 msgid "New Link Color"
 msgstr "Боја нових веза"
 
-#: src/gtkhtml.c:2891
+#: src/gtkhtml.c:2892
 msgid "The color of new link elements"
 msgstr "Боја нових веза"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2897
 msgid "Visited Link Color"
 msgstr "Боја посећених веза"
 
-#: src/gtkhtml.c:2897
+#: src/gtkhtml.c:2898
 msgid "The color of visited link elements"
 msgstr "Боја посећених веза"
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2903
 msgid "Active Link Color"
 msgstr "Боја активних веза"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2904
 msgid "The color of active link elements"
 msgstr "Боја активних веза"
 
-#: src/gtkhtml.c:2908
+#: src/gtkhtml.c:2909
 msgid "Spelling Error Color"
 msgstr "Боја правописних грешака"
 
-#: src/gtkhtml.c:2909
+#: src/gtkhtml.c:2910
 msgid "The color of the spelling error markers"
 msgstr "Боја за означавање правописних грешака"
 
-#: src/gtkhtml.c:2914
-#, fuzzy
-msgid "Cite Quotation Color"
-msgstr "Убаци цитат"
-
 #: src/gtkhtml.c:2915
-#, fuzzy
+msgid "Cite Quotation Color"
+msgstr "Боја цитата"
+
+#: src/gtkhtml.c:2916
 msgid "The color of the cited text"
-msgstr "Боја активних веза"
+msgstr "Боја цитираног текста"
 
 #: src/html-component.c:219
 msgid "Html"

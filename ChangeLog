@@ -1,3 +1,23 @@
+2004-08-27  Radek Doulik  <rodo@ximian.com>
+
+	* configure.in: increment revision number
+
+2004-08-21  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* configure.in: Add «nb» to ALL_LINGUAS.
+
+2004-08-13  JP Rosevear  <jpr@novell.com>
+
+	* configure.in (GTKHTML_API_VERSION): bump version, libtool number
+
+2004-08-13  JP Rosevear  <jpr@ximian.com>
+
+	* configure.in: add file chooser check
+
+2004-08-07  Runa Bhattacharjee <runab@redhat.com>
+
+	* configure.in: Added Bengali(bn) in ALL_LINGUAS.
+
 Wed Aug  4 10:54:35 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* Released 3.3.0
