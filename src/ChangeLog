@@ -1,3 +1,21 @@
+Thu Sep 16 14:07:31 2004  Owen Taylor  <otaylor@redhat.com>
+
+	Bug #66127
+ 
+ 	* htmltext.[ch] (html_text_sanitize): Convert text_len() into
+ 	a more-public helper function, fix problem where text_len()
+ 	was calling g_utf8_validate() without a length even when
+ 	the length was being passed in.
+ 
+ 	* htmltext.c (html_text_init, html_text_append,
+	html_engine_insert_text_with_extra_attributes): Use
+ 	html_text_sanitize() to fix bugs where strlen(str) was being
+	used ignoring the passed in length.
+ 
+ 	* htmlengine-edit-cut-and-paste.[ch]: Fix len argument of
+ 	html_engine_insert_text_with_extra_attributes() to be gint,
+ 	not guint, -1 was supported and used.
+ 
 Tue Sep  7 21:27:44 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkhtmlpainter.[ch]: Split html_painter_calc_text_size()

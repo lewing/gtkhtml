@@ -2376,13 +2376,62 @@ html_text_class_init (HTMLTextClass *klass,
 	parent_class = &html_object_class;
 }
 
-static gint
-text_len (const gchar **str, gint len)
+static gchar *
+offset_to_pointer_validated (const gchar *str, glong offset, gint *chars_out)
 {
-	if (g_utf8_validate (*str, -1, NULL))
-		return len != -1 ? len : g_utf8_strlen (*str, -1);
-	else {
+	const gchar *s = str;
+	glong chars = 0;
+
+	if (offset < 0) {
+		while (*s) {
+			gunichar wc = g_utf8_get_char_validated (s, -1);
+			if (wc == (gunichar)-1 || wc == (gunichar)-2)
+				return NULL;
+			s = g_utf8_next_char (s);
+			chars++;
+		}
+		
+	} else {
+		while (offset-- && *s) {
+			gunichar wc = g_utf8_get_char_validated (s, -1);
+			if (wc == (gunichar)-1 || wc == (gunichar)-2)
+				return NULL;
+			s = g_utf8_next_char (s);
+			chars++;
+		}
+	}
+
+	*chars_out = chars;
+	
+	return (gchar *)s;
+}
+
+/**
+ * html_text_sanitize:
+ * @str: text string (in/out)
+ * @len: length of text, in characters (in/out). (A value of
+ *       -1 on input means to use all characters in @str)
+ * 
+ * Validates a UTF-8 string up to the given number of characters;
+ * if the string is invalid, on output, "[?]" will be stored in
+ * @str and 3 in @len, otherwise @str will be left unchanged,
+ * and @len will be left unchanged if non-negative, otherwise
+ * replaced with the number of characters in @str.
+ * 
+ * Return value: number of bytes in the output value of @str
+ **/
+gsize
+html_text_sanitize (const gchar **str, gint *len)
+{
+	g_return_val_if_fail (str != NULL, 0);
+	g_return_val_if_fail (len != NULL, 0);
+	
+	gchar *end = offset_to_pointer_validated (*str, *len, len);
+	if (end) {
+		return end - *str;
+	} else {
 		*str = "[?]";
+		*len = 3;
 		return 3;
 	}
 }
@@ -2399,9 +2448,9 @@ html_text_init (HTMLText *text,
 
 	html_object_init (HTML_OBJECT (text), HTML_OBJECT_CLASS (klass));
 
-	text->text_len      = text_len (&str, len);
-	text->text_bytes    = strlen (str);
-	text->text          = g_strndup (str, g_utf8_offset_to_pointer (str, text->text_len) - str);
+	text->text_bytes    = html_text_sanitize (&str, &len);
+	text->text_len      = len;
+	text->text          = g_memdup (str, text->text_bytes + 1);
 	text->font_style    = font_style;
 	text->face          = NULL;
 	text->color         = color;
@@ -2479,9 +2528,9 @@ void
 html_text_set_text (HTMLText *text, const gchar *new_text)
 {
 	g_free (text->text);
-	text->text_len = text_len (&new_text, -1);
-	text->text = g_strdup (new_text);
-	text->text_bytes = strlen (text->text);
+	text->text_len = -1;
+	text->text_bytes = html_text_sanitize (&new_text, &text->text_len);
+	text->text = g_memdup (new_text, text->text_bytes);
 	html_object_change_set (HTML_OBJECT (text), HTML_CHANGE_ALL);
 }
 
@@ -2736,12 +2785,18 @@ void
 html_text_append (HTMLText *text, const gchar *str, gint len)
 {
 	gchar *to_delete;
+	guint bytes;
 
 	to_delete       = text->text;
-	text->text_len += text_len (&str, len);
-	text->text_bytes += strlen (str);
-	text->text      = g_strconcat (to_delete, str, NULL);
-
+	bytes = html_text_sanitize (&str, &len);
+	text->text_len += len;
+	text->text      = g_malloc (text->text_bytes + bytes + 1);
+	
+	memcpy (text->text, to_delete, text->text_bytes);
+	memcpy (text->text + text->text_bytes, str, bytes);
+	text->text_bytes += bytes;
+	text->text[text->text_bytes] = '\0';
+	
 	g_free (to_delete);
 
 	html_object_change_set (HTML_OBJECT (text), HTML_CHANGE_ALL);

@@ -272,6 +272,9 @@ void              html_text_set_color_in_range           (HTMLText           *te
 void              html_text_set_color                    (HTMLText           *text,
 							  HTMLColor          *color);
 
+gsize             html_text_sanitize                     (const gchar       **str,
+							  gint               *len);
+
 Link     *html_link_new                 (gchar *url,
 					 gchar *target,
 					 guint  start_index,
