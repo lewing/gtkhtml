@@ -2001,12 +2001,12 @@ focus (GtkWidget *w, GtkDirectionType direction)
 
 			if (x1 < e->x_offset)
 				e->x_offset = x1;
-			else if (x2 > e->x_offset + e->width)
+			if (x2 > e->x_offset + e->width)
 				e->x_offset = MIN (x1, x2 - e->width);
 
 			if (y1 < e->y_offset)
 				e->y_offset = y1;
-			else if (y2 >= e->y_offset + e->height)
+			if (y2 >= e->y_offset + e->height)
 				e->y_offset = MIN (y1, y2 - e->height + 1);
 
 			if (e->x_offset != xo)
