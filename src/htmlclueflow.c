@@ -529,13 +529,9 @@ get_level_indent (HTMLClueFlow *flow,
 			case HTML_LIST_TYPE_BLOCKQUOTE_CITE:
 				indent += html_painter_calc_text_width (painter, 
 									CLUEFLOW_BLOCKQUOTE_CITE, 
-									1, &line_offset,
+									strlen (CLUEFLOW_BLOCKQUOTE_CITE), &line_offset,
 									GTK_HTML_FONT_STYLE_SIZE_3, 
-									NULL);
-					+ html_painter_get_space_width (painter,
-									GTK_HTML_FONT_STYLE_SIZE_3,
-									NULL);
-				
+									NULL)
 				break;
 			case HTML_LIST_TYPE_GLOSSARY_DL:
 				indent += 0;

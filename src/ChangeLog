@@ -1,3 +1,7 @@
+2002-05-09  Larry Ewing  <lewing@ximian.com>
+
+	* htmlclueflow.c (get_level_indent): fix the indent calculation.
+
 2002-05-07  Larry Ewing  <lewing@ximian.com>
 
 	* htmlclueflow.c (plain_padding): more tweaks to make save_plain
