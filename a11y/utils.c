@@ -23,6 +23,7 @@
 
 #include "htmlobject.h"
 
+#include "image.h"
 #include "text.h"
 #include "paragraph.h"
 #include "utils.h"
@@ -38,6 +39,9 @@ create_accessible (HTMLObject *o, AtkObject *parent)
 		break;
 	case HTML_TYPE_TEXT:
 		accessible = html_a11y_text_new (o);
+		break;
+	case HTML_TYPE_IMAGE:
+		accessible = html_a11y_image_new (o);
 		break;
 	}
 

@@ -41,6 +41,8 @@ static AtkStateSet * html_a11y_ref_state_set (AtkObject *accessible);
 static gint html_a11y_get_n_children (AtkObject *accessible);
 static AtkObject * html_a11y_ref_child (AtkObject *accessible, gint index);
 
+void html_a11y_get_size (AtkComponent *component, gint *width, gint *height);
+
 static AtkObjectClass *parent_class = NULL;
 
 GType
@@ -81,11 +83,11 @@ atk_component_interface_init (AtkComponentIface *iface)
 	g_return_if_fail (iface != NULL);
 
 	iface->get_extents = html_a11y_get_extents;
+	iface->get_size = html_a11y_get_size;
 
 	/* FIX2
 	   iface->add_focus_handler = gail_widget_add_focus_handler;
 	   iface->get_extents = gail_widget_get_extents;
-	   iface->get_size = gail_widget_get_size;
 	   iface->get_layer = gail_widget_get_layer;
 	   iface->grab_focus = gail_widget_grab_focus;
 	   iface->remove_focus_handler = gail_widget_remove_focus_handler;
@@ -262,6 +264,17 @@ html_a11y_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, g
 	html_object_calc_abs_position (obj, &ax, &ay);
 	*x += ax;
 	*y += ay - obj->ascent;
+	*width = obj->width;
+	*height = obj->ascent + obj->descent;
+}
+
+void
+html_a11y_get_size (AtkComponent *component, gint *width, gint *height)
+{
+	HTMLObject *obj = HTML_A11Y_HTML (component);
+
+	g_return_if_fail (obj);
+
 	*width = obj->width;
 	*height = obj->ascent + obj->descent;
 }

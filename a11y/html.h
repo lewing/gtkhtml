@@ -51,7 +51,8 @@ struct _HTMLA11YClass {
 	AtkObjectClass parent_class;
 };
 
-/* private for text */
+/* private, used in text.c */
 void  html_a11y_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type);
+void  html_a11y_get_size (AtkComponent *component, gint *width, gint *height);
 
 #endif

@@ -35,6 +35,7 @@ static void html_a11y_text_init          (HTMLA11YText *a11y_text);
 static void atk_component_interface_init (AtkComponentIface *iface);
 static void html_a11y_text_get_extents   (AtkComponent *component,
 					  gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type);
+static void html_a11y_text_get_size      (AtkComponent *component, gint *width, gint *height);
 
 static AtkObjectClass *parent_class = NULL;
 
@@ -76,6 +77,7 @@ atk_component_interface_init (AtkComponentIface *iface)
 	g_return_if_fail (iface != NULL);
 
 	iface->get_extents = html_a11y_text_get_extents;
+	iface->get_size = html_a11y_text_get_size;
 }
 
 static void
@@ -130,14 +132,14 @@ html_a11y_text_new (HTMLObject *html_obj)
 }
 
 static void
-html_a11y_text_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type)
+get_size (HTMLObject *obj, gint *width, gint *height)
 {
-	HTMLObject *obj = HTML_A11Y_HTML (component);
 	HTMLObject *last;
 
-	html_a11y_get_extents (component, x, y, width, height, coord_type);
-
 	if (obj) {
+		gint ax, ay;
+
+		html_object_calc_abs_position (obj, &ax, &ay);
 		last = obj;
 		while (last->next && HTML_IS_TEXT_SLAVE (last->next))
 			last = last->next;
@@ -145,8 +147,26 @@ html_a11y_text_get_extents (AtkComponent *component, gint *x, gint *y, gint *wid
 			gint lx, ly;
 			html_object_calc_abs_position (last, &lx, &ly);
 
-			*width = lx + last->width - *x;
-			*height = ly + last->descent - *y;
+			*width = lx + last->width - ax;
+			*height = ly + last->descent - ay;
 		}
 	}
+}
+
+static void
+html_a11y_text_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type)
+{
+	HTMLObject *obj = HTML_A11Y_HTML (component);
+
+	html_a11y_get_extents (component, x, y, width, height, coord_type);
+	get_size (obj, width, height);
+}
+
+static void
+html_a11y_text_get_size (AtkComponent *component, gint *width, gint *height)
+{
+	HTMLObject *obj = HTML_A11Y_HTML (component);
+
+	html_a11y_get_size (component, width, height);
+	get_size (obj, width, height);
 }

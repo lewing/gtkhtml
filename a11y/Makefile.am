@@ -12,6 +12,8 @@ libgtkhtml_a11y_la_SOURCES =				\
 	factory.c					\
 	html.h						\
 	html.c						\
+	image.h						\
+	image.c						\
 	object.h					\
 	object.c					\
 	paragraph.h					\
