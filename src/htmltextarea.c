@@ -141,6 +141,8 @@ html_textarea_init (HTMLTextArea *ta,
 	HTMLEmbedded *element;
 	HTMLObject *object;
 	GtkWidget *widget;
+	PangoLayout *layout;
+	gint width, height;
 
 	element = HTML_EMBEDDED (ta);
 	object = HTML_OBJECT (ta);
@@ -166,9 +168,13 @@ html_textarea_init (HTMLTextArea *ta,
 
 #define FONT_HEIGHT(f)              ((f)->ascent + (f)->descent)
 
-	/* FIX2 gtk_widget_set_usize ( GTK_WIDGET (widget), 
-			       gdk_char_width(widget->style->font, '0') * col + 8,
-			       FONT_HEIGHT(ta->text->style->font) * row + 4); */
+	layout = pango_layout_new (gtk_widget_get_pango_context (widget));
+	pango_layout_set_font_description (layout, widget->style->font_desc);
+	pango_layout_set_text (layout, "0", 1);
+	pango_layout_get_size (layout, &width, &height);
+	g_object_unref (layout);
+
+	gtk_widget_set_usize ( GTK_WIDGET (widget), (width / PANGO_SCALE) * col + 8, (height / PANGO_SCALE) * row + 4);
 
 #undef FONT_HEIGHT
 	ta->default_text = NULL;
