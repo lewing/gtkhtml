@@ -295,8 +295,14 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 static void
 split_and_add_empty_texts (HTMLEngine *e, gint level, GList **left, GList **right)
 {
+	printf ("-- SPLIT begin\n");
+	gtk_html_debug_dump_tree_simple (e->clue, 0);
+	printf ("-- SPLIT middle\n");
 	html_object_split (e->cursor->object, e, *right ? HTML_OBJECT ((*right)->data) : NULL,
 			   e->cursor->offset, level, left, right);
+	printf ("-- SPLIT middle\n");
+	gtk_html_debug_dump_tree_simple (e->clue, 0);
+	printf ("-- SPLIT end\n");
 }
 
 /* end of helper */

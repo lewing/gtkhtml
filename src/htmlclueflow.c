@@ -161,7 +161,7 @@ op_helper (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *left,
 		return NULL; 
 	if (!from && (*len || !(self->prev && HTML_IS_CLUEFLOW (self->prev) && HTML_IS_TABLE (HTML_CLUE (self->prev)->tail))))
 	(*len) ++; */
-	if (!from) {
+	if (!from && self->prev) {
 		(*len) ++;
 		/* if (cut)
 		   e->cursor->position --; */

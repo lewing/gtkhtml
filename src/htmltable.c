@@ -277,7 +277,6 @@ cut_partial (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *lef
 	HTMLTable *t, *nt;
 	gint r, c;
 	gint start_row, start_col, end_row, end_col;
-	gboolean shrink;
 
 	printf ("partial cut\n");
 
@@ -592,19 +591,14 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 {
 	HTMLTable *t1 = HTML_TABLE (self);
 	HTMLTable *t2 = HTML_TABLE (with);
-	HTMLTableCell *c1; // = HTML_TABLE_CELL (left->data);
-	HTMLTableCell *c2; // = HTML_TABLE_CELL (right->data);
 	HTMLTableCell *cursor_cell_1;
 	HTMLTableCell *cursor_cell_2;
 	HTMLTableCell *cursor_cell_3;
 	HTMLTableCell *prev_c1 = NULL;
 	HTMLTableCell *t1_tail = NULL;
-	HTMLTableCell *t2_head = NULL;
-	gint r, c, end_col, end_row, start_col;
+	gint r, c;
 	gboolean first = TRUE;
 	gboolean cursor_in_t2;
-
-	end_col = 0;	
 
 #ifdef GTKHTML_DEBUG_TABLE
 	printf ("before merge\n");
@@ -621,6 +615,11 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 
 	if (!could_merge (t1, t2))
 		return FALSE;
+
+	g_list_free (*left);
+	*left = NULL;
+	g_list_free (*right);
+	*right = NULL;
 
 	cursor_in_t2 = object_get_parent_cell (e->cursor->object, HTML_OBJECT (t2)) != NULL;
 
@@ -639,12 +638,23 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 			if (first) {
 				if (!cell_is_empty (c2)) {
 					t1_tail = prev_c1;
-					t2_head = c2;
 					if (cell_is_empty (c1)) {
 						move_cell (t1, t2, c1, c2, cursor_cell_1, cursor_cell_2,
 							   r, c, e->cursor, cursor);
 					} else {
-						g_warning ("FIXME!");
+						*left  = html_object_tails_list (HTML_OBJECT (c1));
+						*right = html_object_heads_list (HTML_OBJECT (c2));
+						html_object_remove_child (HTML_OBJECT (t2), HTML_OBJECT (c2));
+						if (e->cursor->object == t1) {
+							e->cursor->object = html_object_get_tail_leaf (HTML_OBJECT (c1));
+							e->cursor->offset = html_object_get_length (e->cursor->object);
+							e->cursor->position -= (t1->totalRows - c1->row - 1)*t1->totalCols
+								+ (t1->totalCols - c1->col);
+							/* printf ("3rd dec: %d t1_tail %d,%d\n",
+								(t1->totalRows - c1->row - 1)*t1->totalCols
+								+ (t1->totalCols - c1->col), c1->row, c1->col); */
+
+						}
 					}
 					first = FALSE;
 				} else {
@@ -662,7 +672,7 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 	if (!t1_tail)
 		t1_tail = prev_c1;
 
-	if (e->cursor->object == t1 && t1_tail) {
+	if (e->cursor->object == self && t1_tail) {
 		e->cursor->object = html_object_get_tail_leaf (HTML_OBJECT (t1_tail));
 		e->cursor->offset = html_object_get_length (HTML_OBJECT (e->cursor->object));
 		e->cursor->position -= (t1->totalRows - t1_tail->row - 1)*t1->totalCols
@@ -677,10 +687,8 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 		   cursor_cell_2->row, cursor_cell_2->col); */
 	}
 
-	g_list_free (*left);
-	*left = NULL;
-	g_list_free (*right);
-	*right = NULL;
+	if (cursor && cursor->object == t2)
+		cursor->object = t1;
 
 	return TRUE;
 }
