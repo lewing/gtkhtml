@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sk\n"
-"POT-Creation-Date: 2002-05-24 15:11+0200\n"
-"PO-Revision-Date: 2002-05-24 15:15+0200\n"
+"POT-Creation-Date: 2002-05-31 09:20+0200\n"
+"PO-Revision-Date: 2002-05-31 09:20+0200\n"
 "Last-Translator: Stanislav Višňovský <visnovsky@nenya.ms.mff.cuni.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -346,7 +346,7 @@ msgid "Insert Smiley 7 smiley into document..."
 msgstr "Vložiť Smajlíka 7 do dokumentu..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:44
-msgid "Insert Surpriced smiley into document..."
+msgid "Insert Surprised smiley into document..."
 msgstr "Vložiť Prekvapeného smajlíka do dokumentu..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:45
@@ -546,7 +546,7 @@ msgid "Su_perscript"
 msgstr "Horný _index"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:90
-msgid "Su_rpriced"
+msgid "Su_rprised"
 msgstr "_Prekvapený"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:91
