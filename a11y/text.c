@@ -135,7 +135,7 @@ html_a11y_text_get_extents (AtkComponent *component, gint *x, gint *y, gint *wid
 	HTMLObject *obj = HTML_A11Y_HTML (component);
 	HTMLObject *last;
 
-	html_a11y_text_get_extents (component, x, y, width, height, coord_type);
+	html_a11y_get_extents (component, x, y, width, height, coord_type);
 
 	if (obj) {
 		last = obj;
