@@ -3,13 +3,13 @@
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003.
 # Martin Norbäck <d95mback@dtek.chalmers.se>, 2000.
 #
-# $Id: sv.po,v 1.73.2.1 2003/07/30 23:30:46 menthos Exp $
+# $Id: sv.po,v 1.73.2.2 2003/09/12 23:35:26 menthos Exp $
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2003-07-31 01:29+0200\n"
-"PO-Revision-Date: 2003-07-31 01:30+0200\n"
+"POT-Creation-Date: 2003-09-13 01:32+0200\n"
+"PO-Revision-Date: 2003-09-13 01:34+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgid "<None>"
 msgstr "<Ingen>"
 
 #: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
-#: components/html-editor/cell.c:418 components/html-editor/image.c:545
+#: components/html-editor/cell.c:419 components/html-editor/image.c:545
 #: components/html-editor/rule.c:316 components/html-editor/table.c:530
 #: components/html-editor/table.c:614 components/html-editor/template.c:272
 msgid "Could not load glade file."
@@ -51,54 +51,64 @@ msgstr "Blått bläck"
 msgid "Rectangles"
 msgstr "Rektanglar"
 
-#: components/html-editor/body.c:257 components/html-editor/menubar.c:165
+#. string marked for translations is sample text. you may want to translate it to common sample text in your language
+#: components/html-editor/body.c:123
+msgid ""
+"The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a href="
+"\"mailto:dog\">dog</a>."
+msgstr ""
+"Flygande <a href=\"mailto:backasiner\">bäckasiner</a> söka strax hwila på "
+"mjuka <a href=\"mailto:tuvor\">tuvor</a>."
+
+#: components/html-editor/body.c:258 components/html-editor/menubar.c:165
 msgid "Template"
 msgstr "Mall"
 
-#: components/html-editor/body.c:275 src/gtkhtml.c:2558
+#: components/html-editor/body.c:276 src/gtkhtml.c:2555
 msgid "Document Title"
 msgstr "Dokumenttitel"
 
-#: components/html-editor/body.c:279 components/html-editor/body.c:282
+#: components/html-editor/body.c:280 components/html-editor/body.c:283
 msgid "Background Image"
 msgstr "Bakgrundsbild"
 
-#: components/html-editor/body.c:304
+#: components/html-editor/body.c:305
 msgid "Colors"
 msgstr "Färger"
 
-#: components/html-editor/body.c:314 components/html-editor/cell.c:424
-#: components/html-editor/table.c:536 components/html-editor/text.c:296
+#: components/html-editor/body.c:315 components/html-editor/cell.c:425
+#: components/html-editor/table.c:536 components/html-editor/text.c:297
 #: components/html-editor/toolbar.c:300
 msgid "Automatic"
 msgstr "Automatisk"
 
-#: components/html-editor/body.c:326
-#: components/html-editor/editor-control-factory.c:207
+#: components/html-editor/body.c:327
+#: components/html-editor/editor-control-factory.c:193
 #: components/html-editor/menubar.c:338 components/html-editor/popup.c:194
 msgid "Text"
 msgstr "Text"
 
-#: components/html-editor/body.c:327 components/html-editor/menubar.c:107
+#: components/html-editor/body.c:328 components/html-editor/menubar.c:107
 #: components/html-editor/popup.c:105 components/html-editor/popup.c:201
 #: components/html-editor/popup.c:274
 msgid "Link"
 msgstr "Länk"
 
-#: components/html-editor/body.c:328
+#: components/html-editor/body.c:329
 msgid "Background"
 msgstr "Bakgrund"
 
-#: components/html-editor/cell.c:173 components/html-editor/cell.c:175
-#: components/html-editor/text.c:108
+#. string marked for translations is sample text. you may want to translate it to common sample text in your language
+#: components/html-editor/cell.c:174 components/html-editor/cell.c:176
+#: components/html-editor/text.c:109
 msgid "The quick brown fox jumps over the lazy dog."
 msgstr "Flygande bäckasiner söka strax hwila på mjuka tuvor."
 
-#: components/html-editor/cell.c:178
+#: components/html-editor/cell.c:179
 msgid "Other"
 msgstr "Annat"
 
-#: components/html-editor/cell.c:679
+#: components/html-editor/cell.c:680
 msgid ""
 "The editted cell was removed from the document.\n"
 "Cannot apply your changes."
@@ -106,29 +116,29 @@ msgstr ""
 "Den redigerade cellen har tagits bort från dokumentet.\n"
 "Kan inte verkställa dina ändringar."
 
-#: components/html-editor/editor-control-factory.c:187
+#: components/html-editor/editor-control-factory.c:173
 #: components/html-editor/menubar.c:317 components/html-editor/menubar.c:335
 #: components/html-editor/menubar.c:353 components/html-editor/popup.c:186
 #: components/html-editor/popup.c:271
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: components/html-editor/editor-control-factory.c:198
+#: components/html-editor/editor-control-factory.c:184
 #: components/html-editor/menubar.c:91 components/html-editor/popup.c:208
 msgid "Image"
 msgstr "Bild"
 
-#: components/html-editor/editor-control-factory.c:218
+#: components/html-editor/editor-control-factory.c:204
 #: components/html-editor/menubar.c:125 components/html-editor/popup.c:229
 msgid "Rule"
 msgstr "Linje"
 
-#: components/html-editor/editor-control-factory.c:228
+#: components/html-editor/editor-control-factory.c:214
 #: components/html-editor/menubar.c:356 components/html-editor/popup.c:215
 msgid "Paragraph"
 msgstr "Stycke"
 
-#: components/html-editor/editor-control-factory.c:233
+#: components/html-editor/editor-control-factory.c:219
 #: components/html-editor/menubar.c:320 components/html-editor/popup.c:222
 msgid "Page"
 msgstr "Sida"
@@ -214,7 +224,7 @@ msgstr "Test-URL..."
 msgid "Link text"
 msgstr "Länktext"
 
-#: components/html-editor/link.c:137 components/html-editor/text.c:246
+#: components/html-editor/link.c:137 components/html-editor/text.c:247
 msgid "Click will follow this URL"
 msgstr "Klick kommer att följa denna URL"
 
@@ -251,79 +261,85 @@ msgstr "Infoga: HTML-fil"
 msgid "Insert: Text File"
 msgstr "Infoga: Textfil"
 
-#: components/html-editor/paragraph.c:115 components/html-editor/text.c:222
+#. string marked for translations is sample text. you may want to translate it to common sample text in your language
+#: components/html-editor/paragraph.c:62
+msgid "The quick brown fox jumps over the lazy dog.</div>"
+msgstr "Flygande bäckasiner söka strax hwila på mjuka tuvor.</div>"
+
+#: components/html-editor/paragraph.c:116 components/html-editor/popup.c:472
+#: components/html-editor/text.c:223
 msgid "Style"
 msgstr "Stil"
 
-#: components/html-editor/paragraph.c:129 components/html-editor/toolbar.c:48
+#: components/html-editor/paragraph.c:130 components/html-editor/toolbar.c:48
 msgid "Normal"
 msgstr "Normal"
 
-#: components/html-editor/paragraph.c:130
+#: components/html-editor/paragraph.c:131
 msgid "Pre"
 msgstr "Förformaterad"
 
-#: components/html-editor/paragraph.c:131 components/html-editor/toolbar.c:54
+#: components/html-editor/paragraph.c:132 components/html-editor/toolbar.c:54
 msgid "Header 1"
 msgstr "Rubrik 1"
 
-#: components/html-editor/paragraph.c:132 components/html-editor/toolbar.c:55
+#: components/html-editor/paragraph.c:133 components/html-editor/toolbar.c:55
 msgid "Header 2"
 msgstr "Rubrik 2"
 
-#: components/html-editor/paragraph.c:133 components/html-editor/toolbar.c:56
+#: components/html-editor/paragraph.c:134 components/html-editor/toolbar.c:56
 msgid "Header 3"
 msgstr "Rubrik 3"
 
-#: components/html-editor/paragraph.c:134 components/html-editor/toolbar.c:57
+#: components/html-editor/paragraph.c:135 components/html-editor/toolbar.c:57
 msgid "Header 4"
 msgstr "Rubrik 4"
 
-#: components/html-editor/paragraph.c:135 components/html-editor/toolbar.c:58
+#: components/html-editor/paragraph.c:136 components/html-editor/toolbar.c:58
 msgid "Header 5"
 msgstr "Rubrik 5"
 
-#: components/html-editor/paragraph.c:136 components/html-editor/toolbar.c:59
+#: components/html-editor/paragraph.c:137 components/html-editor/toolbar.c:59
 msgid "Header 6"
 msgstr "Rubrik 6"
 
-#: components/html-editor/paragraph.c:137 components/html-editor/toolbar.c:60
+#: components/html-editor/paragraph.c:138 components/html-editor/toolbar.c:60
 msgid "Address"
 msgstr "Adress"
 
-#: components/html-editor/paragraph.c:138
+#: components/html-editor/paragraph.c:139
 msgid "Dot item"
 msgstr "Punktobjekt"
 
-#: components/html-editor/paragraph.c:139
+#: components/html-editor/paragraph.c:140
 msgid "Number item"
 msgstr "Sifferobjekt"
 
-#: components/html-editor/paragraph.c:140
+#: components/html-editor/paragraph.c:141
 msgid "Roman item"
 msgstr "Romerskt sifferobjekt"
 
-#: components/html-editor/paragraph.c:141
+#: components/html-editor/paragraph.c:142
 msgid "Alphabeta item"
 msgstr "Alfabetsobjekt"
 
-#: components/html-editor/paragraph.c:150
+#: components/html-editor/paragraph.c:151
 msgid "Align"
 msgstr "Justera"
 
-#: components/html-editor/paragraph.c:163
+#: components/html-editor/paragraph.c:164
 msgid "Left"
 msgstr "Vänster"
 
-#: components/html-editor/paragraph.c:164 components/html-editor/toolbar.c:511
+#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:511
 msgid "Center"
 msgstr "Centrera"
 
-#: components/html-editor/paragraph.c:165
+#: components/html-editor/paragraph.c:166
 msgid "Right"
 msgstr "Höger"
 
-#: components/html-editor/paragraph.c:194
+#: components/html-editor/paragraph.c:195
 msgid ""
 "The editted paragraph was removed from the document.\n"
 "Cannot apply your changes."
@@ -416,10 +432,30 @@ msgstr "Kolumn"
 msgid "Cell contents"
 msgstr "Cellinnehåll"
 
+#: components/html-editor/popup.c:539
+msgid "Check Word Spelling..."
+msgstr "Kontrollera ordstavning..."
+
+#: components/html-editor/popup.c:544
+msgid "Add Word to"
+msgstr "Lägg till ord till"
+
 #: components/html-editor/popup.c:548
 #, c-format
 msgid "%s Dictionary"
 msgstr "Ordbok för %s"
+
+#: components/html-editor/popup.c:557
+msgid "Add Word to Dictionary"
+msgstr "Lägg till ord i ordbok"
+
+#: components/html-editor/popup.c:560
+msgid "Ignore Misspelled Word"
+msgstr "Ignorera felstavat ord"
+
+#: components/html-editor/popup.c:563
+msgid "Input Methods"
+msgstr "Inmatningsmetoder"
 
 #: components/html-editor/replace.c:75
 msgid "Replace confirmation"
@@ -482,11 +518,11 @@ msgstr "_Bakåt"
 msgid "Find Regular Expression"
 msgstr "Sök reguljärt uttryck"
 
-#: components/html-editor/spell.c:274
+#: components/html-editor/spell.c:277
 msgid "Spell checker"
 msgstr "Stavningskontroll"
 
-#: components/html-editor/spell.c:361
+#: components/html-editor/spell.c:366
 msgid "Current _Languages"
 msgstr "Aktuella _språk"
 
@@ -518,6 +554,10 @@ msgstr "Placera din text här"
 msgid "Image frame"
 msgstr "Bildram"
 
+#: components/html-editor/template.c:281
+msgid "Labels"
+msgstr "Etiketter"
+
 #: components/html-editor/test-html-editor-control.c:317
 msgid "Open file..."
 msgstr "Öppna fil..."
@@ -530,32 +570,32 @@ msgstr "Spara fil som..."
 msgid "GtkHTML Editor Test Container"
 msgstr "GtkHTML-redigerartestbehållare"
 
-#: components/html-editor/text.c:235 components/html-editor/toolbar.c:522
+#: components/html-editor/text.c:236 components/html-editor/toolbar.c:522
 msgid "Bold"
 msgstr "Fet"
 
-#: components/html-editor/text.c:236 components/html-editor/toolbar.c:524
+#: components/html-editor/text.c:237 components/html-editor/toolbar.c:524
 msgid "Italic"
 msgstr "Kursiv"
 
-#: components/html-editor/text.c:237 components/html-editor/toolbar.c:526
+#: components/html-editor/text.c:238 components/html-editor/toolbar.c:526
 msgid "Underline"
 msgstr "Understruken"
 
-#: components/html-editor/text.c:238 components/html-editor/toolbar.c:528
+#: components/html-editor/text.c:239 components/html-editor/toolbar.c:528
 msgid "Strikeout"
 msgstr "Genomstruken"
 
-#: components/html-editor/text.c:262
+#: components/html-editor/text.c:263
 msgid "Size"
 msgstr "Storlek"
 
 #. color selection
-#: components/html-editor/text.c:292
+#: components/html-editor/text.c:293
 msgid "Color"
 msgstr "Färg"
 
-#: components/html-editor/text.c:334
+#: components/html-editor/text.c:335
 msgid ""
 "The editted text was removed from the document.\n"
 "Cannot apply your changes."
@@ -647,71 +687,71 @@ msgstr "Drar in styckena mer"
 msgid "Sample"
 msgstr "Prov"
 
-#: src/gtkhtml.c:2551
+#: src/gtkhtml.c:2548
 msgid "Editable"
 msgstr "Redigerbar"
 
-#: src/gtkhtml.c:2552
+#: src/gtkhtml.c:2549
 msgid "Whether the html can be edited"
 msgstr "Huruvida html-koden kan redigeras"
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2556
 msgid "The title of the current document"
 msgstr "Titeln på det aktuella dokumentet"
 
-#: src/gtkhtml.c:2565
+#: src/gtkhtml.c:2562
 msgid "Document Base"
 msgstr "Dokumentbas"
 
-#: src/gtkhtml.c:2566
+#: src/gtkhtml.c:2563
 msgid "The base URL for relative references"
 msgstr "Bas-URL:en för relativa referenser"
 
-#: src/gtkhtml.c:2572
+#: src/gtkhtml.c:2569
 msgid "Target Base"
 msgstr "Målbas"
 
-#: src/gtkhtml.c:2573
+#: src/gtkhtml.c:2570
 msgid "The base URL of the targe frame"
 msgstr "Bas-URL:en för målramen"
 
-#: src/gtkhtml.c:2582
+#: src/gtkhtml.c:2579
 msgid "Fixed Width Font"
 msgstr "Typsnitt med fast breddsteg"
 
-#: src/gtkhtml.c:2583
+#: src/gtkhtml.c:2580
 msgid "The Monospace font to use for typewriter text"
 msgstr "Typsnittet med fast breddsteg som ska användas för skrivmaskinstext"
 
-#: src/gtkhtml.c:2589
+#: src/gtkhtml.c:2586
 msgid "New Link Color"
 msgstr "Färg för ny länk"
 
-#: src/gtkhtml.c:2590
+#: src/gtkhtml.c:2587
 msgid "The color of new link elements"
 msgstr "Färgen på nya länkelement"
 
-#: src/gtkhtml.c:2595
+#: src/gtkhtml.c:2592
 msgid "Visited Link Color"
 msgstr "Färg för besökt länk"
 
-#: src/gtkhtml.c:2596
+#: src/gtkhtml.c:2593
 msgid "The color of visited link elements"
 msgstr "Färgen på besökta länkelement"
 
-#: src/gtkhtml.c:2601
+#: src/gtkhtml.c:2598
 msgid "Active Link Color"
 msgstr "Färg för aktiv länk"
 
-#: src/gtkhtml.c:2602
+#: src/gtkhtml.c:2599
 msgid "The color of active link elements"
 msgstr "Färgen på aktiva länkelement"
 
-#: src/gtkhtml.c:2607
+#: src/gtkhtml.c:2604
 msgid "Spelling Error Color"
 msgstr "Stavfelsfärg"
 
-#: src/gtkhtml.c:2608
+#: src/gtkhtml.c:2605
 msgid "The color of the spelling error markers"
 msgstr "Färgen på markörerna för stavfel"
 
@@ -875,15 +915,6 @@ msgstr "GtkHTML-testprogram"
 
 #~ msgid "_Delete"
 #~ msgstr "_Ta bort"
-
-#~ msgid "GNOME HTML Editor"
-#~ msgstr "HTML-redigerare för GNOME"
-
-#~ msgid "GNOME HTML Editor Control"
-#~ msgstr "HTML-redigerarkontroll för GNOME"
-
-#~ msgid "GNOME HTML Editor Factory"
-#~ msgstr "HTML-redigerarfabrik för GNOME"
 
 #~ msgid "+0"
 #~ msgstr "+0"
@@ -1289,11 +1320,20 @@ msgstr "GtkHTML-testprogram"
 #~ msgid "_Wink"
 #~ msgstr "_Blinka"
 
-#~ msgid "_Wrap Lines"
-#~ msgstr "_Radbryt rader"
-
 #~ msgid "etc..."
 #~ msgstr "osv..."
+
+#~ msgid "GNOME HTML Editor"
+#~ msgstr "HTML-redigerare för GNOME"
+
+#~ msgid "GNOME HTML Editor Control"
+#~ msgstr "HTML-redigerarkontroll för GNOME"
+
+#~ msgid "GNOME HTML Editor Factory"
+#~ msgstr "HTML-redigerarfabrik för GNOME"
+
+#~ msgid "_Wrap Lines"
+#~ msgstr "_Radbryt rader"
 
 #~ msgid "************"
 #~ msgstr "************"
@@ -1448,6 +1488,12 @@ msgstr "GtkHTML-testprogram"
 #~ msgid "xxxxxxxxxxxxxx"
 #~ msgstr "xxxxxxxxxxxxxx"
 
+#~ msgid "The quick brown fox jumps over the lazy dog"
+#~ msgstr "Flygande bäckasiner söka strax hwila på mjuka tuvor"
+
+#~ msgid "Label"
+#~ msgstr "Etikett"
+
 #~ msgid "Insert HTML File"
 #~ msgstr "Infoga HTML-fil"
 
@@ -1507,9 +1553,6 @@ msgstr "GtkHTML-testprogram"
 
 #~ msgid "The quick brown fox jumped over the lazy dog. "
 #~ msgstr "Flygande bäckasiner söka strax hwila på mjuka tuvor."
-
-#~ msgid "No misspelled word found"
-#~ msgstr "Inget felstavat ord hittades"
 
 #~ msgid ""
 #~ "<table cellspacing=0 cellpadding=1 bgcolor=\"#ccccc0"
@@ -1660,9 +1703,6 @@ msgstr "GtkHTML-testprogram"
 
 #~ msgid "_Numbered List"
 #~ msgstr "_Numrerad lista"
-
-#~ msgid "Check _spelling..."
-#~ msgstr "Kontrollera sta_vning..."
 
 #~ msgid "_Alpabetical List"
 #~ msgstr "_Alfabetisk lista"
