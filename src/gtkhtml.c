@@ -5133,7 +5133,8 @@ set_magnification (HTMLObject *o, HTMLEngine *e, gpointer data)
 	} else if (HTML_IS_IFRAME (o)) {
 		html_font_manager_set_magnification (&GTK_HTML (HTML_IFRAME (o)->html)->engine->painter->font_manager,
 						     *(gdouble *) data);
-	}
+	} else if (HTML_IS_TEXT (o))
+		html_text_calc_font_size (HTML_TEXT (o), e);
 }
 
 void

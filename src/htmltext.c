@@ -2554,14 +2554,16 @@ struct _HTMLPangoAttrFontSize {
         PangoAttrInt attr_int;
 	GtkHTMLFontStyle style;
 };
-typedef struct _HTMLPangoAttrFontSize HTMLPangoAttrFontSize;
 
 static PangoAttribute *
 html_pango_attr_font_size_copy (const PangoAttribute *attr)
 {
-	HTMLPangoAttrFontSize *font_size_attr = (HTMLPangoAttrFontSize *) attr;
+	HTMLPangoAttrFontSize *font_size_attr = (HTMLPangoAttrFontSize *) attr, *new_attr;
 
-	return html_pango_attr_font_size_new (font_size_attr->attr_int.value, font_size_attr->style);
+	new_attr = (HTMLPangoAttrFontSize *) html_pango_attr_font_size_new (font_size_attr->style);
+	new_attr->attr_int.value = font_size_attr->attr_int.value;
+
+	return (PangoAttribute *) new_attr;
 }
 
 static void
@@ -2579,8 +2581,20 @@ html_pango_attr_font_size_equal (const PangoAttribute *attr1, const PangoAttribu
 	return (font_size_attr1->style == font_size_attr2->style);
 }
 
+void
+html_pango_attr_font_size_calc (HTMLPangoAttrFontSize *attr, HTMLEngine *e)
+{
+	gint size, base_size, real_size;
+
+	base_size = e->painter->font_manager.var_size;
+	size = (attr->style & GTK_HTML_FONT_STYLE_SIZE_MASK) - GTK_HTML_FONT_STYLE_SIZE_3;
+	real_size = e->painter->font_manager.magnification * 1000 * ((gdouble) base_size + (size > 0 ? (1 << size) : size) * base_size/8.0);
+
+	attr->attr_int.value = real_size;
+}
+
 PangoAttribute *
-html_pango_attr_font_size_new (int size, GtkHTMLFontStyle style)
+html_pango_attr_font_size_new (GtkHTMLFontStyle style)
 {
 	static const PangoAttrClass klass = {
 		PANGO_ATTR_SIZE,
@@ -2591,8 +2605,24 @@ html_pango_attr_font_size_new (int size, GtkHTMLFontStyle style)
 
 	HTMLPangoAttrFontSize *result = g_new (HTMLPangoAttrFontSize, 1);
 	result->attr_int.attr.klass = &klass;
-	result->attr_int.value = size;
 	result->style = style;
 
 	return (PangoAttribute *) result;
+}
+
+static gboolean
+calc_font_size_filter (PangoAttribute *attr, gpointer data)
+{
+	HTMLEngine *e = HTML_ENGINE (data);
+
+	if (attr->klass->type == PANGO_ATTR_SIZE)
+		html_pango_attr_font_size_calc ((HTMLPangoAttrFontSize *) attr, e);
+
+	return FALSE;
+}
+
+void
+html_text_calc_font_size (HTMLText *text, HTMLEngine *e)
+{
+	pango_attr_list_filter (text->attr_list, calc_font_size_filter, e);
 }

@@ -222,6 +222,8 @@ gboolean          html_text_last_link_offset             (HTMLText           *te
 							  gint               *offset);
 gchar            *html_text_get_link_text                (HTMLText           *text,
 							  gint                offset);
+void              html_text_calc_font_size               (HTMLText           *text,
+							  HTMLEngine         *e);
 
 Link     *html_link_new                 (gchar *url,
 					 gchar *target,
@@ -248,8 +250,10 @@ gint               html_text_pango_info_get_index  (HTMLTextPangoInfo *pi,
 						    gint               byte_offset,
 						    gint               idx);
 
-PangoAttribute *html_pango_attr_font_size_new  (int              size,
-						GtkHTMLFontStyle style);
+PangoAttribute *html_pango_attr_font_size_new   (GtkHTMLFontStyle       style);
+void            html_pango_attr_font_size_calc  (HTMLPangoAttrFontSize *attr,
+						 HTMLEngine            *e);
+
 
 
 typedef HTMLObject * (* HTMLTextHelperFunc)       (HTMLText *, gint begin, gint end);

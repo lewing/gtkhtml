@@ -95,6 +95,7 @@ typedef struct _HTMLObjectClass HTMLObjectClass;
 typedef struct _HTMLObjectClearRectangle HTMLObjectClearRectangle;
 typedef struct _HTMLPainter HTMLPainter;
 typedef struct _HTMLPainterClass HTMLPainterClass;
+typedef struct _HTMLPangoAttrFontSize HTMLPangoAttrFontSize;
 typedef struct _HTMLPoint HTMLPoint;
 typedef struct _HTMLPrinter HTMLPrinter;
 typedef struct _HTMLPrinterClass HTMLPrinterClass;
