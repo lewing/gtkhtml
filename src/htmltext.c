@@ -1237,7 +1237,10 @@ prepare_attrs (HTMLText *text, HTMLPainter *painter)
 PangoDirection
 html_text_get_pango_direction (HTMLText *text)
 {
-	return pango_find_base_dir (text->text, text->text_bytes);
+	if (HTML_OBJECT (text)->change & HTML_CHANGE_RECALC_PI)
+		return pango_find_base_dir (text->text, text->text_bytes);
+	else
+		return text->direction;
 }
 
 static PangoDirection
@@ -1338,6 +1341,7 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 	if (HTML_OBJECT (text)->change & HTML_CHANGE_RECALC_PI)	{
 		pango_info_destroy (text);
 		HTML_OBJECT (text)->change &= ~HTML_CHANGE_RECALC_PI;
+		text->direction = pango_find_base_dir (text->text, text->text_bytes);
 	}
 	if (!text->pi) {
 		GList *items, *cur;

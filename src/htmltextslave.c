@@ -1230,7 +1230,7 @@ html_text_slave_cursor_left_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 	int index;
 	HTMLTextSlaveGlyphItem *gi = html_text_slave_get_glyph_item_at_offset (slave, cursor->offset - slave->posStart, &prev, &next, NULL, &index);
 
-	printf ("gi: %p item num chars: %d\n", gi, gi->glyph_item.item->num_chars);
+	printf ("gi: %p item num chars: %d\n", gi, gi ? gi->glyph_item.item->num_chars : -1);
 
 	if (!gi)
 		return FALSE;
@@ -1269,58 +1269,72 @@ html_text_slave_cursor_left (HTMLTextSlave *slave, HTMLCursor *cursor)
 	return step_success;
 }
 
-gboolean
-html_text_slave_cursor_head (HTMLTextSlave *slave, HTMLCursor *cursor)
+static gboolean
+html_text_slave_get_left_edge (HTMLTextSlave *slave, HTMLCursor *cursor)
 {
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, NULL);
 	GSList *gis = html_text_slave_get_glyph_items (slave, NULL);
+	HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) gis->data;
 
-	if (gis) {
-		HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) gis->data;
+	cursor->offset = slave->posStart;
+	if (gi->glyph_item.item->offset > (html_text_slave_get_text (slave) - slave->owner->text))
+		cursor->offset += g_utf8_pointer_to_offset (html_text_slave_get_text (slave), slave->owner->text + gi->glyph_item.item->offset);
 
+	if (pi->attrs [cursor->offset].is_cursor_position)
+		return TRUE;
+	else
+		return html_text_slave_cursor_right (slave, cursor);
+}
+
+static gboolean
+html_text_slave_get_right_edge (HTMLTextSlave *slave, HTMLCursor *cursor)
+{
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, NULL);
+	GSList *gis = html_text_slave_get_glyph_items (slave, NULL);
+	HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) g_slist_last (gis)->data;
+
+	cursor->offset = slave->posStart + g_utf8_pointer_to_offset (html_text_slave_get_text (slave),
+								     slave->owner->text + gi->glyph_item.item->offset + gi->glyph_item.item->length);
+	if (pi->attrs [cursor->offset].is_cursor_position)
+		return TRUE;
+	else
+		return html_text_slave_cursor_left (slave, cursor);
+}
+
+gboolean
+html_text_slave_cursor_head (HTMLTextSlave *slave, HTMLCursor *cursor)
+{
+	if (html_text_slave_get_glyph_items (slave, NULL)) {
 		cursor->object = HTML_OBJECT (slave->owner);
 
-		if (gi->glyph_item.item->analysis.level % 2 == 0) {
+		if (html_text_get_pango_direction (slave->owner) != PANGO_DIRECTION_RTL) {
 			/* LTR */
-			cursor->offset = slave->posStart;
+			return html_text_slave_get_left_edge (slave, cursor);
 		} else {
 			/* RTL */
-			cursor->offset = slave->posStart + gi->glyph_item.item->num_chars;
+			return html_text_slave_get_right_edge (slave, cursor);
 		}
+	}
 
-		if (pi->attrs [cursor->offset].is_cursor_position)
-			return TRUE;
-		else
-			return html_text_slave_cursor_right (slave, cursor);
-	} else
-		return FALSE;
+	return FALSE;
 }
 
 gboolean
 html_text_slave_cursor_tail (HTMLTextSlave *slave, HTMLCursor *cursor)
 {
-	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, NULL);
-	GSList *gis = html_text_slave_get_glyph_items (slave, NULL);
-
-	if (gis) {
-		HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) g_slist_last (gis)->data;
-
+	if (html_text_slave_get_glyph_items (slave, NULL)) {
 		cursor->object = HTML_OBJECT (slave->owner);
 
-		if (gi->glyph_item.item->analysis.level % 2 == 0) {
+		if (html_text_get_pango_direction (slave->owner) != PANGO_DIRECTION_RTL) {
 			/* LTR */
-			cursor->offset = slave->posStart + slave->posLen;
+			return html_text_slave_get_right_edge (slave, cursor);
 		} else {
 			/* RTL */
-			cursor->offset = slave->posStart + slave->posLen - gi->glyph_item.item->num_chars;
+			return html_text_slave_get_left_edge (slave, cursor);
 		}
+	}
 
-		if (pi->attrs [cursor->offset].is_cursor_position)
-			return TRUE;
-		else
-			return html_text_slave_cursor_left (slave, cursor);
-	} else
-		return FALSE;
+	return FALSE;
 }
 
 void

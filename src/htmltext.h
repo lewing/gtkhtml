@@ -85,6 +85,7 @@ struct _HTMLText {
 
 	GSList *links;
 	gint focused_link_offset;
+	PangoDirection direction;
 };
 
 struct _HTMLTextClass {
