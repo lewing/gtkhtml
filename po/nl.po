@@ -2,21 +2,18 @@
 # Copyright (C) 2000 Free Software Foundation, Inc.
 # Dennis Smit <synap@area101.penguin.nl>, 2000.
 # Tino Meinen <a.t.meinen@chello.nl>, 2002, 2003.
-#  
-# TODO
-#  	snelkoppelingen
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml cvs\n"
-"POT-Creation-Date: 2003-09-25 18:00+0200\n"
-"PO-Revision-Date: 2003-07-24 00:22+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-10-01 20:30+0200\n"
+"PO-Revision-Date: 2003-10-02 02:10+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -983,11 +980,12 @@ msgstr "Rechthoeken"
 
 #. string marked for translations is sample text. you may want to translate it to common sample text in your language
 #: components/html-editor/body.c:123
-#, fuzzy
 msgid ""
 "The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a href="
 "\"mailto:dog\">dog</a>."
-msgstr "Pa's wijze lynx bezag vroom het fikse aquaduct."
+msgstr ""
+"Pa's wijze <a href=\"mailto:lynx\">lynx</a> bezag vroom het fikse <a href="
+"\"mailto:aquaduct\">aquaduct</a>."
 
 #: components/html-editor/body.c:276 src/gtkhtml.c:2555
 msgid "Document Title"
@@ -1438,9 +1436,8 @@ msgstr "Invoegen: Tekstbestand"
 
 #. string marked for translations is sample text. you may want to translate it to common sample text in your language
 #: components/html-editor/paragraph.c:62
-#, fuzzy
 msgid "The quick brown fox jumps over the lazy dog.</div>"
-msgstr "Pa's wijze lynx bezag vroom het fikse aquaduct."
+msgstr "Pa's wijze lynx bezag vroom het fikse aquaduct.</div>"
 
 #: components/html-editor/paragraph.c:131
 msgid "Pre"
@@ -1579,11 +1576,11 @@ msgstr "Cel-inhoud"
 
 #: components/html-editor/popup.c:539
 msgid "Check Word Spelling..."
-msgstr ""
+msgstr "Spelling van woord controleren..."
 
 #: components/html-editor/popup.c:544
 msgid "Add Word to"
-msgstr ""
+msgstr "Woord toevoegen aan"
 
 #: components/html-editor/popup.c:548
 #, c-format
@@ -1591,17 +1588,17 @@ msgid "%s Dictionary"
 msgstr "%s woordenboek"
 
 #: components/html-editor/popup.c:557
-#, fuzzy
 msgid "Add Word to Dictionary"
-msgstr "%s woordenboek"
+msgstr "Woord aan woordenboek toevoegen"
 
 #: components/html-editor/popup.c:560
 msgid "Ignore Misspelled Word"
-msgstr ""
+msgstr "Fout gespelde woord negeren"
 
+# Methoden?
 #: components/html-editor/popup.c:563
 msgid "Input Methods"
-msgstr ""
+msgstr "Invoermethodes"
 
 #: components/html-editor/replace.c:75
 msgid "Replace confirmation"
@@ -1656,15 +1653,11 @@ msgstr "_achteruit"
 msgid "Find Regular Expression"
 msgstr "Reguliere Expressie Zoeken"
 
-#: components/html-editor/spell.c:278
-msgid "No misspelled word found"
-msgstr ""
-
-#: components/html-editor/spell.c:285
+#: components/html-editor/spell.c:277
 msgid "Spell checker"
 msgstr "Spellingscontrole"
 
-#: components/html-editor/spell.c:378
+#: components/html-editor/spell.c:366
 msgid "Current _Languages"
 msgstr "Huidige _talen"
 
@@ -1698,7 +1691,7 @@ msgstr "Afbeeldingskader"
 
 #: components/html-editor/template.c:281
 msgid "Labels"
-msgstr ""
+msgstr "Labels"
 
 #: components/html-editor/test-html-editor-control.c:317
 msgid "Open file..."
@@ -1923,6 +1916,3 @@ msgstr "Afdrukvoorbeeld"
 #: src/testgtkhtml.c:973
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML test-toepassing"
-
-#~ msgid "The quick brown fox jumped over the lazy dog."
-#~ msgstr "Pa's wijze lynx bezag vroom het fikse aquaduct."
