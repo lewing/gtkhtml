@@ -5263,7 +5263,7 @@ draw_link_text (HTMLLinkText *lt, HTMLEngine *e)
 gboolean
 html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 {
-	if (e->clue && dir == GTK_DIR_TAB_FORWARD || dir == GTK_DIR_TAB_BACKWARD) {
+	if (e->clue && (dir == GTK_DIR_TAB_FORWARD || dir == GTK_DIR_TAB_BACKWARD)) {
 		HTMLObject *cur;
 		gint offset;
 

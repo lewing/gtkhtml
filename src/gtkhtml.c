@@ -2010,6 +2010,18 @@ init_properties (GtkHTMLClass *klass)
 	initialized = TRUE;
 }
 
+static void
+set_focus_child (GtkContainer *containter, GtkWidget *w)
+{
+	HTMLObject *o = NULL;
+
+	while (w && !(o = g_object_get_data (G_OBJECT (w), "embeddedelement")))
+		w = w->parent;
+
+	if (o)
+		html_engine_set_focus_object (GTK_HTML (containter)->engine, o);
+}
+
 static gboolean
 focus (GtkWidget *w, GtkDirectionType direction)
 {
@@ -2487,6 +2499,8 @@ gtk_html_class_init (GtkHTMLClass *klass)
 	widget_class->drag_end = drag_end;
 	widget_class->drag_data_received = drag_data_received;
 	widget_class->focus = focus;
+
+	container_class->set_focus_child = set_focus_child;
 
 	layout_class->set_scroll_adjustments = set_adjustments;
 
