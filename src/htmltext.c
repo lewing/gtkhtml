@@ -1544,14 +1544,8 @@ get_cursor (HTMLObject *self,
 	    gint *x1, gint *y1,
 	    gint *x2, gint *y2)
 {
-	HTMLObject *slave, *next;
+	HTMLObject *slave;
 	guint ascent, descent;
-
-	next = html_object_next_not_slave (self);
-	if (offset == HTML_TEXT (self)->text_len && next && html_object_is_text (next) && HTML_TEXT (next)->text [0] != ' ') {
-		html_object_get_cursor (next, painter, 0, x1, y1, x2, y2);
-		return;
-	}
 
 	html_object_get_cursor_base (self, painter, offset, x2, y2);
 
@@ -1575,13 +1569,7 @@ get_cursor_base (HTMLObject *self,
 		 guint offset,
 		 gint *x, gint *y)
 {
-	HTMLObject *obj, *next;
-
-	next = html_object_next_not_slave (self);
-	if (offset == HTML_TEXT (self)->text_len && next && html_object_is_text (next) && HTML_TEXT (next)->text [0] != ' ') {
-		html_object_get_cursor_base (next, painter, 0, x, y);
-		return;
-	}
+	HTMLObject *obj;
 
 	for (obj = self->next; obj != NULL; obj = obj->next) {
 		HTMLTextSlave *slave;
@@ -1595,25 +1583,8 @@ get_cursor_base (HTMLObject *self,
 		    || obj->next == NULL
 		    || HTML_OBJECT_TYPE (obj->next) != HTML_TYPE_TEXTSLAVE) {
 			html_object_calc_abs_position (obj, x, y);
-			if (offset > slave->posStart) {
-				HTMLText *text;
-				GtkHTMLFontStyle font_style;
-				gint line_offset, width, asc, dsc;
-				gchar *slave_text;
-
-				text = HTML_TEXT (self);
-
-				font_style = html_text_get_font_style (text);
-				line_offset = html_text_slave_get_line_offset (slave, 0, painter);
-				/* FIXME: cache items and glyphs? */
-				slave_text = html_text_get_text (text, slave->posStart);
-				html_painter_calc_text_size (painter,
-							     slave_text,
-							     offset - slave->posStart, NULL, NULL, 0, &line_offset,
-							     font_style, text->face, &width, &asc, &dsc);
-
-				*x += width;
-			}
+			if (offset > slave->posStart)
+				*x += html_text_calc_part_width (HTML_TEXT (self), painter, slave->posStart, offset - slave->posStart, NULL, NULL);
 
 			return;
 		}
