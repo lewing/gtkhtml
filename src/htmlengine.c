@@ -75,7 +75,6 @@
 #include "htmlclueh.h"
 #include "htmlcluev.h"
 #include "htmlcluealigned.h"
-#include "htmlvspace.h"
 #include "htmlimage.h"
 #include "htmllinktext.h"
 #include "htmllist.h"

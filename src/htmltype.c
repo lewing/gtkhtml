@@ -51,9 +51,7 @@
 #include "htmltextarea.h"
 #include "htmltextinput.h"
 #include "htmltextslave.h"
-#include "htmlvspace.h"
 
-
 /* This is used to statically initialize all the classes we are using.  */
 
 static gboolean types_inited = FALSE;
