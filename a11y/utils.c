@@ -104,3 +104,17 @@ html_utils_get_accessible (HTMLObject *o, AtkObject *parent)
 
 	return accessible;
 }
+
+static GtkHTML * gtkhtml = NULL;
+                                                                                              
+void
+html_utils_set_gtk_html(GtkHTML * p)
+{
+        gtkhtml = p;
+}
+                                                                                              
+GtkHTML *
+html_utils_get_gtk_html(void)
+{
+        return gtkhtml;
+}

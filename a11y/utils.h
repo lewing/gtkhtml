@@ -31,5 +31,8 @@
 #define HTML_OBJECT_ACCESSIBLE(o) ATK_OBJECT (html_object_get_data (HTML_OBJECT (o), ACCESSIBLE_ID))
 
 AtkObject *html_utils_get_accessible (HTMLObject *o, AtkObject *parent);
+GtkHTML	*html_utils_get_gtk_html (void);
+void 	html_utils_set_gtk_html (GtkHTML * gtkhtml);
+
 
 #endif

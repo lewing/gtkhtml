@@ -168,10 +168,11 @@ gtk_html_a11y_grab_focus_cb(GtkWidget * widget)
 {
         AtkObject *focus_object, *obj;
 
+        html_utils_set_gtk_html(GTK_HTML(widget));
 
 	focus_object = gtk_html_a11y_get_focus_object (widget);
         obj = gtk_widget_get_accessible (widget);
-        g_object_set_data (obj, "gail-focus-object", focus_object);
+        g_object_set_data (G_OBJECT(obj), "gail-focus-object", focus_object);
         atk_focus_tracker_notify (focus_object);
 
 }
@@ -187,14 +188,13 @@ gtk_html_a11y_cursor_move_cb(GtkWidget *widget,  GtkDirectionType dir_type, GtkH
 	
 	if (prev_object != focus_object) {
 		prev_object = focus_object;
-        	g_object_set_data (obj, "gail-focus-object", focus_object);
+        	g_object_set_data (G_OBJECT(obj), "gail-focus-object", focus_object);
         	atk_focus_tracker_notify (focus_object);
 	} else {
 		if (G_IS_HTML_A11Y_TEXT(focus_object)) {
 			gint offset;
                                                                                 
 			offset = (GTK_HTML(widget))->engine->cursor->offset;
-			g_object_set_data(G_OBJECT(focus_object), "caret-offset", offset);
 			g_signal_emit_by_name(focus_object, "text_caret_moved",offset);
                 }
         }
@@ -220,6 +220,7 @@ gtk_html_a11y_new (GtkWidget *widget)
 	g_signal_connect_after(widget, "cursor_move",
 			G_CALLBACK(gtk_html_a11y_cursor_move_cb),
 			NULL);
+	html_utils_set_gtk_html(GTK_HTML(widget));
 
 	/* printf ("created new gtkhtml accessible object\n"); */
 

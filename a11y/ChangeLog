@@ -1,3 +1,17 @@
+2003-07-23  Yuedong Du  <yuedong.du@sun.com>
+
+	* utils.c: (html_utils_set_gtk_html), (html_utils_get_gtk_html):add
+	functions to remember current gtkhtml widget.
+	* utils.h: declaration of functions above.
+	* object.c: (gtk_html_a11y_grab_focus_cb),(gtk_html_a11y_new): remember
+	the current gtk html widget.
+	* text.c: (atk_text_interface_init), add more implementation of
+	atk_text interface.
+	(html_a11y_text_get_caret_offset), change to find the offset from
+	gtkhtml engine, instead of use g_object_set_data().
+	(html_a11y_text_set_caret_offset), (html_a11y_text_add_selection):
+	implementation of corresponding interface.
+
 2003-07-21  Yuedong Du  <yuedong.du@sun.com>
 
 	* object.c: (gtk_html_a11y_cursor_move_cb): emit caret-move signal on
