@@ -637,26 +637,55 @@ get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gint *item_of
 	return idx;
 }
 
-gint
-html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gint len)
+static void
+update_asc_dsc (PangoItem *item, gint *asc, gint *dsc)
 {
+	PangoFontMetrics *pfm;
+
+	pfm = pango_font_get_metrics (item->analysis.font, item->analysis.language);
+	if (asc)
+		*asc = MAX (*asc, PANGO_PIXELS (pango_font_metrics_get_ascent (pfm)));
+	if (dsc)
+		*dsc = MAX (*dsc, PANGO_PIXELS (pango_font_metrics_get_descent (pfm)));
+	pango_font_metrics_unref (pfm);
+}
+
+gint
+html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gint len, gint *asc, gint *dsc)
+{
+	HTMLTextPangoInfo *pi;
 	gint idx, width = 0;
 
 	g_return_val_if_fail (offset >= 0, 0);
 	g_return_val_if_fail (offset + len <= text->text_len, 0);
 
+	pi = html_text_get_pango_info (text, painter);
+
+	if (asc)
+		*asc = 0;
+	if (dsc)
+		*dsc = 0;
+
+	if (pi->n == 0)
+		return 0;
+
 	idx = get_item_index (text, painter, offset, &offset);
+	if (asc || dsc)
+		update_asc_dsc (pi->entries [idx].item, asc, dsc);
+
 	while (len > 0) {
-		width += text->pi->entries [idx].widths [offset];
-		if (offset >= text->pi->entries [idx].item->num_chars - 1) {
+		width += pi->entries [idx].widths [offset];
+		if (offset > pi->entries [idx].item->num_chars) {
 			idx ++;
 			offset = 0;
+			if (asc || dsc)
+				update_asc_dsc (pi->entries [idx].item, asc, dsc);
 		} else
 			offset ++;
 		len --;
 	}
 
-	return width;
+	return PANGO_PIXELS (width);
 }
 
 static gint
@@ -668,7 +697,7 @@ calc_preferred_width (HTMLObject *self,
 
 	text = HTML_TEXT (self);
 
-	width = html_text_calc_part_width (text, painter, 0, text->text_len);
+	width = html_text_calc_part_width (text, painter, 0, text->text_len, NULL, NULL);
 	if (html_clueflow_tabs (HTML_CLUEFLOW (self->parent), painter)) {
 		gint line_offset;
 		gint tabs;
@@ -713,7 +742,7 @@ ht_fit_line (HTMLObject *o,
 	remove_text_slaves (o);
 
 	/* Turn all text over to our slaves */
-	text_slave = html_text_slave_new (text, 0, HTML_TEXT (text)->text_len, 0);
+	text_slave = html_text_slave_new (text, 0, HTML_TEXT (text)->text_len);
 	html_clue_append_after (HTML_CLUE (o->parent), text_slave, o);
 
 	return HTML_FIT_COMPLETE;

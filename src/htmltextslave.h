@@ -34,7 +34,6 @@ struct _HTMLTextSlave {
 	HTMLText *owner;
 	guint posStart;
 	guint posLen;
-	guint start_word;
 	gchar *charStart;
 
 	HTMLTextPangoInfo *pi;
@@ -53,12 +52,10 @@ void        html_text_slave_init                  (HTMLTextSlave      *slave,
 						   HTMLTextSlaveClass *klass,
 						   HTMLText           *owner,
 						   guint               posStart,
-						   guint               posLen,
-						   guint               start_word);
+						   guint               posLen);
 HTMLObject *html_text_slave_new                   (HTMLText           *owner,
 						   guint               posStart,
-						   guint               posLen,
-						   guint               start_word);
+						   guint               posLen);
 gint        html_text_slave_get_line_offset       (HTMLTextSlave      *slave,
 						   gint                offset,
 						   HTMLPainter        *p);

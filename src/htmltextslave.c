@@ -55,7 +55,7 @@ html_text_slave_get_text (HTMLTextSlave *slave)
 
 /* Split this TextSlave at the specified offset.  */
 static void
-split (HTMLTextSlave *slave, guint offset, guint start_word, char *start_pointer)
+split (HTMLTextSlave *slave, guint offset, char *start_pointer)
 {
 	HTMLObject *obj;
 	HTMLObject *new;
@@ -67,7 +67,7 @@ split (HTMLTextSlave *slave, guint offset, guint start_word, char *start_pointer
 
 	new = html_text_slave_new (slave->owner,
 				   slave->posStart + offset,
-				   slave->posLen - offset, start_word);
+				   slave->posLen - offset);
 
 	HTML_TEXT_SLAVE (new)->charStart = start_pointer;
 
@@ -109,10 +109,7 @@ calc_width (HTMLTextSlave *slave, HTMLPainter *painter, gint *asc, gint *dsc)
 		width += (html_text_text_line_length (html_text_slave_get_text (slave), &line_offset, slave->posLen, &tabs) - slave->posLen)*
 			html_painter_get_space_width (painter, html_text_get_font_style (text), text->face);
 
-	*asc = HTML_OBJECT (text)->ascent;
-	*dsc = HTML_OBJECT (text)->descent;
-
-	width += html_text_calc_part_width (text, painter, slave->posStart, slave->posLen);
+	width += html_text_calc_part_width (text, painter, slave->posStart, slave->posLen, asc, dsc);
 
 	return width;
 }
@@ -327,8 +324,6 @@ html_text_slave_remove_leading_space (HTMLTextSlave *slave, HTMLPainter *painter
 
 	begin = html_text_slave_get_text (slave);
 	if (*begin == ' ' && could_remove_leading_space (slave, lineBegin)) {
-		if (slave->posStart == 0)
-			slave->start_word ++;
 		begin = g_utf8_next_char (begin);
 		slave->charStart = begin;
 		slave->posStart ++;
@@ -983,8 +978,7 @@ html_text_slave_init (HTMLTextSlave *slave,
 		      HTMLTextSlaveClass *klass,
 		      HTMLText *owner,
 		      guint posStart,
-		      guint posLen,
-		      guint start_word)
+		      guint posLen)
 {
 	HTMLText *owner_text;
 	HTMLObject *object;
@@ -999,7 +993,6 @@ html_text_slave_init (HTMLTextSlave *slave,
 
 	slave->posStart   = posStart;
 	slave->posLen     = posLen;
-	slave->start_word = start_word;
 	slave->owner      = owner;
 	slave->charStart  = NULL;
 	slave->pi         = NULL;
@@ -1011,12 +1004,12 @@ html_text_slave_init (HTMLTextSlave *slave,
 }
 
 HTMLObject *
-html_text_slave_new (HTMLText *owner, guint posStart, guint posLen, guint start_word)
+html_text_slave_new (HTMLText *owner, guint posStart, guint posLen)
 {
 	HTMLTextSlave *slave;
 
 	slave = g_new (HTMLTextSlave, 1);
-	html_text_slave_init (slave, &html_text_slave_class, owner, posStart, posLen, start_word);
+	html_text_slave_init (slave, &html_text_slave_class, owner, posStart, posLen);
 
 	return HTML_OBJECT (slave);
 }

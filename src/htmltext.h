@@ -149,7 +149,9 @@ gint              html_text_text_line_length             (const gchar      *text
 gint              html_text_calc_part_width              (HTMLText         *text,
 							  HTMLPainter      *painter,
 							  gint              offset,
-							  gint              len);
+							  gint              len,
+							  gint             *asc,
+							  gint             *dsc);
 /*
  * protected
  */
