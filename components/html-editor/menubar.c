@@ -35,6 +35,7 @@
 #include "htmlengine.h"
 #include "htmlengine-edit-cut-and-paste.h"
 #include "htmlimage.h"
+#include "htmlrule.h"
 #include "htmltable.h"
 
 #include "menubar.h"
@@ -122,11 +123,13 @@ insert_rule_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char *cnam
 	if (cd->properties_dialog)
 		gtk_html_edit_properties_dialog_close (cd->properties_dialog);
 
+	html_engine_insert_rule (cd->html->engine, 0, 100, 2, FALSE, HTML_HALIGN_LEFT);
+
 	cd->properties_dialog = gtk_html_edit_properties_dialog_new (cd, _("Insert"), ICONDIR "/insert-rule-24.png");
 
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_RULE, _("Rule"),
-						   rule_insert,
+						   rule_properties,
 						   rule_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
