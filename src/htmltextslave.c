@@ -465,23 +465,46 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	HTMLTextSlave *slave = HTML_TEXT_SLAVE (o);
 	gint lbw, w, lbo, ltw, lwl, offset;
 	gint ii, io;
-	HTMLFitType rv = (!firstRun && lineBegin) ? HTML_FIT_COMPLETE : HTML_FIT_NONE;
+	HTMLFitType rv = HTML_FIT_NONE;
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, painter);
+	gboolean force_fit = lineBegin;
+
+	if (slave->posStart == 0) {
+		HTMLObject *prev = html_object_prev_not_slave (HTML_OBJECT (slave->owner));
+		if (prev && html_object_is_text (prev) && HTML_TEXT (prev)->text_len > 0 && slave->posLen > 0) {
+			HTMLTextPangoInfo *ppi = html_text_get_pango_info (HTML_TEXT (prev), painter);
+
+			/* if (!pi->entries [0].attrs [0].is_line_break) */
+			/* FIXME: this suck for more complicated languages
+			   the solution is not easy though, we need to put text
+			   with different styles (even links) into one text object
+			   and keep style info with interval position
+			 */
+			if (HTML_TEXT (prev)->text [strlen (HTML_TEXT (prev)->text) - 1] != ' ')
+				force_fit = TRUE;
+		}
+	}
+
+	if (rv == HTML_FIT_COMPLETE)
+		return rv;
 
 	lbw = ltw = lwl = w = 0;
 	offset = lbo = slave->posStart;
 	ii = html_text_get_item_index (slave->owner, painter, offset, &io);
 
-	while (widthLeft > lbw && offset < slave->posStart + slave->posLen) {
+	while ((force_fit || widthLeft > lbw) && offset < slave->posStart + slave->posLen) {
 		if (offset > slave->posStart && pi->entries [ii].attrs [io].is_line_break) {
 			gint new_ltw, new_lwl;
 
 			new_ltw = PANGO_PIXELS (html_text_tail_white_space (pi, ii, io, &new_lwl));
-			if (w - new_ltw <= widthLeft) {
+			if (w - new_ltw <= widthLeft || force_fit) {
 				ltw = new_ltw;
 				lwl = new_lwl;
 				lbw = w - ltw;
 				lbo = offset;
+				if (force_fit && lbw >= widthLeft)
+					break;
+				force_fit = FALSE;
 			} else
 				break;
 		}
@@ -490,7 +513,7 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 		html_text_pi_forward (pi, &ii, &io);
 	}
 
-	if (offset == slave->posStart + slave->posLen && widthLeft >= w) {
+	if (offset == slave->posStart + slave->posLen && (widthLeft >= w || force_fit)) {
 		rv = HTML_FIT_COMPLETE;
 		o->width = w;
 	} else if (lbo > slave->posStart) {
