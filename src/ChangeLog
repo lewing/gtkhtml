@@ -1,3 +1,9 @@
+2002-03-28  Larry Ewing  <lewing@ximian.com>
+
+	* htmlgdkpainter.c (draw_background): optimize the 1x1 pixel
+	background image into drawing a color or nothing.  This should
+	help over the wire drawing speed in some degenerate cases.
+
 2002-03-05  Larry Ewing  <lewing@ximian.com>
 
 	* htmlselect.c: convert from utf8 properly and use needs_update

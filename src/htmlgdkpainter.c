@@ -658,6 +658,34 @@ draw_background (HTMLPainter *painter,
 	pw = gdk_pixbuf_get_width (pixbuf);
 	ph = gdk_pixbuf_get_height (pixbuf);
 
+	/* optimize out some special cases */
+	if (pw == 1 && ph == 1) {
+		GdkColor pixcol;
+		guchar *p;
+
+		p = gdk_pixbuf_get_pixels (pixbuf);
+		
+		if (!(gdk_pixbuf_get_has_alpha (pixbuf) && (p[3] < 0x80))) {
+			pixcol.red = p[0] * 0xff;
+			pixcol.green = p[1] * 0xff; 
+			pixcol.blue = p[2] * 0xff;
+			
+			alloc_color (painter, &pixcol);
+			color = &pixcol;
+		}
+
+		if (color) {
+			gdk_gc_set_foreground (gdk_painter->gc, color);
+			gdk_draw_rectangle (gdk_painter->pixmap, gdk_painter->gc,
+					    TRUE, x - gdk_painter->x1, y - gdk_painter->y1,
+					    width, height);
+		}	
+		
+		if (color == &pixcol)
+			free_color (painter, &pixcol);
+		return;
+	}
+
 	tile_width = (tile_x % pw) + width;
 	tile_height = (tile_y % ph) + height;
 
