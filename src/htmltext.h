@@ -172,23 +172,27 @@ gint              html_text_calc_part_width              (HTMLText           *te
 							  gint               *dsc);
 gint              html_text_get_item_index               (HTMLText           *text,
 							  HTMLPainter        *painter,
-							  gint                offset,
-							  gint               *item_offset);
+							  int                 offset,
+							  int                *item_offset,
+							  int                *char_offset);
 gboolean          html_text_pi_backward                  (HTMLTextPangoInfo  *pi,
-							  gint               *ii,
-							  gint               *io);
+							  int                *ii,
+							  int                *io,
+							  int                *char_offset);
 gboolean          html_text_pi_forward                   (HTMLTextPangoInfo  *pi,
-							  gint               *ii,
-							  gint               *io);
+							  int                *ii,
+							  int                *io,
+							  int                *char_offset);
 void              html_text_free_attrs                   (GSList             *attrs);
 gint              html_text_tail_white_space             (HTMLText           *text,
 							  HTMLPainter        *painter,
-							  gint                offset,
-							  gint                ii,
-							  gint                io,
-							  gint               *white_len,
-							  gint                line_offset,
-							  gchar              *s);
+							  int                 offset,
+							  int                 ii,
+							  int                 io,
+							  int                 char_offset,
+							  int                *white_len,
+							  int                 line_offset,
+							  char               *s);
 void              html_text_append_link                  (HTMLText           *text,
 							  gchar              *url,
 							  gchar              *target,

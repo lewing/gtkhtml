@@ -831,18 +831,30 @@ html_text_get_line_offset (HTMLText *text, HTMLPainter *painter, gint offset)
 	return line_offset;
 }
 
-gint
-html_text_get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gint *item_offset)
+int
+html_text_get_item_index (HTMLText *text, HTMLPainter *painter, int offset, int *item_offset, int *char_offset)
 {
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
-	gint idx = 0;
+	int idx = 0;
 
-	while (idx < pi->n - 1 && offset >= pi->entries [idx].glyph_item.item->num_chars) {
-		offset -= pi->entries [idx].glyph_item.item->num_chars;
-		idx ++;
+	(*char_offset) = 0;
+
+	if (pi->n > 0) {
+		while (idx < pi->n - 1 && offset >= pi->entries [idx].glyph_item.item->num_chars) {
+			offset -= pi->entries [idx].glyph_item.item->num_chars;
+			(*char_offset) += pi->entries [idx].glyph_item.item->num_chars;
+			idx ++;
+		}
+
+		if (0 && pi->entries [idx].glyph_item.item->analysis.level % 2)
+			/* RTL */
+			*item_offset = pi->entries [idx].glyph_item.item->num_chars - 1 - offset;
+		else
+			/* LTR */
+			*item_offset = offset;
+
+		(*char_offset) += *item_offset;
 	}
-
-	*item_offset = offset;
 
 	return idx;
 }
@@ -923,7 +935,7 @@ html_text_calc_text_size (HTMLText *t, HTMLPainter *painter,
 gint
 html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, char *start, gint offset, gint len, gint *asc, gint *dsc)
 {
-	gint idx, width = 0, line_offset;
+	gint idx, width = 0, line_offset, char_offset;
 	gint ascent = 0, descent = 0; /* Quiet GCC */
 	gboolean need_ascent_descent = asc || dsc;
 	HTMLTextPangoInfo *pi;
@@ -951,13 +963,15 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, char *start, gi
 
 	pi = html_text_get_pango_info (text, painter);
 	
-	idx = html_text_get_item_index (text, painter, offset, &offset);
+	idx = html_text_get_item_index (text, painter, offset, &offset, &char_offset);
 	if (need_ascent_descent) {
 		update_asc_dsc (painter, pi->entries [idx].glyph_item.item, &ascent, &descent);
 		font = pi->entries [idx].glyph_item.item->analysis.font;
 		language = pi->entries [idx].glyph_item.item->analysis.language;
 	}
 	while (len > 0) {
+		int old_idx;
+
 		if (*s == '\t') {
 			gint skip = 8 - (line_offset % 8);
 			width += skip*pi->entries [idx].widths [offset];
@@ -967,15 +981,14 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, char *start, gi
 			line_offset ++;
   		}
 		len --;
-		if (offset >= pi->entries [idx].glyph_item.item->num_chars - 1) {
-			idx ++;
-			offset = 0;
+
+		old_idx = idx;
+		if (html_text_pi_forward (pi, &idx, &offset, &char_offset) && idx != old_idx)
 			if (len > 0 && (need_ascent_descent) && (pi->entries [idx].glyph_item.item->analysis.font != font
 								 || pi->entries [idx].glyph_item.item->analysis.language != language)) {
 				update_asc_dsc (painter, pi->entries [idx].glyph_item.item, &ascent, &descent);
 			}
-		} else
-			offset ++;
+
 		s = g_utf8_next_char (s);
   	}
   
@@ -1255,7 +1268,7 @@ prepare_attrs (HTMLText *text, HTMLPainter *painter)
 	return attrs;
 }
 
-PangoDirection
+static PangoDirection
 html_text_get_pango_direction (HTMLText *text)
 {
 	switch (html_object_get_direction (HTML_OBJECT (text))) {
@@ -1342,30 +1355,90 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 	return text->pi;
 }
 
-gboolean
-html_text_pi_backward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
+static int
+item_head_offset (PangoItem *item)
 {
-	if (*io <= 0) {
-		if (*ii <= 0)
-			return FALSE;
-		(*ii) --;
-		*io = pi->entries [*ii].glyph_item.item->num_chars - 1;
-	} else
-		(*io) --;
+	if (0 && item ->analysis.level % 2)
+		/* RTL */
+		return item->num_chars - 1;
+	else
+		/* LTR */
+		return 0;
+}
+
+static int
+item_tail_offset (PangoItem *item)
+{
+	if (0 && item ->analysis.level % 2)
+		/* RTL */
+		return 0;
+	else
+		/* LTR */
+		return item->num_chars - 1;
+}
+
+gboolean
+html_text_pi_backward (HTMLTextPangoInfo *pi, int *ii, int *io, int *char_offset)
+{
+	PangoDirection dir = (pi->entries [*ii].glyph_item.item->analysis.level % 2) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+
+	if (1 || dir == PANGO_DIRECTION_LTR) {
+		if (*io <= 0) {
+			if (*ii <= 0)
+				return FALSE;
+			(*ii) --;
+			*io = item_tail_offset (pi->entries [*ii].glyph_item.item);
+			*char_offset -= pi->entries [*ii].glyph_item.item->num_chars - *io;
+		} else {
+			(*io) --;
+			(*char_offset) --;
+		}
+	} else {
+		if (*io >= pi->entries [*ii].glyph_item.item->num_chars - 1) {
+			if (*ii <= 0)
+				return FALSE;
+			*char_offset -= pi->entries [*ii].glyph_item.item->num_chars - 1;
+			(*ii) --;
+			*io = item_tail_offset (pi->entries [*ii].glyph_item.item);
+			*char_offset -= pi->entries [*ii].glyph_item.item->num_chars - *io;
+		} else {
+			(*io) ++;
+			(*char_offset) ++;
+		}
+	}
 
 	return TRUE;
 }
 
 gboolean
-html_text_pi_forward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
+html_text_pi_forward (HTMLTextPangoInfo *pi, int *ii, int *io, int *char_offset)
 {
-	if (*io >= pi->entries [*ii].glyph_item.item->num_chars - 1) {
-		if (*ii >= pi->n -1)
-			return FALSE;
-		(*ii) ++;
-		*io = 0;
-	} else
-		(*io) ++;
+	PangoDirection dir = (pi->entries [*ii].glyph_item.item->analysis.level % 2) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+
+	if (1 || dir == PANGO_DIRECTION_LTR) {
+		if (*io >= pi->entries [*ii].glyph_item.item->num_chars - 1) {
+			if (*ii >= pi->n -1)
+				return FALSE;
+			(*ii) ++;
+			*io = item_head_offset (pi->entries [*ii].glyph_item.item);
+			*char_offset += *io + 1;
+		} else {
+			(*io) ++;
+			(*char_offset) ++;
+		}
+	} else {
+		if (*io <= 0) {
+			if (*ii >= pi->n -1)
+				return FALSE;
+			(*char_offset) += pi->entries [*ii].glyph_item.item->num_chars;
+			(*ii) ++;
+			*io = item_head_offset (pi->entries [*ii].glyph_item.item);
+			*char_offset += *io;
+		} else {
+			(*io) --;
+			(*char_offset) --;
+		}
+	}
 
 	return TRUE;
 }
@@ -1385,18 +1458,16 @@ html_text_pi_forward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
  * 
  * Return value: width of found trailing white space, in Pango units
  **/
-gint
-html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, gint offset, gint ii, gint io, gint *white_len, gint line_offset, gchar *s)
+int
+html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, int offset, int ii, int io, int char_offset, int *white_len, int line_offset, char *s)
 {
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 	int wl = 0;
 	int ww = 0;
-	int current_offset = offset;
 
-	if (html_text_pi_backward (pi, &ii, &io)) {
+	if (html_text_pi_backward (pi, &ii, &io, &char_offset)) {
 		s = g_utf8_prev_char (s);
-		current_offset --;
-		if (pi->attrs [current_offset].is_white) {
+		if (pi->attrs [char_offset].is_white) {
 			if (*s == '\t' && offset > 1) {
 				gint skip = 8, co = offset - 1;
 				
@@ -1422,8 +1493,8 @@ html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, gint offset, g
 }
 
 static void
-update_mw (HTMLText *text, HTMLPainter *painter, gint offset, gint *last_offset, gint *ww, gint *mw, gint ii, gint io, gchar *s, gint line_offset) {
-	*ww -= html_text_tail_white_space (text, painter, offset, ii, io, NULL, line_offset, s);
+update_mw (HTMLText *text, HTMLPainter *painter, gint offset, gint *last_offset, gint *ww, gint *mw, gint ii, gint io, int char_offset, gchar *s, gint line_offset) {
+	*ww -= html_text_tail_white_space (text, painter, offset, ii, io, char_offset, NULL, line_offset, s);
 	if (*ww > *mw)
 		*mw = *ww;
 	*ww = 0;
@@ -1443,18 +1514,18 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 	HTMLText *text = HTML_TEXT (self);
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 	gint mw = 0, ww;
-	gint ii, io, offset, last_offset, line_offset;
+	gint ii, io, offset, last_offset, line_offset, char_offset;
 	gchar *s;
 
 	ww = 0;
 
-	last_offset = offset = 0;
+	char_offset = last_offset = offset = 0;
 	ii = io = 0;
 	line_offset = html_text_get_line_offset (text, painter, 0);
 	s = text->text;
 	while (offset < text->text_len) {
-		if (offset > 0 && html_text_is_line_break (pi->attrs [offset]))
-			update_mw (text, painter, offset, &last_offset, &ww, &mw, ii, io, s, line_offset);
+		if (offset > 0 && html_text_is_line_break (pi->attrs [char_offset]))
+			update_mw (text, painter, offset, &last_offset, &ww, &mw, ii, io, char_offset, s, line_offset);
 
 		if (*s == '\t') {
 			gint skip = 8 - (line_offset % 8);
@@ -1468,7 +1539,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 		s = g_utf8_next_char (s);
 		offset ++;
 
-		html_text_pi_forward (pi, &ii, &io);
+		html_text_pi_forward (pi, &ii, &io, &char_offset);
 	}
 
 	if (ww > mw)
