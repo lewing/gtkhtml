@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtkhtml.evolution-1-4-branch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-09-26 20:58+0200\n"
-"PO-Revision-Date: 2003-09-26 23:26+0200\n"
+"PO-Revision-Date: 2003-10-06 17:55+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@arrakis.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -470,7 +470,7 @@ msgstr "Convierte el párrafo actual a estilo Preformato"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:60
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:60
 msgid "Make the current paragraph a bulleted list"
-msgstr "Convierte el párrafo actual en una lista de viñetas"
+msgstr "Convierte el párrafo actual en una lista de puntos"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:61
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:61
@@ -640,7 +640,7 @@ msgstr "Regla"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:92
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:92
 msgid "Select _All"
-msgstr "Seleccion_ar todo"
+msgstr "Seleccionar _todo"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:93
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:93
@@ -749,7 +749,7 @@ msgstr "_Negrita"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:112
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:112
 msgid "_Bulleted List"
-msgstr "Lista de _viñetas"
+msgstr "Lista de _puntos"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:113
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:113
@@ -1174,7 +1174,7 @@ msgstr "Cabecera"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:36
 msgid "Height:"
-msgstr "Alto:"
+msgstr "Altura:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:37
 msgid "Horizontal alignment:"
@@ -1320,7 +1320,7 @@ msgstr "Vertical:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:81
 msgid "Width:"
-msgstr "Ancho:"
+msgstr "Anchura:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:82
 msgid "Wrap"
