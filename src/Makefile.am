@@ -11,11 +11,7 @@ INCLUDES = 				\
 	-DPREFIX=\"$(prefix)\"
 
 AM_CFLAGS = 								\
-	-DICONDIR=\"$(datadir)/gtkhtml-@GTKHTML_RELEASE@/icons\"	\
-	-DGTK_DISABLE_DEPRECATED=1					\
-	-DGDK_DISABLE_DEPRECATED=1					\
-	-DG_DISABLE_DEPRECATED=1					\
-	-DGNOME_DISABLE_DEPRECATED=1
+	-DICONDIR=\"$(datadir)/gtkhtml-@GTKHTML_RELEASE@/icons\"
 
 lib_LTLIBRARIES = libgtkhtml-3.0.la
 

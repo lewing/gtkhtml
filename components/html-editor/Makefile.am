@@ -16,15 +16,10 @@ AM_CFLAGS = \
         -DGTKHTML_DATADIR=\""$(gtkhtml_data)"\"		\
         -DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DGLADE_DATADIR=\"$(gladedir)\"			\
-	-DGTK_DISABLE_DEPRECATED=1 			\
-	-DGDK_DISABLE_DEPRECATED=1			\
-	-DG_DISABLE_DEPRECATED=1			\
-	-DGNOME_DISABLE_DEPRECATED=1			\
 	-DPREFIX=\""$(prefix)"\"			\
 	-DSYSCONFDIR=\""$(sysconfdir)"\"		\
 	-DDATADIR=\""$(datadir)"\"			\
-	-DLIBDIR=\""$(datadir)"\"			\
-	-DBONOBO_DISABLE_DEPRECATED=1
+	-DLIBDIR=\""$(datadir)"\"
 
 # CORBA stuff
 IDLS = Editor.idl
