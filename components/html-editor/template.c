@@ -183,7 +183,7 @@ set_ui (GtkHTMLEditTemplateProperties *d)
 {
 	d->disable_change = TRUE;
 
-	gtk_clist_select_row (GTK_CLIST (d->clist_template), d->template, 0);
+	gtk_list_select_item (GTK_LIST (d->clist_template), d->template);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width), d->width);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_halign), d->halign - HTML_HALIGN_LEFT);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width_percent), d->width_percent ? 1 : 0);
@@ -194,9 +194,9 @@ set_ui (GtkHTMLEditTemplateProperties *d)
 }
 
 static void
-changed_template (GtkWidget *w, gint row, gint column, GdkEvent *event, GtkHTMLEditTemplateProperties *d)
+changed_template (GtkWidget *w, GtkWidget *child, GtkHTMLEditTemplateProperties *d)
 {
-	d->template = row;
+	d->template = gtk_list_child_position (GTK_LIST (w), child);
 
 	if (!d->disable_change) {
 		gtk_widget_set_sensitive (d->spin_width, template_templates [d->template].has_width);
@@ -222,15 +222,14 @@ changed_template (GtkWidget *w, gint row, gint column, GdkEvent *event, GtkHTMLE
 static void
 fill_templates (GtkHTMLEditTemplateProperties *d)
 {
-	gchar *name [1];
+	GtkWidget *item;
 	gint i;
 
-	gtk_clist_freeze (GTK_CLIST (d->clist_template));
 	for (i = 0; i < TEMPLATES; i ++) {
-		name [0] = template_templates [i].name;
-		gtk_clist_append (GTK_CLIST (d->clist_template), name);
+		item = gtk_list_item_new_with_label (template_templates [i].name);
+		gtk_widget_show (item);
+		gtk_container_add (GTK_CONTAINER (d->clist_template), item);
 	}
-	gtk_clist_thaw (GTK_CLIST (d->clist_template));
 }
 
 static GtkWidget *
@@ -246,7 +245,7 @@ template_widget (GtkHTMLEditTemplateProperties *d, gboolean insert)
 	template_page = glade_xml_get_widget (xml, "vbox_template");
 
 	d->clist_template = glade_xml_get_widget (xml, "clist_templates");
-	gtk_signal_connect (GTK_OBJECT (d->clist_template), "select_row", GTK_SIGNAL_FUNC (changed_template), d);
+	gtk_signal_connect (GTK_OBJECT (d->clist_template), "select_child", GTK_SIGNAL_FUNC (changed_template), d);
 	fill_templates (d);
 
 	d->spin_width           = glade_xml_get_widget (xml, "spin_template_width");
@@ -274,7 +273,7 @@ template_insert (GtkHTMLControlData *cd, gpointer *set_data)
 	*set_data = data;
 	rv = template_widget (data, TRUE);
 	set_ui (data);
-	gtk_clist_select_row (GTK_CLIST (data->clist_template), 0, 0);
+	gtk_list_select_item (GTK_LIST (data->clist_template), 0);
 	gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
 
 	return rv;

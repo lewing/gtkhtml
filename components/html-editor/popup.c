@@ -494,7 +494,7 @@ popup_show (GtkHTMLControlData *cd, GdkEventButton *event)
 
 	menu = prepare_properties_and_menu (cd, &items);
 	if (items)
-		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
 				event ? event->button : 0, event ? event->time : 0);
 	gtk_widget_unref (menu);
 
@@ -534,7 +534,7 @@ property_dialog_show (GtkHTMLControlData *cd)
 {
 	guint items = 0;
 
-	gtk_widget_unref (prepare_properties_and_menu (cd, &items));
+	prepare_properties_and_menu (cd, &items);
 	if (items)
 		show_prop_dialog (cd, GTK_HTML_EDIT_PROPERTY_NONE);
 }
