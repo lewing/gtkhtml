@@ -931,12 +931,71 @@ html_text_tail_white_space (HTMLTextPangoInfo *pi, gint ii, gint io, gint *white
 }
 
 static gint
+calc_nb_before (HTMLText *text, HTMLPainter *painter)
+{
+	gint nbw = 0;
+	HTMLObject *prev = html_object_prev_not_slave (HTML_OBJECT (text));
+
+	if (prev && text->text_len > 0 && html_object_is_text (prev) && HTML_TEXT (prev)->text_len > 0) {
+		HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
+
+		if (!pi->entries [0].attrs [0].is_line_break) {
+			gint ii, io;
+
+			pi = html_text_get_pango_info (HTML_TEXT (prev), painter);
+			ii = pi->n - 1;
+			io = pi->entries [ii].item->num_chars - 1;
+
+			while (!pi->entries [ii].attrs [io].is_line_break) {
+				nbw += PANGO_PIXELS (pi->entries [ii].widths [io]);
+				if (!html_text_pi_forward (pi, &ii, &io)) {
+					nbw += calc_nb_before (HTML_TEXT (prev), painter);
+					break;
+				}
+			}
+		}
+	}
+
+	return nbw;
+}
+
+static gint
+calc_nb_after (HTMLText *text, HTMLPainter *painter)
+{
+	gint nbw = 0;
+	HTMLObject *next = html_object_next_not_slave (HTML_OBJECT (text));
+
+	if (next && text->text_len > 0 && html_object_is_text (next) && HTML_TEXT (next)->text_len > 0) {
+		HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
+
+		if (!pi->entries [pi->n - 1].attrs [pi->entries [pi->n - 1].item->num_chars - 1].is_line_break) {
+			gint ii, io;
+
+			pi = html_text_get_pango_info (HTML_TEXT (next), painter);
+			ii = io = 0;
+
+			while (!pi->entries [ii].attrs [io].is_line_break) {
+				nbw += PANGO_PIXELS (pi->entries [ii].widths [io]);
+				if (!html_text_pi_backward (pi, &ii, &io)) {
+					nbw += calc_nb_after (HTML_TEXT (next), painter);
+					break;
+				}
+			}
+		}
+	}
+
+	return nbw;
+}
+
+static gint
 calc_min_width (HTMLObject *self, HTMLPainter *painter)
 {
 	HTMLText *text = HTML_TEXT (self);
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
-	gint mw = 0, ww = 0;
+	gint mw = 0, ww;
 	gint ii, io, offset;
+
+	ww = calc_nb_before (text, painter);
 
 	offset = 0;
 	ii = io = 0;
@@ -953,43 +1012,9 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 		html_text_pi_forward (pi, &ii, &io);
 	}
 
+	ww += calc_nb_after (text, painter);
 	if (ww > mw)
 		mw = ww;
-
-	/* FIXME-words HTMLText *text = HTML_TEXT (self);
-	HTMLObject *prev, *next, *obj;
-	guint i, w, mw;
-
-	pango_info_destroy (text);
-	html_text_get_pango_info (text, painter);
-	mw = 0;
-
-	for (i = 0; i < text->words; i++) {
-		w = min_word_width (text, painter, i);
-		prev = next = NULL;
-		if (i == 0) {
-			obj = html_object_prev_not_slave (self);
-			if (obj && html_object_is_text (obj)) {
-				w += html_text_get_nb_width (HTML_TEXT (obj), painter, FALSE);
-				prev = obj;
-			}
-		}
-		if (i == text->words - 1) {
-			obj = html_object_next_not_slave (self);
-			if (obj && html_object_is_text (obj)) {
-				w += html_text_get_nb_width (HTML_TEXT (obj), painter, TRUE);
-				next = obj;
-			}
-		}
-
-		if (prev && prev->min_width < w)
-			prev->min_width = w;
-		if (next && next->min_width < w)
-			next->min_width = w;
-
-		if (w > mw)
-			mw = w;
-			} */
 
 	return MAX (1, mw);
 }
