@@ -16,6 +16,8 @@ libgtkhtml_a11y_3_0_la_SOURCES =			\
 	factory.c					\
 	html.h						\
 	html.c						\
+	hyperlink.h					\
+	hyperlink.c					\
 	image.h						\
 	image.c						\
 	link.h						\

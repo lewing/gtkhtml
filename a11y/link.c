@@ -27,6 +27,7 @@
 #include "htmllinktext.h"
 
 #include "html.h"
+#include "hyperlink.h"
 #include "link.h"
 
 static void html_a11y_link_class_init    (HTMLA11YLinkClass *klass);
@@ -140,11 +141,15 @@ html_a11y_link_new (HTMLObject *html_obj)
 static AtkHyperlink *
 html_a11y_link_get_link (AtkHypertext *hypertext, gint link_index)
 {
+	AtkHyperlink *link;
+
+	return html_a11y_hyper_link_new (HTML_A11Y (hypertext));
 }
 
 static gint
 html_a11y_link_get_n_links (AtkHypertext *hypertext)
 {
+	return 1;
 }
 
 static gint
