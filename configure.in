@@ -217,7 +217,7 @@ if $try_pspell; then
 		AC_MSG_RESULT([found ($pspell_ver)])
 	else
 		have_pspell=false
-		AC_MSG_RESULT([not found, gtkhtml will be built without pspell support])
+		AC_MSG_RESULT([not found, GtkHTML will be built without pspell support])
 	fi
 fi
 AC_SUBST(PSPELL_CFLAGS)
@@ -235,7 +235,7 @@ if gnome-config --libs print > /dev/null 2>&1; then
     if test "$vers" -ge 24; then
         AC_MSG_RESULT(found)
     else
-        AC_MSG_ERROR(You need at least GNOME print 0.21pre for this version of GAL)
+        AC_MSG_ERROR(You need at least GNOME print 0.24 for this version of GtkHTML)
     fi
 else
     AC_MSG_ERROR(Did not find GnomePrint installed)
