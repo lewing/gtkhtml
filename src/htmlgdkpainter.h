@@ -22,6 +22,9 @@
 #ifndef _HTMLGDKPAINTER_H
 #define _HTMLGDKPAINTER_H
 
+#include <pango/pango-context.h>
+#include <pango/pango-layout.h>
+
 #include <gtk/gtkwidget.h>
 
 #include "htmlpainter.h"
@@ -36,6 +39,7 @@
 struct _HTMLGdkPainter {
 	HTMLPainter base;
 	PangoContext *pc;
+	PangoLayout *layout;
 
 	/* GdkWindow to draw on */
 	GdkWindow *window;
