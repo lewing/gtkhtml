@@ -1,3 +1,30 @@
+2001-11-20  Radek Doulik  <rodo@ximian.com>
+
+	* htmlengine-search.c (display_search_results): use move_to_found
+	only for non editable widget
+
+	* htmlclueflow.c (search_set_info): use strlen instead of
+	Text::text_len because of utf8
+	(search_set_info): use g_utf8_pointer_to_offset
+	(search_text): use strlen
+	(search_set_info): added text parameter
+
+2001-11-19  Radek Doulik  <rodo@ximian.com>
+
+	* htmlengine-search.c (display_search_results): hide/show cursor
+
+	* htmlselection.c (html_engine_select_interval): wrap in hide/show
+	cursor
+	(html_engine_unselect_all): ditto
+	(html_engine_disable_selection): ditto
+
+	* htmlengine-search.c (html_engine_search_next): if engine is
+	editable, use html_engine_search rather than
+	html_engine_search_next to respect cursor position 
+
+	* htmlengine.c (replace): don't replace with empty text's, just
+	delete selection in such case
+
 2001-12-03  Radek Doulik  <rodo@ximian.com>
 
 	* htmlimage.c (draw): use new colors
