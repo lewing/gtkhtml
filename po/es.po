@@ -12,14 +12,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml.evolution-1-4-branch\n"
-"POT-Creation-Date: 2003-09-25 18:00+0200\n"
-"PO-Revision-Date: 2003-09-10 19:28+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-09-26 20:58+0200\n"
+"PO-Revision-Date: 2003-09-26 23:26+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@arrakis.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "X-Generator: KBabel 1.0.2\n"
 
 #: capplet/gnome-bindings-prop.c:157
@@ -986,12 +986,11 @@ msgstr "Rectángulos"
 
 #. string marked for translations is sample text. you may want to translate it to common sample text in your language
 #: components/html-editor/body.c:123
-#, fuzzy
 msgid ""
 "The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a href="
 "\"mailto:dog\">dog</a>."
 msgstr ""
-"El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el "
+"El veloz <a href=\"mailto:murciélago\">murciélago</a> hindú comía feliz cardillo y kiwi. La cigüeña tocaba el "
 "saxofón detrás del palenque de paja."
 
 #: components/html-editor/body.c:276 src/gtkhtml.c:2555
@@ -1442,11 +1441,10 @@ msgstr "Insertar: archivo de texto"
 
 #. string marked for translations is sample text. you may want to translate it to common sample text in your language
 #: components/html-editor/paragraph.c:62
-#, fuzzy
 msgid "The quick brown fox jumps over the lazy dog.</div>"
 msgstr ""
 "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el "
-"saxofón detrás del palenque de paja."
+"saxofón detrás del palenque de paja.</div>"
 
 #: components/html-editor/paragraph.c:131
 msgid "Pre"
@@ -1582,13 +1580,12 @@ msgid "Cell contents"
 msgstr "Contenidos de la celda"
 
 #: components/html-editor/popup.c:539
-#, fuzzy
 msgid "Check Word Spelling..."
-msgstr "Comprobar la ortografía de '%s'..."
+msgstr "Comprobar la ortografía..."
 
 #: components/html-editor/popup.c:544
 msgid "Add Word to"
-msgstr ""
+msgstr "Añadir palabra a"
 
 #: components/html-editor/popup.c:548
 #, c-format
@@ -1596,21 +1593,20 @@ msgid "%s Dictionary"
 msgstr "Diccionario %s"
 
 #: components/html-editor/popup.c:557
-#, fuzzy
 msgid "Add Word to Dictionary"
-msgstr "Diccionario %s"
+msgstr "Añadir palabra al diccionario"
 
 #: components/html-editor/popup.c:560
 msgid "Ignore Misspelled Word"
-msgstr ""
+msgstr "Ignorar palabra mal escrita"
 
 #: components/html-editor/popup.c:563
 msgid "Input Methods"
-msgstr ""
+msgstr "Métodos de entrada"
 
 #: components/html-editor/replace.c:75
 msgid "Replace confirmation"
-msgstr "Reemplazar con confirmación"
+msgstr "Confirmación del reemplazo"
 
 #: components/html-editor/replace.c:76
 msgid "Replace all"
@@ -1643,7 +1639,7 @@ msgstr "Azul 3D"
 
 #: components/html-editor/rule.c:110
 msgid "Yellow, flowers"
-msgstr "Amarillo, flores"
+msgstr "Amarillas, flores"
 
 #: components/html-editor/rule.c:422
 msgid ""
@@ -1661,15 +1657,11 @@ msgstr "Hacia _atrás"
 msgid "Find Regular Expression"
 msgstr "Buscar una expresión regular"
 
-#: components/html-editor/spell.c:278
-msgid "No misspelled word found"
-msgstr ""
-
-#: components/html-editor/spell.c:285
+#: components/html-editor/spell.c:277
 msgid "Spell checker"
 msgstr "Corrector ortográfico"
 
-#: components/html-editor/spell.c:378
+#: components/html-editor/spell.c:366
 msgid "Current _Languages"
 msgstr "_Idiomas actuales"
 
@@ -1703,7 +1695,7 @@ msgstr "Marco de la imagen"
 
 #: components/html-editor/template.c:281
 msgid "Labels"
-msgstr ""
+msgstr "Etiquetas"
 
 #: components/html-editor/test-html-editor-control.c:317
 msgid "Open file..."
@@ -1816,8 +1808,7 @@ msgstr "Tipografía de anchura fija"
 
 #: src/gtkhtml.c:2580
 msgid "The Monospace font to use for typewriter text"
-msgstr ""
-"La tipografía monoespaciada que se usará para el texto de máquina de escribir"
+msgstr "La tipografía monoespaciada que se usará para el texto de máquina de escribir"
 
 #: src/gtkhtml.c:2586
 msgid "New Link Color"
@@ -1953,3 +1944,4 @@ msgstr "Aplicación de prueba GtkHTML"
 
 #~ msgid "Monospace"
 #~ msgstr "Monospace"
+
