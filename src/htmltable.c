@@ -644,8 +644,8 @@ move_cell (HTMLTable *t1, HTMLTable *t2, HTMLTableCell *c1, HTMLTableCell *c2,
 	   HTMLTableCell *cursor_cell_1, HTMLTableCell *cursor_cell_2, gint r, gint c,
 	   HTMLCursor *cursor_1, HTMLCursor *cursor_2)
 {
-	if (cursor_1 && cursor_cell_1 == c1)
-		update_cursor (cursor_1, c2);
+	/*if (cursor_1 && cursor_cell_1 == c1)
+	  update_cursor (cursor_1, c2); */
 	if (cursor_2 && cursor_cell_2 == c1)
 		update_cursor (cursor_2, c2);
 	remove_cell (t1, c1);
@@ -664,8 +664,12 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 	HTMLTableCell *c2; // = HTML_TABLE_CELL (right->data);
 	HTMLTableCell *cursor_cell_1;
 	HTMLTableCell *cursor_cell_2;
+	HTMLTableCell *prev_c1 = NULL;
+	HTMLTableCell *t1_tail = NULL;
+	HTMLTableCell *t2_head = NULL;
 	gint r, c, end_col, end_row, start_col;
 	gboolean first = TRUE;
+	gboolean cursor_in_t2;
 
 	end_col = 0;	
 
@@ -685,6 +689,8 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 	if (!could_merge (t1, t2))
 		return FALSE;
 
+	cursor_in_t2 = object_get_parent_cell (e->cursor->object, HTML_OBJECT (t2)) != NULL;
+
 	cursor_cell_1 = HTML_TABLE_CELL (object_get_parent_cell (e->cursor->object, HTML_OBJECT (t1)));
 	if (cursor)
 		cursor_cell_2 = HTML_TABLE_CELL (object_get_parent_cell (cursor->object, HTML_OBJECT (t1)));
@@ -698,7 +704,10 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 
 			if (first) {
 				if (!cell_is_empty (c2)) {
+					t1_tail = prev_c1;
+					t2_head = c2;
 					if (cell_is_empty (c1)) {
+						//if (cursor_cell_1 == c2)
 						move_cell (t1, t2, c1, c2, cursor_cell_1, cursor_cell_2,
 							   r, c, e->cursor, cursor);
 					} else {
@@ -710,10 +719,24 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 				move_cell (t1, t2, c1, c2, cursor_cell_1, cursor_cell_2,
 					   r, c, e->cursor, cursor);
 			}
+			prev_c1 = c1;
 		}
 	}
 
-	cursor_cell_1 = HTML_TABLE_CELL (object_get_parent_cell (e->cursor->object, HTML_OBJECT (t2)));
+	if (!t1_tail)
+		t1_tail = prev_c1;
+
+	if (e->cursor->object == t1 && t1_tail) {
+		e->cursor->object = html_object_get_tail_leaf (HTML_OBJECT (t1_tail));
+		e->cursor->offset = html_object_get_length (HTML_OBJECT (e->cursor->object));
+		e->cursor->position -= (t1->totalRows - t1_tail->row - 1)*t1->totalCols
+			+ (t1->totalCols - t1_tail->col);
+	}
+
+	if (t2_head && cursor_in_t2) {
+		e->cursor->position -= t2_head->row * t1->totalCols + t2_head->col + 1;
+	}
+	/* cursor_cell_1 = HTML_TABLE_CELL (object_get_parent_cell (e->cursor->object, HTML_OBJECT (t2)));
 	if (cursor)
 		cursor_cell_2 = HTML_TABLE_CELL (object_get_parent_cell (cursor->object, HTML_OBJECT (t2)));
 
@@ -724,7 +747,7 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 	if (cursor_cell_2) {
 		cursor->object = html_object_get_head_leaf (HTML_OBJECT (t2));
 		cursor->offset = 0;
-	}
+		} */
 
 	g_list_free (*left);
 	*left = NULL;

@@ -128,6 +128,8 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 					     HTML_TABLE_CELL (self)->row, HTML_TABLE_CELL (self)->col,
 					     HTML_TABLE_CELL (self));
 		}
+		e->cursor->position --;
+
 		return rv;
 	} else
 		return FALSE;

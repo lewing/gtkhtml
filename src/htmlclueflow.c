@@ -161,8 +161,11 @@ op_helper (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *left,
 		return NULL; 
 	if (!from && (*len || !(self->prev && HTML_IS_CLUEFLOW (self->prev) && HTML_IS_TABLE (HTML_CLUE (self->prev)->tail))))
 	(*len) ++; */
-	if (!from)
+	if (!from) {
 		(*len) ++;
+		/* if (cut)
+		   e->cursor->position --; */
+	}
 	html_clueflow_remove_text_slaves (HTML_CLUEFLOW (self));
 	return cut
 		? (*HTML_OBJECT_CLASS (parent_class)->op_cut) (self, e, from, to, left, right, len)
@@ -204,6 +207,7 @@ split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, gint lev
 {
 	html_clueflow_remove_text_slaves (HTML_CLUEFLOW (self));
 	(*HTML_OBJECT_CLASS (parent_class)->split) (self, e, child, offset, level, left, right);
+	//e->cursor->position ++;
 	update_item_number (self);
 }
 
@@ -234,6 +238,8 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 		update_item_number (self);
 		return FALSE;
 	}
+
+	//e->cursor->position --;
 
 	/* printf ("merge happens\n"); */
 	if (html_clueflow_is_empty (cf1)) {

@@ -223,7 +223,6 @@ static void
 remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right, HTMLCursor *c)
 {
 	HTMLObject *lo, *ro, *prev;
-	gint len;
 
 	printf ("before merge\n");
 	gtk_html_debug_dump_tree_simple (e->clue, 0);
@@ -241,7 +240,6 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 
 		lo  = HTML_OBJECT (left->data);
 		ro  = HTML_OBJECT (right->data);
-		len = html_object_get_length (lo);
 
 		left  = left->next;
 		right = right->next;
@@ -249,10 +247,14 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 		if (html_object_is_text (lo) && !*HTML_TEXT (lo)->text && (html_object_prev_not_slave (lo) || merge)) {
 			HTMLObject *nlo = html_object_prev_not_slave (lo);
 
-			if (e->cursor->object == lo)
+			if (e->cursor->object == lo) {
 				e->cursor->object = ro;
-			if (c && c->object == lo)
+				e->cursor->offset = 0;
+			}
+			if (c && c->object == lo) {
 				c->object = ro;
+				c->offset = 0;
+			}
 
 			html_object_remove_child (lo->parent, lo);
 			html_object_destroy (lo);
@@ -260,8 +262,10 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 		} else if (html_object_is_text (ro) && !*HTML_TEXT (ro)->text && (html_object_next_not_slave (ro) || merge)) {
 			HTMLObject *nro = html_object_next_not_slave (ro);
 
-			if (e->cursor->object == ro)
+			if (e->cursor->object == ro) {
 				e->cursor->object = lo;
+				e->cursor->offset = html_object_get_length (lo);
+			}
 
 			html_object_remove_child (ro->parent, ro);
 			html_object_destroy (ro);
@@ -273,7 +277,7 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 				break;
 			if (ro == e->cursor->object) {
 				e->cursor->object  = lo;
-				e->cursor->offset += len;
+				e->cursor->offset += html_object_get_length (lo);;
 			}
 		}
 	}
@@ -288,94 +292,11 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 	printf ("-- END merge\n");
 }
 
-static gboolean
-look_for_non_appendable (GList *list)
-{
-	while (list) {
-		HTMLObject *o = HTML_OBJECT (list->data);
-
-		if (o->parent && HTML_OBJECT_TYPE (o->parent) == HTML_TYPE_TABLE)
-			return TRUE;
-		list = list->next;
-	}
-
-	return FALSE;
-}
-
-static HTMLObject *
-split_between_objects (HTMLObject *object, HTMLObject *other,
-		       GList **object_parents, GList **other_parents, gint *object_level)
-{
-	HTMLObject *common_parent;
-	gint d_object, d_other;
-
-	common_parent = get_common_parent (object, other);
-
-	if (common_parent) {
-		d_object = get_parent_depth (object, common_parent);
-		d_other  = get_parent_depth (other,  common_parent);
-
-		if (d_object <= *object_level) {
-			object_get_parent_list (object, d_object - 1, object_parents);
-			object_get_parent_list (other, d_other - 1, other_parents);
-
-#ifdef GTKHTML_DEBUG_TABLE
-			if (*object_parents) {
-				printf ("split object\n");
-				gtk_html_debug_dump_tree_simple ((*object_parents)->data, 0);
-			}
-
-			if (*other_parents) {
-				printf ("split other\n");
-				gtk_html_debug_dump_tree_simple ((*other_parents)->data, 0);
-			}
-#endif
-			if (!look_for_non_appendable (*object_parents) && !look_for_non_appendable (*object_parents)) {
-				g_list_free (*object_parents);
-				g_list_free (*other_parents);
-
-				printf ("drop lists, do simple split\n");
-				*object_parents = NULL;
-				*other_parents = NULL;
-
-				return NULL;
-			}
-
-			*object_level -= d_object - 1;
-
-			return common_parent;
-		}
-	}
-
-	return NULL;
-}
-
 static void
 split_and_add_empty_texts (HTMLEngine *e, gint level, GList **left, GList **right)
 {
-	HTMLObject *object = NULL;
-
-	/* if ((e->cursor->offset == 0 || (html_object_get_length (e->cursor->object) == e->cursor->offset))) {
-		HTMLObject *leaf;
-		gboolean prev;
-
-		prev = html_object_get_length (e->cursor->object) != e->cursor->offset;
-
-		leaf = prev
-			? html_object_prev_leaf_not_type (e->cursor->object, HTML_TYPE_TEXTSLAVE)
-			: html_object_next_leaf_not_type (e->cursor->object, HTML_TYPE_TEXTSLAVE);
-		if (leaf) {
-			if (prev)
-				object = split_between_objects (e->cursor->object, leaf, right, left, &level);
-			else
-				object = split_between_objects (e->cursor->object, leaf, left, right, &level);
-		}
-		} */
-
-	if (!object)
-		object = e->cursor->object;
-
-	html_object_split (object, e, *right ? HTML_OBJECT ((*right)->data) : NULL, e->cursor->offset, level, left, right);
+	html_object_split (e->cursor->object, e, *right ? HTML_OBJECT ((*right)->data) : NULL,
+			   e->cursor->offset, level, left, right);
 }
 
 /* end of helper */
@@ -481,6 +402,32 @@ move_cursor_before_delete (HTMLEngine *e)
 }
 
 static void
+move_cursor_after_delete (HTMLEngine *e)
+{
+	if (e->cursor->offset == html_object_get_length (e->cursor->object)) {
+		if (html_object_next_not_slave (e->cursor->object)) {
+			HTMLObject *obj;
+			gint off;
+
+			html_cursor_get_right (e->cursor, &obj, &off);
+			if (obj) {
+				e->cursor->object = obj;
+				e->cursor->offset = off;
+			}
+		} /* else {
+			HTMLObject *obj;
+			gint off;
+
+			html_cursor_get_left (e->mark, &obj, &off);
+			if (obj) {
+				e->cursor->object = obj;
+				e->cursor->offset = off;
+			}
+			} */
+	}
+}
+
+static void
 place_cursor_before_mark (HTMLEngine *e)
 {
 	if (e->mark->position < e->cursor->position) {
@@ -493,9 +440,22 @@ place_cursor_before_mark (HTMLEngine *e)
 }
 
 static void
+place_cursor_after_mark (HTMLEngine *e)
+{
+	if (e->mark->position > e->cursor->position) {
+		HTMLCursor *tmp;
+
+		tmp = e->cursor;
+		e->cursor = e->mark;
+		e->mark = tmp;
+	}
+}
+
+static void
 delete_object_do (HTMLEngine *e, HTMLObject **object, guint *len)
 {
 	GList *from, *to, *left, *right;
+	guint position;
 
 	html_engine_freeze (e);
 	prepare_delete_bounds (e, &from, &to, &left, &right);
@@ -504,7 +464,9 @@ delete_object_do (HTMLEngine *e, HTMLObject **object, guint *len)
 	html_engine_disable_selection (e);
 	*len     = 0;
 	*object  = html_object_op_cut  (HTML_OBJECT (from->data), e, from->next, to->next, left, right, len);
+	position = e->cursor->position;
 	remove_empty_and_merge (e, TRUE, left ? left->next : NULL, right ? right->next : NULL, NULL);
+	e->cursor->position = position;
 	html_engine_spell_check_range (e, e->cursor, e->cursor);
 	html_engine_thaw (e);
 }
@@ -649,11 +611,13 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check, HTM
 			html_clue_append_after (HTML_CLUE (parent), obj, where);
 	}
 
+	//e->cursor->position += len;
+
 	remove_empty_and_merge (e, TRUE, last, right, orig);
 	remove_empty_and_merge (e, TRUE, left, first, orig);
 
-	if (check)
-		html_engine_spell_check_range (e, orig, e->cursor);
+	/* if (check)
+	   html_engine_spell_check_range (e, orig, e->cursor); */
 	html_cursor_destroy (orig);
 	html_engine_thaw (e);
 }
@@ -752,8 +716,8 @@ insert_empty_paragraph (HTMLEngine *e, HTMLUndoDirection dir)
 	html_engine_freeze (e);
 	orig = html_cursor_dup (e->cursor);
 	split_and_add_empty_texts (e, 2, &left, &right);
+	e->cursor->position ++;
 	remove_empty_and_merge (e, FALSE, left, right, orig);
-	html_cursor_forward (e->cursor, e);
 
 	/* replace empty text in new empty flow by text with current style */
 	if (html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {

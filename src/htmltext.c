@@ -332,6 +332,11 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, G
 
 	/* merge_word_width (t1, t2, e->painter); */
 
+	if (e->cursor->object == with) {
+		e->cursor->object  = self;
+		e->cursor->offset += t1->text_len;
+	}
+
 	move_spell_errors (t2->spell_errors, 0, t1->text_len);
 	t1->spell_errors = g_list_concat (t1->spell_errors, t2->spell_errors);
 	t2->spell_errors = NULL;
@@ -381,6 +386,8 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	g_free (tt);
 
 	html_clue_append_after (HTML_CLUE (self->parent), dup, self);
+	e->cursor->object = dup;
+	e->cursor->offset = 0;
 
 	prev = self->prev;
 	if (t1->text_len == 0 && prev && html_object_merge (prev, self, e, NULL, NULL, NULL))
