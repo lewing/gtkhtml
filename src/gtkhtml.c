@@ -1036,11 +1036,20 @@ static void
 gtk_html_size_request (GtkWidget *widget, GtkRequisition *requisition)
 {
 	HTMLEngine *e = GTK_HTML (widget)->engine;
-
 	if (!e->writing) {
+		int old_width, old_height;
+
+		old_width = e->width;
+		old_height = e->height;
 		e->width = requisition->width;
 		e->height = requisition->height;
 		html_engine_calc_size (e, NULL);
+		requisition->width = html_engine_get_doc_width (e);
+		requisition->height = html_engine_get_doc_height (e);
+		e->width = old_width;
+		e->height = old_height;
+		html_engine_calc_size (e, NULL);
+	} else {
 		requisition->width = html_engine_get_doc_width (e);
 		requisition->height = html_engine_get_doc_height (e);
 	}
@@ -2533,6 +2542,7 @@ drag_data_received (GtkWidget *widget, GdkDragContext *context,
 	if (!selection_data->data || selection_data->length < 0 || !html_engine_get_editable (engine))
 		return;
 
+	gdk_window_get_pointer (GTK_LAYOUT (widget)->bin_window, &x, &y, NULL);
 	move_before_paste (widget, x, y);
 
 	switch (info) {
