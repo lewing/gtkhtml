@@ -1,3 +1,4 @@
+# translation of es.po to Spanish
 # Translations of gtkhtml-1.4 into spanish.
 # Copyright © 2000-2003 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtkhtml package.
@@ -6,14 +7,15 @@
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2002.
 # Germán Poo Caamaño <gpoo@ubiobio.cl>, 2003.
 # Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.
+# Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml.evolution-1-4-branch\n"
+"Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-13 04:18+0100\n"
-"PO-Revision-Date: 2003-12-13 14:17+0100\n"
-"Last-Translator: Francisco Javier F. Serrador <serrador@arrakis.es>\n"
+"PO-Revision-Date: 2004-01-07 15:27+0100\n"
+"Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +24,7 @@ msgstr ""
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
-msgstr "<Nada>"
+msgstr "<Ninguna>"
 
 #: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
 #: components/html-editor/cell.c:419 components/html-editor/image.c:545
@@ -150,8 +152,8 @@ msgid ""
 "Cannot execute GNOME Spell control applet\n"
 "Try to install GNOME Spell if you don't have it installed."
 msgstr ""
-"No se puede ejecutar el aplique de control GNOME Spell\n"
-"Intente instalar GNOME Spell si no lo tiene instalado."
+"No se puede ejecutar el aplique de control Gnome Spell\n"
+"Intente instalar Gnome Spell si no lo tiene instalado."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -354,12 +356,12 @@ msgstr "Imagen"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:38
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:38
 msgid "Insert Crying smiley into document..."
-msgstr "Inserta un emoticón de llanto en el documento..."
+msgstr "Inserta un emoticono de llanto en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:39
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:39
 msgid "Insert Frown smiley into document..."
-msgstr "Inserta un emoticón de ceño fruncido en el documento..."
+msgstr "Inserta un emoticono de ceño fruncido en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:40
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:40
@@ -379,42 +381,42 @@ msgstr "Inserta una plantilla HTML en el documento..."
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:43
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:43
 msgid "Insert Indifferent smiley into document..."
-msgstr "Inserta un emoticón indiferente en el documento..."
+msgstr "Inserta un emoticono indiferente en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:44
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:44
 msgid "Insert Laughing smiley into document..."
-msgstr "Inserta un emoticón riéndose en el documento..."
+msgstr "Inserta un emoticono riéndose en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:45
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:45
 msgid "Insert Lick smiley into document..."
-msgstr "Inserta un emoticón burlándose en el documento..."
+msgstr "Inserta un emoticono burlándose en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:46
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:46
 msgid "Insert Oh no! smiley into document..."
-msgstr "Inserta un emoticón ¡oh, no! en el documento..."
+msgstr "Inserta un emoticono ¡oh, no! en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:47
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:47
 msgid "Insert Smile smiley into document..."
-msgstr "Inserta un emoticón sonriendo en el documento..."
+msgstr "Inserta un emoticono sonriendo en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:48
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:48
 msgid "Insert Surprised smiley into document..."
-msgstr "Inserta un emoticón sorprendido en el documento..."
+msgstr "Inserta un emoticono sorprendido en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:49
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:49
 msgid "Insert Undecided smiley into document..."
-msgstr "Inserta un emoticón indeciso en el documento..."
+msgstr "Inserta un emoticono indeciso en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:50
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:50
 msgid "Insert Wink smiley into document..."
-msgstr "Inserta un emoticón de guiño en el documento..."
+msgstr "Inserta un emoticono de guiño en el documento..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:51
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:51
@@ -896,7 +898,7 @@ msgstr "_Sonrisa"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:142
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:142
 msgid "_Smiley"
-msgstr "E_moticón"
+msgstr "E_moticono"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:143
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:143
@@ -950,15 +952,15 @@ msgstr "etc..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.server.in.in.h:1
 msgid "GNOME HTML Editor"
-msgstr "Editor HTML de GNOME"
+msgstr "Editor HTML de Gnome"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.server.in.in.h:2
 msgid "GNOME HTML Editor Control"
-msgstr "Control del editor HTML de GNOME"
+msgstr "Control del editor HTML de Gnome"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.server.in.in.h:3
 msgid "GNOME HTML Editor Factory"
-msgstr "Fábrica del editor HTML de GNOME"
+msgstr "Fábrica del editor HTML de Gnome"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:152
 msgid "_Wrap Lines"
@@ -967,7 +969,7 @@ msgstr "_Ajustar líneas"
 #: components/html-editor/body.c:66
 #: components/html-editor/gtkhtml-editor-properties.glade.h:48
 msgid "None"
-msgstr "Nada"
+msgstr "Ninguna"
 
 #: components/html-editor/body.c:74
 msgid "Perforated Paper"
@@ -988,7 +990,8 @@ msgid ""
 "\"mailto:dog\">dog</a>."
 msgstr ""
 "El veloz <a href=\"mailto:murciélago\">murciélago</a> hindú comía feliz "
-"cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja."
+"cardillo y kiwi. La <a href=\"mailto:cigüeña\">cigüeña</a> tocaba el "
+"saxofón detrás del palenque de paja."
 
 #: components/html-editor/body.c:276 src/gtkhtml.c:2555
 msgid "Document Title"
@@ -1040,7 +1043,7 @@ msgid ""
 "Cannot apply your changes."
 msgstr ""
 "La celda editada ha sido eliminada del documento.\n"
-"No se pueden aplicar los cambios."
+"No se pueden aplicar sus cambios."
 
 #: components/html-editor/editor-control-factory.c:176
 #: components/html-editor/menubar.c:317 components/html-editor/menubar.c:335
@@ -1118,11 +1121,11 @@ msgstr "Centro"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:22
 #: components/html-editor/link.c:137 components/html-editor/text.c:247
 msgid "Click will follow this URL"
-msgstr "Pulse para seguir esta URL"
+msgstr "Al pulsar se irá a esta URL"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:23
 msgid "Click will follow this URL:"
-msgstr "Pulse para seguir esta URL:"
+msgstr "Al pulsar se irá a esta URL:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:24
 msgid "Color:"
@@ -1151,7 +1154,7 @@ msgstr "No ajustar"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:31
 msgid "Enable"
-msgstr "Habilitar"
+msgstr "Activar"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:32
 msgid "Follow"
@@ -1234,7 +1237,7 @@ msgstr "Píxeles"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:57
 msgid "Pixmap:"
-msgstr "Pixmap:"
+msgstr "Imagen:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:58
 msgid "Points"
@@ -1350,7 +1353,7 @@ msgstr ""
 
 #: components/html-editor/image.c:123
 msgid "Frame"
-msgstr "Marco"
+msgstr "Enmarcado"
 
 #: components/html-editor/image.c:125
 msgid ""
@@ -1368,7 +1371,7 @@ msgstr ""
 
 #: components/html-editor/image.c:133
 msgid "Caption"
-msgstr "Subtítulo"
+msgstr "Descripción"
 
 #: components/html-editor/image.c:135
 msgid ""
@@ -1414,7 +1417,7 @@ msgid ""
 "Cannot apply your changes."
 msgstr ""
 "El enlace editado ha sido eliminado del documento.\n"
-"No se pueden aplicar los cambios."
+"No se pueden aplicar sus cambios."
 
 #: components/html-editor/menubar.c:88 components/html-editor/menubar.c:104
 #: components/html-editor/menubar.c:122 components/html-editor/menubar.c:139
@@ -1785,7 +1788,7 @@ msgstr "Editable"
 
 #: src/gtkhtml.c:2549
 msgid "Whether the html can be edited"
-msgstr "Indica si el html puede ser editado"
+msgstr "Indica si el HTML puede ser editado"
 
 #: src/gtkhtml.c:2556
 msgid "The title of the current document"
@@ -1813,8 +1816,7 @@ msgstr "Tipografía de anchura fija"
 
 #: src/gtkhtml.c:2580
 msgid "The Monospace font to use for typewriter text"
-msgstr ""
-"La tipografía monoespaciada que se usará para el texto de máquina de escribir"
+msgstr "La tipografía monoespaciada que se usará para el texto de máquina de escribir"
 
 #: src/gtkhtml.c:2586
 msgid "New Link Color"
@@ -1950,3 +1952,4 @@ msgstr "Aplicación de prueba GtkHTML"
 
 #~ msgid "Monospace"
 #~ msgstr "Monospace"
+
