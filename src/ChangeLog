@@ -1,3 +1,8 @@
+2003-09-01  Maxx Cao  <maxx.cao@sun.com>
+
+	* htmltextslave.c (get_offset_for_pointer): add consideration for
+	one-character text, fix bug #47676.
+
 2003-08-15  Antonio Xu  <antonio.xu@sun.com>
 
 	* htmlengine-edit-movement.c (html_engine_jump_at): add
