@@ -192,12 +192,12 @@ end (HTMLPainter *painter)
 	if (! gdk_painter->double_buffer)
 		return;
 
-	gdk_draw_pixmap (gdk_painter->window, gdk_painter->gc,
-			 gdk_painter->pixmap,
-			 0, 0,
-			 gdk_painter->x1, gdk_painter->y1,
-			 gdk_painter->x2 - gdk_painter->x1,
-			 gdk_painter->y2 - gdk_painter->y1);
+	gdk_draw_drawable (gdk_painter->window, gdk_painter->gc,
+			   gdk_painter->pixmap,
+			   0, 0,
+			   gdk_painter->x1, gdk_painter->y1,
+			   gdk_painter->x2 - gdk_painter->x1,
+			   gdk_painter->y2 - gdk_painter->y1);
 
 	gdk_pixmap_unref (gdk_painter->pixmap);
 	gdk_painter->pixmap = NULL;

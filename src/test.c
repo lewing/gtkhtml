@@ -37,7 +37,10 @@
 #include <gtk/gtksignal.h>
 
 #include "gtkhtml.h"
+#include "gtkhtmldebug.h"
 #include "gtkhtml-stream.h"
+
+#include "htmlengine.h"
 
 #define BUTTON_INDEX 6
 
@@ -126,6 +129,24 @@ encode_html (gchar *txt)
 	return rv;
 }
 
+static void
+dump_cb (GtkWidget *widget, gpointer data)
+{
+	g_print ("Object Tree\n");
+	g_print ("-----------\n");
+
+	gtk_html_debug_dump_tree (GTK_HTML (html)->engine->clue, 0);
+}
+
+static void
+dump_simple_cb (GtkWidget *widget, gpointer data)
+{
+	g_print ("Simple Object Tree\n");
+	g_print ("-----------\n");
+
+	gtk_html_debug_dump_tree_simple (GTK_HTML (html)->engine->clue, 0);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -134,6 +155,7 @@ main (int argc, char **argv)
 	GtkWidget *hbox;
 	GtkWidget *button [BUTTON_INDEX];
 	GtkWidget *swindow;
+	GtkWidget *debug;
 	gchar *str []= {"Example 1", "Example 2", "Example 3", "Example 4", "Example 5", "Quit"};
 	int i = 0;
 	 
@@ -157,6 +179,13 @@ main (int argc, char **argv)
 	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 	for (i = 0; i < BUTTON_INDEX; i++)
 		gtk_box_pack_start (GTK_BOX (hbox), button [i], FALSE, FALSE, 0);
+
+	debug = gtk_button_new_with_label ("Dump");
+	gtk_box_pack_end (GTK_BOX (hbox), debug, FALSE, FALSE, 0);
+	gtk_signal_connect (GTK_OBJECT (debug), "clicked", GTK_SIGNAL_FUNC (dump_cb), NULL);
+	debug = gtk_button_new_with_label ("Dump simple");
+	gtk_box_pack_end (GTK_BOX (hbox), debug, FALSE, FALSE, 0);
+	gtk_signal_connect (GTK_OBJECT (debug), "clicked", GTK_SIGNAL_FUNC (dump_simple_cb), NULL);
 
 	gtk_window_set_title (GTK_WINDOW (window), "GtkHTML Test");
 	gtk_widget_set_usize (GTK_WIDGET (swindow), 500, 500);

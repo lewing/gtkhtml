@@ -281,8 +281,8 @@ clear (HTMLDrawQueue *queue,
 
 	e = queue->engine;
 
-	x1 = elem->x + e->leftBorder - e->x_offset;
-	y1 = elem->y + e->topBorder - e->y_offset;
+	x1 = elem->x;
+	y1 = elem->y;
 
 	x2 = x1 + elem->width;
 	y2 = y1 + elem->height;

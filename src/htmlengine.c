@@ -3474,10 +3474,7 @@ html_engine_draw_background (HTMLEngine *e,
 
 	html_painter_draw_background (e->painter, 
 				      &html_colorset_get_color_allocated (e->painter, HTMLBgColor)->color,
-				      pixbuf,
-				      x, y,
-				      w, h,
-				      e->x_offset + x, e->y_offset + y);
+				      pixbuf, x, y, w, h, x, y);
 }
 
 void
@@ -3654,9 +3651,6 @@ update_embedded (GtkWidget *widget, gpointer data)
 			tx += p->x;
 			ty += p->y - p->ascent;
 		}
-		
-		tx = tx + e->leftBorder - e->x_offset;
-		ty = ty + e->topBorder - e->y_offset;
 		
 		/* Then prepare for drawing.  We will only update this object, so we
 		   only allocate enough size for it.  */
@@ -3970,22 +3964,15 @@ html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
 	/* printf ("html_engine_draw_real %d x %d, %d\n",
 	   e->width, e->height, e->clue ? e->clue->ascent + e->clue->descent : 0); */
 
-	tx = -e->x_offset + e->leftBorder;
-	ty = -e->y_offset + e->topBorder;
-
 	html_painter_begin (e->painter, x, y, x + width, y + height);
 
 	html_engine_draw_background (e, x, y, width, height);
 
-	if (e->clue)
-		html_object_draw (e->clue,
-				  e->painter,
-				  x + e->x_offset - e->leftBorder,
-				  y + e->y_offset - e->topBorder,
-				  width,
-				  height,
-				  tx, ty);
-
+	if (e->clue) {
+		e->clue->x = e->leftBorder;
+		e->clue->y = e->topBorder + e->clue->ascent;
+		html_object_draw (e->clue, e->painter, x, y, width, height, 0, 0);
+	}
 	html_painter_end (e->painter);
 
 	if (e->editable)
@@ -4228,11 +4215,7 @@ html_engine_get_object_at (HTMLEngine *e,
 		}
 	}
 
-	obj = html_object_check_point (clue,
-				       e->painter,
-				       x - e->leftBorder, y - e->topBorder,
-				       offset_return,
-				       for_cursor);
+	obj = html_object_check_point (clue, e->painter, x, y, offset_return, for_cursor);
 
 	return obj;
 }
@@ -4381,23 +4364,18 @@ html_engine_make_cursor_visible (HTMLEngine *e)
 
 	html_object_get_cursor (e->cursor->object, e->painter, e->cursor->offset, &x1, &y1, &x2, &y2);
 
-	x1 += e->leftBorder;
-	y1 += e->topBorder;
-	x2 += e->leftBorder;
-	y2 += e->topBorder;
-
 	xo = e->x_offset;
 	yo = e->y_offset;
 
-	if (x1 < e->x_offset + e->leftBorder)
-		e->x_offset = x1 - e->leftBorder;
-	if (x1 + e->leftBorder > e->x_offset + e->width)
-		e->x_offset = x1 + e->leftBorder - e->width;
+	if (x1 < e->x_offset)
+		e->x_offset = x1;
+	if (x1 > e->x_offset + e->width)
+		e->x_offset = x1 - e->width;
 
-	if (y1 < e->y_offset + e->topBorder)
-		e->y_offset = y1 - e->topBorder;
-	if (y2 + e->topBorder >= e->y_offset + e->height)
-		e->y_offset = y2 + e->topBorder - e->height + 1;
+	if (y1 < e->y_offset)
+		e->y_offset = y1;
+	if (y2 >= e->y_offset + e->height)
+		e->y_offset = y2 - e->height + 1;
 
 	return xo != e->x_offset || yo != e->y_offset;
 }
@@ -4514,17 +4492,17 @@ html_engine_freeze (HTMLEngine *engine)
 gboolean
 html_engine_intersection (HTMLEngine *e, gint *x1, gint *y1, gint *x2, gint *y2)
 {
-	if (*x2 < 0 || *y2 < 0 || *x1 > e->width || *y1 > e->height)
+	if (*x2 < e->x_offset || *y2 < e->y_offset || *x1 > e->x_offset + e->width || *y1 > e->y_offset + e->height)
 		return FALSE;
 
-	if (*x1 < 0)
-		*x1 = 0;
-	if (*y1 < 0)
-		*y1 = 0;
-	if (*x2 > e->width)
-		*x2 = e->width;
-	if (*y2 > e->height)
-		*y2 = e->height;
+	if (*x1 < e->x_offset)
+		*x1 = e->x_offset;
+	if (*y1 < e->y_offset)
+		*y1 = e->y_offset;
+	if (*x2 > e->x_offset + e->width)
+		*x2 = e->x_offset + e->width;
+	if (*y2 > e->y_offset + e->height)
+		*y2 = e->y_offset + e->height;
 
 	return TRUE;
 }

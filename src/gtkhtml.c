@@ -475,7 +475,6 @@ vertical_scroll_cb (GtkAdjustment *adjustment, gpointer data)
 	GtkHTML *html = GTK_HTML (data);
 
 	html->engine->y_offset = (gint) adjustment->value;
-	printf ("y_offset: %d\n", html->engine->y_offset);
 	scroll_update_mouse (GTK_WIDGET (data));
 }
 
@@ -586,9 +585,7 @@ scroll_timeout_cb (gpointer data)
 		HTMLEngine *engine;
 
 		engine = html->engine;
-		html_engine_select_region (engine,
-					   html->selection_x1, html->selection_y1,
-					   x + engine->x_offset, y + engine->y_offset);
+		html_engine_select_region (engine, html->selection_x1, html->selection_y1, x, y);
 	}
 
 	layout = GTK_LAYOUT (widget);
@@ -996,7 +993,7 @@ mouse_change_pos (GtkWidget *widget, GdkWindow *window, gint x, gint y)
 
 	html   = GTK_HTML (widget);
 	engine = html->engine;
-	obj    = html_engine_get_object_at (engine, x + engine->x_offset, y + engine->y_offset, NULL, FALSE);
+	obj    = html_engine_get_object_at (engine, x, y, NULL, FALSE);
 
 	if (html->button1_pressed && html->allow_selection) {
 		gboolean need_scroll;
@@ -1019,29 +1016,22 @@ mouse_change_pos (GtkWidget *widget, GdkWindow *window, gint x, gint y)
 			}
 		}
 
-		if (HTML_DIST ((x + engine->x_offset - html->selection_x1),
-			       (y + engine->y_offset - html->selection_y1)) 
-		    > html_painter_get_space_width (engine->painter, 
-						    GTK_HTML_FONT_STYLE_SIZE_3,  
-						    NULL)) {
+		if (HTML_DIST ((x - html->selection_x1), (y  - html->selection_y1)) 
+		    > html_painter_get_space_width (engine->painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL)) {
 			html->in_selection = TRUE;
 		}
 
 		need_scroll = FALSE;
 
-		if (x < 0) {
-			x = 0;
+		if (x < html->engine->x_offset) {
 			need_scroll = TRUE;
 		} else if (x >= widget->allocation.width) {
-			x = widget->allocation.width - 1;
 			need_scroll = TRUE;
 		}
 
-		if (y < 0) {
-			y = 0;
+		if (y < html->engine->y_offset) {
 			need_scroll = TRUE;
 		} else if (y >= widget->allocation.height) {
-			y = widget->allocation.height - 1;
 			need_scroll = TRUE;
 		}
 
@@ -1055,10 +1045,7 @@ mouse_change_pos (GtkWidget *widget, GdkWindow *window, gint x, gint y)
 		if (engine->mark == NULL && engine->editable)
 			html_engine_set_mark (engine);
 
-		html_engine_select_region (engine, html->selection_x1,
-					   html->selection_y1,
-					   x + engine->x_offset, 
-					   y + engine->y_offset);
+		html_engine_select_region (engine, html->selection_x1, html->selection_y1, x, y); 
 	}
 
 	on_object (widget, window, obj);
@@ -1297,9 +1284,7 @@ motion_notify_event (GtkWidget *widget,
 
 	engine = GTK_HTML (widget)->engine;
 	if (GTK_HTML (widget)->button1_pressed && html_engine_get_editable (engine))
-		html_engine_jump_at (engine,
-				     x + engine->x_offset,
-				     y + engine->y_offset);
+		html_engine_jump_at (engine, x, y);
 	return TRUE;
 }
 
@@ -1365,9 +1350,7 @@ button_press_event (GtkWidget *widget,
 				}
 
 				html_engine_disable_selection (html->engine);
-				html_engine_jump_at (engine,
-						     x + engine->x_offset,
-						     y + engine->y_offset);
+				html_engine_jump_at (engine, x, y);
 				gtk_html_update_styles (html);
 				gtk_html_request_paste (html, GDK_SELECTION_PRIMARY, 0, event->time);
 				return TRUE;
@@ -1380,13 +1363,12 @@ button_press_event (GtkWidget *widget,
 					if (!(event->state & GDK_SHIFT_MASK)
 					    || (!engine->mark && event->state & GDK_SHIFT_MASK))
 						html_engine_set_mark (engine);
-				html_engine_jump_at (engine, x + engine->x_offset, y + engine->y_offset);
+				html_engine_jump_at (engine, x, y);
 			}
 			if (html->allow_selection) {
 				if (event->state & GDK_SHIFT_MASK)
 					html_engine_select_region (engine,
-								   html->selection_x1, html->selection_y1,
-								   x + engine->x_offset, y + engine->y_offset);
+								   html->selection_x1, html->selection_y1, x, y);
 				else {
 					html_engine_disable_selection (engine);
 					if (gdk_pointer_grab (GTK_LAYOUT (widget)->bin_window, FALSE,
@@ -1394,8 +1376,8 @@ button_press_event (GtkWidget *widget,
 							       | GDK_BUTTON_MOTION_MASK
 							       | GDK_POINTER_MOTION_HINT_MASK),
 							      NULL, NULL, 0) == 0) {
-						html->selection_x1 = x + engine->x_offset;
-						html->selection_y1 = y + engine->y_offset;
+						html->selection_x1 = x;
+						html->selection_y1 = y;
 					}
 				}
 			}
@@ -2125,10 +2107,7 @@ move_before_paste (GtkWidget *widget, gint x, gint y)
 		HTMLObject *obj;
 		guint offset;
 
-		obj = html_engine_get_object_at (engine,
-						 x + engine->x_offset,
-						 y + engine->y_offset,
-						 &offset, FALSE);
+		obj = html_engine_get_object_at (engine, x, y, &offset, FALSE);
 		if (!html_engine_point_in_selection (engine, obj, offset)) {
 			html_engine_disable_selection (engine);
 			html_engine_edit_selection_updater_update_now (engine->selection_updater);
@@ -2136,7 +2115,7 @@ move_before_paste (GtkWidget *widget, gint x, gint y)
 	}
 	if (!html_engine_is_selection_active (engine)) {
 
-		html_engine_jump_at (engine, x + engine->x_offset, y + engine->y_offset);
+		html_engine_jump_at (engine, x, y);
 		gtk_html_update_styles (GTK_HTML (widget));
 	}
 }
@@ -2899,7 +2878,6 @@ gtk_html_private_calc_scrollbars (GtkHTML *html, gboolean *changed_x, gboolean *
 
 	if ((width != layout->width) || (height != layout->height)) {
 		gtk_signal_emit (GTK_OBJECT (html), signals [SIZE_CHANGED]);
-		printf ("set size %d,%d (%d,%d)\n", width, height, GTK_LAYOUT (html)->width, GTK_LAYOUT (html)->height);
 		gtk_layout_set_size (layout, width, height);
 	}
 
