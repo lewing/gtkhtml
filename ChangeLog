@@ -1,3 +1,10 @@
+2004-09-23  Radek Doulik  <rodo@ximian.com>
+
+	* configure.in: bumped version to 3.2.2
+	incremented revision
+
+	* NEWS: updated
+
 2004-08-21  Jayaradha  <njaya@redhat.com>
 
 	* configure.in: Add ta to ALL_LINGUAS.

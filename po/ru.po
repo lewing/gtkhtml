@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-26 15:35+0200\n"
+"POT-Creation-Date: 2004-09-23 20:14+0200\n"
 "PO-Revision-Date: 2004-08-19 19:51+0300\n"
 "Last-Translator: Leonid Kanter <leon@asplinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -1880,89 +1880,89 @@ msgstr ""
 "Редактируемый текст был удалён из документа.\n"
 "Невозможно применить изменения."
 
-#: src/gtkhtml.c:2531
+#: src/gtkhtml.c:2559
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URL, перетащенный из Mozilla, имеет неверный формат (%d) или длину (%d)\n"
 
-#: src/gtkhtml.c:2853
+#: src/gtkhtml.c:2881
 msgid "Editable"
 msgstr "Редактируемый"
 
-#: src/gtkhtml.c:2854
+#: src/gtkhtml.c:2882
 msgid "Whether the html can be edited"
 msgstr "Может ли текст быть редактируемым"
 
-#: src/gtkhtml.c:2860
+#: src/gtkhtml.c:2888
 msgid "Document Title"
 msgstr "Заголовок документа"
 
-#: src/gtkhtml.c:2861
+#: src/gtkhtml.c:2889
 msgid "The title of the current document"
 msgstr "Заголовок текущего документа"
 
-#: src/gtkhtml.c:2867
+#: src/gtkhtml.c:2895
 msgid "Document Base"
 msgstr "База документа"
 
-#: src/gtkhtml.c:2868
+#: src/gtkhtml.c:2896
 msgid "The base URL for relative references"
 msgstr "Базовая ссылка (URL) для относительных ссылок"
 
-#: src/gtkhtml.c:2874
+#: src/gtkhtml.c:2902
 msgid "Target Base"
 msgstr "База цели"
 
-#: src/gtkhtml.c:2875
+#: src/gtkhtml.c:2903
 msgid "The base URL of the targe frame"
 msgstr "Базовая ссылка (URL) для целевого фрейма"
 
-#: src/gtkhtml.c:2884
+#: src/gtkhtml.c:2912
 msgid "Fixed Width Font"
 msgstr "Шрифт с фиксированной шириной"
 
-#: src/gtkhtml.c:2885
+#: src/gtkhtml.c:2913
 msgid "The Monospace font to use for typewriter text"
 msgstr "Фиксированный шрифт для использования в тексте печатной машинки"
 
-#: src/gtkhtml.c:2891
+#: src/gtkhtml.c:2919
 msgid "New Link Color"
 msgstr "Цвет непосещенной ссылки"
 
-#: src/gtkhtml.c:2892
+#: src/gtkhtml.c:2920
 msgid "The color of new link elements"
 msgstr "Цвет еще не посещенной ссылки"
 
-#: src/gtkhtml.c:2897
+#: src/gtkhtml.c:2925
 msgid "Visited Link Color"
 msgstr "Цвет посещенной ссылки"
 
-#: src/gtkhtml.c:2898
+#: src/gtkhtml.c:2926
 msgid "The color of visited link elements"
 msgstr "Цвет уже посещенной ссылки"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2931
 msgid "Active Link Color"
 msgstr "Цвет активной ссылки"
 
-#: src/gtkhtml.c:2904
+#: src/gtkhtml.c:2932
 msgid "The color of active link elements"
 msgstr "Цвет активной ссылки"
 
-#: src/gtkhtml.c:2909
+#: src/gtkhtml.c:2937
 msgid "Spelling Error Color"
 msgstr "Цвет неверного правописания"
 
-#: src/gtkhtml.c:2910
+#: src/gtkhtml.c:2938
 msgid "The color of the spelling error markers"
 msgstr "Цвет маркеров ошибок орфографии"
 
-#: src/gtkhtml.c:2915
+#: src/gtkhtml.c:2943
 msgid "Cite Quotation Color"
 msgstr "Цвет цитируемого текста"
 
-#: src/gtkhtml.c:2916
+#: src/gtkhtml.c:2944
 msgid "The color of the cited text"
 msgstr "Цвет цитируемого текста"
 
