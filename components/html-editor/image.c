@@ -221,17 +221,12 @@ get_location (GtkHTMLEditImageProperties *d)
 static void
 pentry_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 {
-	const gchar *text;
+	char *location;
 
-	text = gtk_entry_get_text (GTK_ENTRY (entry));
-	if (!text || !d->location || strcmp (text, d->location)) {
-		g_free (d->location);
-		d->location = g_strdup (text);
-		if (!d->width_percent)
-			d->width = 0;
-		if (!d->height_percent)
-			d->height = 0;
-	}
+	location = get_location (d);
+	html_image_edit_set_url (d->image, location);
+	g_free (location);
+
 }
 
 static void
@@ -397,25 +392,49 @@ changed_padding (GtkWidget *check, GtkHTMLEditImageProperties *d)
 static void
 set_size_all (HTMLObject *o, HTMLEngine *e, GtkHTMLEditImageProperties *d)
 {
-	if (d->location && HTML_IS_IMAGE (o) && HTML_IMAGE (o)->image_ptr && HTML_IMAGE (o)->image_ptr->url) {
-		gchar *location = get_location (d);
-
+	gchar *location = get_location (d);
+	printf ("all: %s\n", location);
+	if (location && HTML_IS_IMAGE (o) && HTML_IMAGE (o)->image_ptr && HTML_IMAGE (o)->image_ptr->url) {
 		if (!strcmp (HTML_IMAGE (o)->image_ptr->url, location)) {
 			HTMLImage *i = HTML_IMAGE (o);
+			GtkWidget *menu_width_p, *menu_height_p;
+			gint width, height, width_percent, height_percent;
+
+			width = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width));
+			height = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_height));
+			menu_width_p = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width_percent));
+			menu_height_p = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_height_percent));
+			width_percent = g_list_index (GTK_MENU_SHELL (menu_width_p)->children,
+						      gtk_menu_get_active (GTK_MENU (menu_width_p)));
+			height_percent = g_list_index (GTK_MENU_SHELL (menu_height_p)->children,
+						       gtk_menu_get_active (GTK_MENU (menu_height_p)));
 
 			d->disable_change = TRUE;
-			if ((d->width == 0 || d->width_percent == 2) && d->width_percent != 1) {
-				d->width = html_image_get_actual_width (i, NULL);
-				gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width), d->width);
+			if ((width == 0 || width_percent == 2) && width_percent != 1) {
+				width = html_image_get_actual_width (i, NULL);
+				gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width), width);
 			}
-			if ((d->height == 0 || d->height_percent == 2) && d->height_percent != 1) {
-				d->height = html_image_get_actual_height (i, NULL);
-				gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_height), d->height);
+			if ((height == 0 || height_percent == 2) && height_percent != 1) {
+				height = html_image_get_actual_height (i, NULL);
+				gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_height), height);
 			}
 			d->disable_change = FALSE;
 		}
-		g_free (location);
 	}
+	g_free (location);
+}
+
+/* FIXME
+   we need image_loaded signal in gtkhtml so that we can update width/height values in the UI when new image is loaded
+*/
+static
+load_done (GtkHTML *html, GtkHTMLEditImageProperties *d)
+{
+	printf ("load done\n");
+	if (d->cd->html->engine->clue) {
+		html_object_forall (d->cd->html->engine->clue, d->cd->html->engine, (HTMLObjectForallFunc) set_size_all, d);
+	}
+	return FALSE;
 }
 
 #define UPPER_FIX(x) gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (d->spin_ ## x))->upper = 100000.0
@@ -459,12 +478,6 @@ image_widget (GtkHTMLEditImageProperties *d, gboolean insert)
 	UPPER_FIX (padv);
 	g_signal_connect (d->spin_padv, "value_changed", G_CALLBACK (changed_padding), d);
 
-	/* d->option_template = glade_xml_get_widget (xml, "option_image_template");
-	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template)),
-			  "selection-done", G_CALLBACK (changed_template), d);
-	if (insert)
-	   fill_templates (d); */
-
 	d->entry_url = glade_xml_get_widget (xml, "entry_image_url");
 	g_signal_connect (GTK_OBJECT (d->entry_url), "changed", G_CALLBACK (url_changed), d);
 
@@ -484,6 +497,8 @@ image_widget (GtkHTMLEditImageProperties *d, gboolean insert)
 	g_signal_connect (button, "clicked", G_CALLBACK (test_url_clicked), d);
 	gtk_widget_show (button);
 	gtk_table_attach (GTK_TABLE (glade_xml_get_widget (xml, "image_table")), button, 2, 3, 0, 1, 0, 0, 0, 0);
+
+	g_signal_connect (d->cd->html, "load_done", G_CALLBACK (load_done), d);
 
 	return d->page;
 }
@@ -587,10 +602,6 @@ insert_or_apply (GtkHTMLControlData *cd, gpointer get_data, gboolean insert)
 
 	if (HTML_OBJECT (image)->parent && html_object_get_data (HTML_OBJECT (image)->parent, "template_image"))
 		html_object_set_data_full (HTML_OBJECT (image)->parent, "template_image", NULL, NULL);
-
-	location = get_location (d);
-	html_image_edit_set_url (image, location);
-	g_free (location);
 
 	html_cursor_jump_to_position (e->cursor, e, position);
 
