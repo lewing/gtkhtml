@@ -1,23 +1,8 @@
-2002-04-18  gettextize  <bug-gnu-utils@gnu.org>
+2002-05-22  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* Makefile.in.in: Upgrade to gettext-0.10.38.
-
-2002-03-19  gettextize  <bug-gnu-utils@gnu.org>
-
-	* Makefile.in.in: Upgrade to gettext-0.10.38.
-
-2002-03-19  gettextize  <bug-gnu-utils@gnu.org>
-
-	* Makefile.in.in: Upgrade to gettext-0.10.38.
-
-2002-03-19  gettextize  <bug-gnu-utils@gnu.org>
-
-	* Makefile.in.in: Upgrade to gettext-0.10.38.
-
-2002-03-18  gettextize  <bug-gnu-utils@gnu.org>
-
-	* Makefile.in.in: Upgrade to gettext-0.10.38.
-
+	* no.po: Updated Norwegian (bokmål) translation.
+	* POTFILES.in: Added missing files.
+	
 2002-03-15  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* eu.po: Added Basque file
