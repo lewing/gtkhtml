@@ -44,7 +44,7 @@
 
 static HTMLPainterClass *parent_class = NULL;
 
-/* GtkObject methods.  */
+/* GObject methods.  */
 
 static void
 finalize (GObject *object)
@@ -991,7 +991,7 @@ init_color (GdkColor *color, gushort red, gushort green, gushort blue)
 }
 
 static void
-init (GtkObject *object)
+html_gdk_painter_init (GObject *object)
 {
 	HTMLGdkPainter *gdk_painter;
 
@@ -1015,13 +1015,14 @@ init (GtkObject *object)
 }
 
 static void
-class_init (GObjectClass *object_class)
+html_gdk_painter_class_init (GObjectClass *object_class)
 {
 	HTMLPainterClass *painter_class;
 
 	painter_class = HTML_PAINTER_CLASS (object_class);
 
 	object_class->finalize = finalize;
+	parent_class = g_type_class_ref (HTML_TYPE_PAINTER);
 
 	painter_class->begin = begin;
 	painter_class->end = end;
@@ -1051,31 +1052,30 @@ class_init (GObjectClass *object_class)
 	painter_class->draw_embedded = draw_embedded;
 	painter_class->get_page_width = get_page_width;
 	painter_class->get_page_height = get_page_height;
-
-	parent_class = gtk_type_class (html_painter_get_type ());
 }
 
-GtkType
+GType
 html_gdk_painter_get_type (void)
 {
-	static GtkType type = 0;
+	static GType html_gdk_painter_type = 0;
 
-	if (type == 0) {
-		static const GtkTypeInfo info = {
-			"HTMLGdkPainter",
-			sizeof (HTMLGdkPainter),
+	if (html_gdk_painter_type == 0) {
+		static const GTypeInfo html_gdk_painter_info = {
 			sizeof (HTMLGdkPainterClass),
-			(GtkClassInitFunc) class_init,
-			(GtkObjectInitFunc) init,
-			/* reserved_1 */ NULL,
-			/* reserved_2 */ NULL,
-			(GtkClassInitFunc) NULL,
+			NULL,
+			NULL,
+			(GClassInitFunc) html_gdk_painter_class_init,
+			NULL,
+			NULL,
+			sizeof (HTMLGdkPainter),
+			1,
+			(GInstanceInitFunc) html_gdk_painter_init,
 		};
-
-		type = gtk_type_unique (HTML_TYPE_PAINTER, &info);
+		html_gdk_painter_type = g_type_register_static (HTML_TYPE_PAINTER, "HTMLGdkPainter",
+								&html_gdk_painter_info, 0);
 	}
 
-	return type;
+	return html_gdk_painter_type;
 }
 
 
@@ -1084,7 +1084,7 @@ html_gdk_painter_new (GtkWidget *widget, gboolean double_buffer)
 {
 	HTMLGdkPainter *new;
 
-	new = gtk_type_new (html_gdk_painter_get_type ());
+	new = g_object_new (HTML_TYPE_GDK_PAINTER, NULL);
 
 	new->double_buffer = double_buffer;
 	new->pc = gtk_widget_get_pango_context (widget);

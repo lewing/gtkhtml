@@ -161,7 +161,7 @@ finalize (GObject *object)
 
 	if (printer->print_context != NULL) {
 		gnome_print_context_close (printer->print_context);
-		gtk_object_unref (GTK_OBJECT (printer->print_context));
+		g_object_unref (G_OBJECT (printer->print_context));
 	}
 
 	(* G_OBJECT_CLASS (parent_class)->finalize) (object);

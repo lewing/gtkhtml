@@ -3163,7 +3163,7 @@ html_engine_destroy (GtkObject *object)
 	}
 
 	if (engine->painter) {
-		g_object_unref (GTK_OBJECT (engine->painter));
+		g_object_unref (G_OBJECT (engine->painter));
 		engine->painter = NULL;
 	}
 
@@ -4429,8 +4429,8 @@ html_engine_set_tokenizer (HTMLEngine *engine,
 	g_return_if_fail (engine && HTML_IS_ENGINE (engine));
 	g_return_if_fail (tok && HTML_IS_TOKENIZER (tok));
 
-	gtk_object_ref (GTK_OBJECT (tok));
-	gtk_object_unref (GTK_OBJECT (engine->ht));
+	g_object_ref (G_OBJECT (tok));
+	g_object_unref (G_OBJECT (engine->ht));
 	engine->ht = tok;
 }
 
@@ -5066,8 +5066,8 @@ html_engine_set_painter (HTMLEngine *e, HTMLPainter *painter)
 	g_return_if_fail (painter != NULL);
 	g_return_if_fail (e != NULL);
 
-	gtk_object_ref (GTK_OBJECT (painter));
-	gtk_object_unref (GTK_OBJECT (e->painter));
+	g_object_ref (G_OBJECT (painter));
+	g_object_unref (G_OBJECT (e->painter));
 	e->painter = painter;
 	
 	html_object_set_painter (e->clue, painter);

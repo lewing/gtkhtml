@@ -102,10 +102,10 @@ static void
 frame_set_gdk_painter (HTMLFrame *frame, HTMLPainter *painter)
 {
 	if (painter)
-		gtk_object_ref (GTK_OBJECT (painter));
+		g_object_ref (G_OBJECT (painter));
 	
 	if (frame->gdk_painter)
-		gtk_object_unref (GTK_OBJECT (frame->gdk_painter));
+		g_object_unref (G_OBJECT (frame->gdk_painter));
 
 	frame->gdk_painter = painter;
 }
@@ -483,7 +483,7 @@ html_frame_init (HTMLFrame *frame,
 	new_tokenizer = html_tokenizer_clone (parent_html->engine->ht);
 
 	html_engine_set_tokenizer (new_html->engine, new_tokenizer);
-	gtk_object_unref (GTK_OBJECT (new_tokenizer));
+	g_object_unref (G_OBJECT (new_tokenizer));
 	new_tokenizer = NULL;
 
 	gtk_html_set_default_content_type (new_html,

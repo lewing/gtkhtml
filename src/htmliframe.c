@@ -87,10 +87,10 @@ static void
 iframe_set_gdk_painter (HTMLIFrame *iframe, HTMLPainter *painter)
 {
 	if (painter)
-		gtk_object_ref (GTK_OBJECT (painter));
+		g_object_ref (G_OBJECT (painter));
 	
 	if (iframe->gdk_painter)
-		gtk_object_unref (GTK_OBJECT (iframe->gdk_painter));
+		g_object_unref (G_OBJECT (iframe->gdk_painter));
 
 	iframe->gdk_painter = painter;
 }
@@ -448,7 +448,7 @@ html_iframe_init (HTMLIFrame *iframe,
 	new_tokenizer = html_tokenizer_clone (parent_html->engine->ht);
 
 	html_engine_set_tokenizer (new_html->engine, new_tokenizer);
-	gtk_object_unref (GTK_OBJECT (new_tokenizer));
+	g_object_unref (G_OBJECT (new_tokenizer));
 	new_tokenizer = NULL;
 
 	gtk_html_set_default_content_type (new_html,

@@ -34,16 +34,16 @@
 
 /* Convenience macro to extract the HTMLPainterClass from a GTK+ object.  */
 #define HP_CLASS(obj)					\
-	HTML_PAINTER_CLASS (GTK_WIDGET_GET_CLASS (obj))
+	HTML_PAINTER_CLASS (G_OBJECT_GET_CLASS (obj))
 
 /* Our parent class.  */
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 
 static gint calc_text_bytes_delta (const gchar *text, gint len, gint line_offset, gint *translated_len, gboolean tabs);
 static gint translate_text_special_chars (const gchar *text, gchar *translated, gint len, gint line_offset, gboolean tabs);
 
 
-/* GtkObject methods.  */
+/* GObject methods.  */
 
 static void
 finalize (GObject *object)
@@ -63,10 +63,10 @@ finalize (GObject *object)
 
 #define DEFINE_UNIMPLEMENTED(method)						\
 	static gint								\
-	method##_unimplemented (GtkObject *obj)					\
+	method##_unimplemented (GObject *obj)					\
 	{									\
 		g_warning ("Class `%s' does not implement `" #method "'\n",	\
-			   gtk_type_name (GTK_OBJECT_TYPE (obj)));		\
+			   g_type_name (G_TYPE_FROM_INSTANCE (obj)));		\
 		return 0;							\
 	}
 
@@ -107,7 +107,7 @@ DEFINE_UNIMPLEMENTED (get_page_height)
 
 
 static void
-init (GtkObject *object, HTMLPainterClass *real_klass)
+html_painter_init (GObject *object, HTMLPainterClass *real_klass)
 {
 	HTMLPainter *painter;
 
@@ -120,13 +120,14 @@ init (GtkObject *object, HTMLPainterClass *real_klass)
 }
 
 static void
-class_init (GObjectClass *object_class)
+html_painter_class_init (GObjectClass *object_class)
 {
 	HTMLPainterClass *class;
 
 	class = HTML_PAINTER_CLASS (object_class);
 
 	object_class->finalize = finalize;
+	parent_class = g_type_class_ref (G_TYPE_OBJECT);
 
 	class->begin = (gpointer) begin_unimplemented;
 	class->end = (gpointer) end_unimplemented;
@@ -163,38 +164,36 @@ class_init (GObjectClass *object_class)
 
 	class->get_page_width  = (gpointer) get_page_width_unimplemented;
 	class->get_page_height = (gpointer) get_page_height_unimplemented;
-
-	parent_class = gtk_type_class (gtk_object_get_type ());
 }
 
 
-GtkType
+GType
 html_painter_get_type (void)
 {
-	static GtkType type = 0;
+	static GType html_painter_type = 0;
 
-	if (type == 0) {
-		static const GtkTypeInfo info = {
-			"HTMLPainter",
-			sizeof (HTMLPainter),
+	if (html_painter_type == 0) {
+		static const GTypeInfo html_painter_info = {
 			sizeof (HTMLPainterClass),
-			(GtkClassInitFunc) class_init,
-			(GtkObjectInitFunc) init,
-			/* reserved_1 */ NULL,
-			/* reserved_2 */ NULL,
-			(GtkClassInitFunc) NULL,
+			NULL,
+			NULL,
+			(GClassInitFunc) html_painter_class_init,
+			NULL,
+			NULL,
+			sizeof (HTMLPainter),
+			1,
+			(GInstanceInitFunc) html_painter_init,
 		};
-
-		type = gtk_type_unique (GTK_TYPE_OBJECT, &info);
+		html_painter_type = g_type_register_static (G_TYPE_OBJECT, "HTMLPainter", &html_painter_info, 0);
 	}
 
-	return type;
+	return html_painter_type;
 }
 
 HTMLPainter *
 html_painter_new (void)
 {
-	return gtk_type_new (html_painter_get_type ());
+	return g_object_new (HTML_TYPE_PAINTER, NULL);
 }
 
 

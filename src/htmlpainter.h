@@ -26,7 +26,7 @@
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdktypes.h>
-#include <gtk/gtkobject.h>
+#include <glib-object.h>
 
 #include "gtkhtml-enums.h"
 #include "htmltypes.h"
@@ -34,14 +34,14 @@
 
 
 #define HTML_TYPE_PAINTER                 (html_painter_get_type ())
-#define HTML_PAINTER(obj)                 (GTK_CHECK_CAST ((obj), HTML_TYPE_PAINTER, HTMLPainter))
-#define HTML_PAINTER_CLASS(klass)         (GTK_CHECK_CLASS_CAST ((klass), HTML_TYPE_PAINTER, HTMLPainterClass))
-#define HTML_IS_PAINTER(obj)              (GTK_CHECK_TYPE ((obj), HTML_TYPE_PAINTER))
-#define HTML_IS_PAINTER_CLASS(klass)      (GTK_CHECK_CLASS_TYPE ((klass), HTML_TYPE_PAINTER))
+#define HTML_PAINTER(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), HTML_TYPE_PAINTER, HTMLPainter))
+#define HTML_PAINTER_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), HTML_TYPE_PAINTER, HTMLPainterClass))
+#define HTML_IS_PAINTER(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), HTML_TYPE_PAINTER))
+#define HTML_IS_PAINTER_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), HTML_TYPE_PAINTER))
 
 
 struct _HTMLPainter {
-	GtkObject base;
+	GObject base;
 
 	HTMLFontManager     font_manager;
 	HTMLColorSet       *color_set;
@@ -52,7 +52,7 @@ struct _HTMLPainter {
 };
 
 struct _HTMLPainterClass {
-	GtkObjectClass   base;
+	GObjectClass   base;
 
 	void (* begin)            (HTMLPainter *painter, int x1, int y1, int x2, int y2);
 	void (* end)              (HTMLPainter *painter);
@@ -101,7 +101,7 @@ struct _HTMLPainterClass {
 
 
 /* Creation.  */
-GtkType           html_painter_get_type                                (void);
+GType             html_painter_get_type                                (void);
 HTMLPainter      *html_painter_new                                     (void);
 
 /* Functions to drive the painting process.  */

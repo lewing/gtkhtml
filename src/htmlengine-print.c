@@ -192,12 +192,12 @@ print_with_header_footer (HTMLEngine *engine,
 					 user_data, do_print);
 
 		html_engine_set_painter (engine, old_painter);
-		gtk_object_unref (GTK_OBJECT (old_painter));
+		g_object_unref (G_OBJECT (old_painter));
 	} else {
 		gnome_ok_dialog (_("Cannot allocate default font for printing\n"));
 	}
 
-	gtk_object_unref (GTK_OBJECT (printer));
+	g_object_unref (G_OBJECT (printer));
 
 	return pages;
 }
