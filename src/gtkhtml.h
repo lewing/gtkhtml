@@ -112,7 +112,7 @@ struct _GtkHTMLEditorAPI
 {
 	/* spell checking methods */
 	gboolean  (* check_word)              (GtkHTML *html, const gchar *word, gpointer data);
-	void      (* suggestion_request)      (GtkHTML *html, const gchar *word, gpointer data);
+	void      (* suggestion_request)      (GtkHTML *html, gpointer data);
 	void      (* add_to_session)          (GtkHTML *html, const gchar *word, gpointer data);
 	void      (* add_to_personal)         (GtkHTML *html, const gchar *word, gpointer data);
 

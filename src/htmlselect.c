@@ -280,7 +280,7 @@ html_select_init (HTMLSelect *select,
 		GtkRequisition req;
 		GtkTreeIter iter;
 
-		select->store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+		select->store = gtk_list_store_new (1, G_TYPE_STRING);
 		select->view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (select->store));
 
 		gtk_tree_view_append_column (GTK_TREE_VIEW (select->view),

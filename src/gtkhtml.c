@@ -3836,7 +3836,7 @@ command (GtkHTML *html, GtkHTMLCommandType com_type)
 		break;
 	case GTK_HTML_COMMAND_SPELL_SUGGEST:
 		if (html->editor_api && !html_engine_spell_word_is_valid (e))
-			(*html->editor_api->suggestion_request) (html, html_engine_get_spell_word (e), html->editor_data);
+			(*html->editor_api->suggestion_request) (html, html->editor_data);
 		break;
 	case GTK_HTML_COMMAND_SPELL_PERSONAL_DICTIONARY_ADD:
 	case GTK_HTML_COMMAND_SPELL_SESSION_DICTIONARY_ADD: {

@@ -121,10 +121,8 @@ gtk_html_class_properties_load (GtkHTMLClassProperties *p, GConfClient *client)
 	GETSP (int, "/spell_error_color_green", spell_error_color.green,,);
 	GETSP (int, "/spell_error_color_blue",  spell_error_color.blue,,);
 
-	printf ("language %s\n", p->language);
 	GETSP (string, "/language", language,
 	       g_free (p->language), g_strdup);
-	printf ("language %s\n", p->language);
 }
 
 #define SET(t,x,prop) \
@@ -365,10 +363,10 @@ static GEnumValue _gtk_html_command_values[] = {
 	{ 0, NULL, NULL }
 };
 
-GtkType
+GType
 gtk_html_command_get_type ()
 {
-	static GtkType command_type = 0;
+	static GType command_type = 0;
 
 	if (!command_type)
 		command_type = g_enum_register_static ("GTK_HTML_COMMAND", _gtk_html_command_values);
