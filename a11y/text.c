@@ -36,6 +36,7 @@
 #include "object.h"
 #include "html.h"
 #include "text.h"
+#include "utils.h"
 
 static void html_a11y_text_class_init    (HTMLA11YTextClass *klass);
 static void html_a11y_text_init          (HTMLA11YText *a11y_text);
@@ -127,6 +128,7 @@ atk_text_interface_init (AtkTextIface *iface)
 	iface->get_selection = html_a11y_text_get_selection;
 	iface->remove_selection = html_a11y_text_remove_selection;
 	iface->set_selection = html_a11y_text_set_selection;
+	iface->add_selection = html_a11y_text_add_selection;
 	iface->get_caret_offset = html_a11y_text_get_caret_offset;
 	iface->set_caret_offset = html_a11y_text_set_caret_offset;
 }
@@ -268,17 +270,37 @@ html_a11y_text_get_caret_offset(AtkText * text)
 {
 	HTMLObject * p;
 	HTMLEngine * e;
+	GtkHTML * gtkhtml;
 
-	g_return_val_if_fail(text && G_IS_HTML_A11Y_TEXT(text), 0);
+	g_return_val_if_fail(text, 0);
 
-	return (gint)g_object_get_data(G_OBJECT(text), "caret-offset");
+	p= HTML_A11Y_HTML(text);
+	g_return_val_if_fail(p && HTML_IS_TEXT(p), 0);
+
+	gtkhtml = html_utils_get_gtk_html();
+	g_return_val_if_fail(gtkhtml && gtkhtml->engine, 0);
+
+	e = html_engine_get_top_html_engine(gtkhtml->engine);
+	g_return_val_if_fail(e && e->cursor && e->cursor->object == p, 0);
+
+	return e->cursor->offset;
 }
 
 static gboolean
 html_a11y_text_set_caret_offset(AtkText * text, gint offset)
 {
-	printf("FIXME, set_caret_offset not implmented");
-	return FALSE;	
+	GtkHTML * html;
+	HTMLEngine * e;
+	HTMLObject * obj = HTML_A11Y_HTML(text);
+
+	html = html_utils_get_gtk_html();
+
+	g_return_val_if_fail(obj && html && html->engine, FALSE);
+
+	e = html->engine;
+	html_engine_jump_to_object(e, obj, offset);
+
+	return TRUE;
 }
 
 static gchar *
@@ -344,9 +366,12 @@ html_a11y_text_get_selection (AtkText *text, gint selection_num, gint *start_off
 static gboolean
 html_a11y_text_add_selection (AtkText *text, gint start_offset, gint end_offset)
 {
-	GtkHTML *html = GTK_HTML_A11Y_GTKHTML (html_a11y_get_gtkhtml_parent (HTML_A11Y (text)));
+	GtkHTML *html ;
 	HTMLObject *obj = HTML_A11Y_HTML (text);
 	HTMLInterval *i;
+
+	html = html_utils_get_gtk_html();
+	g_return_val_if_fail(html && html->engine, FALSE);
 
 	if (html_engine_is_selection_active (html->engine))
 		return FALSE;
@@ -379,6 +404,7 @@ html_a11y_text_set_selection (AtkText *text, gint selection_num, gint start_offs
 
 	return html_a11y_text_add_selection (text, start_offset, end_offset);
 }
+
 
 /*
   AtkAttributeSet* (* get_run_attributes)         (AtkText	    *text,
