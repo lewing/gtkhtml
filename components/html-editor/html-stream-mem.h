@@ -32,7 +32,7 @@ struct _HTMLStreamMemClass {
 };
 
 GtkType         html_stream_mem_get_type     (void);
-BonoboStream   *html_stream_mem_create       (GtkHTMLStream *html_stream);
+BonoboObject   *html_stream_mem_create       (GtkHTMLStream *html_stream);
 HTMLStreamMem  *html_stream_mem_constuct     (HTMLStreamMem *bhtml, GtkHTMLStream *html_stream);
 
 #endif /* _HTML_STREAM_MEM_H_ */

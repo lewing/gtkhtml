@@ -13,7 +13,8 @@ CFLAGS += \
         -DGTKHTML_DATADIR=\""$(gtkhtml_data)"\"					\
         -DGNOMELOCALEDIR=\""$(datadir)/locale"\"				\
 	-DGLADE_DATADIR=\"$(gladedir)\"						\
-	-DGTK_DISABLE_DEPRECATED=1
+	-DGTK_DISABLE_DEPRECATED=1						\
+	-DBONOBO_DISABLE_DEPRECATED=1
 
 # CORBA stuff
 
@@ -67,6 +68,8 @@ GTKHTML_EDITOR_SOURCES_COMMON =			\
 	editor-control-factory.h		\
 	engine.h				\
 	engine.c				\
+	html-stream-mem.h			\
+	html-stream-mem.c			\
 	image.c					\
 	image.h					\
 	link.c					\
@@ -75,18 +78,14 @@ GTKHTML_EDITOR_SOURCES_COMMON =			\
 	menubar.h				\
 	paragraph.c				\
 	paragraph.h				\
-	persist-file-impl.c			\
-	persist-file-impl.h			\
-	persist-stream-impl.c			\
-	persist-stream-impl.h			\
+	persist-stream.c			\
+	persist-stream.h			\
 	popup.c					\
 	popup.h					\
 	properties.c				\
 	properties.h				\
 	replace.c				\
 	replace.h				\
-	html-stream-mem.h			\
-	html-stream-mem.c			\
 	rule.c					\
 	rule.h					\
 	search.c				\
@@ -115,7 +114,7 @@ PRGS = gnome-gtkhtml-editor
 gnome_gtkhtml_editor_SOURCES =			\
 	$(GTKHTML_EDITOR_SOURCES_COMMON)
 install-exec-hook:
-	mv $(bindir)/gnome-gtkhtml-editor $(bindir)/gnome-gtkhtml-editor-@EDITOR_API_VERSION@
+	mv $(DESTDIR)$(bindir)/gnome-gtkhtml-editor $(DESTDIR)$(bindir)/gnome-gtkhtml-editor-@EDITOR_API_VERSION@
 endif
 
 libgnome_gtkhtml_editor_la_LDFLAGS = -release $(EDITOR_API_VERSION)

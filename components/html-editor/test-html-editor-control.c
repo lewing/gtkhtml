@@ -39,7 +39,7 @@ static void
 load_through_persist_stream (const gchar *filename,
 			     Bonobo_PersistStream pstream)
 {
-	BonoboStream *stream = NULL;
+	BonoboObject *stream = NULL;
 	CORBA_Environment ev;
 
 	CORBA_exception_init (&ev);
@@ -50,11 +50,9 @@ load_through_persist_stream (const gchar *filename,
 	if (stream == NULL) {
 		g_warning ("Couldn't load `%s'\n", filename);
 	} else {
-		BonoboObject *stream_object;
 		Bonobo_Stream corba_stream;
 
-		stream_object = BONOBO_OBJECT (stream);
-		corba_stream = bonobo_object_corba_objref (stream_object);
+		corba_stream = bonobo_object_corba_objref (stream);
 		Bonobo_PersistStream_load (pstream, corba_stream,
 					   "text/html", &ev);
 	}
@@ -69,7 +67,7 @@ static void
 save_through_persist_stream (const gchar *filename,
 			     Bonobo_PersistStream pstream)
 {
-	BonoboStream *stream = NULL;
+	BonoboObject *stream = NULL;
 	CORBA_Environment ev;
 
 	CORBA_exception_init (&ev);
@@ -82,13 +80,10 @@ save_through_persist_stream (const gchar *filename,
 	if (stream == NULL) {
 		g_warning ("Couldn't create `%s'\n", filename);
 	} else {
-		BonoboObject *stream_object;
 		Bonobo_Stream corba_stream;
 
-		stream_object = BONOBO_OBJECT (stream);
-		corba_stream = bonobo_object_corba_objref (stream_object);
-		Bonobo_PersistStream_save (pstream, corba_stream,
-					   "text/html", &ev);
+		corba_stream = bonobo_object_corba_objref (stream);
+		Bonobo_PersistStream_save (pstream, corba_stream, "text/html", &ev);
 	}
 
 	Bonobo_Unknown_unref (pstream, &ev);
@@ -101,7 +96,7 @@ static void
 save_through_plain_persist_stream (const gchar *filename,
 			     Bonobo_PersistStream pstream)
 {
-	BonoboStream *stream = NULL;
+	BonoboObject *stream = NULL;
 	CORBA_Environment ev;
 
 	CORBA_exception_init (&ev);
@@ -117,10 +112,8 @@ save_through_plain_persist_stream (const gchar *filename,
 		BonoboObject *stream_object;
 		Bonobo_Stream corba_stream;
 
-		stream_object = BONOBO_OBJECT (stream);
-		corba_stream = bonobo_object_corba_objref (stream_object);
-		Bonobo_PersistStream_save (pstream, corba_stream,
-					   "text/plain", &ev);
+		corba_stream = bonobo_object_corba_objref (stream);
+		Bonobo_PersistStream_save (pstream, corba_stream, "text/plain", &ev);
 	}
 
 	Bonobo_Unknown_unref (pstream, &ev);

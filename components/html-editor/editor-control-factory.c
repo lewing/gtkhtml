@@ -56,8 +56,8 @@
 
 #include "engine.h"
 #include "menubar.h"
-#include "persist-file-impl.h"
-#include "persist-stream-impl.h"
+/* FIX2 #include "persist-file-impl.h" */
+#include "persist-stream.h"
 #include "popup.h"
 #include "toolbar.h"
 #include "properties.h"
@@ -478,12 +478,12 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 				     BONOBO_OBJECT (cd->editor_bonobo_engine));
 
 	/* Bonobo::PersistStream */
-	cd->persist_stream = persist_stream_impl_new (GTK_HTML (html_widget));
+	cd->persist_stream = gtk_html_persist_stream_new (GTK_HTML (html_widget));
 	bonobo_object_add_interface (BONOBO_OBJECT (control), BONOBO_OBJECT (cd->persist_stream));
 
-	/* Bonobo::PersistFile */
+	/* Bonobo::PersistFile FIX2
 	cd->persist_file = persist_file_impl_new (GTK_HTML (html_widget));
-	bonobo_object_add_interface (BONOBO_OBJECT (control), BONOBO_OBJECT (cd->persist_file));
+	bonobo_object_add_interface (BONOBO_OBJECT (control), BONOBO_OBJECT (cd->persist_file)); */
 
 	/* PropertyBag */
 	pb = bonobo_property_bag_new (editor_get_prop, editor_set_prop, cd);
@@ -606,7 +606,7 @@ send_event_stream (GNOME_GtkHTML_Editor_Engine engine,
 	CORBA_any *any;
 	GNOME_GtkHTML_Editor_URLRequestEvent e;
 	CORBA_Environment ev;
-	BonoboStream *bstream;
+	BonoboObject *bstream;
 
 	any = CORBA_any__alloc ();
 	any->_type = TC_GNOME_GtkHTML_Editor_URLRequestEvent;
