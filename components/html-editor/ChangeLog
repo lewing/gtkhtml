@@ -1,3 +1,9 @@
+2002-05-21  Larry Ewing  <lewing@ximian.com>
+
+	* toolbar.c (toolbar_item_update_sensitivity): make the alignment
+	items sensitive now that alignment is reflected in the plain text
+	output.
+
 2002-05-15  Larry Ewing  <lewing@ximian.com>
 
 	* htmlsourceview.c: rename methods and add content type parameter
@@ -42,6 +48,17 @@
 	* test-html-editor-control.c (save_through_plain_persist_stream):
 	give a reasonable mode for the new file.
 	add missing includes.
+
+2002-05-08  Radek Doulik  <rodo@ximian.com>
+
+	* GNOME_GtkHTML_Editor.xml.in: moved lists before hedings
+
+	* toolbar.c: moved lists before hedings
+
+2002-05-06  Radek Doulik  <rodo@ximian.com>
+
+	* spell.c (spell_check_word): check just for SYSTEM exception
+	(fill_suggestion_clist): ditto
 
 2002-05-01  Larry Ewing  <lewing@ximian.com>
 
