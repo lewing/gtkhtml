@@ -12,146 +12,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 3.1.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-23 20:14+0200\n"
+"POT-Creation-Date: 2004-10-11 20:55+0200\n"
 "PO-Revision-Date: 2004-07-30 10:00+0200\n"
 "Last-Translator: Audrey Simons <asimons@redhat.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: capplet/gnome-bindings-prop.c:157
-msgid "<None>"
-msgstr "<Aucun>"
-
-#: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
-#: components/html-editor/cell.c:333 components/html-editor/image.c:350
-#: components/html-editor/link.c:182 components/html-editor/rule.c:174
-#: components/html-editor/table.c:220 components/html-editor/template.c:271
-#: components/html-editor/text.c:159
-msgid "Could not load glade file."
-msgstr "Impossible de charger le fichier glade."
-
-#: capplet/gtkhtml-capplet.glade.h:1
-msgid "\n"
-msgstr "\n"
-
-#: capplet/gtkhtml-capplet.glade.h:3
-#: components/html-editor/gtkhtml-editor-properties.glade.h:4
-msgid "*"
-msgstr "*"
-
-#: capplet/gtkhtml-capplet.glade.h:4
-msgid "*********************"
-msgstr "*********************"
-
-#: capplet/gtkhtml-capplet.glade.h:5
-msgid "Add Keyboard Shortcuts"
-msgstr "Ajouter des raccourcis clavier"
-
-#: capplet/gtkhtml-capplet.glade.h:6
-msgid "Automatically detect links"
-msgstr "Détecter automatiquement les liens"
-
-#: capplet/gtkhtml-capplet.glade.h:7
-msgid "Behavior"
-msgstr "Comportement"
-
-#: capplet/gtkhtml-capplet.glade.h:8
-msgid "Composer Properties"
-msgstr "Propriétés de l'éditeur"
-
-#: capplet/gtkhtml-capplet.glade.h:9
-msgid "Composer Properties planned"
-msgstr "Propriétés planifiées de l'éditeur"
-
-#: capplet/gtkhtml-capplet.glade.h:10
-msgid "Configure spell checking"
-msgstr "Configurer la vérification orthographique"
-
-#: capplet/gtkhtml-capplet.glade.h:11
-msgid "Enable spell checking"
-msgstr "Activer la vérification orthographique"
-
-#: capplet/gtkhtml-capplet.glade.h:12
-msgid "Fixed width"
-msgstr "Largeur constante"
-
-#: capplet/gtkhtml-capplet.glade.h:13
-msgid "Fonts"
-msgstr "Polices"
-
-#: capplet/gtkhtml-capplet.glade.h:14
-msgid "For printing"
-msgstr "Pour l'impression"
-
-#: capplet/gtkhtml-capplet.glade.h:15
-msgid "Grab keys"
-msgstr "Capturer les touches"
-
-#: capplet/gtkhtml-capplet.glade.h:16
-msgid "Information"
-msgstr "Information"
-
-#: capplet/gtkhtml-capplet.glade.h:17
-msgid "Keyboard Shortcuts"
-msgstr "Raccourcis clavier"
-
-#: capplet/gtkhtml-capplet.glade.h:18
-msgid "Miscellaneous"
-msgstr "Divers"
-
-#: capplet/gtkhtml-capplet.glade.h:19
-msgid "New shortcut:"
-msgstr "Nouveau raccourci :"
-
-#: capplet/gtkhtml-capplet.glade.h:20
-msgid "On screen"
-msgstr "Pour l'écran"
-
-#: capplet/gtkhtml-capplet.glade.h:21
-msgid "Select HTML fixed width font"
-msgstr "Sélectionnez une police HTML à largeur constante"
-
-#: capplet/gtkhtml-capplet.glade.h:22
-msgid "Select HTML fixed width font for printing"
-msgstr "Sélectionnez une police HTML à largeur constante pour l'impression"
-
-#: capplet/gtkhtml-capplet.glade.h:23
-msgid "Select HTML variable width font"
-msgstr "Sélectionnez une police HTML à largeur variable"
-
-#: capplet/gtkhtml-capplet.glade.h:24
-msgid "Select HTML variable width font for printing"
-msgstr "Sélectionnez une police HTML à largeur variable pour l'impression"
-
-#: capplet/gtkhtml-capplet.glade.h:25
-msgid "Shortcuts _type:"
-msgstr "_Type de raccourcis :"
-
-#: capplet/gtkhtml-capplet.glade.h:26
-msgid "Show animated images"
-msgstr "Afficher les images animées"
-
-#: capplet/gtkhtml-capplet.glade.h:27
-msgid "Variable width"
-msgstr "Largeur variable"
-
-#: capplet/gtkhtml-capplet.glade.h:28
-msgid "_Add"
-msgstr "A_jouter"
-
-#: capplet/gtkhtml-capplet.glade.h:29
-msgid "_Delete"
-msgstr "_Supprimer"
-
-#: capplet/main.c:226
-msgid ""
-"Cannot execute GNOME Spell control applet\n"
-"Try to install GNOME Spell if you don't have it installed."
-msgstr ""
-"Impossible d'exécuter l'applet de contrôle GNOME Spell\n"
-"Essayez d'installer GNOME Spell s'il n'est pas installé."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1053,6 +920,13 @@ msgstr "Image d'arrière-plan"
 msgid "_Source:"
 msgstr "_Source :"
 
+#: components/html-editor/cell.c:333 components/html-editor/image.c:350
+#: components/html-editor/link.c:182 components/html-editor/rule.c:174
+#: components/html-editor/table.c:220 components/html-editor/template.c:271
+#: components/html-editor/text.c:159
+msgid "Could not load glade file."
+msgstr "Impossible de charger le fichier glade."
+
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
 msgstr "Transparent"
@@ -1292,6 +1166,10 @@ msgstr "    "
 #, no-c-format
 msgid "%"
 msgstr "%"
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:4
+msgid "*"
+msgstr "*"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1876,90 +1754,90 @@ msgstr ""
 "Le texte édité a été supprimé du document.\n"
 "Impossible d'appliquer les modifications."
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2568
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr ""
 "L'URL Mozilla déposé sur l'éditeur avait le mauvais format (%d) ou la "
 "mauvaise longueur (%d)\n"
 
-#: src/gtkhtml.c:2881
+#: src/gtkhtml.c:2890
 msgid "Editable"
 msgstr "Éditable"
 
-#: src/gtkhtml.c:2882
+#: src/gtkhtml.c:2891
 msgid "Whether the html can be edited"
 msgstr "Indique si l'HTML peut être modifié"
 
-#: src/gtkhtml.c:2888
+#: src/gtkhtml.c:2897
 msgid "Document Title"
 msgstr "Titre du document"
 
-#: src/gtkhtml.c:2889
+#: src/gtkhtml.c:2898
 msgid "The title of the current document"
 msgstr "Le titre du document courant"
 
-#: src/gtkhtml.c:2895
+#: src/gtkhtml.c:2904
 msgid "Document Base"
 msgstr "Base du document"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2905
 msgid "The base URL for relative references"
 msgstr "L'URL de base pour les références relatives"
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2911
 msgid "Target Base"
 msgstr "Base de la cible"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2912
 msgid "The base URL of the targe frame"
 msgstr "L'URL de base pour le cadre cible"
 
-#: src/gtkhtml.c:2912
+#: src/gtkhtml.c:2921
 msgid "Fixed Width Font"
 msgstr "Police à largeur constante"
 
-#: src/gtkhtml.c:2913
+#: src/gtkhtml.c:2922
 msgid "The Monospace font to use for typewriter text"
 msgstr "La police à largeur constante à utiliser pour le texte à pas fixe"
 
-#: src/gtkhtml.c:2919
+#: src/gtkhtml.c:2928
 msgid "New Link Color"
 msgstr "Couleur des nouveaux liens"
 
-#: src/gtkhtml.c:2920
+#: src/gtkhtml.c:2929
 msgid "The color of new link elements"
 msgstr "La couleur des éléments nouveau lien"
 
-#: src/gtkhtml.c:2925
+#: src/gtkhtml.c:2934
 msgid "Visited Link Color"
 msgstr "Couleur des liens visités"
 
-#: src/gtkhtml.c:2926
+#: src/gtkhtml.c:2935
 msgid "The color of visited link elements"
 msgstr "La couleur des éléments lien visité"
 
-#: src/gtkhtml.c:2931
+#: src/gtkhtml.c:2940
 msgid "Active Link Color"
 msgstr "Couleur des liens actifs"
 
-#: src/gtkhtml.c:2932
+#: src/gtkhtml.c:2941
 msgid "The color of active link elements"
 msgstr "La couleur des éléments lien actif"
 
-#: src/gtkhtml.c:2937
+#: src/gtkhtml.c:2946
 msgid "Spelling Error Color"
 msgstr "Couleur de le vérification orthographique"
 
-#: src/gtkhtml.c:2938
+#: src/gtkhtml.c:2947
 msgid "The color of the spelling error markers"
 msgstr "La couleur du marqueur des erreurs orthographiques"
 
-#: src/gtkhtml.c:2943
+#: src/gtkhtml.c:2952
 msgid "Cite Quotation Color"
 msgstr "Couleur de la citation"
 
-#: src/gtkhtml.c:2944
+#: src/gtkhtml.c:2953
 msgid "The color of the cited text"
 msgstr "La couleur du texte cité"
 
@@ -2039,3 +1917,94 @@ msgstr "Aperçu avant impression"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "Application de test GtkHTML"
+
+#~ msgid "<None>"
+#~ msgstr "<Aucun>"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "*********************"
+#~ msgstr "*********************"
+
+#~ msgid "Add Keyboard Shortcuts"
+#~ msgstr "Ajouter des raccourcis clavier"
+
+#~ msgid "Automatically detect links"
+#~ msgstr "Détecter automatiquement les liens"
+
+#~ msgid "Behavior"
+#~ msgstr "Comportement"
+
+#~ msgid "Composer Properties"
+#~ msgstr "Propriétés de l'éditeur"
+
+#~ msgid "Composer Properties planned"
+#~ msgstr "Propriétés planifiées de l'éditeur"
+
+#~ msgid "Configure spell checking"
+#~ msgstr "Configurer la vérification orthographique"
+
+#~ msgid "Enable spell checking"
+#~ msgstr "Activer la vérification orthographique"
+
+#~ msgid "Fixed width"
+#~ msgstr "Largeur constante"
+
+#~ msgid "Fonts"
+#~ msgstr "Polices"
+
+#~ msgid "For printing"
+#~ msgstr "Pour l'impression"
+
+#~ msgid "Grab keys"
+#~ msgstr "Capturer les touches"
+
+#~ msgid "Information"
+#~ msgstr "Information"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Raccourcis clavier"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Divers"
+
+#~ msgid "New shortcut:"
+#~ msgstr "Nouveau raccourci :"
+
+#~ msgid "On screen"
+#~ msgstr "Pour l'écran"
+
+#~ msgid "Select HTML fixed width font"
+#~ msgstr "Sélectionnez une police HTML à largeur constante"
+
+#~ msgid "Select HTML fixed width font for printing"
+#~ msgstr "Sélectionnez une police HTML à largeur constante pour l'impression"
+
+#~ msgid "Select HTML variable width font"
+#~ msgstr "Sélectionnez une police HTML à largeur variable"
+
+#~ msgid "Select HTML variable width font for printing"
+#~ msgstr "Sélectionnez une police HTML à largeur variable pour l'impression"
+
+#~ msgid "Shortcuts _type:"
+#~ msgstr "_Type de raccourcis :"
+
+#~ msgid "Show animated images"
+#~ msgstr "Afficher les images animées"
+
+#~ msgid "Variable width"
+#~ msgstr "Largeur variable"
+
+#~ msgid "_Add"
+#~ msgstr "A_jouter"
+
+#~ msgid "_Delete"
+#~ msgstr "_Supprimer"
+
+#~ msgid ""
+#~ "Cannot execute GNOME Spell control applet\n"
+#~ "Try to install GNOME Spell if you don't have it installed."
+#~ msgstr ""
+#~ "Impossible d'exécuter l'applet de contrôle GNOME Spell\n"
+#~ "Essayez d'installer GNOME Spell s'il n'est pas installé."

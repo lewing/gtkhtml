@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-23 20:14+0200\n"
+"POT-Creation-Date: 2004-10-11 20:55+0200\n"
 "PO-Revision-Date: 2004-09-15 02:40+0300\n"
 "Last-Translator: Ayman Hourieh <aymanh@gmail.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
@@ -15,139 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3.1\n"
-
-#: capplet/gnome-bindings-prop.c:157
-msgid "<None>"
-msgstr "<بلا>"
-
-#: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
-#: components/html-editor/cell.c:333 components/html-editor/image.c:350
-#: components/html-editor/link.c:182 components/html-editor/rule.c:174
-#: components/html-editor/table.c:220 components/html-editor/template.c:271
-#: components/html-editor/text.c:159
-msgid "Could not load glade file."
-msgstr "لم أتمكن من تحميل ملف glade"
-
-#: capplet/gtkhtml-capplet.glade.h:1
-msgid "\n"
-msgstr "\n"
-
-#: capplet/gtkhtml-capplet.glade.h:3
-#: components/html-editor/gtkhtml-editor-properties.glade.h:4
-msgid "*"
-msgstr "*"
-
-#: capplet/gtkhtml-capplet.glade.h:4
-msgid "*********************"
-msgstr "*********************"
-
-#: capplet/gtkhtml-capplet.glade.h:5
-msgid "Add Keyboard Shortcuts"
-msgstr "اضف إختصارات لوحة المفاتيح"
-
-#: capplet/gtkhtml-capplet.glade.h:6
-msgid "Automatically detect links"
-msgstr "تعرف على الوصلات تلقائيا"
-
-#: capplet/gtkhtml-capplet.glade.h:7
-msgid "Behavior"
-msgstr "سلوك"
-
-#: capplet/gtkhtml-capplet.glade.h:8
-msgid "Composer Properties"
-msgstr "خصائص الكاتب"
-
-#: capplet/gtkhtml-capplet.glade.h:9
-msgid "Composer Properties planned"
-msgstr "خصائص الكاتب المخططة"
-
-#: capplet/gtkhtml-capplet.glade.h:10
-msgid "Configure spell checking"
-msgstr "عرّف مدقق الإملاء"
-
-#: capplet/gtkhtml-capplet.glade.h:11
-msgid "Enable spell checking"
-msgstr "تفعيل مدقق الإملاء"
-
-#: capplet/gtkhtml-capplet.glade.h:12
-msgid "Fixed width"
-msgstr "عرض ثابت"
-
-#: capplet/gtkhtml-capplet.glade.h:13
-msgid "Fonts"
-msgstr "خطوط"
-
-#: capplet/gtkhtml-capplet.glade.h:14
-msgid "For printing"
-msgstr "لطباعة"
-
-#: capplet/gtkhtml-capplet.glade.h:15
-msgid "Grab keys"
-msgstr "مفاتيح السحب"
-
-#: capplet/gtkhtml-capplet.glade.h:16
-msgid "Information"
-msgstr "معلومات"
-
-#: capplet/gtkhtml-capplet.glade.h:17
-msgid "Keyboard Shortcuts"
-msgstr "اختصارات لوحة المفاتيح"
-
-#: capplet/gtkhtml-capplet.glade.h:18
-msgid "Miscellaneous"
-msgstr "متفرقات"
-
-#: capplet/gtkhtml-capplet.glade.h:19
-msgid "New shortcut:"
-msgstr "إختصار جديد:"
-
-#: capplet/gtkhtml-capplet.glade.h:20
-msgid "On screen"
-msgstr "على الشاشة"
-
-#: capplet/gtkhtml-capplet.glade.h:21
-msgid "Select HTML fixed width font"
-msgstr "اختر خط HTML ذو العرض الثابت"
-
-#: capplet/gtkhtml-capplet.glade.h:22
-msgid "Select HTML fixed width font for printing"
-msgstr "اختر خط HTML ذو العرض الثابت للطباعة"
-
-#: capplet/gtkhtml-capplet.glade.h:23
-msgid "Select HTML variable width font"
-msgstr "اختر خط HTML ذو العرض المتغيير"
-
-#: capplet/gtkhtml-capplet.glade.h:24
-msgid "Select HTML variable width font for printing"
-msgstr "اختر خط HTML ذو العرض المتغيير للطباعة"
-
-#: capplet/gtkhtml-capplet.glade.h:25
-msgid "Shortcuts _type:"
-msgstr "_نوع الإختصارات :"
-
-#: capplet/gtkhtml-capplet.glade.h:26
-msgid "Show animated images"
-msgstr "أظهر الصور المتحركة"
-
-#: capplet/gtkhtml-capplet.glade.h:27
-msgid "Variable width"
-msgstr "متغير العرض"
-
-#: capplet/gtkhtml-capplet.glade.h:28
-msgid "_Add"
-msgstr "أ_ضف"
-
-#: capplet/gtkhtml-capplet.glade.h:29
-msgid "_Delete"
-msgstr "ا_حذف"
-
-#: capplet/main.c:226
-msgid ""
-"Cannot execute GNOME Spell control applet\n"
-"Try to install GNOME Spell if you don't have it installed."
-msgstr ""
-"لا يمكن تشغيل بريمج تحكم مدقق إملاء جينومحاول تثبيت مدقق إملاء جينوم أن لم "
-"يكن موجود لديك."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1049,6 +916,13 @@ msgstr "صورة الخلفية"
 msgid "_Source:"
 msgstr "ال_مصدر:"
 
+#: components/html-editor/cell.c:333 components/html-editor/image.c:350
+#: components/html-editor/link.c:182 components/html-editor/rule.c:174
+#: components/html-editor/table.c:220 components/html-editor/template.c:271
+#: components/html-editor/text.c:159
+msgid "Could not load glade file."
+msgstr "لم أتمكن من تحميل ملف glade"
+
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
 msgstr "شفّاف"
@@ -1288,6 +1162,10 @@ msgstr "...."
 #, no-c-format
 msgid "%"
 msgstr "%"
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:4
+msgid "*"
+msgstr "*"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1872,88 +1750,88 @@ msgstr ""
 "أزيل الكائن المحرّر من المستند.\n"
 "لا أستطيع تطبيق تغييراتك."
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2568
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr "لعنوان موزيلا المسقط على المحرّر هيئة خاطئة (%d) أو طول (%d)\n"
 
-#: src/gtkhtml.c:2881
+#: src/gtkhtml.c:2890
 msgid "Editable"
 msgstr "قابل للتّحرير"
 
-#: src/gtkhtml.c:2882
+#: src/gtkhtml.c:2891
 msgid "Whether the html can be edited"
 msgstr "فيما إذا يمكن تحرير الـ html"
 
-#: src/gtkhtml.c:2888
+#: src/gtkhtml.c:2897
 msgid "Document Title"
 msgstr "عنوان المستند"
 
-#: src/gtkhtml.c:2889
+#: src/gtkhtml.c:2898
 msgid "The title of the current document"
 msgstr "عنوان المستند الحالي"
 
-#: src/gtkhtml.c:2895
+#: src/gtkhtml.c:2904
 msgid "Document Base"
 msgstr "قاعدة المستند"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2905
 msgid "The base URL for relative references"
 msgstr "العنوان القاعدة للمراجع النسبيّة"
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2911
 msgid "Target Base"
 msgstr "قاعدة الهدف"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2912
 msgid "The base URL of the targe frame"
 msgstr "العنوان القاعدة للإطار الهدف"
 
-#: src/gtkhtml.c:2912
+#: src/gtkhtml.c:2921
 msgid "Fixed Width Font"
 msgstr "خط ذو عرض ثابت"
 
-#: src/gtkhtml.c:2913
+#: src/gtkhtml.c:2922
 msgid "The Monospace font to use for typewriter text"
 msgstr "الخط المحدّد الحجم للاستخدام في نصّ الآلة الكاتبة"
 
-#: src/gtkhtml.c:2919
+#: src/gtkhtml.c:2928
 msgid "New Link Color"
 msgstr "لون الارتباط الجديد"
 
-#: src/gtkhtml.c:2920
+#: src/gtkhtml.c:2929
 msgid "The color of new link elements"
 msgstr "لون عناصر الارتباط الجديد"
 
-#: src/gtkhtml.c:2925
+#: src/gtkhtml.c:2934
 msgid "Visited Link Color"
 msgstr "لون الارتباط المُزار"
 
-#: src/gtkhtml.c:2926
+#: src/gtkhtml.c:2935
 msgid "The color of visited link elements"
 msgstr "لون عناصر الارتباط المُزار"
 
-#: src/gtkhtml.c:2931
+#: src/gtkhtml.c:2940
 msgid "Active Link Color"
 msgstr "لون الارتباط الفعّال"
 
-#: src/gtkhtml.c:2932
+#: src/gtkhtml.c:2941
 msgid "The color of active link elements"
 msgstr "لون عناصر الارتباط الفعّال"
 
-#: src/gtkhtml.c:2937
+#: src/gtkhtml.c:2946
 msgid "Spelling Error Color"
 msgstr "لون الخطأ الإملائي"
 
-#: src/gtkhtml.c:2938
+#: src/gtkhtml.c:2947
 msgid "The color of the spelling error markers"
 msgstr "لون علامات الخطأ الإملائي"
 
-#: src/gtkhtml.c:2943
+#: src/gtkhtml.c:2952
 msgid "Cite Quotation Color"
 msgstr "لون استشهاد الاقتباس"
 
-#: src/gtkhtml.c:2944
+#: src/gtkhtml.c:2953
 msgid "The color of the cited text"
 msgstr "لون النّص المستشهد به"
 
@@ -2033,3 +1911,94 @@ msgstr "معاينة الطباعة"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "تطبيق اختبار GtkHTML"
+
+#~ msgid "<None>"
+#~ msgstr "<بلا>"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "*********************"
+#~ msgstr "*********************"
+
+#~ msgid "Add Keyboard Shortcuts"
+#~ msgstr "اضف إختصارات لوحة المفاتيح"
+
+#~ msgid "Automatically detect links"
+#~ msgstr "تعرف على الوصلات تلقائيا"
+
+#~ msgid "Behavior"
+#~ msgstr "سلوك"
+
+#~ msgid "Composer Properties"
+#~ msgstr "خصائص الكاتب"
+
+#~ msgid "Composer Properties planned"
+#~ msgstr "خصائص الكاتب المخططة"
+
+#~ msgid "Configure spell checking"
+#~ msgstr "عرّف مدقق الإملاء"
+
+#~ msgid "Enable spell checking"
+#~ msgstr "تفعيل مدقق الإملاء"
+
+#~ msgid "Fixed width"
+#~ msgstr "عرض ثابت"
+
+#~ msgid "Fonts"
+#~ msgstr "خطوط"
+
+#~ msgid "For printing"
+#~ msgstr "لطباعة"
+
+#~ msgid "Grab keys"
+#~ msgstr "مفاتيح السحب"
+
+#~ msgid "Information"
+#~ msgstr "معلومات"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "اختصارات لوحة المفاتيح"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "متفرقات"
+
+#~ msgid "New shortcut:"
+#~ msgstr "إختصار جديد:"
+
+#~ msgid "On screen"
+#~ msgstr "على الشاشة"
+
+#~ msgid "Select HTML fixed width font"
+#~ msgstr "اختر خط HTML ذو العرض الثابت"
+
+#~ msgid "Select HTML fixed width font for printing"
+#~ msgstr "اختر خط HTML ذو العرض الثابت للطباعة"
+
+#~ msgid "Select HTML variable width font"
+#~ msgstr "اختر خط HTML ذو العرض المتغيير"
+
+#~ msgid "Select HTML variable width font for printing"
+#~ msgstr "اختر خط HTML ذو العرض المتغيير للطباعة"
+
+#~ msgid "Shortcuts _type:"
+#~ msgstr "_نوع الإختصارات :"
+
+#~ msgid "Show animated images"
+#~ msgstr "أظهر الصور المتحركة"
+
+#~ msgid "Variable width"
+#~ msgstr "متغير العرض"
+
+#~ msgid "_Add"
+#~ msgstr "أ_ضف"
+
+#~ msgid "_Delete"
+#~ msgstr "ا_حذف"
+
+#~ msgid ""
+#~ "Cannot execute GNOME Spell control applet\n"
+#~ "Try to install GNOME Spell if you don't have it installed."
+#~ msgstr ""
+#~ "لا يمكن تشغيل بريمج تحكم مدقق إملاء جينومحاول تثبيت مدقق إملاء جينوم أن "
+#~ "لم يكن موجود لديك."

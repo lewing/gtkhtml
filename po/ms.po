@@ -6,148 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 1.1.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-23 20:14+0200\n"
+"POT-Creation-Date: 2004-10-11 20:55+0200\n"
 "PO-Revision-Date: 2004-08-27 22:51+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@my-penguin.org>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@lists.sourceforge.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: capplet/gnome-bindings-prop.c:157
-msgid "<None>"
-msgstr "<Tiada>"
-
-#: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
-#: components/html-editor/cell.c:333 components/html-editor/image.c:350
-#: components/html-editor/link.c:182 components/html-editor/rule.c:174
-#: components/html-editor/table.c:220 components/html-editor/template.c:271
-#: components/html-editor/text.c:159
-msgid "Could not load glade file."
-msgstr "Tak dapat memuatkan fail glade."
-
-#: capplet/gtkhtml-capplet.glade.h:1
-msgid "\n"
-msgstr "\n"
-
-#: capplet/gtkhtml-capplet.glade.h:3
-#: components/html-editor/gtkhtml-editor-properties.glade.h:4
-msgid "*"
-msgstr "*"
-
-#: capplet/gtkhtml-capplet.glade.h:4
-msgid "*********************"
-msgstr "*********************"
-
-#: capplet/gtkhtml-capplet.glade.h:5
-msgid "Add Keyboard Shortcuts"
-msgstr "Tambah pintasan papan kekunci"
-
-#: capplet/gtkhtml-capplet.glade.h:6
-msgid "Automatically detect links"
-msgstr "Automatik detect pautan"
-
-#: capplet/gtkhtml-capplet.glade.h:7
-msgid "Behavior"
-msgstr "Kelakuan"
-
-#: capplet/gtkhtml-capplet.glade.h:8
-msgid "Composer Properties"
-msgstr "Ciri-ciri Penggubah"
-
-#: capplet/gtkhtml-capplet.glade.h:9
-msgid "Composer Properties planned"
-msgstr "Ciri-ciri Penggubah dirancang"
-
-#: capplet/gtkhtml-capplet.glade.h:10
-msgid "Configure spell checking"
-msgstr "Konfigurasikan penyemak ejaan"
-
-#: capplet/gtkhtml-capplet.glade.h:11
-msgid "Enable spell checking"
-msgstr "Hidupkan penyemak ejaan"
-
-#: capplet/gtkhtml-capplet.glade.h:12
-msgid "Fixed width"
-msgstr "Lebar tetap"
-
-# src/prefs.c:618
-# ui/galeon.glade.h:140
-#: capplet/gtkhtml-capplet.glade.h:13
-msgid "Fonts"
-msgstr "Font"
-
-#: capplet/gtkhtml-capplet.glade.h:14
-msgid "For printing"
-msgstr "Untuk cetakan"
-
-#: capplet/gtkhtml-capplet.glade.h:15
-msgid "Grab keys"
-msgstr "Genggam kekunci..."
-
-#: capplet/gtkhtml-capplet.glade.h:16
-msgid "Information"
-msgstr "Maklumat"
-
-#: capplet/gtkhtml-capplet.glade.h:17
-msgid "Keyboard Shortcuts"
-msgstr "Pintasan Papan Kekunci"
-
-#: capplet/gtkhtml-capplet.glade.h:18
-msgid "Miscellaneous"
-msgstr "Lain-lain"
-
-#: capplet/gtkhtml-capplet.glade.h:19
-msgid "New shortcut:"
-msgstr "Pintasan baru:"
-
-#: capplet/gtkhtml-capplet.glade.h:20
-msgid "On screen"
-msgstr "Pada skrin"
-
-#: capplet/gtkhtml-capplet.glade.h:21
-msgid "Select HTML fixed width font"
-msgstr "Pilih for lebar tetap HTML"
-
-#: capplet/gtkhtml-capplet.glade.h:22
-msgid "Select HTML fixed width font for printing"
-msgstr "Pilih for lebar tetap HTML untuk cetakan"
-
-#: capplet/gtkhtml-capplet.glade.h:23
-msgid "Select HTML variable width font"
-msgstr "Pilih font lebar bolehubah HTML"
-
-#: capplet/gtkhtml-capplet.glade.h:24
-msgid "Select HTML variable width font for printing"
-msgstr "Pilih font lebar bolehubah HTML untuk cetakan"
-
-#: capplet/gtkhtml-capplet.glade.h:25
-msgid "Shortcuts _type:"
-msgstr "Jenis Pintasan:"
-
-#: capplet/gtkhtml-capplet.glade.h:26
-msgid "Show animated images"
-msgstr "Papar imej animasi"
-
-#: capplet/gtkhtml-capplet.glade.h:27
-msgid "Variable width"
-msgstr "Lebar bolehubah"
-
-#: capplet/gtkhtml-capplet.glade.h:28
-msgid "_Add"
-msgstr "_Tambah"
-
-#: capplet/gtkhtml-capplet.glade.h:29
-msgid "_Delete"
-msgstr "Pa_dam"
-
-#: capplet/main.c:226
-msgid ""
-"Cannot execute GNOME Spell control applet\n"
-"Try to install GNOME Spell if you don't have it installed."
-msgstr ""
-"Tak dapat melaksanakan GNOME aplet kawalan GNOME Spell\n"
-" Cuba pasang GNOME Spell jika anda belum memasangnya."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1054,6 +919,13 @@ msgstr "Imej latarbelakang:"
 msgid "_Source:"
 msgstr "_Sumber:"
 
+#: components/html-editor/cell.c:333 components/html-editor/image.c:350
+#: components/html-editor/link.c:182 components/html-editor/rule.c:174
+#: components/html-editor/table.c:220 components/html-editor/template.c:271
+#: components/html-editor/text.c:159
+msgid "Could not load glade file."
+msgstr "Tak dapat memuatkan fail glade."
+
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
 msgstr "Telus"
@@ -1297,6 +1169,10 @@ msgstr "    "
 #, no-c-format
 msgid "%"
 msgstr "%"
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:4
+msgid "*"
+msgstr "*"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1889,91 +1765,91 @@ msgstr ""
 "Objek yang diedit telah dibuang daripada dokumen.\n"
 " Tak dapat menerapkan perubahan"
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2568
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Url mozilla yang dijatuhkan pada Penggubah mempunyai format (%d) atau "
 "panjang (%d) yang salah\n"
 
-#: src/gtkhtml.c:2881
+#: src/gtkhtml.c:2890
 msgid "Editable"
 msgstr "Boleh edit"
 
-#: src/gtkhtml.c:2882
+#: src/gtkhtml.c:2891
 msgid "Whether the html can be edited"
 msgstr "Samada html boleh diedit"
 
-#: src/gtkhtml.c:2888
+#: src/gtkhtml.c:2897
 msgid "Document Title"
 msgstr "Tajuk Dokumen"
 
-#: src/gtkhtml.c:2889
+#: src/gtkhtml.c:2898
 msgid "The title of the current document"
 msgstr "Tajuk bagi dokumen semasa"
 
-#: src/gtkhtml.c:2895
+#: src/gtkhtml.c:2904
 msgid "Document Base"
 msgstr "Dokumen Dasar"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2905
 msgid "The base URL for relative references"
 msgstr "URL dasar bagi rujukan relatif"
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2911
 msgid "Target Base"
 msgstr "Sasaran Dasar"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2912
 msgid "The base URL of the targe frame"
 msgstr "URL dasar bagi kerangka sasaran"
 
-#: src/gtkhtml.c:2912
+#: src/gtkhtml.c:2921
 msgid "Fixed Width Font"
 msgstr "Font Lebar tetap"
 
-#: src/gtkhtml.c:2913
+#: src/gtkhtml.c:2922
 msgid "The Monospace font to use for typewriter text"
 msgstr "Font monoruang untuk digunakan bagi teks mesin taip"
 
-#: src/gtkhtml.c:2919
+#: src/gtkhtml.c:2928
 msgid "New Link Color"
 msgstr "Warna Pautan Baru"
 
-#: src/gtkhtml.c:2920
+#: src/gtkhtml.c:2929
 msgid "The color of new link elements"
 msgstr "Warna bagi unsur pautan baru"
 
-#: src/gtkhtml.c:2925
+#: src/gtkhtml.c:2934
 msgid "Visited Link Color"
 msgstr "Warna Pautan Dilawati"
 
-#: src/gtkhtml.c:2926
+#: src/gtkhtml.c:2935
 msgid "The color of visited link elements"
 msgstr "Warna bagi unsur pautan yg telah dilawati"
 
-#: src/gtkhtml.c:2931
+#: src/gtkhtml.c:2940
 msgid "Active Link Color"
 msgstr "Warna Pautan Aktif"
 
-#: src/gtkhtml.c:2932
+#: src/gtkhtml.c:2941
 msgid "The color of active link elements"
 msgstr "Warna bagi unsur pautan aktif"
 
-#: src/gtkhtml.c:2937
+#: src/gtkhtml.c:2946
 msgid "Spelling Error Color"
 msgstr "Warna Ralat Ejaan"
 
-#: src/gtkhtml.c:2938
+#: src/gtkhtml.c:2947
 msgid "The color of the spelling error markers"
 msgstr "Warna bagi tanda ralat ejaan"
 
-#: src/gtkhtml.c:2943
+#: src/gtkhtml.c:2952
 #, fuzzy
 msgid "Cite Quotation Color"
 msgstr "Tepek Warna Petikan"
 
-#: src/gtkhtml.c:2944
+#: src/gtkhtml.c:2953
 #, fuzzy
 msgid "The color of the cited text"
 msgstr "Semak ejaan dokumen"
@@ -2054,3 +1930,96 @@ msgstr "Prebiu Cetakan"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "Aplikasi Ujian GtkHTML"
+
+#~ msgid "<None>"
+#~ msgstr "<Tiada>"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "*********************"
+#~ msgstr "*********************"
+
+#~ msgid "Add Keyboard Shortcuts"
+#~ msgstr "Tambah pintasan papan kekunci"
+
+#~ msgid "Automatically detect links"
+#~ msgstr "Automatik detect pautan"
+
+#~ msgid "Behavior"
+#~ msgstr "Kelakuan"
+
+#~ msgid "Composer Properties"
+#~ msgstr "Ciri-ciri Penggubah"
+
+#~ msgid "Composer Properties planned"
+#~ msgstr "Ciri-ciri Penggubah dirancang"
+
+#~ msgid "Configure spell checking"
+#~ msgstr "Konfigurasikan penyemak ejaan"
+
+#~ msgid "Enable spell checking"
+#~ msgstr "Hidupkan penyemak ejaan"
+
+#~ msgid "Fixed width"
+#~ msgstr "Lebar tetap"
+
+# src/prefs.c:618
+# ui/galeon.glade.h:140
+#~ msgid "Fonts"
+#~ msgstr "Font"
+
+#~ msgid "For printing"
+#~ msgstr "Untuk cetakan"
+
+#~ msgid "Grab keys"
+#~ msgstr "Genggam kekunci..."
+
+#~ msgid "Information"
+#~ msgstr "Maklumat"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Pintasan Papan Kekunci"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Lain-lain"
+
+#~ msgid "New shortcut:"
+#~ msgstr "Pintasan baru:"
+
+#~ msgid "On screen"
+#~ msgstr "Pada skrin"
+
+#~ msgid "Select HTML fixed width font"
+#~ msgstr "Pilih for lebar tetap HTML"
+
+#~ msgid "Select HTML fixed width font for printing"
+#~ msgstr "Pilih for lebar tetap HTML untuk cetakan"
+
+#~ msgid "Select HTML variable width font"
+#~ msgstr "Pilih font lebar bolehubah HTML"
+
+#~ msgid "Select HTML variable width font for printing"
+#~ msgstr "Pilih font lebar bolehubah HTML untuk cetakan"
+
+#~ msgid "Shortcuts _type:"
+#~ msgstr "Jenis Pintasan:"
+
+#~ msgid "Show animated images"
+#~ msgstr "Papar imej animasi"
+
+#~ msgid "Variable width"
+#~ msgstr "Lebar bolehubah"
+
+#~ msgid "_Add"
+#~ msgstr "_Tambah"
+
+#~ msgid "_Delete"
+#~ msgstr "Pa_dam"
+
+#~ msgid ""
+#~ "Cannot execute GNOME Spell control applet\n"
+#~ "Try to install GNOME Spell if you don't have it installed."
+#~ msgstr ""
+#~ "Tak dapat melaksanakan GNOME aplet kawalan GNOME Spell\n"
+#~ " Cuba pasang GNOME Spell jika anda belum memasangnya."

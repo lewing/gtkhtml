@@ -6,146 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-23 20:14+0200\n"
+"POT-Creation-Date: 2004-10-11 20:55+0200\n"
 "PO-Revision-Date: 2003-01-22 15:31+0100\n"
 "Last-Translator: Andraz Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: capplet/gnome-bindings-prop.c:157
-msgid "<None>"
-msgstr "<Brez>"
-
-#: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
-#: components/html-editor/cell.c:333 components/html-editor/image.c:350
-#: components/html-editor/link.c:182 components/html-editor/rule.c:174
-#: components/html-editor/table.c:220 components/html-editor/template.c:271
-#: components/html-editor/text.c:159
-msgid "Could not load glade file."
-msgstr "Nisem mogel naložiti datoteke glade."
-
-#: capplet/gtkhtml-capplet.glade.h:1
-msgid "\n"
-msgstr "\n"
-
-#: capplet/gtkhtml-capplet.glade.h:3
-#: components/html-editor/gtkhtml-editor-properties.glade.h:4
-msgid "*"
-msgstr "*"
-
-#: capplet/gtkhtml-capplet.glade.h:4
-msgid "*********************"
-msgstr "*********************"
-
-#: capplet/gtkhtml-capplet.glade.h:5
-msgid "Add Keyboard Shortcuts"
-msgstr "Dodaj bližnjico tipkovnice"
-
-#: capplet/gtkhtml-capplet.glade.h:6
-msgid "Automatically detect links"
-msgstr "Samodejno prepoznavaj povezave"
-
-#: capplet/gtkhtml-capplet.glade.h:7
-msgid "Behavior"
-msgstr "Obnašanje"
-
-#: capplet/gtkhtml-capplet.glade.h:8
-msgid "Composer Properties"
-msgstr "Lastnosti skladatelja"
-
-#: capplet/gtkhtml-capplet.glade.h:9
-msgid "Composer Properties planned"
-msgstr "Načrtovane lastnosti skladatelja"
-
-#: capplet/gtkhtml-capplet.glade.h:10
-msgid "Configure spell checking"
-msgstr "Nastavi preverjanje črkovanja"
-
-#: capplet/gtkhtml-capplet.glade.h:11
-msgid "Enable spell checking"
-msgstr "Vključi preverjanje črkovanja"
-
-#: capplet/gtkhtml-capplet.glade.h:12
-msgid "Fixed width"
-msgstr "Stalna širina"
-
-#: capplet/gtkhtml-capplet.glade.h:13
-msgid "Fonts"
-msgstr "Pisave"
-
-#: capplet/gtkhtml-capplet.glade.h:14
-msgid "For printing"
-msgstr "Za tiskanje"
-
-#: capplet/gtkhtml-capplet.glade.h:15
-msgid "Grab keys"
-msgstr "Preberi tipke"
-
-#: capplet/gtkhtml-capplet.glade.h:16
-msgid "Information"
-msgstr "Podatki"
-
-#: capplet/gtkhtml-capplet.glade.h:17
-msgid "Keyboard Shortcuts"
-msgstr "Bližnjice tipkovnice"
-
-#: capplet/gtkhtml-capplet.glade.h:18
-msgid "Miscellaneous"
-msgstr "Razno"
-
-#: capplet/gtkhtml-capplet.glade.h:19
-msgid "New shortcut:"
-msgstr "Nova bližnjica:"
-
-#: capplet/gtkhtml-capplet.glade.h:20
-msgid "On screen"
-msgstr "Za zaslon"
-
-#: capplet/gtkhtml-capplet.glade.h:21
-msgid "Select HTML fixed width font"
-msgstr "Izberi pisavo s stalno širino"
-
-#: capplet/gtkhtml-capplet.glade.h:22
-msgid "Select HTML fixed width font for printing"
-msgstr "Izberi pisavo s stalno širino za tiskanje"
-
-#: capplet/gtkhtml-capplet.glade.h:23
-msgid "Select HTML variable width font"
-msgstr "Izberi HTML pisavo s spremenljivo širino"
-
-#: capplet/gtkhtml-capplet.glade.h:24
-msgid "Select HTML variable width font for printing"
-msgstr "Izberi HTML pisavo s spremenljivo širino za tiskanje"
-
-#: capplet/gtkhtml-capplet.glade.h:25
-msgid "Shortcuts _type:"
-msgstr "_Vrste bližnjic:"
-
-#: capplet/gtkhtml-capplet.glade.h:26
-msgid "Show animated images"
-msgstr "Kaži animirane slike"
-
-#: capplet/gtkhtml-capplet.glade.h:27
-msgid "Variable width"
-msgstr "Spremenljiva širina"
-
-#: capplet/gtkhtml-capplet.glade.h:28
-msgid "_Add"
-msgstr "_Dodaj"
-
-#: capplet/gtkhtml-capplet.glade.h:29
-msgid "_Delete"
-msgstr "_Zbriši"
-
-#: capplet/main.c:226
-msgid ""
-"Cannot execute GNOME Spell control applet\n"
-"Try to install GNOME Spell if you don't have it installed."
-msgstr ""
-"Ne morem izvesti kontrolnega vstavka Črkovalnika GNOME\n"
-"Poizkusite namestiti Črkovalnik GNOME, če ga še nimate."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1057,6 +924,13 @@ msgstr "Slika v ozadju"
 msgid "_Source:"
 msgstr ""
 
+#: components/html-editor/cell.c:333 components/html-editor/image.c:350
+#: components/html-editor/link.c:182 components/html-editor/rule.c:174
+#: components/html-editor/table.c:220 components/html-editor/template.c:271
+#: components/html-editor/text.c:159
+msgid "Could not load glade file."
+msgstr "Nisem mogel naložiti datoteke glade."
+
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
 msgstr ""
@@ -1320,6 +1194,10 @@ msgstr ""
 #, no-c-format
 msgid "%"
 msgstr ""
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:4
+msgid "*"
+msgstr "*"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1958,93 +1836,93 @@ msgstr ""
 "Besedilo, ki ga urejate, je bilo odstranjeno iz dokumenta.\n"
 "Ne morem uveljaviti vaših sprememb."
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2568
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr ""
 
-#: src/gtkhtml.c:2881
+#: src/gtkhtml.c:2890
 #, fuzzy
 msgid "Editable"
 msgstr "Vključi"
 
-#: src/gtkhtml.c:2882
+#: src/gtkhtml.c:2891
 msgid "Whether the html can be edited"
 msgstr ""
 
-#: src/gtkhtml.c:2888
+#: src/gtkhtml.c:2897
 msgid "Document Title"
 msgstr "Naziv dokumenta"
 
-#: src/gtkhtml.c:2889
+#: src/gtkhtml.c:2898
 #, fuzzy
 msgid "The title of the current document"
 msgstr "Preveri črkovanje dokumenta"
 
-#: src/gtkhtml.c:2895
+#: src/gtkhtml.c:2904
 #, fuzzy
 msgid "Document Base"
 msgstr "Naziv dokumenta"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2905
 msgid "The base URL for relative references"
 msgstr ""
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2911
 msgid "Target Base"
 msgstr ""
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2912
 msgid "The base URL of the targe frame"
 msgstr ""
 
-#: src/gtkhtml.c:2912
+#: src/gtkhtml.c:2921
 #, fuzzy
 msgid "Fixed Width Font"
 msgstr "Stalna širina"
 
-#: src/gtkhtml.c:2913
+#: src/gtkhtml.c:2922
 msgid "The Monospace font to use for typewriter text"
 msgstr ""
 
-#: src/gtkhtml.c:2919
+#: src/gtkhtml.c:2928
 msgid "New Link Color"
 msgstr ""
 
-#: src/gtkhtml.c:2920
+#: src/gtkhtml.c:2929
 msgid "The color of new link elements"
 msgstr ""
 
-#: src/gtkhtml.c:2925
+#: src/gtkhtml.c:2934
 msgid "Visited Link Color"
 msgstr ""
 
-#: src/gtkhtml.c:2926
+#: src/gtkhtml.c:2935
 msgid "The color of visited link elements"
 msgstr ""
 
-#: src/gtkhtml.c:2931
+#: src/gtkhtml.c:2940
 msgid "Active Link Color"
 msgstr ""
 
-#: src/gtkhtml.c:2932
+#: src/gtkhtml.c:2941
 msgid "The color of active link elements"
 msgstr ""
 
-#: src/gtkhtml.c:2937
+#: src/gtkhtml.c:2946
 msgid "Spelling Error Color"
 msgstr ""
 
-#: src/gtkhtml.c:2938
+#: src/gtkhtml.c:2947
 msgid "The color of the spelling error markers"
 msgstr ""
 
-#: src/gtkhtml.c:2943
+#: src/gtkhtml.c:2952
 #, fuzzy
 msgid "Cite Quotation Color"
 msgstr "Prilepi citat"
 
-#: src/gtkhtml.c:2944
+#: src/gtkhtml.c:2953
 #, fuzzy
 msgid "The color of the cited text"
 msgstr "Preveri črkovanje dokumenta"
@@ -2126,6 +2004,97 @@ msgstr "Predogled tiskanja"
 #, fuzzy
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML test"
+
+#~ msgid "<None>"
+#~ msgstr "<Brez>"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "*********************"
+#~ msgstr "*********************"
+
+#~ msgid "Add Keyboard Shortcuts"
+#~ msgstr "Dodaj bližnjico tipkovnice"
+
+#~ msgid "Automatically detect links"
+#~ msgstr "Samodejno prepoznavaj povezave"
+
+#~ msgid "Behavior"
+#~ msgstr "Obnašanje"
+
+#~ msgid "Composer Properties"
+#~ msgstr "Lastnosti skladatelja"
+
+#~ msgid "Composer Properties planned"
+#~ msgstr "Načrtovane lastnosti skladatelja"
+
+#~ msgid "Configure spell checking"
+#~ msgstr "Nastavi preverjanje črkovanja"
+
+#~ msgid "Enable spell checking"
+#~ msgstr "Vključi preverjanje črkovanja"
+
+#~ msgid "Fixed width"
+#~ msgstr "Stalna širina"
+
+#~ msgid "Fonts"
+#~ msgstr "Pisave"
+
+#~ msgid "For printing"
+#~ msgstr "Za tiskanje"
+
+#~ msgid "Grab keys"
+#~ msgstr "Preberi tipke"
+
+#~ msgid "Information"
+#~ msgstr "Podatki"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Bližnjice tipkovnice"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Razno"
+
+#~ msgid "New shortcut:"
+#~ msgstr "Nova bližnjica:"
+
+#~ msgid "On screen"
+#~ msgstr "Za zaslon"
+
+#~ msgid "Select HTML fixed width font"
+#~ msgstr "Izberi pisavo s stalno širino"
+
+#~ msgid "Select HTML fixed width font for printing"
+#~ msgstr "Izberi pisavo s stalno širino za tiskanje"
+
+#~ msgid "Select HTML variable width font"
+#~ msgstr "Izberi HTML pisavo s spremenljivo širino"
+
+#~ msgid "Select HTML variable width font for printing"
+#~ msgstr "Izberi HTML pisavo s spremenljivo širino za tiskanje"
+
+#~ msgid "Shortcuts _type:"
+#~ msgstr "_Vrste bližnjic:"
+
+#~ msgid "Show animated images"
+#~ msgstr "Kaži animirane slike"
+
+#~ msgid "Variable width"
+#~ msgstr "Spremenljiva širina"
+
+#~ msgid "_Add"
+#~ msgstr "_Dodaj"
+
+#~ msgid "_Delete"
+#~ msgstr "_Zbriši"
+
+#~ msgid ""
+#~ "Cannot execute GNOME Spell control applet\n"
+#~ "Try to install GNOME Spell if you don't have it installed."
+#~ msgstr ""
+#~ "Ne morem izvesti kontrolnega vstavka Črkovalnika GNOME\n"
+#~ "Poizkusite namestiti Črkovalnik GNOME, če ga še nimate."
 
 #~ msgid "Plain"
 #~ msgstr "pusto"

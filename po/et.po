@@ -7,146 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-23 20:14+0200\n"
+"POT-Creation-Date: 2004-10-11 20:55+0200\n"
 "PO-Revision-Date: 2004-05-02 23:36+0300\n"
 "Last-Translator: Priit Laes <amd@tt.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: capplet/gnome-bindings-prop.c:157
-msgid "<None>"
-msgstr "<Ei ole>"
-
-#: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
-#: components/html-editor/cell.c:333 components/html-editor/image.c:350
-#: components/html-editor/link.c:182 components/html-editor/rule.c:174
-#: components/html-editor/table.c:220 components/html-editor/template.c:271
-#: components/html-editor/text.c:159
-msgid "Could not load glade file."
-msgstr "Ei saa glade faili laadida."
-
-#: capplet/gtkhtml-capplet.glade.h:1
-msgid "\n"
-msgstr "\n"
-
-#: capplet/gtkhtml-capplet.glade.h:3
-#: components/html-editor/gtkhtml-editor-properties.glade.h:4
-msgid "*"
-msgstr "*"
-
-#: capplet/gtkhtml-capplet.glade.h:4
-msgid "*********************"
-msgstr "*********************"
-
-#: capplet/gtkhtml-capplet.glade.h:5
-msgid "Add Keyboard Shortcuts"
-msgstr "Lisa kiirklahve"
-
-#: capplet/gtkhtml-capplet.glade.h:6
-msgid "Automatically detect links"
-msgstr "Leia viidad automaatselt"
-
-#: capplet/gtkhtml-capplet.glade.h:7
-msgid "Behavior"
-msgstr "Käitumine"
-
-#: capplet/gtkhtml-capplet.glade.h:8
-#, fuzzy
-msgid "Composer Properties"
-msgstr "Käivitaja häälestus"
-
-#: capplet/gtkhtml-capplet.glade.h:9
-#, fuzzy
-msgid "Composer Properties planned"
-msgstr "Näita arhiivi omadusi"
-
-#: capplet/gtkhtml-capplet.glade.h:10
-msgid "Configure spell checking"
-msgstr "Õigekirjakontrolli seadistamine"
-
-#: capplet/gtkhtml-capplet.glade.h:11
-msgid "Enable spell checking"
-msgstr "Õigekirja kontroll"
-
-#: capplet/gtkhtml-capplet.glade.h:12
-msgid "Fixed width"
-msgstr "Fikseeritud laiusega"
-
-#: capplet/gtkhtml-capplet.glade.h:13
-msgid "Fonts"
-msgstr "Kirjatüübid"
-
-#: capplet/gtkhtml-capplet.glade.h:14
-msgid "For printing"
-msgstr "Printimiseks"
-
-#: capplet/gtkhtml-capplet.glade.h:15
-msgid "Grab keys"
-msgstr "Haara klahvid"
-
-#: capplet/gtkhtml-capplet.glade.h:16
-msgid "Information"
-msgstr "Informatsioon"
-
-#: capplet/gtkhtml-capplet.glade.h:17
-msgid "Keyboard Shortcuts"
-msgstr "Kiirklahvid"
-
-#: capplet/gtkhtml-capplet.glade.h:18
-msgid "Miscellaneous"
-msgstr "Mitmesugust"
-
-#: capplet/gtkhtml-capplet.glade.h:19
-msgid "New shortcut:"
-msgstr "Uus kiirklahv:"
-
-#: capplet/gtkhtml-capplet.glade.h:20
-msgid "On screen"
-msgstr "Ekraanil"
-
-#: capplet/gtkhtml-capplet.glade.h:21
-msgid "Select HTML fixed width font"
-msgstr "Vali HTML fikseeritud laiusega kirjatüüp"
-
-#: capplet/gtkhtml-capplet.glade.h:22
-msgid "Select HTML fixed width font for printing"
-msgstr "Vali printimise jaoks HTML fikseeritud laiusega kirjatüüp"
-
-#: capplet/gtkhtml-capplet.glade.h:23
-msgid "Select HTML variable width font"
-msgstr "Vali HTML muutuva laiusega kirjatüüp"
-
-#: capplet/gtkhtml-capplet.glade.h:24
-msgid "Select HTML variable width font for printing"
-msgstr "Vali printimise jaoks HTML muutuva laiusega kirjatüüp"
-
-#: capplet/gtkhtml-capplet.glade.h:25
-msgid "Shortcuts _type:"
-msgstr "Kiirklahvide _tüüp:"
-
-#: capplet/gtkhtml-capplet.glade.h:26
-msgid "Show animated images"
-msgstr "Näita animeeritud pilte"
-
-#: capplet/gtkhtml-capplet.glade.h:27
-msgid "Variable width"
-msgstr "Muutuva laiusega"
-
-#: capplet/gtkhtml-capplet.glade.h:28
-msgid "_Add"
-msgstr "_Lisa"
-
-#: capplet/gtkhtml-capplet.glade.h:29
-msgid "_Delete"
-msgstr "_Kustuta"
-
-#: capplet/main.c:226
-msgid ""
-"Cannot execute GNOME Spell control applet\n"
-"Try to install GNOME Spell if you don't have it installed."
-msgstr ""
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1086,6 +953,13 @@ msgstr "Taustapilt"
 msgid "_Source:"
 msgstr ""
 
+#: components/html-editor/cell.c:333 components/html-editor/image.c:350
+#: components/html-editor/link.c:182 components/html-editor/rule.c:174
+#: components/html-editor/table.c:220 components/html-editor/template.c:271
+#: components/html-editor/text.c:159
+msgid "Could not load glade file."
+msgstr "Ei saa glade faili laadida."
+
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
 msgstr ""
@@ -1328,6 +1202,10 @@ msgstr ""
 #, no-c-format
 msgid "%"
 msgstr ""
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:4
+msgid "*"
+msgstr "*"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1962,93 +1840,93 @@ msgid ""
 "Cannot apply your changes."
 msgstr ""
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2568
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr ""
 
-#: src/gtkhtml.c:2881
+#: src/gtkhtml.c:2890
 msgid "Editable"
 msgstr "Redigeeritav"
 
-#: src/gtkhtml.c:2882
+#: src/gtkhtml.c:2891
 msgid "Whether the html can be edited"
 msgstr "Kas html'i saab redigeerida"
 
-#: src/gtkhtml.c:2888
+#: src/gtkhtml.c:2897
 msgid "Document Title"
 msgstr "Dokumendi pealkiri"
 
-#: src/gtkhtml.c:2889
+#: src/gtkhtml.c:2898
 msgid "The title of the current document"
 msgstr "Aktiivse dokumendi pealkiri"
 
-#: src/gtkhtml.c:2895
+#: src/gtkhtml.c:2904
 msgid "Document Base"
 msgstr "Dokumendi baas"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2905
 msgid "The base URL for relative references"
 msgstr ""
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2911
 #, fuzzy
 msgid "Target Base"
 msgstr "alus,astendaja"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2912
 msgid "The base URL of the targe frame"
 msgstr ""
 
-#: src/gtkhtml.c:2912
+#: src/gtkhtml.c:2921
 msgid "Fixed Width Font"
 msgstr "Fikseeritud laiusega font"
 
-#: src/gtkhtml.c:2913
+#: src/gtkhtml.c:2922
 msgid "The Monospace font to use for typewriter text"
 msgstr ""
 
-#: src/gtkhtml.c:2919
+#: src/gtkhtml.c:2928
 msgid "New Link Color"
 msgstr "Uus viidavärv"
 
-#: src/gtkhtml.c:2920
+#: src/gtkhtml.c:2929
 msgid "The color of new link elements"
 msgstr "Uute viidaelementide värv"
 
-#: src/gtkhtml.c:2925
+#: src/gtkhtml.c:2934
 msgid "Visited Link Color"
 msgstr "Külastatud viida värv"
 
-#: src/gtkhtml.c:2926
+#: src/gtkhtml.c:2935
 msgid "The color of visited link elements"
 msgstr "Külastatud viidaelementide värv"
 
-#: src/gtkhtml.c:2931
+#: src/gtkhtml.c:2940
 msgid "Active Link Color"
 msgstr "Aktiivse viida värv"
 
-#: src/gtkhtml.c:2932
+#: src/gtkhtml.c:2941
 #, fuzzy
 msgid "The color of active link elements"
 msgstr "Uute viidaelementide värv"
 
-#: src/gtkhtml.c:2937
+#: src/gtkhtml.c:2946
 #, fuzzy
 msgid "Spelling Error Color"
 msgstr "Vali kohandatud värv"
 
-#: src/gtkhtml.c:2938
+#: src/gtkhtml.c:2947
 #, fuzzy
 msgid "The color of the spelling error markers"
 msgstr "Vea korral &muudetakse teksti värvi"
 
-#: src/gtkhtml.c:2943
+#: src/gtkhtml.c:2952
 #, fuzzy
 msgid "Cite Quotation Color"
 msgstr "Aseta _tsiteering"
 
-#: src/gtkhtml.c:2944
+#: src/gtkhtml.c:2953
 #, fuzzy
 msgid "The color of the cited text"
 msgstr "Uute viidaelementide värv"
@@ -2131,6 +2009,92 @@ msgstr "Printimise eelvaade"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML testrakendus"
+
+#~ msgid "<None>"
+#~ msgstr "<Ei ole>"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "*********************"
+#~ msgstr "*********************"
+
+#~ msgid "Add Keyboard Shortcuts"
+#~ msgstr "Lisa kiirklahve"
+
+#~ msgid "Automatically detect links"
+#~ msgstr "Leia viidad automaatselt"
+
+#~ msgid "Behavior"
+#~ msgstr "Käitumine"
+
+#, fuzzy
+#~ msgid "Composer Properties"
+#~ msgstr "Käivitaja häälestus"
+
+#, fuzzy
+#~ msgid "Composer Properties planned"
+#~ msgstr "Näita arhiivi omadusi"
+
+#~ msgid "Configure spell checking"
+#~ msgstr "Õigekirjakontrolli seadistamine"
+
+#~ msgid "Enable spell checking"
+#~ msgstr "Õigekirja kontroll"
+
+#~ msgid "Fixed width"
+#~ msgstr "Fikseeritud laiusega"
+
+#~ msgid "Fonts"
+#~ msgstr "Kirjatüübid"
+
+#~ msgid "For printing"
+#~ msgstr "Printimiseks"
+
+#~ msgid "Grab keys"
+#~ msgstr "Haara klahvid"
+
+#~ msgid "Information"
+#~ msgstr "Informatsioon"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Kiirklahvid"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Mitmesugust"
+
+#~ msgid "New shortcut:"
+#~ msgstr "Uus kiirklahv:"
+
+#~ msgid "On screen"
+#~ msgstr "Ekraanil"
+
+#~ msgid "Select HTML fixed width font"
+#~ msgstr "Vali HTML fikseeritud laiusega kirjatüüp"
+
+#~ msgid "Select HTML fixed width font for printing"
+#~ msgstr "Vali printimise jaoks HTML fikseeritud laiusega kirjatüüp"
+
+#~ msgid "Select HTML variable width font"
+#~ msgstr "Vali HTML muutuva laiusega kirjatüüp"
+
+#~ msgid "Select HTML variable width font for printing"
+#~ msgstr "Vali printimise jaoks HTML muutuva laiusega kirjatüüp"
+
+#~ msgid "Shortcuts _type:"
+#~ msgstr "Kiirklahvide _tüüp:"
+
+#~ msgid "Show animated images"
+#~ msgstr "Näita animeeritud pilte"
+
+#~ msgid "Variable width"
+#~ msgstr "Muutuva laiusega"
+
+#~ msgid "_Add"
+#~ msgstr "_Lisa"
+
+#~ msgid "_Delete"
+#~ msgstr "_Kustuta"
 
 #~ msgid "Plain"
 #~ msgstr "Lihtne"

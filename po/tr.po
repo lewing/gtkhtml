@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml.gnome-2-8.tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-23 20:14+0200\n"
+"POT-Creation-Date: 2004-10-11 20:55+0200\n"
 "PO-Revision-Date: 2004-09-10 17:26+0300\n"
 "Last-Translator: Onur Can ÇAKMAK <onur.cakmak@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -16,139 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=1; plural=0;\n"
-
-#: capplet/gnome-bindings-prop.c:157
-msgid "<None>"
-msgstr "<Yok>"
-
-#: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
-#: components/html-editor/cell.c:333 components/html-editor/image.c:350
-#: components/html-editor/link.c:182 components/html-editor/rule.c:174
-#: components/html-editor/table.c:220 components/html-editor/template.c:271
-#: components/html-editor/text.c:159
-msgid "Could not load glade file."
-msgstr "Glade dosyası yüklenemedi."
-
-#: capplet/gtkhtml-capplet.glade.h:1
-msgid "\n"
-msgstr "\n"
-
-#: capplet/gtkhtml-capplet.glade.h:3
-#: components/html-editor/gtkhtml-editor-properties.glade.h:4
-msgid "*"
-msgstr "*"
-
-#: capplet/gtkhtml-capplet.glade.h:4
-msgid "*********************"
-msgstr "*********************"
-
-#: capplet/gtkhtml-capplet.glade.h:5
-msgid "Add Keyboard Shortcuts"
-msgstr "Kısayol Tuşu Ekle"
-
-#: capplet/gtkhtml-capplet.glade.h:6
-msgid "Automatically detect links"
-msgstr "Bağları otomatik sapta"
-
-#: capplet/gtkhtml-capplet.glade.h:7
-msgid "Behavior"
-msgstr "Davranış"
-
-#: capplet/gtkhtml-capplet.glade.h:8
-msgid "Composer Properties"
-msgstr "Düzenleyici Özellikleri"
-
-#: capplet/gtkhtml-capplet.glade.h:9
-msgid "Composer Properties planned"
-msgstr "Planlanmış Düzenleyici Özellikleri"
-
-#: capplet/gtkhtml-capplet.glade.h:10
-msgid "Configure spell checking"
-msgstr "Sözel denetim yapılandırması"
-
-#: capplet/gtkhtml-capplet.glade.h:11
-msgid "Enable spell checking"
-msgstr "Sözel denetimini etkinleştir"
-
-#: capplet/gtkhtml-capplet.glade.h:12
-msgid "Fixed width"
-msgstr "Sabit genişlik"
-
-#: capplet/gtkhtml-capplet.glade.h:13
-msgid "Fonts"
-msgstr "Yazıtipleri"
-
-#: capplet/gtkhtml-capplet.glade.h:14
-msgid "For printing"
-msgstr "Yazdırma için"
-
-#: capplet/gtkhtml-capplet.glade.h:15
-msgid "Grab keys"
-msgstr "Tuş yakala"
-
-#: capplet/gtkhtml-capplet.glade.h:16
-msgid "Information"
-msgstr "Bilgi"
-
-#: capplet/gtkhtml-capplet.glade.h:17
-msgid "Keyboard Shortcuts"
-msgstr "Tuş kısayolları"
-
-#: capplet/gtkhtml-capplet.glade.h:18
-msgid "Miscellaneous"
-msgstr "Çeşitli"
-
-#: capplet/gtkhtml-capplet.glade.h:19
-msgid "New shortcut:"
-msgstr "Yeni kısayol:"
-
-#: capplet/gtkhtml-capplet.glade.h:20
-msgid "On screen"
-msgstr "Ekranda"
-
-#: capplet/gtkhtml-capplet.glade.h:21
-msgid "Select HTML fixed width font"
-msgstr "HTML için sabit genişlikli yazıtipi seç"
-
-#: capplet/gtkhtml-capplet.glade.h:22
-msgid "Select HTML fixed width font for printing"
-msgstr "Yazdırma için HTML sabit genişlikli yazıtipini seç"
-
-#: capplet/gtkhtml-capplet.glade.h:23
-msgid "Select HTML variable width font"
-msgstr "HTML değişken genişlikli yazıtipini seç"
-
-#: capplet/gtkhtml-capplet.glade.h:24
-msgid "Select HTML variable width font for printing"
-msgstr "Yazdırma için HTML değişken genişlikli yazıtipi seç"
-
-#: capplet/gtkhtml-capplet.glade.h:25
-msgid "Shortcuts _type:"
-msgstr "Kısayol _türü:"
-
-#: capplet/gtkhtml-capplet.glade.h:26
-msgid "Show animated images"
-msgstr "Canlandırmaları göster"
-
-#: capplet/gtkhtml-capplet.glade.h:27
-msgid "Variable width"
-msgstr "Değişken genişlikli"
-
-#: capplet/gtkhtml-capplet.glade.h:28
-msgid "_Add"
-msgstr "_Ekle"
-
-#: capplet/gtkhtml-capplet.glade.h:29
-msgid "_Delete"
-msgstr "_Sil"
-
-#: capplet/main.c:226
-msgid ""
-"Cannot execute GNOME Spell control applet\n"
-"Try to install GNOME Spell if you don't have it installed."
-msgstr ""
-"GNOME sözdizim denetimi programcığı çalıştırılamıyor\n"
-"Eğer kurulu değilse GNOME Spell uygulamasını kurmayı deneyin."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1050,6 +917,13 @@ msgstr "Arkaplan Resmi"
 msgid "_Source:"
 msgstr "_Kaynak:"
 
+#: components/html-editor/cell.c:333 components/html-editor/image.c:350
+#: components/html-editor/link.c:182 components/html-editor/rule.c:174
+#: components/html-editor/table.c:220 components/html-editor/template.c:271
+#: components/html-editor/text.c:159
+msgid "Could not load glade file."
+msgstr "Glade dosyası yüklenemedi."
+
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
 msgstr "Şeffaf"
@@ -1289,6 +1163,10 @@ msgstr "    "
 #, no-c-format
 msgid "%"
 msgstr "%"
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:4
+msgid "*"
+msgstr "*"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1873,90 +1751,90 @@ msgstr ""
 "Değiştirilmiş nesne belgeden silindi.\n"
 "Değişiklikleriniz uygulanamıyor."
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2568
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Düzenleyici üzerine bırakılan Mozilla url yanlış biçimde (%d) veya uzunlukta "
 "(%d)\n"
 
-#: src/gtkhtml.c:2881
+#: src/gtkhtml.c:2890
 msgid "Editable"
 msgstr "Düzenlenebilir"
 
-#: src/gtkhtml.c:2882
+#: src/gtkhtml.c:2891
 msgid "Whether the html can be edited"
 msgstr "html düzenlenebilirliği"
 
-#: src/gtkhtml.c:2888
+#: src/gtkhtml.c:2897
 msgid "Document Title"
 msgstr "Belge Başlığı"
 
-#: src/gtkhtml.c:2889
+#: src/gtkhtml.c:2898
 msgid "The title of the current document"
 msgstr "Geçerli belgenin başlığı"
 
-#: src/gtkhtml.c:2895
+#: src/gtkhtml.c:2904
 msgid "Document Base"
 msgstr "Belge Temeli"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2905
 msgid "The base URL for relative references"
 msgstr "Göreceli referanslar için URL temeli"
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2911
 msgid "Target Base"
 msgstr "Hedef Temeli"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2912
 msgid "The base URL of the targe frame"
 msgstr "Hedef çerçevenin URL temeli"
 
-#: src/gtkhtml.c:2912
+#: src/gtkhtml.c:2921
 msgid "Fixed Width Font"
 msgstr "Sabit Genişlikli Yazıtipi"
 
-#: src/gtkhtml.c:2913
+#: src/gtkhtml.c:2922
 msgid "The Monospace font to use for typewriter text"
 msgstr "Daktilo metini için kullanılacak SabitBoyutlu(monospace) yazıtipi"
 
-#: src/gtkhtml.c:2919
+#: src/gtkhtml.c:2928
 msgid "New Link Color"
 msgstr "Yeni Bağlantı Rengi"
 
-#: src/gtkhtml.c:2920
+#: src/gtkhtml.c:2929
 msgid "The color of new link elements"
 msgstr "Yeni bağlantı elemanlarının rengi"
 
-#: src/gtkhtml.c:2925
+#: src/gtkhtml.c:2934
 msgid "Visited Link Color"
 msgstr "Ziyaret Edilmiş Bağlantı Rengi"
 
-#: src/gtkhtml.c:2926
+#: src/gtkhtml.c:2935
 msgid "The color of visited link elements"
 msgstr "Ziyaret edilmiş elemanları elemanlarının rengi"
 
-#: src/gtkhtml.c:2931
+#: src/gtkhtml.c:2940
 msgid "Active Link Color"
 msgstr "Etkin Bağlantı Rengi"
 
-#: src/gtkhtml.c:2932
+#: src/gtkhtml.c:2941
 msgid "The color of active link elements"
 msgstr "Etkin bağlantı elemanlarının rengi"
 
-#: src/gtkhtml.c:2937
+#: src/gtkhtml.c:2946
 msgid "Spelling Error Color"
 msgstr "Yazım Hatalası Rengi"
 
-#: src/gtkhtml.c:2938
+#: src/gtkhtml.c:2947
 msgid "The color of the spelling error markers"
 msgstr "Yazım hatası belirteçlerinin rengi"
 
-#: src/gtkhtml.c:2943
+#: src/gtkhtml.c:2952
 msgid "Cite Quotation Color"
 msgstr "Alıntı Rengini Belirt"
 
-#: src/gtkhtml.c:2944
+#: src/gtkhtml.c:2953
 msgid "The color of the cited text"
 msgstr "Belirtilen metinin rengi"
 
@@ -2036,3 +1914,94 @@ msgstr "Baskı önizleme"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML Test Uygulaması"
+
+#~ msgid "<None>"
+#~ msgstr "<Yok>"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "*********************"
+#~ msgstr "*********************"
+
+#~ msgid "Add Keyboard Shortcuts"
+#~ msgstr "Kısayol Tuşu Ekle"
+
+#~ msgid "Automatically detect links"
+#~ msgstr "Bağları otomatik sapta"
+
+#~ msgid "Behavior"
+#~ msgstr "Davranış"
+
+#~ msgid "Composer Properties"
+#~ msgstr "Düzenleyici Özellikleri"
+
+#~ msgid "Composer Properties planned"
+#~ msgstr "Planlanmış Düzenleyici Özellikleri"
+
+#~ msgid "Configure spell checking"
+#~ msgstr "Sözel denetim yapılandırması"
+
+#~ msgid "Enable spell checking"
+#~ msgstr "Sözel denetimini etkinleştir"
+
+#~ msgid "Fixed width"
+#~ msgstr "Sabit genişlik"
+
+#~ msgid "Fonts"
+#~ msgstr "Yazıtipleri"
+
+#~ msgid "For printing"
+#~ msgstr "Yazdırma için"
+
+#~ msgid "Grab keys"
+#~ msgstr "Tuş yakala"
+
+#~ msgid "Information"
+#~ msgstr "Bilgi"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Tuş kısayolları"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Çeşitli"
+
+#~ msgid "New shortcut:"
+#~ msgstr "Yeni kısayol:"
+
+#~ msgid "On screen"
+#~ msgstr "Ekranda"
+
+#~ msgid "Select HTML fixed width font"
+#~ msgstr "HTML için sabit genişlikli yazıtipi seç"
+
+#~ msgid "Select HTML fixed width font for printing"
+#~ msgstr "Yazdırma için HTML sabit genişlikli yazıtipini seç"
+
+#~ msgid "Select HTML variable width font"
+#~ msgstr "HTML değişken genişlikli yazıtipini seç"
+
+#~ msgid "Select HTML variable width font for printing"
+#~ msgstr "Yazdırma için HTML değişken genişlikli yazıtipi seç"
+
+#~ msgid "Shortcuts _type:"
+#~ msgstr "Kısayol _türü:"
+
+#~ msgid "Show animated images"
+#~ msgstr "Canlandırmaları göster"
+
+#~ msgid "Variable width"
+#~ msgstr "Değişken genişlikli"
+
+#~ msgid "_Add"
+#~ msgstr "_Ekle"
+
+#~ msgid "_Delete"
+#~ msgstr "_Sil"
+
+#~ msgid ""
+#~ "Cannot execute GNOME Spell control applet\n"
+#~ "Try to install GNOME Spell if you don't have it installed."
+#~ msgstr ""
+#~ "GNOME sözdizim denetimi programcığı çalıştırılamıyor\n"
+#~ "Eğer kurulu değilse GNOME Spell uygulamasını kurmayı deneyin."

@@ -6,146 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-23 20:14+0200\n"
+"POT-Creation-Date: 2004-10-11 20:55+0200\n"
 "PO-Revision-Date: 2003-03-15 18:51+0200\n"
 "Last-Translator: Artis Trops  <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: capplet/gnome-bindings-prop.c:157
-msgid "<None>"
-msgstr "<Nekas>"
-
-#: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
-#: components/html-editor/cell.c:333 components/html-editor/image.c:350
-#: components/html-editor/link.c:182 components/html-editor/rule.c:174
-#: components/html-editor/table.c:220 components/html-editor/template.c:271
-#: components/html-editor/text.c:159
-msgid "Could not load glade file."
-msgstr "Nevarēja ielādēt glade failu."
-
-#: capplet/gtkhtml-capplet.glade.h:1
-msgid "\n"
-msgstr "\n"
-
-#: capplet/gtkhtml-capplet.glade.h:3
-#: components/html-editor/gtkhtml-editor-properties.glade.h:4
-msgid "*"
-msgstr "*"
-
-#: capplet/gtkhtml-capplet.glade.h:4
-msgid "*********************"
-msgstr "*********************"
-
-#: capplet/gtkhtml-capplet.glade.h:5
-msgid "Add Keyboard Shortcuts"
-msgstr "Pievienot Tastatūras Saīsnes"
-
-#: capplet/gtkhtml-capplet.glade.h:6
-msgid "Automatically detect links"
-msgstr "Automātiski noteikt saites"
-
-#: capplet/gtkhtml-capplet.glade.h:7
-msgid "Behavior"
-msgstr "Uzvedība"
-
-#: capplet/gtkhtml-capplet.glade.h:8
-msgid "Composer Properties"
-msgstr "Sastādītāja Rekvizīti"
-
-#: capplet/gtkhtml-capplet.glade.h:9
-msgid "Composer Properties planned"
-msgstr "Plānotie Sastādītāja Rekvizīti "
-
-#: capplet/gtkhtml-capplet.glade.h:10
-msgid "Configure spell checking"
-msgstr "Konfigurēt pareizrakstības pārbaudi"
-
-#: capplet/gtkhtml-capplet.glade.h:11
-msgid "Enable spell checking"
-msgstr "Aktivizēt pareizrakstības pārbaudi"
-
-#: capplet/gtkhtml-capplet.glade.h:12
-msgid "Fixed width"
-msgstr "Fiksēts platums"
-
-#: capplet/gtkhtml-capplet.glade.h:13
-msgid "Fonts"
-msgstr "Fonti"
-
-#: capplet/gtkhtml-capplet.glade.h:14
-msgid "For printing"
-msgstr "Drukāšanai"
-
-#: capplet/gtkhtml-capplet.glade.h:15
-msgid "Grab keys"
-msgstr "Paķert taustiņus"
-
-#: capplet/gtkhtml-capplet.glade.h:16
-msgid "Information"
-msgstr "Informācija"
-
-#: capplet/gtkhtml-capplet.glade.h:17
-msgid "Keyboard Shortcuts"
-msgstr "Tastatūras Saīsnes"
-
-#: capplet/gtkhtml-capplet.glade.h:18
-msgid "Miscellaneous"
-msgstr "Dažādi"
-
-#: capplet/gtkhtml-capplet.glade.h:19
-msgid "New shortcut:"
-msgstr "Jauna saīsne:"
-
-#: capplet/gtkhtml-capplet.glade.h:20
-msgid "On screen"
-msgstr "Uz ekrāna"
-
-#: capplet/gtkhtml-capplet.glade.h:21
-msgid "Select HTML fixed width font"
-msgstr "Izvēlies HTML fiksēta platuma fontu"
-
-#: capplet/gtkhtml-capplet.glade.h:22
-msgid "Select HTML fixed width font for printing"
-msgstr "Izvēlies HTML fiksēta platuma fontu drukāšanai"
-
-#: capplet/gtkhtml-capplet.glade.h:23
-msgid "Select HTML variable width font"
-msgstr "Izvēlies HTML mainīga platuma fontu"
-
-#: capplet/gtkhtml-capplet.glade.h:24
-msgid "Select HTML variable width font for printing"
-msgstr "Izvēlies HTML mainīga platuma fontu drukāšanai"
-
-#: capplet/gtkhtml-capplet.glade.h:25
-msgid "Shortcuts _type:"
-msgstr "Saīsnes _tips:"
-
-#: capplet/gtkhtml-capplet.glade.h:26
-msgid "Show animated images"
-msgstr "Parādīt animētus attēlus"
-
-#: capplet/gtkhtml-capplet.glade.h:27
-msgid "Variable width"
-msgstr "Mainīgā platums"
-
-#: capplet/gtkhtml-capplet.glade.h:28
-msgid "_Add"
-msgstr "_Pievienot"
-
-#: capplet/gtkhtml-capplet.glade.h:29
-msgid "_Delete"
-msgstr "_Dzēst"
-
-#: capplet/main.c:226
-msgid ""
-"Cannot execute GNOME Spell control applet\n"
-"Try to install GNOME Spell if you don't have it installed."
-msgstr ""
-"Nevaru izpildīt GNOME Pareizrakstibas konroles sīkprogrammu\n"
-"Mēģiniet uzinstalēt GNOME Pareizrakstību, ja jums tā nav uzinstalēta."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1061,6 +928,13 @@ msgstr "Fona Attēls"
 msgid "_Source:"
 msgstr ""
 
+#: components/html-editor/cell.c:333 components/html-editor/image.c:350
+#: components/html-editor/link.c:182 components/html-editor/rule.c:174
+#: components/html-editor/table.c:220 components/html-editor/template.c:271
+#: components/html-editor/text.c:159
+msgid "Could not load glade file."
+msgstr "Nevarēja ielādēt glade failu."
+
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
 msgstr ""
@@ -1322,6 +1196,10 @@ msgstr ""
 #, no-c-format
 msgid "%"
 msgstr ""
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:4
+msgid "*"
+msgstr "*"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1957,89 +1835,89 @@ msgstr ""
 "Rediģētais teksts tika izņemts no dokumenta.\n"
 "Nevaru pielietot jūsu izmaiņas."
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2568
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
 msgstr ""
 
-#: src/gtkhtml.c:2881
+#: src/gtkhtml.c:2890
 msgid "Editable"
 msgstr "Rdiģējams"
 
-#: src/gtkhtml.c:2882
+#: src/gtkhtml.c:2891
 msgid "Whether the html can be edited"
 msgstr "Vai html var tikt rediģēts"
 
-#: src/gtkhtml.c:2888
+#: src/gtkhtml.c:2897
 msgid "Document Title"
 msgstr "Dokumenta Nosaukums"
 
-#: src/gtkhtml.c:2889
+#: src/gtkhtml.c:2898
 msgid "The title of the current document"
 msgstr "Pašreizējā dokumenta nosaukums"
 
-#: src/gtkhtml.c:2895
+#: src/gtkhtml.c:2904
 msgid "Document Base"
 msgstr "Dokumenta Bāze"
 
-#: src/gtkhtml.c:2896
+#: src/gtkhtml.c:2905
 msgid "The base URL for relative references"
 msgstr "Relatīvo atsauču bāzes URL"
 
-#: src/gtkhtml.c:2902
+#: src/gtkhtml.c:2911
 msgid "Target Base"
 msgstr "Mērķa Bāze"
 
-#: src/gtkhtml.c:2903
+#: src/gtkhtml.c:2912
 msgid "The base URL of the targe frame"
 msgstr "Mērķa rāmja bāzes URL"
 
-#: src/gtkhtml.c:2912
+#: src/gtkhtml.c:2921
 msgid "Fixed Width Font"
 msgstr "Fiksēta platuma Fonts"
 
-#: src/gtkhtml.c:2913
+#: src/gtkhtml.c:2922
 msgid "The Monospace font to use for typewriter text"
 msgstr "Vienādplatuma fonts, ko lietot rakstāmmašīnas tekstā"
 
-#: src/gtkhtml.c:2919
+#: src/gtkhtml.c:2928
 msgid "New Link Color"
 msgstr "Jaunās Saites Krāsa"
 
-#: src/gtkhtml.c:2920
+#: src/gtkhtml.c:2929
 msgid "The color of new link elements"
 msgstr "Jaunās saites elementu krāsa"
 
-#: src/gtkhtml.c:2925
+#: src/gtkhtml.c:2934
 msgid "Visited Link Color"
 msgstr "Apmeklētās Saites Krāsa"
 
-#: src/gtkhtml.c:2926
+#: src/gtkhtml.c:2935
 msgid "The color of visited link elements"
 msgstr "Apmeklētās saites elementu krāsa"
 
-#: src/gtkhtml.c:2931
+#: src/gtkhtml.c:2940
 msgid "Active Link Color"
 msgstr "Aktivās Saites Krāsa"
 
-#: src/gtkhtml.c:2932
+#: src/gtkhtml.c:2941
 msgid "The color of active link elements"
 msgstr "Aktīvās saites elementu krāsa"
 
-#: src/gtkhtml.c:2937
+#: src/gtkhtml.c:2946
 msgid "Spelling Error Color"
 msgstr "Pareizrakstības Kļūdu Krāsa"
 
-#: src/gtkhtml.c:2938
+#: src/gtkhtml.c:2947
 msgid "The color of the spelling error markers"
 msgstr "Pareizrakstības kļūdu marķiera krāsa"
 
-#: src/gtkhtml.c:2943
+#: src/gtkhtml.c:2952
 #, fuzzy
 msgid "Cite Quotation Color"
 msgstr "Ievietot Citātu"
 
-#: src/gtkhtml.c:2944
+#: src/gtkhtml.c:2953
 #, fuzzy
 msgid "The color of the cited text"
 msgstr "Aktīvās saites elementu krāsa"
@@ -2121,6 +1999,97 @@ msgstr "Pirmsdrukas apskate"
 #, fuzzy
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML Tests"
+
+#~ msgid "<None>"
+#~ msgstr "<Nekas>"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "*********************"
+#~ msgstr "*********************"
+
+#~ msgid "Add Keyboard Shortcuts"
+#~ msgstr "Pievienot Tastatūras Saīsnes"
+
+#~ msgid "Automatically detect links"
+#~ msgstr "Automātiski noteikt saites"
+
+#~ msgid "Behavior"
+#~ msgstr "Uzvedība"
+
+#~ msgid "Composer Properties"
+#~ msgstr "Sastādītāja Rekvizīti"
+
+#~ msgid "Composer Properties planned"
+#~ msgstr "Plānotie Sastādītāja Rekvizīti "
+
+#~ msgid "Configure spell checking"
+#~ msgstr "Konfigurēt pareizrakstības pārbaudi"
+
+#~ msgid "Enable spell checking"
+#~ msgstr "Aktivizēt pareizrakstības pārbaudi"
+
+#~ msgid "Fixed width"
+#~ msgstr "Fiksēts platums"
+
+#~ msgid "Fonts"
+#~ msgstr "Fonti"
+
+#~ msgid "For printing"
+#~ msgstr "Drukāšanai"
+
+#~ msgid "Grab keys"
+#~ msgstr "Paķert taustiņus"
+
+#~ msgid "Information"
+#~ msgstr "Informācija"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Tastatūras Saīsnes"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Dažādi"
+
+#~ msgid "New shortcut:"
+#~ msgstr "Jauna saīsne:"
+
+#~ msgid "On screen"
+#~ msgstr "Uz ekrāna"
+
+#~ msgid "Select HTML fixed width font"
+#~ msgstr "Izvēlies HTML fiksēta platuma fontu"
+
+#~ msgid "Select HTML fixed width font for printing"
+#~ msgstr "Izvēlies HTML fiksēta platuma fontu drukāšanai"
+
+#~ msgid "Select HTML variable width font"
+#~ msgstr "Izvēlies HTML mainīga platuma fontu"
+
+#~ msgid "Select HTML variable width font for printing"
+#~ msgstr "Izvēlies HTML mainīga platuma fontu drukāšanai"
+
+#~ msgid "Shortcuts _type:"
+#~ msgstr "Saīsnes _tips:"
+
+#~ msgid "Show animated images"
+#~ msgstr "Parādīt animētus attēlus"
+
+#~ msgid "Variable width"
+#~ msgstr "Mainīgā platums"
+
+#~ msgid "_Add"
+#~ msgstr "_Pievienot"
+
+#~ msgid "_Delete"
+#~ msgstr "_Dzēst"
+
+#~ msgid ""
+#~ "Cannot execute GNOME Spell control applet\n"
+#~ "Try to install GNOME Spell if you don't have it installed."
+#~ msgstr ""
+#~ "Nevaru izpildīt GNOME Pareizrakstibas konroles sīkprogrammu\n"
+#~ "Mēģiniet uzinstalēt GNOME Pareizrakstību, ja jums tā nav uzinstalēta."
 
 #~ msgid "Plain"
 #~ msgstr "Līdzens"
