@@ -113,6 +113,20 @@ gtk_html_debug_dump_table (HTMLObject *o,
 }
 
 void
+gtk_html_debug_dump_table_simple (HTMLObject *o, gint level)
+{
+	gint c, r;
+	HTMLTable *table = HTML_TABLE (o);
+
+	for (r = 0; r < table->totalRows; r++) {
+		for (c = 0; c < table->totalCols; c++) {
+			gtk_html_debug_dump_tree_simple (HTML_OBJECT (table->cells[r][c]), level + 1);
+		}
+	}
+
+}
+
+void
 gtk_html_debug_dump_object (HTMLObject *obj,
 			    gint level)
 {
@@ -255,7 +269,9 @@ gtk_html_debug_dump_tree_simple (HTMLObject *o,
 		case HTML_TYPE_TABLECELL:
 			gtk_html_debug_dump_tree_simple (HTML_CLUE (obj)->head, level + 1);
 			break;
-
+		case HTML_TYPE_TABLE:
+			gtk_html_debug_dump_table_simple (obj, level + 1);
+			break;
 		default:
 			break;
 		}
