@@ -1,3 +1,21 @@
+2000-10-16  Radek Doulik  <rodo@helixcode.com>
+
+	* htmlengine-save.c (encode_entities): update to non-utf8 texts,
+	save all 8bit range instead of encoding it as #-1; it's wrong
+	here, but it may work at least with iso-latin-1 I hope,
+	new painter should replace it soon
+
+2000-10-15  Radek Doulik  <rodo@helixcode.com>
+
+	* htmltext.c (save_plain): cut down text from utf8 to 8bit before
+	plain saving (this fixes anoying A^ for now, should be replaced
+	later by text painter)
+
+	* htmlclueflow.c (save_plain): replaced '\240' with ENTITY_NBSP to
+	avoid compiler warnings and kill always true compares
+	(save_plain): don't use unicode functions here, as text is not in
+	utf8 now
+
 2000-10-12  Larry Ewing  <lewing@helixcode.com>
 
 	* htmlclueflow.c (save_plain): wrap the text contained within the
