@@ -4002,7 +4002,7 @@ html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
 		return;
 
 	/* don't draw in case we are longer than available space and scrollbar is going to be shown */
-	if (e->clue && e->clue->ascent + e->clue->descent > e->height) {
+	if (e->clue && e->clue->ascent + e->clue->descent > e->height - e->topBorder - e->bottomBorder) {
 		if (GTK_WIDGET (e->widget)->parent) {
 			if (GTK_IS_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)) {
 				if (GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar
@@ -4021,7 +4021,7 @@ html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
 	}
 
 	/* don't draw in case we are shorter than available space and scrollbar is going to be hidden */
-	if (e->clue && e->clue->ascent + e->clue->descent <= e->height) {
+	if (e->clue && e->clue->ascent + e->clue->descent <= e->height - e->topBorder - e->bottomBorder) {
 		if (GTK_WIDGET (e->widget)->parent) {
 			if (GTK_IS_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)) {
 				if (GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar
