@@ -217,6 +217,7 @@ gchar            *html_text_get_link_text                (HTMLText           *te
 void  html_link_set_url_and_target  (Link  *link,
 				     gchar *url,
 				     gchar *target);
+Link *html_link_dup                 (Link  *link);
 
 /*
  * protected

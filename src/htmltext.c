@@ -226,6 +226,7 @@ copy (HTMLObject *s,
 	HTMLText *src  = HTML_TEXT (s);
 	HTMLText *dest = HTML_TEXT (d);
 	GList *cur;
+	GSList *csl;
 
 	(* HTML_OBJECT_CLASS (parent_class)->copy) (s, d);
 
@@ -248,6 +249,10 @@ copy (HTMLObject *s,
 		cur->data = spell_error_new (se->off, se->len);
 		cur = cur->next;
 	}
+
+	dest->links = g_slist_copy (src->links);
+	for (csl = dest->links; csl; csl = csl->next)
+		csl->data = html_link_dup ((Link *) csl->data);
 
 	dest->pi = NULL;
 }
@@ -474,6 +479,49 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, G
 	return TRUE;
 }
 
+static gboolean
+split_attrs_filter_head (PangoAttribute *attr, gpointer data)
+{
+	gint index = GPOINTER_TO_INT (data);
+
+	if (attr->start_index >= index)
+		return TRUE;
+	else if (attr->end_index > index)
+		attr->end_index = index;
+
+	return FALSE;
+}
+
+static gboolean
+split_attrs_filter_tail (PangoAttribute *attr, gpointer data)
+{
+	gint index = GPOINTER_TO_INT (data);
+	
+	if (attr->end_index <= index)
+		return TRUE;
+
+	if (attr->start_index > index)
+		attr->start_index -= index;
+	else
+		attr->start_index = 0;
+	attr->end_index -= index;
+
+	return FALSE;
+}
+
+static void
+split_attrs (HTMLText *t1, HTMLText *t2, gint index)
+{
+	PangoAttrList *delete;
+
+	delete = pango_attr_list_filter (t1->attr_list, split_attrs_filter_head, GINT_TO_POINTER (index));
+	if (delete)
+		pango_attr_list_unref (delete);
+	delete = pango_attr_list_filter (t2->attr_list, split_attrs_filter_tail, GINT_TO_POINTER (index));
+	if (delete)
+		pango_attr_list_unref (delete);
+}
+
 static void
 object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, gint level, GList **left, GList **right)
 {
@@ -501,6 +549,7 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	t2->text        = html_text_get_text (t2, offset);
 	t2->text_len   -= offset;
 	t2->text_bytes -= split_index;
+	split_attrs (t1, t2, split_index);
 	if (!html_text_convert_nbsp (t2, FALSE))
 		t2->text = g_strdup (t2->text);
 	g_free (tt);
@@ -2242,4 +2291,15 @@ html_link_set_url_and_target (Link *link, gchar *url, gchar *target)
 
 	link->url = g_strdup (url);
 	link->target = g_strdup (target);
+}
+
+Link *
+html_link_dup (Link *l)
+{
+	Link *nl = g_new (Link, 1);
+
+	nl->url = g_strdup (l->url);
+	nl->target = g_strdup (l->target);
+	nl->start_offset = l->start_offset;
+	nl->end_offset = l->end_offset;
 }
