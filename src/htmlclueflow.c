@@ -94,6 +94,8 @@ static void
 destroy (HTMLObject *self)
 {
 	g_byte_array_free (HTML_CLUEFLOW (self)->levels, TRUE);
+
+	(* HTML_OBJECT_CLASS (parent_class)->destroy) (self);
 }
 
 static void
@@ -525,9 +527,15 @@ get_level_indent (HTMLClueFlow *flow,
 		while (i <= level) {
 			switch (flow->levels->data[i]) {
 			case HTML_LIST_TYPE_BLOCKQUOTE_CITE:
-				indent += html_painter_calc_text_width (painter, CLUEFLOW_BLOCKQUOTE_CITE, 
+				indent += html_painter_calc_text_width (painter, 
+									CLUEFLOW_BLOCKQUOTE_CITE, 
 									1, &line_offset,
-									GTK_HTML_FONT_STYLE_SIZE_3, NULL);
+									GTK_HTML_FONT_STYLE_SIZE_3, 
+									NULL);
+					+ html_painter_get_space_width (painter,
+									GTK_HTML_FONT_STYLE_SIZE_3,
+									NULL);
+				
 				break;
 			case HTML_LIST_TYPE_GLOSSARY_DL:
 				indent += 0;
@@ -1207,7 +1215,7 @@ draw_quotes (HTMLObject *self, HTMLPainter *painter,
 		indent = get_level_indent (flow, i, painter);
 
 		html_painter_set_pen (painter, &html_colorset_get_color_allocated (painter, HTMLLinkColor)->color);
-		
+		g_warning ("data[%d] = %d, indent[%d] = %d", i, flow->levels->data[i], i, indent);
 		if (is_cite (flow, i)) {
 			if (!HTML_IS_PLAIN_PAINTER (painter)) {
 				area.x0 = self->x + indent - 5;
@@ -2384,7 +2392,6 @@ html_clueflow_class_init (HTMLClueFlowClass *klass,
 
 	html_clue_class_init (clue_class, type, size);
 
-	/* FIXME destroy */
 	object_class->destroy = destroy;
 	object_class->copy = copy;
 	object_class->op_cut = op_cut;

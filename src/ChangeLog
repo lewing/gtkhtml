@@ -1,3 +1,8 @@
+2002-05-06  Larry Ewing  <lewing@ximian.com>
+
+	* htmlclueflow.c: chain to the parent class destroy method.
+	(get_level_indent): tweak indent settings.
+
 2002-05-03  Larry Ewing  <lewing@ximian.com>
 
 	* htmlenums.h: add some clueflow styles (this should probably be
