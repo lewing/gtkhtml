@@ -499,6 +499,7 @@ calc_size (HTMLObject *self, HTMLPainter *painter, GList **changed_objs)
 	   GtkHTMLFontStyle style = html_text_get_font_style (text); */
 
 	self->width = 0;
+	html_object_calc_preferred_width (self, painter);
 	/* self->ascent = 0; FIX2? */
 	/* self->descent = 0; FIX2? */
 
@@ -663,7 +664,7 @@ calc_preferred_width (HTMLObject *self,
 
 	text = HTML_TEXT (self);
 
-	width = html_text_calc_part_width (text, painter, 0, text->text_len, NULL, NULL);
+	width = html_text_calc_part_width (text, painter, 0, text->text_len, &self->ascent, &self->descent);
 	if (html_clueflow_tabs (HTML_CLUEFLOW (self->parent), painter)) {
 		gint line_offset;
 		gint tabs;
@@ -850,6 +851,10 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 {
 	/*if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter))
 	  return NULL; */
+	if (HTML_OBJECT (text)->change & HTML_CHANGE_RECALC_PI) {
+		pango_info_destroy (text);
+		HTML_OBJECT (text)->change &= ~HTML_CHANGE_RECALC_PI;
+	}
 	if (!text->pi) {
 		PangoContext *pc = HTML_GDK_PAINTER (painter)->pc;
 		GList *items, *cur;
