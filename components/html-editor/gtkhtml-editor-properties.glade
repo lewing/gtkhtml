@@ -96,13 +96,29 @@
 		      <property name="spacing">12</property>
 
 		      <child>
-			<widget class="GtkHBox" id="hbox50">
+			<widget class="GtkHBox" id="table_rows_hbox">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">6</property>
 
 			  <child>
-			    <placeholder/>
+			    <widget class="GtkSpinButton" id="spin_table_rows">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">1</property>
+			      <property name="digits">0</property>
+			      <property name="numeric">False</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">False</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">1 0 100 1 10 10</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			      <property name="pack_type">GTK_PACK_END</property>
+			    </packing>
 			  </child>
 
 			  <child>
@@ -123,11 +139,25 @@
 			      <property name="padding">0</property>
 			      <property name="expand">False</property>
 			      <property name="fill">False</property>
+			      <property name="pack_type">GTK_PACK_END</property>
 			    </packing>
 			  </child>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkHBox" id="table_cols_hbox">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">6</property>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="spin_table_rows">
+			    <widget class="GtkSpinButton" id="spin_table_columns">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
@@ -142,24 +172,8 @@
 			      <property name="padding">0</property>
 			      <property name="expand">True</property>
 			      <property name="fill">True</property>
+			      <property name="pack_type">GTK_PACK_END</property>
 			    </packing>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">True</property>
-			  <property name="fill">True</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkHBox" id="hbox51">
-			  <property name="visible">True</property>
-			  <property name="homogeneous">False</property>
-			  <property name="spacing">6</property>
-
-			  <child>
-			    <placeholder/>
 			  </child>
 
 			  <child>
@@ -180,25 +194,7 @@
 			      <property name="padding">0</property>
 			      <property name="expand">False</property>
 			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkSpinButton" id="spin_table_columns">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="climb_rate">1</property>
-			      <property name="digits">0</property>
-			      <property name="numeric">False</property>
-			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
-			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 100 1 10 10</property>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">True</property>
-			      <property name="fill">True</property>
+			      <property name="pack_type">GTK_PACK_END</property>
 			    </packing>
 			  </child>
 			</widget>
@@ -211,7 +207,7 @@
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
+		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
@@ -321,7 +317,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="spinbutton16">
+			    <widget class="GtkSpinButton" id="spin_table_height">
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="can_focus">True</property>
@@ -343,7 +339,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkOptionMenu" id="optionmenu7">
+			    <widget class="GtkOptionMenu" id="option_table_height">
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="can_focus">True</property>
@@ -412,51 +408,6 @@
 			    <packing>
 			      <property name="left_attach">2</property>
 			      <property name="right_attach">3</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
-			      <property name="x_options"></property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkCheckButton" id="checkbutton1">
-			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Height:</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">1</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="x_options"></property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkCheckButton" id="check_table_width">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Width:</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">1</property>
 			      <property name="top_attach">0</property>
 			      <property name="bottom_attach">1</property>
 			      <property name="x_options"></property>
@@ -538,6 +489,77 @@
 			      <property name="top_attach">2</property>
 			      <property name="bottom_attach">3</property>
 			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox75">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_table_width">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Width:</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
+			      <property name="top_attach">0</property>
+			      <property name="bottom_attach">1</property>
+			      <property name="x_options">fill</property>
+			      <property name="y_options">fill</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox76">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
+
+			      <child>
+				<widget class="GtkCheckButton" id="check_table_height">
+				  <property name="visible">True</property>
+				  <property name="sensitive">False</property>
+				  <property name="can_focus">True</property>
+				  <property name="label" translatable="yes">Height:</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
+			      <property name="top_attach">1</property>
+			      <property name="bottom_attach">2</property>
+			      <property name="x_options">fill</property>
+			      <property name="y_options">fill</property>
 			    </packing>
 			  </child>
 			</widget>
@@ -701,7 +723,7 @@
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
+		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
@@ -996,13 +1018,13 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox63">
+		    <widget class="GtkHBox" id="cell_scope_hbox">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">12</property>
 
 		      <child>
-			<widget class="GtkTable" id="table29">
+			<widget class="GtkTable" id="cell_scope_table1">
 			  <property name="visible">True</property>
 			  <property name="n_rows">2</property>
 			  <property name="n_columns">2</property>
@@ -1043,6 +1065,7 @@
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
+			      <property name="group">radiobutton1</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1056,13 +1079,13 @@
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">True</property>
+			  <property name="expand">False</property>
 			  <property name="fill">True</property>
 			</packing>
 		      </child>
 
 		      <child>
-			<widget class="GtkTable" id="table30">
+			<widget class="GtkTable" id="cell_scope_table2">
 			  <property name="visible">True</property>
 			  <property name="n_rows">2</property>
 			  <property name="n_columns">2</property>
@@ -1071,7 +1094,7 @@
 			  <property name="column_spacing">6</property>
 
 			  <child>
-			    <widget class="GtkRadioButton" id="radiobutton3">
+			    <widget class="GtkRadioButton" id="radiobutton7">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">_Row</property>
@@ -1081,6 +1104,7 @@
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
+			      <property name="group">radiobutton1</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1093,7 +1117,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkRadioButton" id="radiobutton4">
+			    <widget class="GtkRadioButton" id="radiobutton8">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Col_umn</property>
@@ -1103,6 +1127,7 @@
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
+			      <property name="group">radiobutton1</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1116,7 +1141,7 @@
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">True</property>
+			  <property name="expand">False</property>
 			  <property name="fill">True</property>
 			</packing>
 		      </child>
@@ -1288,7 +1313,7 @@
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
-			      <property name="expand">True</property>
+			      <property name="expand">False</property>
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
@@ -1365,7 +1390,7 @@
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
-			      <property name="expand">True</property>
+			      <property name="expand">False</property>
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
@@ -1685,7 +1710,7 @@
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">True</property>
+			  <property name="expand">False</property>
 			  <property name="fill">True</property>
 			</packing>
 		      </child>
@@ -1791,7 +1816,7 @@
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">True</property>
+			  <property name="expand">False</property>
 			  <property name="fill">True</property>
 			</packing>
 		      </child>

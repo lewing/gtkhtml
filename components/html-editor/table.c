@@ -379,6 +379,13 @@ table_widget (GtkHTMLEditTableProperties *d)
 
 	table_page = glade_xml_get_widget (xml, "table_page");
 
+	gtk_box_pack_start (GTK_BOX (glade_xml_get_widget (xml, "table_rows_hbox")),
+			    gtk_image_new_from_file (ICONDIR "/table-row-16.png"),
+			    FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (glade_xml_get_widget (xml, "table_cols_hbox")),
+			    gtk_image_new_from_file (ICONDIR "/table-column-16.png"),
+			    FALSE, FALSE, 0);
+
         color = html_colorset_get_color (d->cd->html->engine->defaultSettings->color_set, HTMLBgColor);
 	html_color_alloc (color, d->cd->html->engine->painter);
 	d->combo_bg_color = color_combo_new (NULL, _("Automatic"), &color->color,
