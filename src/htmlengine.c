@@ -4058,6 +4058,8 @@ html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
 
 	if (e->editable)
 		html_engine_draw_cursor_in_area (e, x, y, width, height);
+	else
+		html_engine_draw_focus_object (e);
 }
 
 void
@@ -5265,17 +5267,9 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 		HTMLObject *cur;
 		gint offset;
 
-		if (e->focus_object) {
-			if (HTML_IS_LINK_TEXT (e->focus_object)) {
-				draw_link_text (HTML_LINK_TEXT (e->focus_object), e);
-			} else if (HTML_IS_IMAGE (e->focus_object)) {
-				html_engine_queue_draw (e, e->focus_object);
-			} else if (html_object_is_embedded (e->focus_object)) {
-				if (gtk_widget_child_focus (HTML_EMBEDDED (e->focus_object)->widget, dir))
-					return TRUE;
-			}
-			printf ("no, OK, let's move focus to next child\n");
-		}
+		if (e->focus_object && html_object_is_embedded (e->focus_object)
+		    && gtk_widget_child_focus (HTML_EMBEDDED (e->focus_object)->widget, dir))
+			return TRUE;
 
 		if (e->focus_object) {
 			offset = dir == GTK_DIR_TAB_FORWARD ? html_object_get_length (e->focus_object) : 0;
@@ -5287,18 +5281,9 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 
 		while (cur) {
 			printf ("try child %p\n", cur);
-			if (HTML_IS_LINK_TEXT (cur)) {
-				e->focus_object = cur;
-				printf ("focus link: %s\n", HTML_LINK_TEXT (cur)->url);
-				draw_link_text (HTML_LINK_TEXT (cur), e);
-				html_engine_flush_draw_queue (e);
-
-				return TRUE;
-			} else if (HTML_IS_IMAGE (cur) && HTML_IMAGE (cur)->url && *HTML_IMAGE (cur)->url) {
-				e->focus_object = cur;
-				printf ("focus image: %s\n", HTML_IMAGE (cur)->url);
-				html_engine_queue_draw (e, cur);
-				html_engine_flush_draw_queue (e);
+			if (HTML_IS_LINK_TEXT (cur)
+			    || (HTML_IS_IMAGE (cur) && HTML_IMAGE (cur)->url && *HTML_IMAGE (cur)->url)) {
+				html_engine_set_focus_object (e, cur);
 
 				return TRUE;
 			} else if (html_object_is_embedded (cur) && !html_object_is_frame (cur)) {
@@ -5311,8 +5296,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 				}
 
 				if (gtk_widget_child_focus (HTML_EMBEDDED (cur)->widget, dir)) {
-					e->focus_object = cur;
-					html_engine_flush_draw_queue (e);
+					html_engine_set_focus_object (e, cur);
 					return TRUE;
 				}
 			}
@@ -5322,15 +5306,40 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 				: html_object_prev_cursor (cur, &offset);
 		}
 		printf ("no focus\n");
-		e->focus_object = NULL;
-		html_engine_flush_draw_queue (e);
+		html_engine_set_focus_object (e, NULL);
 	}
 
 	return FALSE;
 }
 
-void
-html_engine_queue_draw_focus (HTMLEngine *e)
+static void
+draw_focus_object (HTMLEngine *e, HTMLObject *o)
 {
-	
+	if (HTML_IS_LINK_TEXT (o))
+		draw_link_text (HTML_LINK_TEXT (o), e);
+	else if (HTML_IS_IMAGE (o))
+		html_engine_queue_draw (e, o);
+}
+
+void
+html_engine_draw_focus_object (HTMLEngine *e)
+{
+	draw_focus_object (e, e->focus_object);
+}
+
+void
+html_engine_set_focus_object (HTMLEngine *e, HTMLObject *o)
+{
+	if (e->focus_object) {
+		draw_focus_object (e, e->focus_object);
+		e->focus_object = NULL;
+		html_engine_flush_draw_queue (e);
+	}
+
+	e->focus_object = o;
+
+	if (o) {
+		draw_focus_object (e, o);
+		html_engine_flush_draw_queue (e);
+	}
 }
