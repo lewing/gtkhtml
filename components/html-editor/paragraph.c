@@ -151,7 +151,7 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	group = gtk_radio_button_group (GTK_RADIO_BUTTON (radio)); \
 	gtk_box_pack_start (GTK_BOX (hbox), radio, FALSE, FALSE, 0); \
         if (a == data->align) gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE); \
-        gtk_signal_connect (GTK_OBJECT (radio), "toggled", set_align, data); \
+        gtk_signal_connect (GTK_OBJECT (radio), "toggled", GTK_SIGNAL_FUNC (set_align), data); \
         gtk_object_set_data (GTK_OBJECT (radio), "align", GINT_TO_POINTER (a));
 
 	group = NULL;

@@ -36,12 +36,11 @@
 
 #include "gtkhtml.h"
 
+#include "editor-control-factory.h"
 #include "persist-file-impl.h"
 
-
 #define BUFFER_SIZE 4096
 
-
 /* Loading.  */
 
 static int
@@ -98,7 +97,6 @@ pf_impl_load (BonoboPersistFile *pf,
 	}
 }
 
-
 /* Saving.  */
 
 static gboolean
@@ -160,7 +158,6 @@ pf_destroy (BonoboPersistFile *pf, GtkHTML *html)
 	gtk_object_unref (GTK_OBJECT (html));
 }
 
-
 BonoboPersistFile *
 persist_file_impl_new (GtkHTML *html)
 {
@@ -168,14 +165,9 @@ persist_file_impl_new (GtkHTML *html)
 	
 	gtk_object_ref (GTK_OBJECT (html));
 
-	pf = bonobo_persist_file_new (pf_impl_load, pf_impl_save, html);
+	pf = bonobo_persist_file_new (pf_impl_load, pf_impl_save, CONTROL_FACTORY_ID, html);
 
-	gtk_signal_connect (GTK_OBJECT (pf), "destroy",
-			    pf_destroy, html);
+	gtk_signal_connect (GTK_OBJECT (pf), "destroy", GTK_SIGNAL_FUNC (pf_destroy), html);
 
 	return pf;
 }
-
-
-
-

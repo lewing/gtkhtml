@@ -90,7 +90,6 @@ struct _GtkHTMLControlData {
 	CORBA_sequence_GNOME_Spell_Language *languages;
 	gboolean                block_language_changes;
 	GNOME_Spell_Dictionary  dict;
-	BonoboObjectClient     *dict_client;
 	EditorEngine           *editor_bonobo_engine;
 	BonoboPersistStream    *persist_stream;
 	BonoboPersistFile      *persist_file;

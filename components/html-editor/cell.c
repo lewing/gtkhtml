@@ -64,7 +64,7 @@ typedef struct
 
 	gboolean   has_bg_pixmap;
 	gboolean   changed_bg_pixmap;
-	gchar     *bg_pixmap;
+	const gchar *bg_pixmap;
 	GtkWidget *entry_bg_pixmap;
 	GtkWidget *check_bg_pixmap;
 
@@ -380,7 +380,7 @@ cell_widget (GtkHTMLEditCellProperties *d)
 	GtkWidget *cell_page;
 	GladeXML *xml;
 
-	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "cell_page");
+	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "cell_page", NULL);
 	if (!xml)
 		g_error (_("Could not load glade file."));
 
@@ -396,9 +396,9 @@ cell_widget (GtkHTMLEditCellProperties *d)
 			  1, 2, 0, 1, 0, 0, 0, 0);
 
 	d->check_bg_color  = glade_xml_get_widget (xml, "check_cell_bg_color");
-	gtk_signal_connect (GTK_OBJECT (d->check_bg_color), "toggled", set_has_bg_color, d);
+	gtk_signal_connect (GTK_OBJECT (d->check_bg_color), "toggled", GTK_SIGNAL_FUNC (set_has_bg_color), d);
 	d->check_bg_pixmap = glade_xml_get_widget (xml, "check_cell_bg_pixmap");
-	gtk_signal_connect (GTK_OBJECT (d->check_bg_pixmap), "toggled", set_has_bg_pixmap, d);
+	gtk_signal_connect (GTK_OBJECT (d->check_bg_pixmap), "toggled", GTK_SIGNAL_FUNC (set_has_bg_pixmap), d);
 	d->entry_bg_pixmap = glade_xml_get_widget (xml, "entry_cell_bg_pixmap");
 
 	d->disable_change = TRUE;
@@ -412,39 +412,39 @@ cell_widget (GtkHTMLEditCellProperties *d)
 
 	d->option_halign = glade_xml_get_widget (xml, "option_cell_halign");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_halign))), "selection-done",
-			    changed_halign, d);
+			    GTK_SIGNAL_FUNC (changed_halign), d);
 	d->option_valign = glade_xml_get_widget (xml, "option_cell_valign");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_valign))), "selection-done",
-			    changed_valign, d);
+			    GTK_SIGNAL_FUNC (changed_valign), d);
 
 	d->spin_width   = glade_xml_get_widget (xml, "spin_cell_width");
 	UPPER_FIX (width);
-	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", changed_width, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", GTK_SIGNAL_FUNC (changed_width), d);
 	d->check_width  = glade_xml_get_widget (xml, "check_cell_width");
-	gtk_signal_connect (GTK_OBJECT (d->check_width), "toggled", set_has_width, d);
+	gtk_signal_connect (GTK_OBJECT (d->check_width), "toggled", GTK_SIGNAL_FUNC (set_has_width), d);
 	d->option_width = glade_xml_get_widget (xml, "option_cell_width");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width))), "selection-done",
-			    changed_width_percent, d);
+			    GTK_SIGNAL_FUNC (changed_width_percent), d);
 
 	d->spin_height   = glade_xml_get_widget (xml, "spin_cell_height");
 	UPPER_FIX (height);
-	gtk_signal_connect (GTK_OBJECT (d->spin_height), "changed", changed_height, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_height), "changed", GTK_SIGNAL_FUNC (changed_height), d);
 	d->check_height  = glade_xml_get_widget (xml, "check_cell_height");
-	gtk_signal_connect (GTK_OBJECT (d->check_height), "toggled", set_has_height, d);
+	gtk_signal_connect (GTK_OBJECT (d->check_height), "toggled", GTK_SIGNAL_FUNC (set_has_height), d);
 	d->option_height = glade_xml_get_widget (xml, "option_cell_height");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_height))), "selection-done",
-			    changed_height_percent, d);
+			    GTK_SIGNAL_FUNC (changed_height_percent), d);
 
 	d->option_wrap    = glade_xml_get_widget (xml, "option_cell_wrap");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_wrap))), "selection-done",
-			    changed_wrap, d);
+			    GTK_SIGNAL_FUNC (changed_wrap), d);
 	d->option_heading = glade_xml_get_widget (xml, "option_cell_style");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_heading))), "selection-done",
-			    changed_heading, d);
+			    GTK_SIGNAL_FUNC (changed_heading), d);
 
 	d->option_scope   = glade_xml_get_widget (xml, "option_cell_scope");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_scope))), "selection-done",
-			    changed_scope, d);
+			    GTK_SIGNAL_FUNC (changed_scope), d);
 
 	gtk_box_pack_start (GTK_BOX (cell_page), sample_frame (&d->sample), FALSE, FALSE, 0);
 

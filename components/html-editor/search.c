@@ -21,7 +21,6 @@
 */
 
 #include <config.h>
-#include <gal/widgets/e-unicode.h>
 #include "search.h"
 #include "dialog.h"
 #include "htmlengine-search.h"

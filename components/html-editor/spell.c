@@ -22,9 +22,7 @@
 
 #include <config.h>
 #include <glib.h>
-#include <libgnome/gnome-defs.h>
 #include <libgnome/gnome-i18n.h>
-#include <gal/widgets/e-scroll-frame.h>
 
 #include "gtkhtml.h"
 #include "gtkhtml-properties.h"
@@ -42,7 +40,6 @@
 #include "menubar.h"
 #include "spell.h"
 
-#define DICTIONARY_IID "OAFIID:GNOME_Spell_Dictionary:0.2"
 #define CONTROL_IID "OAFIID:GNOME_Spell_Control:0.2"
 
 struct _SpellPopup {
@@ -187,17 +184,19 @@ spell_suggestion_request (GtkHTML *html, const gchar *word, gpointer data)
 	gtk_window_set_focus (GTK_WINDOW (sp->window), sp->clist);
 }
 
-BonoboObjectClient *
+GNOME_Spell_Dictionary
 spell_new_dictionary (void)
 {
-	BonoboObjectClient *dictionary_client = bonobo_object_activate (DICTIONARY_IID, 0);
+#define DICTIONARY_IID "OAFIID:GNOME_Spell_Dictionary:0.2"
 
-	if (!dictionary_client) {
-		g_warning ("Cannot activate spell dictionary (iid:%s)", DICTIONARY_IID);
-		return NULL;
+	GNOME_Spell_Dictionary dictionary = bonobo_get_object (DICTIONARY_IID, "GNOME/Spell/Dictionary", NULL);
+
+	if (dictionary == CORBA_OBJECT_NIL) {
+		g_warning ("Cannot create spell dictionary instance (iid:%s)", DICTIONARY_IID);
 	}
+#undef DICTIONARY_IID
 
-	return dictionary_client;
+	return dictionary;
 }
 
 gboolean

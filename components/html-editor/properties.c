@@ -128,15 +128,15 @@ gtk_html_edit_properties_dialog_new (GtkHTMLControlData *cd, gboolean insert, gc
 		gnome_dialog_set_parent (GNOME_DIALOG (d->dialog), parent);
 	}
 	d->notebook = gtk_notebook_new ();
-	gtk_signal_connect (GTK_OBJECT (d->dialog), "destroy", destroy_dialog, d);
-	gtk_signal_connect (GTK_OBJECT (d->notebook), "switch_page", switch_page, d);
+	gtk_signal_connect (GTK_OBJECT (d->dialog), "destroy", GTK_SIGNAL_FUNC (destroy_dialog), d);
+	gtk_signal_connect (GTK_OBJECT (d->notebook), "switch_page", GTK_SIGNAL_FUNC (switch_page), d);
 	gtk_box_pack_start_defaults (GTK_BOX (GNOME_DIALOG (d->dialog)->vbox), d->notebook);
 	gtk_widget_show (d->notebook);
 
-	gnome_dialog_button_connect (GNOME_DIALOG (d->dialog), 0, ok, d);
+	gnome_dialog_button_connect (GNOME_DIALOG (d->dialog), 0, GTK_SIGNAL_FUNC (ok), d);
 	if (!insert)
-		gnome_dialog_button_connect (GNOME_DIALOG (d->dialog), 1, apply, d);
-	gnome_dialog_button_connect (GNOME_DIALOG (d->dialog), insert ? 1 : 2, prop_close, d);
+		gnome_dialog_button_connect (GNOME_DIALOG (d->dialog), 1, GTK_SIGNAL_FUNC (apply), d);
+	gnome_dialog_button_connect (GNOME_DIALOG (d->dialog), insert ? 1 : 2, GTK_SIGNAL_FUNC (prop_close), d);
 	gnome_dialog_set_default (GNOME_DIALOG (d->dialog), 0);
 
 	gnome_dialog_set_sensitive (GNOME_DIALOG (d->dialog), 0, FALSE);

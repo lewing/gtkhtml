@@ -85,10 +85,10 @@ ask_dialog_new (HTMLEngine *e)
 						    GNOME_STOCK_BUTTON_CANCEL, NULL));
 	d->engine = e;
 
-	gnome_dialog_button_connect (d->dialog, 0, replace_cb, d);
-	gnome_dialog_button_connect (d->dialog, 1, replace_all_cb, d);
-	gnome_dialog_button_connect (d->dialog, 2, next_cb, d);
-	gnome_dialog_button_connect (d->dialog, 3, cancel_cb, d);
+	gnome_dialog_button_connect (d->dialog, 0, GTK_SIGNAL_FUNC (replace_cb), d);
+	gnome_dialog_button_connect (d->dialog, 1, GTK_SIGNAL_FUNC (replace_all_cb), d);
+	gnome_dialog_button_connect (d->dialog, 2, GTK_SIGNAL_FUNC (next_cb), d);
+	gnome_dialog_button_connect (d->dialog, 3, GTK_SIGNAL_FUNC (cancel_cb), d);
 
 	gnome_dialog_close_hides (d->dialog, TRUE);
 	/* gnome_dialog_set_close (d->dialog, TRUE); */
@@ -175,7 +175,7 @@ gtk_html_replace_dialog_new (GtkHTML *html)
 	gtk_widget_show_all (table);
 	gtk_widget_show_all (hbox);
 
-	gnome_dialog_button_connect (dialog->dialog, 0, button_replace_cb, dialog);
+	gnome_dialog_button_connect (dialog->dialog, 0, GTK_SIGNAL_FUNC (button_replace_cb), dialog);
 	gnome_dialog_close_hides (dialog->dialog, TRUE);
 	gnome_dialog_set_close (dialog->dialog, TRUE);
 
@@ -183,11 +183,11 @@ gtk_html_replace_dialog_new (GtkHTML *html)
 	gtk_widget_grab_focus (dialog->entry_search);
 
 	gtk_signal_connect (GTK_OBJECT (dialog->entry_search), "changed",
-			    entry_changed, dialog);
+			    GTK_SIGNAL_FUNC (entry_changed), dialog);
 	gtk_signal_connect (GTK_OBJECT (dialog->entry_search), "activate",
-			    entry_activate, dialog);
+			    GTK_SIGNAL_FUNC (entry_activate), dialog);
 	gtk_signal_connect (GTK_OBJECT (dialog->entry_replace), "activate",
-			    entry_activate, dialog);
+			    GTK_SIGNAL_FUNC (entry_activate), dialog);
 
 	return dialog;
 }

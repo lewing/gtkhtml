@@ -68,12 +68,7 @@
 #include "html-stream-mem.h"
 
 #include "gtkhtmldebug.h"
-
-#ifdef USING_OAF
-#define CONTROL_FACTORY_ID "OAFIID:GNOME_GtkHTML_Editor_Factory:" EDITOR_API_VERSION
-#else
-#define CONTROL_FACTORY_ID "control-factory:html-editor"
-#endif
+#include "editor-control-factory.h"
 
 #ifndef GNOME_GTKHTML_EDITOR_SHLIB
 static BonoboGenericFactory *factory;
@@ -117,20 +112,16 @@ set_frame_cb (BonoboControl *control,
 
 	control_data = (GtkHTMLControlData *) data;
 
-	if (bonobo_control_get_control_frame (control) == CORBA_OBJECT_NIL)
+	if (bonobo_control_get_control_frame (control, NULL) == CORBA_OBJECT_NIL)
 		return;
 
-	remote_ui_container = bonobo_control_get_remote_ui_container (control);
+	remote_ui_container = bonobo_control_get_remote_ui_container (control, NULL);
 	control_data->uic = ui_component = bonobo_control_get_ui_component (control);
-	bonobo_ui_component_set_container (ui_component, remote_ui_container);
+	bonobo_ui_component_set_container (ui_component, remote_ui_container, NULL);
 
 	/* Setup the tool bar.  */
 
 	toolbar = toolbar_style (control_data);
-
-	/* hack to fix gtk toolbar focus bug, should be removed once gtk+ is fixed */
-	if (GTK_CONTAINER_CLASS (gtk_type_class (gtk_toolbar_get_type ()))->focus == NULL)
-		GTK_CONTAINER_CLASS (gtk_type_class (gtk_toolbar_get_type ()))->focus = gtk_toolbar_focus;
 	gtk_box_pack_start (GTK_BOX (control_data->vbox), toolbar, FALSE, FALSE, 0);
 
 	scroll_frame = e_scroll_frame_new (NULL, NULL);
@@ -362,7 +353,7 @@ editor_init_painters (GtkHTMLControlData *cd)
 	g_return_if_fail (cd != NULL);
 
 	html = cd->html;
-	prop = GTK_HTML_CLASS (GTK_OBJECT (html)->klass)->properties;
+	prop = GTK_HTML_CLASS (GTK_OBJECT_GET_CLASS (html))->properties;
 	
 	if (!cd->plain_painter) {
 		cd->plain_painter = HTML_GDK_PAINTER (html_plain_painter_new (TRUE));
@@ -499,7 +490,7 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 
 	/* PropertyBag */
 	pb = bonobo_property_bag_new (editor_get_prop, editor_set_prop, cd);
-	bonobo_control_set_properties (control, pb);
+	bonobo_control_set_properties (control, BONOBO_OBJREF (pb), NULL);
 
 	def = bonobo_arg_new (BONOBO_ARG_BOOLEAN);
 	BONOBO_ARG_SET_BOOLEAN (def, TRUE);
@@ -573,40 +564,15 @@ editor_api_command (GtkHTML *html, GtkHTMLCommandType com_type, gpointer data)
 	return rv;
 }
 
-static GtkType
-wait_for_bonobo_patch__bonobo_arg_type_to_gtk (BonoboArgType id)
+static GValue *
+send_event_str (GNOME_GtkHTML_Editor_Engine engine, GNOME_GtkHTML_Editor_Listener listener, gchar *name, GValue *arg)
 {
 	CORBA_Environment ev;
-	GtkType gtk_type = GTK_TYPE_NONE;
-
-	CORBA_exception_init (&ev);
-
-	if (bonobo_arg_type_is_equal (TC_char, id, &ev))         gtk_type = GTK_TYPE_CHAR;
-	else if (bonobo_arg_type_is_equal (TC_boolean, id, &ev)) gtk_type = GTK_TYPE_BOOL;
-	else if (bonobo_arg_type_is_equal (TC_short,   id, &ev)) gtk_type = GTK_TYPE_INT;
-	else if (bonobo_arg_type_is_equal (TC_ushort,  id, &ev)) gtk_type = GTK_TYPE_UINT;
-	else if (bonobo_arg_type_is_equal (TC_long,    id, &ev)) gtk_type = GTK_TYPE_LONG;
-	else if (bonobo_arg_type_is_equal (TC_ulong,   id, &ev)) gtk_type = GTK_TYPE_ULONG;
-	else if (bonobo_arg_type_is_equal (TC_float,   id, &ev)) gtk_type = GTK_TYPE_FLOAT;
-	else if (bonobo_arg_type_is_equal (TC_double,  id, &ev)) gtk_type = GTK_TYPE_DOUBLE;
-	else if (bonobo_arg_type_is_equal (TC_string,  id, &ev)) gtk_type = GTK_TYPE_STRING;
-	else
-		g_warning ("Unmapped bonobo arg type");
-
-	CORBA_exception_free (&ev);
-
-	return gtk_type;
-}
-
-static GtkArg *
-send_event_str (GNOME_GtkHTML_Editor_Engine engine, GNOME_GtkHTML_Editor_Listener listener, gchar *name, GtkArg *arg)
-{
-	CORBA_Environment ev;
-	GtkArg *gtk_retval = NULL;
-	BonoboArg *bonobo_arg = bonobo_arg_new (bonobo_arg_type_from_gtk (arg->type));
+	GValue *gvalue_retval = NULL;
+	BonoboArg *bonobo_arg = bonobo_arg_new (bonobo_arg_type_from_gtype (G_VALUE_TYPE (arg)));
 	BonoboArg *bonobo_retval;
 
-	bonobo_arg_from_gtk (bonobo_arg, arg);
+	bonobo_arg_from_gvalue (bonobo_arg, arg);
 
 	/* printf ("sending to listener\n"); */
 	CORBA_exception_init (&ev);
@@ -616,14 +582,15 @@ send_event_str (GNOME_GtkHTML_Editor_Engine engine, GNOME_GtkHTML_Editor_Listene
 	if (ev._major == CORBA_NO_EXCEPTION) {
 		if (!bonobo_arg_type_is_equal (bonobo_retval->_type, TC_null, &ev)
 		    && !bonobo_arg_type_is_equal (bonobo_retval->_type, TC_void, &ev)) {
-			gtk_retval = gtk_arg_new (wait_for_bonobo_patch__bonobo_arg_type_to_gtk (bonobo_retval->_type));
-			bonobo_arg_to_gtk (gtk_retval, bonobo_retval);
+			gvalue_retval = g_new (GValue, 1);
+			gvalue_retval = g_value_init (gvalue_retval, bonobo_arg_type_to_gtype (bonobo_retval->_type));
+			bonobo_arg_to_gvalue (gvalue_retval, bonobo_retval);
 		}
 		CORBA_free (bonobo_retval);
 	}
 	CORBA_exception_free (&ev);
 
-	return gtk_retval;
+	return gvalue_retval;
 }
 
 static void
@@ -668,11 +635,11 @@ send_event_stream (GNOME_GtkHTML_Editor_Engine engine,
 	CORBA_free (any);
 }
 		  
-static GtkArg *
-editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GtkArg **args, gpointer data)
+static GValue *
+editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GValue **args, gpointer data)
 {
 	GtkHTMLControlData *cd = (GtkHTMLControlData *) data;
-	GtkArg *gtk_retval = NULL;
+	GValue *retval = NULL;
 
 	/* printf ("editor_api_event\n"); */
 
@@ -689,13 +656,13 @@ editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GtkArg **arg
 
 			switch (event_type) {
 			case GTK_HTML_EDITOR_EVENT_COMMAND_BEFORE:
-				gtk_retval = send_event_str (engine, listener, "command_before", args [0]);
+				retval = send_event_str (engine, listener, "command_before", args [0]);
 				break;
 			case GTK_HTML_EDITOR_EVENT_COMMAND_AFTER:
-				gtk_retval = send_event_str (engine, listener, "command_after", args [0]);
+				retval = send_event_str (engine, listener, "command_after", args [0]);
 				break;
 			case GTK_HTML_EDITOR_EVENT_IMAGE_URL:
-				gtk_retval = send_event_str (engine, listener, "image_url", args [0]);
+				retval = send_event_str (engine, listener, "image_url", args [0]);
 				break;
 			case GTK_HTML_EDITOR_EVENT_DELETE:
 				send_event_void (engine, listener, "delete");
@@ -706,7 +673,7 @@ editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GtkArg **arg
 			CORBA_exception_free (&ev);
 		}
 	}
-	return gtk_retval;
+	return retval;
 }
 
 static GtkWidget *
@@ -752,7 +719,7 @@ editor_control_init (void)
 }
 
 static BonoboObject *
-editor_control_factory (BonoboGenericFactory *factory, gpointer closure)
+editor_control_factory (BonoboGenericFactory *factory, const gchar *component_id, gpointer closure)
 {
 	BonoboControl *control;
 	GtkWidget *vbox;
@@ -780,52 +747,6 @@ BONOBO_OAF_SHLIB_FACTORY (CONTROL_FACTORY_ID, "GNOME HTML Editor factory", edito
 
 #else
 
-#ifdef USING_OAF
-
-#include <liboaf/liboaf.h>
-
-static CORBA_ORB
-init_corba (int *argc, char **argv)
-{
-	gnome_init_with_popt_table ("gnome-gtkhtml-editor", VERSION,
-				    *argc, argv, oaf_popt_options, 0, NULL);
-
-	return oaf_init (*argc, argv);
-}
-
-#else
-
-#include <libgnorba/gnorba.h>
-
-static CORBA_ORB
-init_corba (int *argc, char **argv)
-{
-	CORBA_Environment ev;
-
-	CORBA_exception_init (&ev);
-
-	gnome_CORBA_init_with_popt_table ("html-editor-factory", EDITOR_API_VERSION,
-					  argc, argv,
-					  NULL, 0, NULL,
-					  GNORBA_INIT_SERVER_FUNC,
-					  &ev);
-	if (ev._major != CORBA_NO_EXCEPTION)
-		g_error (_("Could not initialize GNORBA"));
-
-	CORBA_exception_free (&ev);
-
-	return CORBA_OBJECT_NIL;
-}
-
-#endif
-
-static void
-init_bonobo (int *argc, char **argv)
-{
-	if (bonobo_init (init_corba (argc, argv), CORBA_OBJECT_NIL, CORBA_OBJECT_NIL) == FALSE)
-		g_error (_("Could not initialize Bonobo"));
-}
-
 int
 main (int argc, char **argv)
 {
@@ -837,7 +758,11 @@ main (int argc, char **argv)
 	bindtextdomain(PACKAGE, GNOMELOCALEDIR);
 	textdomain(PACKAGE);
 
-	init_bonobo (&argc, argv);
+	gnome_init ("gnome-gtkhtml-editor", VERSION, argc, argv);
+	if (!bonobo_init (&argc, argv))
+		g_error (_("I could not initialize Bonobo"));
+	bonobo_activate ();
+
 #ifdef GTKHTML_HAVE_GCONF
 	if (!gconf_init (argc, argv, &gconf_error)) {
 		g_assert (gconf_error != NULL);
@@ -846,9 +771,7 @@ main (int argc, char **argv)
 	}
 #endif
 
-	factory = bonobo_generic_factory_new (CONTROL_FACTORY_ID,
-					      editor_control_factory,
-					      NULL);
+	factory = bonobo_generic_factory_new (CONTROL_FACTORY_ID, editor_control_factory, NULL);
 	if (factory == NULL)
 		g_error ("I could not register the GNOME_GtkHTML_Editor factory.");
 

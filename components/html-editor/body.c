@@ -21,7 +21,6 @@
 */
 
 #include <config.h>
-#include <gal/widgets/e-unicode.h>
 #include <gal/widgets/widget-color-combo.h>
 #include "htmlengine-edit.h"
 #include "htmlengine-edit-clueflowstyle.h"
@@ -85,7 +84,8 @@ static BodyTemplate body_templates [TEMPLATES] = {
 static void
 fill_sample (GtkHTMLEditBodyProperties *d)
 {
-	gchar *body, *body_tag, *bg_image, *fname;
+	gchar *body, *body_tag, *bg_image;
+	const gchar *fname;
 	fname = gtk_entry_get_text (GTK_ENTRY (gnome_pixmap_entry_gtk_entry
 					       (GNOME_PIXMAP_ENTRY (d->pixmap_entry))));
 	bg_image = fname && *fname ? g_strdup_printf (" background=\"%s\"", fname) : g_strdup ("");
@@ -234,7 +234,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->option_template = gtk_option_menu_new ();
 	fill_templates (data);
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (data->option_template))),
-			    "selection-done", changed_template, data);
+			    "selection-done", GTK_SIGNAL_FUNC (changed_template), data);
 	gtk_box_pack_start (GTK_BOX (hbox), data->option_template, FALSE, TRUE, 0);
 	gtk_container_add (GTK_CONTAINER (frame), hbox);
 	gtk_box_pack_start (GTK_BOX (vb1), frame, FALSE, TRUE, 0);
@@ -246,7 +246,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 		e_utf8_gtk_entry_set_text (GTK_ENTRY (data->entry_title), 
 					   gtk_html_get_title (data->cd->html));
 	}
-	gtk_signal_connect (GTK_OBJECT (data->entry_title), "changed", entry_changed, data);
+	gtk_signal_connect (GTK_OBJECT (data->entry_title), "changed", GTK_SIGNAL_FUNC (entry_changed), data);
 	gtk_box_pack_start_defaults (GTK_BOX (hbox), data->entry_title);
 	frame = gtk_frame_new (_("Document Title"));
 	gtk_container_add (GTK_CONTAINER (frame), hbox);
@@ -323,7 +323,7 @@ body_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
 {
 	GtkHTMLEditBodyProperties *data = (GtkHTMLEditBodyProperties *) get_data;
 	gboolean redraw = FALSE;
-	gchar *fname;
+	const gchar *fname;
 
 #define APPLY_COLOR(c) \
 	if (data->color_changed [c]) { \
@@ -349,7 +349,7 @@ body_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
 
 	if (redraw)
 		gtk_widget_queue_draw (GTK_WIDGET (cd->html));
-	gtk_html_set_title (data->cd->html, e_utf8_gtk_entry_get_text (GTK_ENTRY (data->entry_title)));
+	gtk_html_set_title (data->cd->html, gtk_entry_get_text (GTK_ENTRY (data->entry_title)));
 }
 
 void

@@ -11,7 +11,6 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <gtk/gtk.h>
-#include <libgnome/gnome-defs.h>
 #include <libgnome/gnome-util.h>
 #include <bonobo/bonobo-stream-memory.h>
 #include <bonobo/bonobo-exception.h>

@@ -21,7 +21,6 @@
 */
 
 #include <config.h>
-#include <gal/widgets/e-unicode.h>
 #include <gal/widgets/widget-color-combo.h>
 #include "htmlcolor.h"
 #include "htmlcolorset.h"

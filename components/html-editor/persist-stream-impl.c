@@ -31,6 +31,7 @@
 
 #include "gtkhtml.h"
 
+#include "editor-control-factory.h"
 #include "persist-stream-impl.h"
 
 
@@ -182,12 +183,12 @@ persist_stream_impl_new (GtkHTML *html)
 
 	gtk_object_ref (GTK_OBJECT (html));
 
-	stream = bonobo_persist_stream_new (ps_impl_load, ps_impl_save, NULL, 
+	stream = bonobo_persist_stream_new (ps_impl_load, ps_impl_save,
 					    ps_impl_get_content_types,
-					    html);
+					    CONTROL_FACTORY_ID, html);
 
-	gtk_signal_connect (GTK_OBJECT (stream), "destroy",
-			    ps_destroy, html);
+	g_signal_connect (G_OBJECT (stream), "destroy",
+			  G_CALLBACK (ps_destroy), html);
 
 	return stream;
 }
