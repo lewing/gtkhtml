@@ -2302,4 +2302,6 @@ html_link_dup (Link *l)
 	nl->target = g_strdup (l->target);
 	nl->start_offset = l->start_offset;
 	nl->end_offset = l->end_offset;
+
+	return nl;
 }
