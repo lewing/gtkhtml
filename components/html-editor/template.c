@@ -182,9 +182,16 @@ data_new (GtkHTMLControlData *cd)
 static void
 set_ui (GtkHTMLEditTemplateProperties *d)
 {
+	GtkTreeIter iter;
+	gchar *row;
+
 	d->disable_change = TRUE;
 
-	/* FIX2 gtk_list_select_item (GTK_LIST (d->clist_template), d->template); */
+	row = g_strdup_printf ("%d", d->template);
+	gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (d->store), &iter, row);
+	g_free (row);
+	gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (d->tview_template)), &iter);
+
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width), d->width);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_halign), d->halign - HTML_HALIGN_LEFT);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width_percent), d->width_percent ? 1 : 0);
@@ -198,11 +205,14 @@ static void
 selection_changed (GtkTreeSelection *selection, GtkHTMLEditTemplateProperties *d)
 {
 	GtkTreeIter iter;
-	if (gtk_tree_selection_get_selected (selection, NULL, &iter)) {
-		g_print ("TODO");
-	}
+	GtkTreePath *path;
 
-	/* FIX2 d->template = gtk_list_child_position (GTK_LIST (w), child);
+	if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+		return;
+
+	path = gtk_tree_model_get_path (GTK_TREE_MODEL (d->store), &iter);
+	d->template = gtk_tree_path_get_indices (path) [0];
+	gtk_tree_path_free (path);
 
 	if (!d->disable_change) {
 		gtk_widget_set_sensitive (d->spin_width, template_templates [d->template].has_width);
@@ -222,7 +232,7 @@ selection_changed (GtkTreeSelection *selection, GtkHTMLEditTemplateProperties *d
 			FILL;
 		}
 		CHANGE;
-		} */
+	}
 }
 
 static void

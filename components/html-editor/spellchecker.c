@@ -123,11 +123,11 @@ spell_set_language (GtkHTML *html, const gchar *language, gpointer data)
 	GtkHTMLControlData *cd = (GtkHTMLControlData *) data;
 	CORBA_Environment   ev;
 
-	printf ("spell_set_language\n");
+	/* printf ("spell_set_language\n"); */
 	if (!cd->dict)
 		return;
 
-	printf ("spell_set_language '%s'\n", language);
+	/* printf ("spell_set_language '%s'\n", language); */
 
 	CORBA_exception_init (&ev);
 	GNOME_Spell_Dictionary_setLanguage (cd->dict, language, &ev);

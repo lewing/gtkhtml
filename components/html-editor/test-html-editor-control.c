@@ -443,7 +443,7 @@ container_create (void)
 
 	bonobo_ui_component_set_container (component, BONOBO_OBJREF (container), NULL);
 	bonobo_ui_component_add_verb_list_with_data (component, verbs, win);
-	bonobo_ui_component_set (component, "/", ui, NULL);
+	bonobo_ui_component_set_translate (component, "/", ui, NULL);
 
 	control = bonobo_widget_new_control (CONTROL_ID, BONOBO_OBJREF (container));
 
