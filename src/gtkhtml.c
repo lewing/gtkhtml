@@ -2024,7 +2024,7 @@ set_focus_child (GtkContainer *containter, GtkWidget *w)
 	while (w && !(o = g_object_get_data (G_OBJECT (w), "embeddedelement")))
 		w = w->parent;
 
-	if (o)
+	if (o && !html_object_is_frame (o))
 		html_engine_set_focus_object (GTK_HTML (containter)->engine, o);
 }
 
