@@ -47,6 +47,7 @@ struct _HTMLTextSlaveClass {
 
 struct _HTMLTextSlaveGlyphItem {
 	PangoGlyphItem glyph_item;
+	PangoGlyphUnit *widths;
 
 	HTMLTextSlaveGlyphItemType type;
 };

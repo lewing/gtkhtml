@@ -339,4 +339,10 @@ HTMLObject *html_text_op_cut_helper     (HTMLText           *text,
 					 GList              *left,
 					 GList              *right,
 					 guint              *len);
+void
+html_tmp_fix_pango_glyph_string_get_logical_widths (PangoGlyphString *glyphs,
+						    const char       *text,
+						    int               length,
+						    int               embedding_level,
+						    int              *logical_widths);
 #endif /* _HTMLTEXT_H_ */

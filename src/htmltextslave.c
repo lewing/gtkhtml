@@ -45,7 +45,6 @@
 HTMLTextSlaveClass html_text_slave_class;
 static HTMLObjectClass *parent_class = NULL;
 
-static GList * get_glyphs (HTMLTextSlave *slave, HTMLPainter *painter);
 static GList * get_glyphs_part (HTMLTextSlave *slave, HTMLPainter *painter, guint offset, guint len);
 static void    clear_glyphs (HTMLTextSlave *slave);
 static void    clear_glyph_items (HTMLTextSlave *slave);
@@ -184,6 +183,7 @@ glyph_items_destroy (GList *glyph_items)
 		if (gi->type == HTML_TEXT_SLAVE_GLYPH_ITEM_CREATED) {
 			pango_item_free (gi->glyph_item.item);
 			pango_glyph_string_free (gi->glyph_item.glyphs);
+			g_free (gi->widths);
 		}
 
 		g_free (gi);
@@ -590,19 +590,6 @@ get_glyphs_part (HTMLTextSlave *slave, HTMLPainter *painter, guint offset, guint
 	return glyphs;
 }
 
-static GList *
-get_glyphs (HTMLTextSlave *slave, HTMLPainter *painter)
-{
-	if (!slave->glyphs || (HTML_OBJECT (slave)->change & HTML_CHANGE_RECALC_PI)) {
-		clear_glyphs (slave);
-
-		HTML_OBJECT (slave)->change &= ~HTML_CHANGE_RECALC_PI;
-		slave->glyphs = get_glyphs_part (slave, painter, 0, slave->posLen);
-	}
-
-	return slave->glyphs;
-}
-
 /*
  * NB: This implement the exact same algorithm as
  *     reorder-items.c:pango_reorder_items().
@@ -683,6 +670,7 @@ get_glyph_items_in_range (HTMLTextSlave *slave, HTMLPainter *painter, int start_
 			/* use text glyph item */
 			glyph_item->type = HTML_TEXT_SLAVE_GLYPH_ITEM_PARENTAL;
 			glyph_item->glyph_item = pi->entries [i].glyph_item;
+			glyph_item->widths = pi->entries [i].widths;
 
 			if (start_offset > offset) {
 				/* need to cut the beginning of current glyph item */
@@ -690,6 +678,7 @@ get_glyph_items_in_range (HTMLTextSlave *slave, HTMLPainter *painter, int start_
 				int split_index;
 
 				glyph_item->type = HTML_TEXT_SLAVE_GLYPH_ITEM_CREATED;
+				glyph_item->widths = NULL;
 				glyph_item->glyph_item.item = pango_item_copy (glyph_item->glyph_item.item);
 				glyph_item->glyph_item.glyphs = pango_glyph_string_copy (glyph_item->glyph_item.glyphs);
 
@@ -727,6 +716,7 @@ get_glyph_items_in_range (HTMLTextSlave *slave, HTMLPainter *painter, int start_
 				g_free (tmp_gi2);
 
 				glyph_item->type = HTML_TEXT_SLAVE_GLYPH_ITEM_CREATED;
+				glyph_item->widths = NULL;
 			}
 
 			glyph_items = g_slist_prepend (glyph_items, glyph_item);
@@ -905,56 +895,104 @@ get_url (HTMLObject *o, gint offset)
 }
 
 static gint
-calc_offset (HTMLTextSlave *slave, HTMLPainter *painter, gint x, gint y)
+calc_offset (HTMLTextSlave *slave, HTMLPainter *painter, gint x)
 {
-	HTMLText *owner;
-	gint line_offset;
-	guint width, prev_width;
-	gchar *text;
-	guint upper;
-	guint len;
-	guint lower;
-	GList *glyphs;
-	gint lo;
-	gint asc, dsc;
+	GSList *cur, *glyphs = html_text_slave_get_glyph_items (slave, painter);
+	int width = 0, offset = 0;
+	PangoItem *item = NULL;
 
-	g_assert (slave->posLen > 1);
+	if (glyphs) {
+		int i = 0;
 
-	width = 0;
-	prev_width  = 0;
-	lower = 0;
-	upper = slave->posLen;
-	len = 0;
+		for (cur = glyphs; cur; cur = cur->next) {
+			HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) cur->data;
 
-	text = html_text_slave_get_text (slave);
-	line_offset = html_text_slave_get_line_offset (slave, 0, painter);	
-	owner = HTML_TEXT (slave->owner);
+			item = gi->glyph_item.item;
 
-	while (upper - lower > 1) {
-		lo = line_offset;
-		prev_width = width;
+			if (gi->widths == NULL) {
 
-		if (width > x)
-			upper = len;
-		else 
-			lower = len;
-	
-		len = (lower + upper + 1) / 2;
+				gi->widths = g_new (PangoGlyphUnit, item->num_chars);
+				html_tmp_fix_pango_glyph_string_get_logical_widths (gi->glyph_item.glyphs, slave->owner->text + item->offset, item->length,
+										    item->analysis.level, gi->widths);
+			}
 
-		if (len) {
-			glyphs = get_glyphs_part (slave, painter, 0, len);
-			html_text_calc_text_size (slave->owner, painter, text - slave->owner->text, len, html_text_get_pango_info (owner, painter), glyphs,
-						  &lo, &width, &asc, &dsc);
-			glyphs_destroy (glyphs);
-		} else {
-			width = 0;
+			if (item->analysis.level % 2 == 0) {
+				/* LTR */
+				for (i = 0; i < item->num_chars; i ++) {
+					if (x < html_painter_pango_to_engine (painter, width + gi->widths [i] / 2))
+						goto done;
+					width += gi->widths [i];
+				}
+			} else {
+				/* RTL */
+				for (i = item->num_chars - 1; i >= 0; i --) {
+					if (x < html_painter_pango_to_engine (painter, width + gi->widths [i] / 2))
+						goto done;
+					width += gi->widths [i];
+				}
+			}
 		}
+
+	done:
+
+		if (cur)
+			offset = g_utf8_pointer_to_offset (html_text_slave_get_text (slave), slave->owner->text + item->offset) + i;
+		else
+			offset = slave->posLen;
 	}
 
-	if ((width + prev_width) / 2 >= x)
-		len--;
+	printf ("offset %d\n", offset);
 
-	return len;
+	return offset;
+
+/* 	HTMLText *owner; */
+/* 	gint line_offset; */
+/* 	guint width, prev_width; */
+/* 	gchar *text; */
+/* 	guint upper; */
+/* 	guint len; */
+/* 	guint lower; */
+/* 	GList *glyphs; */
+/* 	gint lo; */
+/* 	gint asc, dsc; */
+
+/* 	g_assert (slave->posLen > 1); */
+
+/* 	width = 0; */
+/* 	prev_width  = 0; */
+/* 	lower = 0; */
+/* 	upper = slave->posLen; */
+/* 	len = 0; */
+
+/* 	text = html_text_slave_get_text (slave); */
+/* 	line_offset = html_text_slave_get_line_offset (slave, 0, painter);	 */
+/* 	owner = HTML_TEXT (slave->owner); */
+
+/* 	while (upper - lower > 1) { */
+/* 		lo = line_offset; */
+/* 		prev_width = width; */
+
+/* 		if (width > x) */
+/* 			upper = len; */
+/* 		else  */
+/* 			lower = len; */
+	
+/* 		len = (lower + upper + 1) / 2; */
+
+/* 		if (len) { */
+/* 			glyphs = get_glyphs_part (slave, painter, 0, len); */
+/* 			html_text_calc_text_size (slave->owner, painter, text - slave->owner->text, len, html_text_get_pango_info (owner, painter), glyphs, */
+/* 						  &lo, &width, &asc, &dsc); */
+/* 			glyphs_destroy (glyphs); */
+/* 		} else { */
+/* 			width = 0; */
+/* 		} */
+/* 	} */
+
+/* 	if ((width + prev_width) / 2 >= x) */
+/* 		len--; */
+
+/* 	return len; */
 }
 
 static guint
@@ -971,7 +1009,7 @@ get_offset_for_pointer (HTMLTextSlave *slave, HTMLPainter *painter, gint x, gint
 		return slave->posLen;
 
 	if (slave->posLen > 1)
-		return calc_offset (slave, painter, x, y);
+		return calc_offset (slave, painter, x);
 	else
 		return x > HTML_OBJECT (slave)->width / 2 ? 1 : 0;
 }
