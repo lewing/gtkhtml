@@ -2,7 +2,7 @@
 
 	* object.c: emit atk object when focus move from one object to another,
 		    fix bug #45119
-	* utils.c: add some check to prevent crash,
+	* utils.c: add some check to prevent crash
 
 2002-05-07  Radek Doulik  <rodo@ximian.com>
 
