@@ -570,12 +570,28 @@ get_line_length (HTMLObject *self, HTMLPainter *p, gint line_offset)
 }
 
 gint
-html_text_get_line_offset (HTMLText *text, HTMLPainter *painter)
+html_text_get_line_offset (HTMLText *text, HTMLPainter *painter, gint offset)
 {
-	return html_clueflow_tabs (HTML_CLUEFLOW (HTML_OBJECT (text)->parent), painter)
-		? html_clueflow_get_line_offset (HTML_CLUEFLOW (HTML_OBJECT (text)->parent), 
-						 painter, HTML_OBJECT (text))
-		: -1;
+	gint line_offset = -1;
+
+	if (html_clueflow_tabs (HTML_CLUEFLOW (HTML_OBJECT (text)->parent), painter)) {
+		line_offset = html_clueflow_get_line_offset (HTML_CLUEFLOW (HTML_OBJECT (text)->parent), 
+							     painter, HTML_OBJECT (text));
+		if (offset) {
+			gchar *s = text->text;
+
+			while (offset > 0 && s && *s) {
+				if (*s == '\t')
+					line_offset += 8 - (line_offset % 8);
+				else
+					line_offset ++;
+				s = g_utf8_next_char (s);
+				offset --;
+			}
+		}
+	}
+
+	return line_offset;
 }
 
 gint
@@ -613,7 +629,7 @@ update_asc_dsc (HTMLPainter *painter, PangoItem *item, gint *asc, gint *dsc)
 gint
 html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gint len, gint *asc, gint *dsc)
 {
-	gint idx, width = 0;
+	gint idx, width = 0, line_offset;
 
 	g_return_val_if_fail (offset >= 0, 0);
 	g_return_val_if_fail (offset + len <= text->text_len, 0);
@@ -626,8 +642,11 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gi
 	if (text->text_len == 0 || len == 0)
 		return 0;
 
+	line_offset = html_text_get_line_offset (text, painter, offset);
+
 	if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
 		HTMLTextPangoInfo *pi;
+		gchar *s = html_text_get_text (text, offset);
 
 		pi = html_text_get_pango_info (text, painter);
 
@@ -636,7 +655,14 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gi
 			update_asc_dsc (painter, pi->entries [idx].item, asc, dsc);
 
 		while (len > 0) {
-			width += pi->entries [idx].widths [offset];
+			if (*s == '\t') {
+				gint skip = 8 - (line_offset % 8);
+				width += skip*pi->entries [idx].widths [offset];
+				line_offset += skip;
+			} else {
+				width += pi->entries [idx].widths [offset];
+				line_offset ++;
+			}
 			len --;
 			if (offset >= pi->entries [idx].item->num_chars - 1) {
 				idx ++;
@@ -645,10 +671,11 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gi
 					update_asc_dsc (painter, pi->entries [idx].item, asc, dsc);
 			} else
 				offset ++;
+			s = g_utf8_next_char (s);
 		}
 		width = PANGO_PIXELS (width);
 	} else {
-		html_painter_calc_text_size (painter, html_text_get_text (text, offset), len, NULL, NULL, 0, NULL,
+		html_painter_calc_text_size (painter, html_text_get_text (text, offset), len, NULL, NULL, 0, &line_offset,
 					     html_text_get_font_style (text), text->face, &width, asc, dsc);
 	}
 
@@ -669,7 +696,7 @@ calc_preferred_width (HTMLObject *self,
 		gint line_offset;
 		gint tabs;
 
-		line_offset = html_text_get_line_offset (text, painter);
+		line_offset = html_text_get_line_offset (text, painter, 0);
 		width += (html_text_text_line_length (text->text, &line_offset, text->text_len, &tabs) - text->text_len)*
 			html_painter_get_space_width (painter, html_text_get_font_style (text), text->face);
 	}

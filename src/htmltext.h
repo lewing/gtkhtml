@@ -141,7 +141,8 @@ gint              html_text_trail_space_width            (HTMLText          *tex
 gboolean          html_text_convert_nbsp                 (HTMLText          *text,
 							  gboolean           free_text);
 gint              html_text_get_line_offset              (HTMLText          *text,
-							  HTMLPainter       *painter);
+							  HTMLPainter       *painter,
+							  gint               offset);
 gint              html_text_text_line_length             (const gchar       *text,
 							  gint              *line_offset,
 							  guint              len,

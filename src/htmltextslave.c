@@ -266,12 +266,8 @@ html_text_slave_get_line_offset (HTMLTextSlave *slave, gint offset, HTMLPainter 
 		bol = HTML_TEXT_SLAVE (prev->next);
 		return html_text_text_line_length (html_text_slave_get_text (bol),
 						   &line_offset, slave->posStart + offset - bol->posStart, NULL);
-	} else {
-		gint line_offset = html_text_get_line_offset (slave->owner, p);
-		/* printf ("owner lo %d\n", line_offset); */
-		html_text_text_line_length (slave->owner->text, &line_offset, slave->posStart + offset, NULL);
-		return line_offset;
-	}
+	} else
+		return html_text_get_line_offset (slave->owner, p, slave->posStart + offset);
 }
 
 static gint
@@ -442,7 +438,8 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 {
 	HTMLTextSlave *slave = HTML_TEXT_SLAVE (o);
 	gint lbw, w, lbo, ltw, lwl, offset;
-	gint ii, io;
+	gint ii, io, line_offset;
+	gchar *s;
 	HTMLFitType rv = HTML_FIT_NONE;
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, painter);
 	gboolean force_fit = lineBegin;
@@ -470,6 +467,11 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	offset = lbo = slave->posStart;
 	ii = html_text_get_item_index (slave->owner, painter, offset, &io);
 
+	if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
+		line_offset = html_text_get_line_offset (slave->owner, painter, offset);
+		s = html_text_get_text (slave->owner, offset);
+	}
+
 	while ((force_fit || widthLeft > lbw) && offset < slave->posStart + slave->posLen) {
 		if (offset > slave->posStart && pi->entries [ii].attrs [io].is_line_break) {
 			gint new_ltw, new_lwl, aw;
@@ -478,9 +480,11 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
 				aw = w - new_lwl;
 			} else {
+				gint line_offset = html_text_get_line_offset (slave->owner, painter, lbo - lwl);
 				/* printf ("s: %s l: %d\n", html_text_get_text (slave->owner, lbo - lwl), offset - new_lwl - lbo + lwl); */
 				html_painter_calc_text_size (painter, html_text_get_text (slave->owner, lbo - lwl),
-							     offset - new_lwl - lbo + lwl, NULL, NULL, 0, NULL, html_text_get_font_style (slave->owner), slave->owner->face,
+							     offset - new_lwl - lbo + lwl, NULL, NULL, 0, &line_offset,
+							     html_text_get_font_style (slave->owner), slave->owner->face,
 							     &aw, NULL, NULL);
 				w += aw;
 				aw = w;
@@ -497,17 +501,29 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 			} else
 				break;
 		}
-		if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
-			w += PANGO_PIXELS (pi->entries [ii].widths [io]);
+		if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
+			if (*s == '\t') {
+				gint skip = 8 - (line_offset % 8);
+				w += skip*PANGO_PIXELS (pi->entries [ii].widths [io]);
+				line_offset += skip;
+			} else {
+				w += PANGO_PIXELS (pi->entries [ii].widths [io]);
+				line_offset ++;
+			}
+			s = g_utf8_next_char (s);
+		}
 		offset ++;
 		html_text_pi_forward (pi, &ii, &io);
 	}
 
 	if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter)) {
 		gint aw;
+		gint line_offset = html_text_get_line_offset (slave->owner, painter, lbo - lwl);
+
 		/* printf ("s: %s l: %d\n", html_text_get_text (slave->owner, lbo - lwl), offset - lbo + lwl); */
 		html_painter_calc_text_size (painter, html_text_get_text (slave->owner, lbo - lwl),
-					     offset - lbo + lwl, NULL, NULL, 0, NULL, html_text_get_font_style (slave->owner), slave->owner->face,
+					     offset - lbo + lwl, NULL, NULL, 0, &line_offset,
+					     html_text_get_font_style (slave->owner), slave->owner->face,
 					     &aw, NULL, NULL);
 		w += aw;
 	}
