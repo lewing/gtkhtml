@@ -1877,6 +1877,15 @@ client_notify_widget (GConfClient* client,
 		set_fonts (html);
 	} else if (!strcmp (tkey, "/live_spell_check")) {
 		prop->live_spell_check = gconf_client_get_bool (client, entry->key, NULL);
+	} else if (!strcmp (tkey, "/keybindings_theme")) {
+		gchar *theme = gconf_client_get_string (client, entry->key, NULL);
+		if (strcmp (theme, prop->keybindings_theme)) {
+			g_free (prop->keybindings_theme);
+			prop->keybindings_theme = theme;
+			load_keybindings (klass);
+		} else
+			g_free (theme);
+		set_editor_keybindings (html, html_engine_get_editable (html->engine));
 	}
 }
 
@@ -1931,51 +1940,53 @@ client_notify_class (GConfClient* client,
 
 	if (!strcmp (tkey, "/magic_links")) {
 		prop->magic_links = gconf_client_get_bool (client, entry->key, NULL);
-	} else if (!strcmp (tkey, "/keybindings_theme")) {
-		g_free (prop->keybindings_theme);
-		prop->keybindings_theme = gconf_client_get_string (client, entry->key, NULL);
-		load_keybindings (klass);
 	}
 }
 
 #endif
 
-static void
-init_properties (GtkHTMLClass *klass)
+static GtkHTMLClassProperties *
+get_class_properties (GtkHTML *html)
 {
-	klass->properties = gtk_html_class_properties_new ();
-#ifdef GTKHTML_HAVE_GCONF
-	if (!gconf_is_initialized ()) {
-		char *argv[] = { "gtkhtml", NULL };
+	GtkHTMLClass *klass;
 
+	klass = GTK_HTML_CLASS (GTK_OBJECT (html)->klass);
+
+	if (!klass->properties) {
+		klass->properties = gtk_html_class_properties_new ();
+#ifdef GTKHTML_HAVE_GCONF
+		if (!gconf_is_initialized ()) {
+		char *argv[] = { "gtkhtml", NULL };
+		
 		g_warning ("gconf is not initialized, please call gconf_init before using GtkHTML library. "
 			   "Meanwhile it's initialized by gtkhtml itself.");
 		gconf_init (1, argv, &gconf_error);
 		if (gconf_error)
 			g_error ("gconf error: %s\n", gconf_error->message);
-	}
-
-	gconf_client = gconf_client_get_default ();
-	if (!gconf_client)
-		g_error ("cannot create gconf_client\n");
-	gconf_client_add_dir (gconf_client, GTK_HTML_GCONF_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, &gconf_error);
-	if (gconf_error)
+		}
+		
+		gconf_client = gconf_client_get_default ();
+		if (!gconf_client)
+			g_error ("cannot create gconf_client\n");
+		gconf_client_add_dir (gconf_client, GTK_HTML_GCONF_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, &gconf_error);
+		if (gconf_error)
+			g_error ("gconf error: %s\n", gconf_error->message);
+		gconf_client_add_dir (gconf_client, GNOME_SPELL_GCONF_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, &gconf_error);
+		if (gconf_error)
 		g_error ("gconf error: %s\n", gconf_error->message);
-	gconf_client_add_dir (gconf_client, GNOME_SPELL_GCONF_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, &gconf_error);
-	if (gconf_error)
-		g_error ("gconf error: %s\n", gconf_error->message);
-	gtk_html_class_properties_load (klass->properties, gconf_client);
+		gtk_html_class_properties_load (klass->properties, gconf_client);
 #else
-	gtk_html_class_properties_load (klass->properties);
+		gtk_html_class_properties_load (klass->properties);
 #endif
-	load_keybindings (klass);
+		load_keybindings (klass);
 #ifdef GTKHTML_HAVE_GCONF
-	gconf_client_notify_add (gconf_client, GTK_HTML_GCONF_DIR, client_notify_class, klass, NULL, &gconf_error);
-	if (gconf_error)
-		g_warning ("gconf error: %s\n", gconf_error->message);
+		gconf_client_notify_add (gconf_client, GTK_HTML_GCONF_DIR, client_notify_class, klass, NULL, &gconf_error);
+		if (gconf_error)
+			g_warning ("gconf error: %s\n", gconf_error->message);
 #endif
+	}
+	return klass->properties;
 }
-
 static gint
 focus (GtkContainer *container, GtkDirectionType direction)
 {
@@ -2463,8 +2474,6 @@ class_init (GtkHTMLClass *klass)
 	html_class->cursor_move       = cursor_move;
 	html_class->command           = command;
 
-	init_properties (klass);
-
 	gdk_rgb_init ();
 }
 
@@ -2473,12 +2482,14 @@ init_properties_widget (GtkHTML *html)
 {
 	GtkHTMLClassProperties *prop;
 
-	/* printf ("init_properties_widget\n"); */
-	prop = GTK_HTML_CLASS (GTK_OBJECT (html)->klass)->properties;
+
+	prop = get_class_properties (html);
+
 	set_fonts_idle (html);
 	html_colorset_set_color (html->engine->defaultSettings->color_set, &prop->spell_error_color, HTMLSpellErrorColor);
 
 #ifdef GTKHTML_HAVE_GCONF
+
 	html->priv->notify_id = gconf_client_notify_add (gconf_client, GTK_HTML_GCONF_DIR,
 							 client_notify_widget, html, NULL, &gconf_error);
 	if (gconf_error) {
@@ -4040,11 +4051,13 @@ clean_bindings_set (GtkBindingSet *binding_set)
 static void
 set_editor_keybindings (GtkHTML *html, gboolean editable)
 {
-	if (editable) {
+	if (editable) {		
 		gchar *name;
+		GtkHTMLClassProperties *prop;
+		
+		prop = get_class_properties (html);
+		name = g_strconcat ("gtkhtml-bindings-", prop->keybindings_theme, NULL);
 
-		name = g_strconcat ("gtkhtml-bindings-",
-				    GTK_HTML_CLASS (GTK_OBJECT (html)->klass)->properties->keybindings_theme, NULL);
 		html->editor_bindings = gtk_binding_set_find (name);
 		if (!html->editor_bindings)
 			g_warning ("cannot find %s bindings", name);

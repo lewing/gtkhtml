@@ -1,3 +1,11 @@
+2002-05-17  Larry Ewing  <lewing@ximian.com>
+
+	* gtkhtml.c (get_class_properties): move the gconf initialization
+	into the instance initialization to make michael happy.
+	(init_properties_widget): call get_class_properties to ensure the
+	props are set.
+	(set_editor_keybindings): use get_class_properties.
+
 2002-05-15  Larry Ewing  <lewing@ximian.com>
 
 	* htmlclueflow.c (html_clueflow_set_indentation): if indentation
