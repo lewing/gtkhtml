@@ -46,10 +46,10 @@
 
 typedef enum
 {
-	CELL,
-	ROW,
-	COLUMN,
-	TABLE
+	CELL_SCOPE_CELL,
+	CELL_SCOPE_ROW,
+	CELL_SCOPE_COLUMN,
+	CELL_SCOPE_TABLE
 } CellScope;
 
 typedef struct
@@ -57,6 +57,7 @@ typedef struct
 	GtkHTMLControlData *cd;
 	HTMLTableCell *cell;
 	HTMLTable *table;
+	CellScope  scope;
 
 	GtkWidget *combo_bg_color;
 	GtkWidget *entry_bg_pixmap;
@@ -98,9 +99,6 @@ typedef struct
 	gboolean   changed_heading;
 	GtkWidget *option_heading;
 
-	CellScope  scope;
-	GtkWidget *option_scope;
-
 	gboolean   disable_change;
 
 } GtkHTMLEditCellProperties;
@@ -111,8 +109,8 @@ data_new (GtkHTMLControlData *cd)
 	GtkHTMLEditCellProperties *data = g_new0 (GtkHTMLEditCellProperties, 1);
 
 	/* fill data */
-	data->cd                = cd;
-	data->cell              = NULL;
+	data->cd = cd;
+	data->scope = CELL_SCOPE_CELL;
 
 	return data;
 }
@@ -120,10 +118,57 @@ data_new (GtkHTMLControlData *cd)
 static void
 cell_set_prop (GtkHTMLEditCellProperties *d, void (*set_fn)(HTMLTableCell *, GtkHTMLEditCellProperties *))
 {
+	HTMLEngine *e = d->cd->html->engine;
+	guint position;
 	if (d->disable_change || !editor_has_html_object (d->cd, HTML_OBJECT (d->table)))
 		return;
 
-	(*set_fn) (d->cell, d);
+	position = d->cd->html->engine->cursor->position;
+	switch (d->scope) {
+	case CELL_SCOPE_CELL:
+		(*set_fn) (d->cell, d);
+		break;
+	case CELL_SCOPE_ROW:
+		if (html_engine_table_goto_row (e, d->table, d->cell->row)) {
+			HTMLTableCell *cell = html_engine_get_table_cell (e);
+
+			while (cell && cell->row == d->cell->row) {
+				if (HTML_OBJECT (cell)->parent == HTML_OBJECT (d->table))
+					(*set_fn) (cell, d);
+				html_engine_next_cell (e, FALSE);
+				cell = html_engine_get_table_cell (e);
+			}
+		}
+		break;
+	case CELL_SCOPE_COLUMN:
+		if (html_engine_table_goto_col (e, d->table, d->cell->col)) {
+			HTMLTableCell *cell = html_engine_get_table_cell (e);
+
+			while (cell) {
+				if (cell->col == d->cell->col && HTML_OBJECT (cell)->parent == HTML_OBJECT (d->table))
+					(*set_fn) (cell, d);
+				html_engine_next_cell (e, FALSE);
+				cell = html_engine_get_table_cell (e);
+			}
+		}
+		break;
+	case CELL_SCOPE_TABLE:
+		if (html_engine_goto_table_0 (e, d->table)) {
+			HTMLTableCell *cell;
+
+			html_cursor_forward (e->cursor, e);
+			cell = html_engine_get_table_cell (e);
+			while (cell) {
+				if (HTML_OBJECT (cell)->parent == HTML_OBJECT (d->table))
+					(*set_fn) (cell, d);
+				html_engine_next_cell (e, FALSE);
+				cell = html_engine_get_table_cell (e);
+			}
+		}
+		break;
+	}
+
+	html_cursor_jump_to_position (e->cursor, e, position);
 }
 
 static void
@@ -258,17 +303,39 @@ changed_heading (GtkWidget *w, GtkHTMLEditCellProperties *d)
 		d->changed_heading = TRUE;
 }
 
-static void
-changed_scope (GtkWidget *w, GtkHTMLEditCellProperties *d)
-{
-	d->scope = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w)));
-}
-
 /*
  * FIX: set spin adjustment upper to 100000
  *      as glade cannot set it now
  */
 #define UPPER_FIX(x) gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (d->spin_ ## x))->upper = 100000.0
+
+static void
+cell_scope_cell (GtkWidget *w, GtkHTMLEditCellProperties *d)
+{
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
+		d->scope = CELL_SCOPE_CELL;
+}
+
+static void
+cell_scope_table (GtkWidget *w, GtkHTMLEditCellProperties *d)
+{
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
+		d->scope = CELL_SCOPE_TABLE;
+}
+
+static void
+cell_scope_row (GtkWidget *w, GtkHTMLEditCellProperties *d)
+{
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
+		d->scope = CELL_SCOPE_ROW;
+}
+
+static void
+cell_scope_column (GtkWidget *w, GtkHTMLEditCellProperties *d)
+{
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
+		d->scope = CELL_SCOPE_COLUMN;
+}
 
 static GtkWidget *
 cell_widget (GtkHTMLEditCellProperties *d)
@@ -337,9 +404,10 @@ cell_widget (GtkHTMLEditCellProperties *d)
 	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_heading)), "selection-done",
 			  G_CALLBACK (changed_heading), d);
 
-	d->option_scope   = glade_xml_get_widget (xml, "option_cell_scope");
-	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_scope)), "selection-done",
-			  G_CALLBACK (changed_scope), d);
+        g_signal_connect (glade_xml_get_widget (xml, "cell_radio"), "toggled", G_CALLBACK (cell_scope_cell), d);
+        g_signal_connect (glade_xml_get_widget (xml, "table_radio"), "toggled", G_CALLBACK (cell_scope_table), d);
+        g_signal_connect (glade_xml_get_widget (xml, "row_radio"), "toggled", G_CALLBACK (cell_scope_row), d);
+        g_signal_connect (glade_xml_get_widget (xml, "col_radio"), "toggled", G_CALLBACK (cell_scope_column), d);
 
 	d->spin_cspan   = glade_xml_get_widget (xml, "spin_cell_cspan");
 	d->spin_rspan   = glade_xml_get_widget (xml, "spin_cell_rspan");
@@ -537,19 +605,6 @@ cell_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
 		}
 	}
 
-	switch (d->scope) {
-	case CELL:
-		cell_apply_1 (d->cell, d);
-		break;
-	case ROW:
-		cell_apply_row (d);
-		break;
-	case COLUMN:
-		cell_apply_col (d);
-		break;
-	case TABLE:
-		cell_apply_table (d);
-	}
 	html_cursor_jump_to_position (e->cursor, e, position);
 
 	return TRUE;
