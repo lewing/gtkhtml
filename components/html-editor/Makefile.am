@@ -13,7 +13,6 @@ CFLAGS += \
         -DGTKHTML_DATADIR=\""$(gtkhtml_data)"\"					\
         -DGNOMELOCALEDIR=\""$(datadir)/locale"\"				\
 	-DGLADE_DATADIR=\"$(gladedir)\"						\
-	-DGTK_DISABLE_DEPRECATED=1						\
 	-DBONOBO_DISABLE_DEPRECATED=1
 
 # CORBA stuff
