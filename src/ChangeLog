@@ -1,47 +1,37 @@
-2004-12-27  Radek Doulik  <rodo@ximian.com>
+2005-01-04  Radek Doulik  <rodo@ximian.com>
 
-	* htmlengine.c (html_engine_get_cursor): check for cursor object,
-	fixes crash when double clicking outside a body clue
+	* htmltextslave.c: size calculation rewritten, updated line
+	breaking, create new glyph items for line broken items, drawing
+	rewritten, offset calculation rewritten
 
-	Fixes #69748
+	* htmltext.c: use pango glyph items instead of just items
+	(prepare_attrs): do not set selection colors by pango attributes,
+	it breaks graphemes in some languages. selection colors are
+	applied at draw time
+	(html_tmp_fix_pango_glyph_string_get_logical_widths): temporary
+	function to replace pango function with bug
+	(html_text_tail_white_space): fixed offset calculation
+	(select_range): use pango cursor position attribute
 
-2004-12-15  Mengjie Yu  <meng-jie.yu@sun.com>
+	* htmlpainter.c: remember clip rectangle, added function to query
+	clip rectangle
+	added new function to draw glyphs directly
 
-	* gtkhtml.c: (key_press_event):
-	fix #70085 the focus object may be a frame or an iframe, if so, 
-		   we must check its focus object recursively.
+	* htmlobject.c (select_object): pass engine to avoid crash in
+	underlying functions
 
-2004-12-14  Mengjie Yu  <meng-jie.yu@sun.com>
+	* htmlgdkpainter.c (begin): reset clip rectangle
+	(set_clip_rectangle): transform painters coordinates to gdk ones,
+	clamp values
+	(draw_glyphs): added fg/bg colors to override style/text colors -
+	selection uses that to force selection foreground color to all
+	texts
 
-	* gtkhtml.c: (focus), (gtk_html_class_init), (cursor_move):
-	fix #70078 Add new signals when for insert/delete
-		   change gtk_html_a11y_cursor_move_cb to cursor_changed_cb
-	* gtkhtml.h:
-	fix #70078 add signal field
+	* htmlclueflow.c (html_clueflow_real_get_direction): derive
+	direction from text children
 
-	* htmlengine-edit-cut-and-paste.c: (insert_object_for_undo),
-	(html_engine_delete):
-	fix #70078 emit signal when insert/delete objects
-
-2004-09-29  Radek Doulik  <rodo@ximian.com>
-
-	* gtkhtml.c (drag_data_received): call gdk_window_get_pointer so
-	that we get window coordinates
-
-	Fixes #53368
-
-2004-10-15  Radek Doulik  <rodo@ximian.com>
-
-	* htmlengine.c (html_engine_replace_do): return true if replacing
-	is finished
-
-	Fixes #50646
-
-2004-11-29  Radek Doulik  <rodo@ximian.com>
-
-	* htmlengine.c: make sure we free whole array from g_strsplit
-
-	* htmltext.c (html_text_pango_info_destroy): free entries as well
+	* gtkhtmldebug.c: print out more information regarding pango info
+	structure
 
 2004-11-23  Radek Doulik  <rodo@ximian.com>
 
@@ -54,10 +44,6 @@
 	returns object's flow parent
 
 	Fixes #67763
-
-2004-11-19  Radek Doulik  <rodo@ximian.com>
-
-	* htmlstyle.c (parse_border): quiet compiler
 
 2004-11-11  Radek Doulik  <rodo@ximian.com>
 
