@@ -115,4 +115,7 @@ binding "gtkhtml-bindings-ms"
   bind "<Alt><Shift>p"        { "command" (zero-padding) }
 
   bind "<Ctrl>o"              { "command" (text-color-apply) }
+
+  bind "<Ctrl>Delete"         { "command" (kill-word) }
+  bind "<Ctrl>BackSpace"      { "command" (backward-kill-word) }
 }
