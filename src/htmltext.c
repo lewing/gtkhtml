@@ -627,7 +627,7 @@ html_text_get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gin
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 	gint idx = 0;
 
-	while (idx < pi->n && offset > pi->entries [idx].item->num_chars) {
+	while (idx < pi->n - 1 && offset >= pi->entries [idx].item->num_chars) {
 		offset -= pi->entries [idx].item->num_chars;
 		idx ++;
 	}
@@ -675,14 +675,14 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gi
 
 	while (len > 0) {
 		width += pi->entries [idx].widths [offset];
-		if (offset > pi->entries [idx].item->num_chars) {
+		len --;
+		if (offset >= pi->entries [idx].item->num_chars - 1) {
 			idx ++;
 			offset = 0;
-			if (asc || dsc)
+			if (len > 0 && (asc || dsc))
 				update_asc_dsc (pi->entries [idx].item, asc, dsc);
 		} else
 			offset ++;
-		len --;
 	}
 
 	return PANGO_PIXELS (width);
@@ -917,11 +917,11 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 		pango_attr_list_unref (attrs);
 		text->pi = html_text_pango_info_new (g_list_length (items));
 
-		for (i = 0, cur = items; i < text->pi->n; i ++) {
+		for (i = 0, cur = items; i < text->pi->n; i ++, cur = cur->next) {
 			PangoGlyphString *glyphs;
 			PangoItem *item;
 
-			item = text->pi->entries [i].item = (PangoItem *) items->data;
+			item = text->pi->entries [i].item = (PangoItem *) cur->data;
 
 			text->pi->entries [i].attrs = g_new (PangoLogAttr, item->num_chars + 1);;
 			pango_break (translated + item->offset, item->length, &item->analysis, text->pi->entries [i].attrs, item->num_chars + 1);
