@@ -1637,7 +1637,7 @@ msgstr "正则表达式(_R)"
 msgid ""
 "Unable to add word to dictionary,\n"
 "language settings are broken.\n"
-msgstr "无法将单词添加到字典，\n语言设置有错。"
+msgstr "无法将单词添加到字典，\n语言设置有错。\n"
 
 #: components/html-editor/spellchecker.c:298
 msgid "No misspelled word found"
