@@ -162,7 +162,9 @@ gboolean          html_text_pi_backward                  (HTMLTextPangoInfo *pi,
 gboolean          html_text_pi_forward                   (HTMLTextPangoInfo *pi,
 							  gint              *ii,
 							  gint              *io);
-gint              html_text_tail_white_space             (HTMLTextPangoInfo *pi,
+gint              html_text_tail_white_space             (HTMLText          *text,
+							  HTMLPainter       *painter,
+							  gint               offset,
 							  gint               ii,
 							  gint               io,
 							  gint              *white_len);

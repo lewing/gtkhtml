@@ -474,7 +474,7 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 		if (offset > slave->posStart && pi->entries [ii].attrs [io].is_line_break) {
 			gint new_ltw, new_lwl, aw;
 
-			new_ltw = PANGO_PIXELS (html_text_tail_white_space (pi, ii, io, &new_lwl));
+			new_ltw = PANGO_PIXELS (html_text_tail_white_space (slave->owner, painter, offset, ii, io, &new_lwl));
 			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
 				aw = w - new_lwl;
 			} else {
