@@ -35,6 +35,7 @@
 #include "htmlselection.h"
 #include "htmlsettings.h"
 
+#define USE_SCROLLED_WINDOW 1
 #ifndef USE_SCROLLED_WINDOW
 #include <gal/widgets/e-scroll-frame.h>
 #endif
@@ -421,7 +422,7 @@ html_frame_set_margin_height (HTMLFrame *frame, gint margin_height)
 void
 html_frame_set_scrolling (HTMLFrame *frame, GtkPolicyType scroll)
 {
-#if E_USE_SCROLLED_WINDOW
+#if USE_SCROLLED_WINDOW
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (frame->scroll),
 					scroll, scroll);
 #else

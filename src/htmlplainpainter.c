@@ -34,8 +34,6 @@
 
 static HTMLGdkPainterClass *parent_class = NULL;
 
-static EFontStyle e_style (GtkHTMLFontStyle style);
-
 static void
 draw_panel (HTMLPainter *painter,
 	    GdkColor *bg,
@@ -120,13 +118,6 @@ fill_rect (HTMLPainter *painter,
 			    width, height);
 }
 
-static EFontStyle
-e_style (GtkHTMLFontStyle style)
-{
-	EFontStyle rv = E_FONT_PLAIN;
-	return rv;
-}
-
 static HTMLFont *
 alloc_fixed_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, GtkHTMLFontStyle style)
 {
@@ -155,7 +146,7 @@ draw_text (HTMLPainter *painter,
 	   const gchar *text,
 	   gint len)
 {
-	HTMLGdkPainter *gdk_painter;
+	/* HTMLGdkPainter *gdk_painter;
 	EFont *e_font;
 
 	gdk_painter = HTML_GDK_PAINTER (painter);
@@ -173,26 +164,7 @@ draw_text (HTMLPainter *painter,
 			       e_style (painter->font_style), gdk_painter->gc,
 			       x, y, text, 
 			       g_utf8_offset_to_pointer (text, len) - text);
-
-	if (painter->font_style & (GTK_HTML_FONT_STYLE_UNDERLINE
-				   | GTK_HTML_FONT_STYLE_STRIKEOUT)) {
-		/*
-		guint width;
-
-		width = e_font_utf8_text_width (e_font, e_style (painter->font_style),
-						text, g_utf8_offset_to_pointer (text, len) - text);
-
-		if (painter->font_style & GTK_HTML_FONT_STYLE_UNDERLINE)
-			gdk_draw_line (gdk_painter->pixmap, gdk_painter->gc, 
-				       x, y + 1, 
-				       x + width, y + 1);
-
-		if (painter->font_style & GTK_HTML_FONT_STYLE_STRIKEOUT)
-			gdk_draw_line (gdk_painter->pixmap, gdk_painter->gc, 
-				       x, y - e_font_ascent (e_font) / 2, 
-				       x + width, y - e_font_ascent (e_font) / 2);
-		*/
-	}
+	*/
 }
 
 static void

@@ -44,13 +44,8 @@ static HTMLPainterClass *parent_class = NULL;
 /* Hm, this might need fixing.  */
 #define SPACING_FACTOR 1.2
 
-
-/* This is just a quick hack until GnomePrintContext is fixed to hold the paper
-   size.  */
 
-static const GnomePaper *paper = NULL;
-
-static void
+/* static void
 insure_paper (HTMLPrinter *printer)
 {
 	if (paper != NULL)
@@ -62,48 +57,59 @@ insure_paper (HTMLPrinter *printer)
 	if (!paper)
 		paper = gnome_paper_with_name (_("US-Letter"));
 	g_assert (paper != NULL);
-}
+} */
 
 static gdouble
 printer_get_page_height (HTMLPrinter *printer)
 {
-	insure_paper (printer);
-	return gnome_paper_psheight (paper);
+	/* FIX2 insure_paper (printer);
+	  return gnome_paper_psheight (paper); */
+	return 0;
 }
 
 static gdouble
 printer_get_page_width (HTMLPrinter *printer)
 {
-	insure_paper (printer);
-	return gnome_paper_pswidth (paper);
+	/* FIX2 insure_paper (printer);
+	   return gnome_paper_pswidth (paper); */
+	return 0;
 }
 
 static gdouble
 get_lmargin (HTMLPrinter *printer)
 {
+	/* FIX2
 	insure_paper (printer);
-	return gnome_paper_lmargin (paper) / 2;
+	return gnome_paper_lmargin (paper) / 2; */
+
+	return 0;
 }
 
 static gdouble
 get_rmargin (HTMLPrinter *printer)
 {
-	insure_paper (printer);
-	return gnome_paper_rmargin (paper) / 2;
+	/* FIX2 insure_paper (printer);
+	   return gnome_paper_rmargin (paper) / 2; */
+
+	return 0; 
 }
 
 static gdouble
 get_tmargin (HTMLPrinter *printer)
 {
-	insure_paper (printer);
-	return gnome_paper_tmargin (paper) / 2;
+	/* FIX2 insure_paper (printer);
+	   return gnome_paper_tmargin (paper) / 2; */
+
+	return 0;
 }
 
 static gdouble
 get_bmargin (HTMLPrinter *printer)
 {
-	insure_paper (printer);
-	return gnome_paper_bmargin (paper) / 2;
+	/* FIX2 insure_paper (printer);
+	   return gnome_paper_bmargin (paper) / 2; */
+
+	return 0;
 }
 
 gdouble
@@ -147,7 +153,7 @@ gnome_print_coordinates_to_engine (HTMLPrinter *printer,
 /* GtkObject methods.  */
 
 static void
-finalize (GtkObject *object)
+finalize (GObject *object)
 {
 	HTMLPrinter *printer;
 
@@ -158,7 +164,7 @@ finalize (GtkObject *object)
 		gtk_object_unref (GTK_OBJECT (printer->print_context));
 	}
 
-	(* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+	(* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 
@@ -476,7 +482,7 @@ draw_pixmap (HTMLPainter *painter,
 	gnome_print_gsave (printer->print_context);
 	gnome_print_translate (printer->print_context, print_x, print_y - print_scale_height);
 	gnome_print_scale (printer->print_context, print_scale_width, print_scale_height);
-	gnome_print_pixbuf (printer->print_context, pixbuf);
+	/* FIX2 gnome_print_pixbuf (printer->print_context, pixbuf); */
 	gnome_print_grestore (printer->print_context);
 }
 
@@ -733,8 +739,8 @@ alloc_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, Gt
 		}
 	}
 
-	font = gnome_font_new_closest (family ? family : (style & GTK_HTML_FONT_STYLE_FIXED ? "Courier" : "Helvetica"),
-				       weight, italic, get_font_size (printer, points, size));
+	font = NULL; /* FIX2 gnome_font_new_closest (family ? family : (style & GTK_HTML_FONT_STYLE_FIXED ? "Courier" : "Helvetica"),
+			weight, italic, get_font_size (printer, points, size)); */
 	g_free (family);
 
 	if (font == NULL) {
@@ -742,8 +748,8 @@ alloc_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, Gt
 
 		family_list = gnome_font_family_list ();
 		if (family_list && family_list->data) {
-			font = gnome_font_new_closest (family_list->data,
-						       weight, italic, get_font_size (printer, points, size));
+			font = NULL; /* FIX2 gnome_font_new_closest (family_list->data,
+				  weight, italic, get_font_size (printer, points, size)); */
 			gnome_font_family_list_free (family_list);
 		}
 	}
@@ -790,7 +796,7 @@ init (GtkObject *object)
 }
 
 static void
-class_init (GtkObjectClass *object_class)
+class_init (GObjectClass *object_class)
 {
 	HTMLPainterClass *painter_class;
 

@@ -22,6 +22,8 @@
 #ifndef _HTMLGDKPAINTER_H
 #define _HTMLGDKPAINTER_H
 
+#include <gtk/gtkwidget.h>
+
 #include "htmlpainter.h"
 #include "htmlfontmanager.h"
 
@@ -35,6 +37,7 @@
 
 struct _HTMLGdkPainter {
 	HTMLPainter base;
+	PangoContext *pc;
 
 	/* GdkWindow to draw on */
 	GdkWindow *window;
@@ -63,7 +66,8 @@ struct _HTMLGdkPainterClass {
 
 
 GtkType      html_gdk_painter_get_type   (void);
-HTMLPainter *html_gdk_painter_new        (gboolean        double_buffer);
+HTMLPainter *html_gdk_painter_new        (GtkWidget      *widget,
+					  gboolean        double_buffer);
 void         html_gdk_painter_realize    (HTMLGdkPainter *painter,
 					  GdkWindow      *window);
 void         html_gdk_painter_unrealize  (HTMLGdkPainter *painter);

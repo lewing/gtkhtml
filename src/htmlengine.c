@@ -3190,7 +3190,7 @@ html_g_cclosure_marshal_VOID__STRING_POINTER (GClosure     *closure,
 	register GCClosure *cc = (GCClosure*) closure;
 	register gpointer data1, data2;
 
-	g_return_if_fail (n_param_values == 5);
+	g_return_if_fail (n_param_values == 3);
 
 	if (G_CCLOSURE_SWAP_DATA (closure))
 		{
@@ -3227,7 +3227,7 @@ html_g_cclosure_marshal_BOOL__POINTER (GClosure     *closure,
 	register gpointer data1, data2;
 	gboolean v_return;
 
-	g_return_if_fail (n_param_values == 5);
+	g_return_if_fail (n_param_values == 2);
 
 	if (G_CCLOSURE_SWAP_DATA (closure))
 		{
@@ -3265,7 +3265,7 @@ html_g_cclosure_marshal_VOID__POINTER_INT (GClosure     *closure,
 	register GCClosure *cc = (GCClosure*) closure;
 	register gpointer data1, data2;
 
-	g_return_if_fail (n_param_values == 5);
+	g_return_if_fail (n_param_values == 3);
 
 	if (G_CCLOSURE_SWAP_DATA (closure))
 		{
@@ -3303,7 +3303,7 @@ html_g_cclosure_marshal_VOID__POINTER_POINTER_POINTER (GClosure     *closure,
 	register GCClosure *cc = (GCClosure*) closure;
 	register gpointer data1, data2;
 
-	g_return_if_fail (n_param_values == 5);
+	g_return_if_fail (n_param_values == 4);
 
 	if (G_CCLOSURE_SWAP_DATA (closure))
 		{

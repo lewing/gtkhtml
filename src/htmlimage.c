@@ -1140,7 +1140,7 @@ html_image_animation_start (HTMLImage *image)
 {
 	HTMLImageAnimation *anim = image->animation;
 
-	if (anim && gdk_pixbuf_animation_get_num_frames (image->image_ptr->animation) > 1) {
+	/* FIX2 if (anim && gdk_pixbuf_animation_get_num_frames (image->image_ptr->animation) > 1) {
 		if (anim->timeout == 0) {
 			GList *frames = gdk_pixbuf_animation_get_frames (image->image_ptr->animation);
 
@@ -1150,7 +1150,7 @@ html_image_animation_start (HTMLImage *image)
 						       ((GdkPixbufFrame *) frames->data),
 						       (GtkFunction) html_image_animation_timeout, (gpointer) image);
 		}
-	}
+		} */
 }
 
 static void
@@ -1174,7 +1174,7 @@ html_image_factory_frame_done (GdkPixbufLoader *loader, GdkPixbufFrame *frame, H
 	}
 	g_assert (ip->animation);
 
-	if (gdk_pixbuf_animation_get_num_frames (ip->animation) > 1) {
+	/* FIX2 if (gdk_pixbuf_animation_get_num_frames (ip->animation) > 1) {
 		GSList *cur = ip->interests;
 		HTMLImage *image;
 
@@ -1188,7 +1188,7 @@ html_image_factory_frame_done (GdkPixbufLoader *loader, GdkPixbufFrame *frame, H
 			}
 			cur = cur->next;
 		}
-	}
+		} */
 }
 
 static void
@@ -1446,10 +1446,10 @@ html_image_factory_register (HTMLImageFactory *factory, HTMLImage *i, const char
 	if (i) {
 		i->image_ptr      = retval;
 
-		if (retval->animation && gdk_pixbuf_animation_get_num_frames (retval->animation) > 1) {
+		/* FIX2 if (retval->animation && gdk_pixbuf_animation_get_num_frames (retval->animation) > 1) {
 			i->animation = html_image_animation_new (i);
 			html_image_animation_start (i);
-		}
+			} */
 	}
 
 	return retval;

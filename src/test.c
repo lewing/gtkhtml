@@ -25,7 +25,17 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <gnome.h>
+#include <unistd.h>
+#include <string.h>
+
+#include <gtk/gtkwindow.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtkvbox.h>
+#include <gtk/gtkmain.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtksignal.h>
+
 #include "gtkhtml.h"
 #include "gtkhtml-stream.h"
 
@@ -34,6 +44,16 @@
 GtkWidget *html;
 
 gchar *html_files [] = {"test1.html", "test2.html", "test9.html", "test11.html", "test6.html"};
+
+static gchar *welcome = "
+Czech (&#268;e&#353;tina) &#268;au, Ahoj, Dobr&#253; den<BR> 
+French (Français) Bonjour, Salut<BR>
+Korean (한글)   안녕하세요, 안녕하십니까<BR>
+Russian (Русский) Здравствуйте!<BR>
+Chinese (Simplified) <span lang=\"zh-cn\">元气	开发</span><BR>
+Chinese (Traditional) <span lang=\"zh-tw\">元氣	開發</span><BR>
+Japanese <span lang=\"ja\">元気	開発<BR></FONT>
+";
 
 static void
 url_requested (GtkHTML *html, const char *url, GtkHTMLStream *stream, gpointer data)
@@ -63,7 +83,12 @@ url_requested (GtkHTML *html, const char *url, GtkHTMLStream *stream, gpointer d
 static void
 read_html (GtkWidget *html, gint k)
 {
-	int fd, n;
+	GtkHTMLStream *stream;
+
+	stream = gtk_html_begin (GTK_HTML (html));
+	url_requested (GTK_HTML (html), html_files [k], stream, NULL);
+
+	/* int fd, n;
 	gchar *html_file = g_strconcat ("tests/", html_files [k], NULL);
 	char ostr [BUFSIZ];
 	fd = open (html_file, O_RDONLY);
@@ -74,7 +99,7 @@ read_html (GtkWidget *html, gint k)
 
 		close (fd);
 	}
-	g_free (html_file);
+	g_free (html_file); */
 }
 
 static void
@@ -87,6 +112,31 @@ static void
 quit_cb (GtkWidget *button)
 {
 	gtk_main_quit ();
+}
+
+static gchar *
+encode_html (gchar *txt)
+{
+	GString *str;
+	gchar *rv;
+
+	str = g_string_new (NULL);
+
+	do {
+		gunichar uc;
+
+		uc = g_utf8_get_char (txt);
+		if (uc > 160) {
+			g_string_append_printf (str, "&#%u;", uc);
+		} else {
+			g_string_append_c (str, uc);
+		}
+	} while ((txt = g_utf8_next_char (txt)) && *txt);
+
+	rv = str->str;
+	g_string_free (str, FALSE);
+
+	return rv;
 }
 
 int
@@ -107,7 +157,8 @@ main (int argc, char **argv)
 	vbox = gtk_vbox_new (FALSE, 0);
 	hbox = gtk_hbox_new (FALSE, 0);
 	swindow = gtk_scrolled_window_new (NULL, NULL);
-	html = gtk_html_new ();
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	html = gtk_html_new_from_string (encode_html (welcome), -1);
 	gtk_signal_connect (GTK_OBJECT (html), "url_requested", GTK_SIGNAL_FUNC (url_requested), NULL);
 
 	for (; i < BUTTON_INDEX; i++)
@@ -124,8 +175,8 @@ main (int argc, char **argv)
 	gtk_widget_set_usize (GTK_WIDGET (swindow), 500, 500);
 
 	for (i = 0; i < BUTTON_INDEX -1; i++)
-		gtk_signal_connect (GTK_OBJECT (button [i]), "clicked", button_cb, GINT_TO_POINTER (i));
-	gtk_signal_connect (GTK_OBJECT (button [BUTTON_INDEX - 1]), "clicked", quit_cb, NULL);
+		gtk_signal_connect (GTK_OBJECT (button [i]), "clicked", GTK_SIGNAL_FUNC (button_cb), GINT_TO_POINTER (i));
+	gtk_signal_connect (GTK_OBJECT (button [BUTTON_INDEX - 1]), "clicked", GTK_SIGNAL_FUNC (quit_cb), NULL);
 	
 	gtk_widget_show_all (window);
 		
@@ -134,5 +185,3 @@ main (int argc, char **argv)
 	return 0;
 
 }
-
-	

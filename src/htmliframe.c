@@ -34,6 +34,7 @@
 #include "htmlsettings.h"
 #include "htmltokenizer.h"
 
+#define USE_SCROLLED_WINDOW 1
 #ifndef USE_SCROLLED_WINDOW
 #include <gal/widgets/e-scroll-frame.h>
 #endif
@@ -241,7 +242,7 @@ copy (HTMLObject *self,
 void
 html_iframe_set_scrolling (HTMLIFrame *iframe, GtkPolicyType scroll)
 {
-#if E_USE_SCROLLED_WINDOW
+#if USE_SCROLLED_WINDOW
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (iframe->scroll),
 					scroll, scroll);
 #else
