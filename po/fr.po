@@ -1,20 +1,20 @@
 # French translation of gtkhtml.
-# Copyright (C) 2000-2004 Free Software Foundation, Inc.
+# Copyright (C) 2000-2005 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtkhtml package.
 #
 # Yannick LE NY <y-le-ny@ifrance.com>, 2000.
-# maintainer: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2004.
+# maintainer: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2005.
 # Gildas Guillemot <g.guillemot@laposte.net>, 2003.
 # Audrey Simons <asimons@redhat.com>, 2004.
 #
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml 3.1.18\n"
+"Project-Id-Version: gtkhtml 3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-06 17:40+0100\n"
-"PO-Revision-Date: 2004-07-30 10:00+0200\n"
-"Last-Translator: Audrey Simons <asimons@redhat.com>\n"
+"POT-Creation-Date: 2005-02-09 23:18+0100\n"
+"PO-Revision-Date: 2005-02-09 23:08+0100\n"
+"Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -714,7 +714,7 @@ msgstr "Texte _plein"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:133
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:134
 msgid "_Preformat"
-msgstr "_Preformater"
+msgstr "_Préformater"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:134
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:135
@@ -1538,7 +1538,7 @@ msgstr "Style de la page..."
 
 #: components/html-editor/popup.c:500
 msgid "Table insert"
-msgstr "Insèrer un tableau"
+msgstr "Insérer un tableau"
 
 #: components/html-editor/popup.c:503
 msgid "Row above"
@@ -1638,21 +1638,23 @@ msgstr "En a_rrière"
 msgid "_Regular Expression"
 msgstr "Expression _régulière"
 
-#: components/html-editor/spell.c:110
+#: components/html-editor/spellchecker.c:110
 msgid ""
 "Unable to add word to dictionary,\n"
 "language settings are broken.\n"
 msgstr ""
+"Impossible d'ajouter un mot au dictionnaire,\n"
+"les réglages de langue sont cassés.\n"
 
-#: components/html-editor/spell.c:298
+#: components/html-editor/spellchecker.c:298
 msgid "No misspelled word found"
 msgstr "Aucun mot mal orthographié trouvé"
 
-#: components/html-editor/spell.c:305
+#: components/html-editor/spellchecker.c:305
 msgid "Spell checker"
 msgstr "Vérificateur orthographique"
 
-#: components/html-editor/spell.c:398
+#: components/html-editor/spellchecker.c:398
 msgid "Current _Languages"
 msgstr "_Langues actuelles"
 
@@ -1923,94 +1925,3 @@ msgstr "Aperçu avant impression"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "Application de test GtkHTML"
-
-#~ msgid "<None>"
-#~ msgstr "<Aucun>"
-
-#~ msgid "\n"
-#~ msgstr "\n"
-
-#~ msgid "*********************"
-#~ msgstr "*********************"
-
-#~ msgid "Add Keyboard Shortcuts"
-#~ msgstr "Ajouter des raccourcis clavier"
-
-#~ msgid "Automatically detect links"
-#~ msgstr "Détecter automatiquement les liens"
-
-#~ msgid "Behavior"
-#~ msgstr "Comportement"
-
-#~ msgid "Composer Properties"
-#~ msgstr "Propriétés de l'éditeur"
-
-#~ msgid "Composer Properties planned"
-#~ msgstr "Propriétés planifiées de l'éditeur"
-
-#~ msgid "Configure spell checking"
-#~ msgstr "Configurer la vérification orthographique"
-
-#~ msgid "Enable spell checking"
-#~ msgstr "Activer la vérification orthographique"
-
-#~ msgid "Fixed width"
-#~ msgstr "Largeur constante"
-
-#~ msgid "Fonts"
-#~ msgstr "Polices"
-
-#~ msgid "For printing"
-#~ msgstr "Pour l'impression"
-
-#~ msgid "Grab keys"
-#~ msgstr "Capturer les touches"
-
-#~ msgid "Information"
-#~ msgstr "Information"
-
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "Raccourcis clavier"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "Divers"
-
-#~ msgid "New shortcut:"
-#~ msgstr "Nouveau raccourci :"
-
-#~ msgid "On screen"
-#~ msgstr "Pour l'écran"
-
-#~ msgid "Select HTML fixed width font"
-#~ msgstr "Sélectionnez une police HTML à largeur constante"
-
-#~ msgid "Select HTML fixed width font for printing"
-#~ msgstr "Sélectionnez une police HTML à largeur constante pour l'impression"
-
-#~ msgid "Select HTML variable width font"
-#~ msgstr "Sélectionnez une police HTML à largeur variable"
-
-#~ msgid "Select HTML variable width font for printing"
-#~ msgstr "Sélectionnez une police HTML à largeur variable pour l'impression"
-
-#~ msgid "Shortcuts _type:"
-#~ msgstr "_Type de raccourcis :"
-
-#~ msgid "Show animated images"
-#~ msgstr "Afficher les images animées"
-
-#~ msgid "Variable width"
-#~ msgstr "Largeur variable"
-
-#~ msgid "_Add"
-#~ msgstr "A_jouter"
-
-#~ msgid "_Delete"
-#~ msgstr "_Supprimer"
-
-#~ msgid ""
-#~ "Cannot execute GNOME Spell control applet\n"
-#~ "Try to install GNOME Spell if you don't have it installed."
-#~ msgstr ""
-#~ "Impossible d'exécuter l'applet de contrôle GNOME Spell\n"
-#~ "Essayez d'installer GNOME Spell s'il n'est pas installé."
