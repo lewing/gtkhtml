@@ -185,7 +185,7 @@ GtkWidget *
 text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 {
 	GtkHTMLEditTextProperties *data = g_new (GtkHTMLEditTextProperties, 1);
-	GtkWidget *vbox, *frame, *table, *menu, *menuitem, *hbox, *t1;
+	GtkWidget *vbox, *frame, *table, *menu, *menuitem, *hbox, *t1, *label;
 	gboolean selection;
 	const gchar *target;
 	const gchar *url;
@@ -215,17 +215,13 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	html_color_ref (data->color);
 
 	table = gtk_table_new (3, 2, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 12);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 4);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 18);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 18);
 
-	vbox = gtk_vbox_new (FALSE, 6);
-	frame = gtk_frame_new (_("Style"));
 	t1 = gtk_table_new (2, 2, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (t1), 6);
 
 #define ADD_CHECK(x,c,r) \
-	data->check [i] = gtk_check_button_new_with_label (x); \
+	data->check [i] = gtk_check_button_new_with_mnemonic (x); \
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (data->check [i]), data->style_or & styles [i]); \
         g_object_set_data (G_OBJECT (data->check [i]), "style", GUINT_TO_POINTER (styles [i])); \
         g_signal_connect (data->check [i], "toggled", G_CALLBACK (set_style), data); \
@@ -233,34 +229,24 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
         i++
 
 	i=0;
-	ADD_CHECK (_("Bold"), 0, 0);
-	ADD_CHECK (_("Italic"), 0, 1);
-	ADD_CHECK (_("Underline"), 1, 0);
-	ADD_CHECK (_("Strikeout"), 1, 1);
+	ADD_CHECK (_("_Bold"), 0, 0);
+	ADD_CHECK (_("_Italic"), 0, 1);
+	ADD_CHECK (_("_Underline"), 1, 0);
+	ADD_CHECK (_("_Strikeout"), 1, 1);
 
-	gtk_container_add (GTK_CONTAINER (frame), t1);
-	gtk_box_pack_start_defaults (GTK_BOX (vbox), frame);
+	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Style"), t1), 0, 1, 0, 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
 	if (html_engine_is_selection_active (cd->html->engine)) {
 		GtkWidget *f1;
 
-		frame = gtk_frame_new (_("Click will follow this URL"));
 		data->entry_url = gtk_entry_new ();
-		if (data->url) {
+		if (data->url)
 			gtk_entry_set_text (GTK_ENTRY (data->entry_url), data->url);
-		}
-		f1 = gtk_frame_new (NULL);
-		gtk_container_set_border_width (GTK_CONTAINER (f1), 6);
-		gtk_frame_set_shadow_type (GTK_FRAME (f1), GTK_SHADOW_NONE);
-		gtk_container_add (GTK_CONTAINER (f1), data->entry_url);
-		gtk_container_add (GTK_CONTAINER (frame), f1);
-		gtk_box_pack_start_defaults (GTK_BOX (vbox), frame);
 		g_signal_connect (data->entry_url, "changed", G_CALLBACK (set_url), data);
+
+		gtk_table_attach_defaults (GTK_TABLE (table), editor_hig_vbox (_("Click Will Follow This URL"), data->entry_url), 0, 1, 1, 2);
 	}
 
-	gtk_table_attach_defaults (GTK_TABLE (table), vbox, 0, 1, 0, 2);
-
-	frame = gtk_frame_new (_("Size"));
 	menu = gtk_menu_new ();
 
 #undef ADD_ITEM
@@ -283,36 +269,30 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->sel_size = gtk_option_menu_new ();
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (data->sel_size), menu);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (data->sel_size), get_size (data->style_or));
-	vbox = gtk_vbox_new (FALSE, 0);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
-	gtk_box_pack_start (GTK_BOX (vbox), data->sel_size, FALSE, FALSE, 0);
-	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	gtk_table_attach (GTK_TABLE (table), frame, 1, 2, 0, 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+
+	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Size"), editor_hig_inner_hbox (_("_Relative:"), data->sel_size)),
+			  1, 2, 0, 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
 	/* color selection */
-	frame = gtk_frame_new (_("Color"));
-	hbox = gtk_hbox_new (FALSE, 12);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
-
 	data->color_combo = color_combo_new (NULL, _("Automatic"),
 					     &data->color->color,
 					     color_group_fetch ("text", data->cd));
         g_signal_connect (data->color_combo, "color_changed", G_CALLBACK (color_changed), data);
+	gtk_widget_show (data->color_combo);
 
-	vbox = gtk_vbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox), data->color_combo, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
-
-	gtk_container_add (GTK_CONTAINER (frame), hbox);
-	gtk_table_attach (GTK_TABLE (table), frame, 1, 2, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Color"), editor_hig_inner_hbox (_("_Foreground:"), data->color_combo)),
+			  1, 2, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
 	/* sample */
 	gtk_table_attach (GTK_TABLE (table), sample_frame (&data->sample), 0, 2, 2, 3, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 	fill_sample (data);
 
-	gtk_widget_show_all (table);
+	vbox = gtk_vbox_new (FALSE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
+	gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
+	gtk_widget_show_all (vbox);
 
-	return table;
+	return vbox;
 }
 
 gboolean

@@ -36,4 +36,16 @@ void       url_requested                           (GtkHTML           *html,
 void       our_gnome_pixmap_entry_set_last_pixmap  (GnomePixmapEntry  *entry);
 void       our_gnome_pixmap_entry_set_last_dir     (GnomePixmapEntry  *entry);
 
+GtkWidget *editor_hig_inner_hbox  (gchar     *text,
+				   GtkWidget *control);
+GtkWidget *editor_hig_vbox        (gchar     *text,
+				   GtkWidget *control);
+GtkWidget *editor_hig_vbox_full   (gchar     *text,
+				   GtkWidget *control,
+				   gboolean   vexpand);
+void       editor_hig_attach_row  (GtkWidget *table,
+				   gchar     *text,
+				   GtkWidget *control,
+				   int        row);
+
 #endif

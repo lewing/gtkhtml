@@ -99,7 +99,7 @@ GtkWidget *
 paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 {
 	GtkHTMLEditParagraphProperties *data = g_new0 (GtkHTMLEditParagraphProperties, 1);
-	GtkWidget *hbox, *menu, *menuitem, *frame, *radio, *table;
+	GtkWidget *hbox, *menu, *menuitem, *vbox, *radio, *table;
 	GSList *group;
 	gint h=0, i=0;
 
@@ -110,13 +110,9 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->flow  = HTML_CLUEFLOW (cd->html->engine->cursor->object->parent);
 
 	table = gtk_table_new (2, 2, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 12);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 4);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 18);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 18);
 
-	frame = gtk_frame_new (_("Style"));
-	hbox = gtk_hbox_new (FALSE, 12);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
 	menu = gtk_menu_new ();
 
 #define ADD_SEP menuitem = gtk_separator_menu_item_new (); gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem); gtk_widget_show (menuitem)
@@ -153,13 +149,10 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->style_option = gtk_option_menu_new ();
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (data->style_option), menu);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (data->style_option), h);
-	gtk_box_pack_start (GTK_BOX (hbox), data->style_option, FALSE, FALSE, 0);
-	gtk_container_add (GTK_CONTAINER (frame), hbox);
-	gtk_table_attach (GTK_TABLE (table), frame, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
 
-	frame = gtk_frame_new (_("Align"));
+	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Style"), data->style_option), 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+
 	hbox = gtk_hbox_new (FALSE, 12);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
 
 #define ADD_RADIO(x,a) \
 	radio = gtk_radio_button_new_with_label (group, x); \
@@ -174,14 +167,16 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	ADD_RADIO (_("Center"), GTK_HTML_PARAGRAPH_ALIGNMENT_CENTER);
 	ADD_RADIO (_("Right"), GTK_HTML_PARAGRAPH_ALIGNMENT_RIGHT);
 
-	gtk_container_add (GTK_CONTAINER (frame), hbox);
-	gtk_table_attach (GTK_TABLE (table), frame, 1, 2, 0, 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
-	gtk_table_attach (GTK_TABLE (table), sample_frame (&data->sample), 0, 2, 1, 2, GTK_FILL | GTK_EXPAND, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Align"), hbox), 1, 2, 0, 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), sample_frame (&data->sample), 0, 2, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 	fill_sample (data);
 
-	gtk_widget_show_all (table);
+	vbox = gtk_vbox_new (FALSE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
+	gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
+	gtk_widget_show_all (vbox);
 
-	return table;
+	return vbox;
 }
 
 gboolean

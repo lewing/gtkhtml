@@ -278,7 +278,7 @@ GtkWidget *
 body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 {
 	GtkHTMLEditBodyProperties *data = g_new0 (GtkHTMLEditBodyProperties, 1);
-	GtkWidget *hbox, *vbox, *frame, *combo, *table, *vb1;
+	GtkWidget *hbox, *vbox, *combo, *table, *label, *t1;
 	GSList *group;
 	HTMLColor *color;
 	gint i;
@@ -287,41 +287,29 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->cd = cd;
 	data->left_margin = 10;
 
-	table = gtk_table_new (2, 2, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 12);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 4);
+	table = gtk_table_new (3, 2, FALSE);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 18);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 18);
 
-	vb1 = gtk_vbox_new (FALSE, 6);
-	hbox = gtk_hbox_new (FALSE, 12);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
-	frame = gtk_frame_new (_("Template"));
+	t1 = gtk_table_new (2, 2, FALSE);
+	gtk_table_set_col_spacings (GTK_TABLE (t1), 12);
+	gtk_table_set_row_spacings (GTK_TABLE (t1), 4);
+
 	data->option_template = gtk_option_menu_new ();
 	fill_templates (data);
 	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (data->option_template)),
 			  "selection-done", G_CALLBACK (changed_template), data);
-	gtk_box_pack_start (GTK_BOX (hbox), data->option_template, FALSE, TRUE, 0);
-	gtk_container_add (GTK_CONTAINER (frame), hbox);
-	gtk_box_pack_start (GTK_BOX (vb1), frame, FALSE, TRUE, 0);
+	editor_hig_attach_row (t1, _("T_emplate:"), data->option_template, 0);
 	
-	hbox = gtk_hbox_new (FALSE, 12);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
 	data->entry_title = gtk_entry_new ();
 	if (gtk_html_get_title (data->cd->html)) {
 		gtk_entry_set_text (GTK_ENTRY (data->entry_title), 
 				    gtk_html_get_title (data->cd->html));
 	}
 	g_signal_connect (data->entry_title, "changed", G_CALLBACK (entry_changed), data);
-	gtk_box_pack_start_defaults (GTK_BOX (hbox), data->entry_title);
-	frame = gtk_frame_new (_("Document Title"));
-	gtk_container_add (GTK_CONTAINER (frame), hbox);
-	gtk_box_pack_start (GTK_BOX (vb1), frame, FALSE, TRUE, 0);	
+	editor_hig_attach_row (t1, _("T_itle:"), data->entry_title, 1);	
 
-	frame = gtk_frame_new (_("Background Image"));
-	vbox = gtk_vbox_new (FALSE, 4);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
 	data->pixmap_entry = gnome_pixmap_entry_new ("background_image", _("Background Image"), FALSE);
-
 	if (cd->html->engine->bgPixmapPtr) {
 		HTMLImagePointer *ip = (HTMLImagePointer *) cd->html->engine->bgPixmapPtr;
 		guint off = 0;
@@ -335,16 +323,11 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	g_signal_connect (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (data->pixmap_entry)),
 			  "changed", G_CALLBACK (entry_changed), data);
 
-	gtk_box_pack_start (GTK_BOX (vbox), data->pixmap_entry, FALSE, FALSE, 0);
+	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Document"), t1), 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Background Image"), data->pixmap_entry), 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach_defaults (GTK_TABLE (table), sample_frame (&data->sample), 0, 2, 2, 3);
 
-	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	gtk_box_pack_start_defaults (GTK_BOX (vb1), frame);
-	gtk_table_attach (GTK_TABLE (table), vb1, 0, 1, 0, 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
-	gtk_table_attach_defaults (GTK_TABLE (table), sample_frame (&data->sample), 0, 2, 1, 2);
-
-	frame = gtk_frame_new (_("Colors"));
-	vbox = gtk_vbox_new (FALSE, 2);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
+	t1 = gtk_table_new (3, 2, FALSE);
 
 	group = NULL;
 	i = 0;
@@ -358,24 +341,27 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
         color_combo_set_color (COLOR_COMBO (combo), &data->color [ct]); \
         g_object_set_data (G_OBJECT (combo), "type", GINT_TO_POINTER (ct)); \
         g_signal_connect (combo, "color_changed", G_CALLBACK (color_changed), data); \
-	hbox = gtk_hbox_new (FALSE, 12); \
-	gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE, FALSE, 0); \
-	gtk_box_pack_start (GTK_BOX (hbox), gtk_label_new (x), FALSE, FALSE, 0); \
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0); \
+	hbox = gtk_hbox_new (FALSE, 3); \
+        label = gtk_label_new_with_mnemonic (x); \
+        gtk_misc_set_alignment (GTK_MISC (label), .0, .5); \
+        gtk_table_attach (GTK_TABLE (t1), label, 0, 1, i, i + 1, GTK_FILL, GTK_FILL, 0, 0); \
+        gtk_table_attach (GTK_TABLE (t1), combo, 1, 2, i, i + 1, GTK_FILL, GTK_FILL, 0, 0); \
         i ++
 
-	ADD_COLOR (_("Text"), HTMLTextColor, "text");
-	ADD_COLOR (_("Link"), HTMLLinkColor, "link");
-	ADD_COLOR (_("Background"), HTMLBgColor, "bg");
+	ADD_COLOR (_("_Text:"), HTMLTextColor, "text");
+	ADD_COLOR (_("_Link:"), HTMLLinkColor, "link");
+	ADD_COLOR (_("_Background:"), HTMLBgColor, "bg");
 
-	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	gtk_table_attach_defaults (GTK_TABLE (table), frame, 1, 2, 0, 1);
+	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("Colors"), t1), 1, 2, 0, 2, GTK_FILL, GTK_FILL, 0, 0);
 	fill_sample (data);
 	/* gtk_idle_add (hide_preview, data); */
 
-	gtk_widget_show_all (table);
+	vbox = gtk_vbox_new (FALSE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
+	gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
+	gtk_widget_show_all (vbox);
 
-	return table;
+	return vbox;
 }
 
 gboolean

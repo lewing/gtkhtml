@@ -101,17 +101,83 @@ url_requested (GtkHTML *html, const gchar *url, GtkHTMLStream *handle)
 GtkWidget *
 sample_frame (GtkHTML **html)
 {
-	GtkWidget *frame, *scroll_frame;
+	GtkWidget *frame, *scroll_frame, *vbox;
 
-	frame = gtk_frame_new (_("Sample"));
 	*html = GTK_HTML (gtk_html_new ());
 	scroll_frame = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scroll_frame), GTK_SHADOW_IN);
 	gtk_container_set_border_width (GTK_CONTAINER (scroll_frame), 6);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll_frame), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add (GTK_CONTAINER (scroll_frame), GTK_WIDGET (*html));
-	gtk_container_add (GTK_CONTAINER (frame), scroll_frame);
+
+	gtk_widget_show (GTK_WIDGET (*html));
+	gtk_widget_show (scroll_frame);
+	vbox = editor_hig_vbox_full (_("Sample"), scroll_frame, TRUE);
+
 	g_signal_connect (*html, "url_requested", G_CALLBACK (url_requested), NULL);
 
-	return frame;
+	return vbox;
+}
+
+GtkWidget *
+editor_hig_vbox_full (gchar *text, GtkWidget *control, gboolean vexpand)
+{
+        GtkWidget *vbox, *hbox, *label;
+        gchar *markup;
+
+        markup = g_strconcat ("<span weight=\"bold\">", text, "</span>", NULL);
+	label = gtk_label_new (markup);
+        g_free (markup);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), .0, .5);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	hbox = gtk_hbox_new (FALSE, 0);
+
+	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0); \
+	gtk_box_pack_start (GTK_BOX (hbox), gtk_label_new ("    "), FALSE, FALSE, 0); \
+	gtk_box_pack_start (GTK_BOX (hbox), control, TRUE, TRUE, 0); \
+	gtk_box_pack_start (GTK_BOX (vbox), hbox, vexpand, vexpand, 0); \
+
+	gtk_widget_show (label);
+	gtk_widget_show (hbox);
+	gtk_widget_show (vbox);
+
+	return vbox;
+}
+
+GtkWidget *
+editor_hig_vbox (gchar *text, GtkWidget *control)
+{
+	editor_hig_vbox_full (text, control, FALSE);
+}
+
+GtkWidget *
+editor_hig_inner_hbox (gchar *text, GtkWidget *control)
+{
+	GtkWidget *hbox, *label;
+
+	hbox = gtk_hbox_new (FALSE, 6);
+	label = gtk_label_new_with_mnemonic (text);
+	gtk_misc_set_alignment (GTK_MISC (label), .0, .5);
+
+	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), control, FALSE, FALSE, 0);
+
+	gtk_widget_show (label);
+	gtk_widget_show (hbox);
+
+	return hbox;
+}
+
+void
+editor_hig_attach_row (GtkWidget *table, gchar *text, GtkWidget *control, int row)
+{
+	GtkWidget *label;
+
+	label = gtk_label_new_with_mnemonic (text);
+	gtk_misc_set_alignment (GTK_MISC (label), .0, .5);
+
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), control, 1, 2, row, row + 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 }

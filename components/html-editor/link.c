@@ -112,19 +112,13 @@ link_widget (GtkHTMLEditLinkProperties *data, gboolean insert)
 		stock_test_url_added = TRUE;
 	}
 
-	vbox = gtk_vbox_new (FALSE, 6);
+	vbox = gtk_vbox_new (FALSE, 18);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
 
 	data->entry_text = gtk_entry_new ();
 	data->entry_url  = gtk_entry_new ();
 
-	frame = gtk_frame_new (_("Link text"));
-	f1    = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (f1), GTK_SHADOW_NONE);
-	gtk_container_set_border_width (GTK_CONTAINER (f1), 6);
-	gtk_container_add (GTK_CONTAINER (f1), data->entry_text);
-	gtk_container_add (GTK_CONTAINER (frame), f1);
-	gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), editor_hig_vbox (_("Link Text"), data->entry_text), FALSE, FALSE, 0);
 
 	if (html_engine_is_selection_active (cd->html->engine)) {
 		gchar *str;
@@ -134,17 +128,11 @@ link_widget (GtkHTMLEditLinkProperties *data, gboolean insert)
 		g_free (str);
 	}
 
-	frame = gtk_frame_new (_("Click will follow this URL"));
-	f1    = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (f1), GTK_SHADOW_NONE);
-	gtk_container_set_border_width (GTK_CONTAINER (f1), 6);
-	hbox = gtk_hbox_new (FALSE, 12);
+	hbox = gtk_hbox_new (FALSE, 5);
 	button = gtk_button_new_from_stock (GTKHTML_STOCK_TEST_URL);
 	gtk_box_pack_start (GTK_BOX (hbox), data->entry_url, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-	gtk_container_add (GTK_CONTAINER (f1), hbox);
-	gtk_container_add (GTK_CONTAINER (frame), f1);
-	gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), editor_hig_vbox (_("Click Will Follow This URL"), hbox), FALSE, FALSE, 0);
 
 	if (!insert) {
 		gtk_widget_set_sensitive (data->entry_text, FALSE);
