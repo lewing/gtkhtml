@@ -146,25 +146,26 @@ draw_text (HTMLPainter *painter,
 	   const gchar *text,
 	   gint len)
 {
-	/* HTMLGdkPainter *gdk_painter;
-	EFont *e_font;
-
-	gdk_painter = HTML_GDK_PAINTER (painter);
+	HTMLGdkPainter *gdk_painter;
+	PangoFontDescription *desc;
+	PangoLayout *layout;
+	gint blen;
 
 	if (len == -1)
 		len = g_utf8_strlen (text, -1);
 
+	gdk_painter = HTML_GDK_PAINTER (painter);
+	desc = html_painter_get_font (painter, painter->font_face, painter->font_style);
+	layout = pango_layout_new (gdk_painter->pc);
+	pango_layout_set_font_description (layout, desc);
+	blen = g_utf8_offset_to_pointer (text, len) - text;
+	pango_layout_set_text (layout, text, blen);
+
 	x -= gdk_painter->x1;
 	y -= gdk_painter->y1;
 
-	e_font = html_painter_get_font (painter, painter->font_face,
-					painter->font_style);
-
-	e_font_draw_utf8_text (gdk_painter->pixmap, e_font, 
-			       e_style (painter->font_style), gdk_painter->gc,
-			       x, y, text, 
-			       g_utf8_offset_to_pointer (text, len) - text);
-	*/
+	gdk_draw_layout (gdk_painter->pixmap, gdk_painter->gc, x, y, layout);
+	g_object_unref (layout);
 }
 
 static void
