@@ -4238,7 +4238,7 @@ html_engine_parse (HTMLEngine *e)
 	/* reset settings to default ones */
 	html_colorset_set_by (e->settings->color_set, e->defaultSettings->color_set);
 
-	e->clue = html_cluev_new (0, 0, 100);
+	e->clue = html_cluev_new (e->leftBorder, e->topBorder, 100);
 	HTML_CLUE (e->clue)->valign = HTML_VALIGN_TOP;
 	HTML_CLUE (e->clue)->halign = HTML_HALIGN_LEFT;
 

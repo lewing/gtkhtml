@@ -4025,7 +4025,7 @@ load_bindings_from_file (gboolean from_share, gchar *name)
 {
 	gchar *rcfile;
 
-	rcfile = g_strconcat ((from_share ? PREFIX "/share/gtkhtml/" : gnome_util_user_home ()),
+	rcfile = g_strconcat ((from_share ? PREFIX "/share/gtkhtml/" GTK_HTML_RELEASE "/": gnome_util_user_home ()),
 			      (from_share ? "" : "/.gnome/"), name, NULL);
 	/* FIX2 if (g_file_test (rcfile, G_FILE_TEST_ISFILE)) */
 		gtk_rc_parse (rcfile);
@@ -4287,13 +4287,14 @@ get_value_nick (GtkHTMLCommandType com_type)
 void
 gtk_html_editor_event_command (GtkHTML *html, GtkHTMLCommandType com_type, gboolean before)
 {
-	GValue args [1];
+	GValue arg = { 0, };
 
-	g_value_set_string (&args [0], get_value_nick (com_type));
+	g_value_init (&arg, G_TYPE_STRING);
+	g_value_set_static_string (&arg, get_value_nick (com_type));
 
 	/* printf ("sending %s\n", GTK_VALUE_STRING (*args [0])); */
 	gtk_html_editor_event (html, before ? GTK_HTML_EDITOR_EVENT_COMMAND_BEFORE : GTK_HTML_EDITOR_EVENT_COMMAND_AFTER,
-			       args);
+			       &arg);
 }
 
 void

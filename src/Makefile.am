@@ -196,7 +196,7 @@ EXTRA_DIST = \
 	keybindingsrc.xemacs \
 	keybindingsrc.ms
 
-keybindingsdir = $(datadir)/$(GTKHTML_RELEASE)/gtkhtml
+keybindingsdir = $(datadir)/gtkhtml/$(GTKHTML_RELEASE)
 keybindings_DATA = \
 	keybindingsrc.emacs \
 	keybindingsrc.xemacs \

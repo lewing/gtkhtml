@@ -20,6 +20,7 @@
 #undef GNOME_GTKHTML_EDITOR_SHLIB
 #undef EDITOR_API_VERSION
 #undef GETTEXT_PACKAGE
+#undef GTK_HTML_RELEASE
 
 @BOTTOM@
 /* This is from libglade */

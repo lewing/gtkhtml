@@ -225,6 +225,8 @@ draw_obj (HTMLDrawQueue *queue,
 		return;
 
 	e = queue->engine;
+	e->clue->x = e->leftBorder;
+	e->clue->y = e->topBorder + e->clue->ascent;
 
 	html_object_engine_translation (obj, e, &tx, &ty);
 	if (!html_object_engine_intersection (obj, e, tx, ty, &x1, &y1, &x2, &y2))
@@ -280,6 +282,8 @@ clear (HTMLDrawQueue *queue,
 	gint x1, y1, x2, y2;
 
 	e = queue->engine;
+	e->clue->x = e->leftBorder;
+	e->clue->y = e->topBorder + e->clue->ascent;
 
 	x1 = elem->x;
 	y1 = elem->y;

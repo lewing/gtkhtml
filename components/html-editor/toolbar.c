@@ -573,11 +573,7 @@ create_style_toolbar (GtkHTMLControlData *cd)
 	hbox = gtk_hbox_new (FALSE, 0);
 
 	cd->toolbar_style = gtk_toolbar_new ();
-	gtk_toolbar_set_style (GTK_TOOLBAR (cd->toolbar_style), GTK_TOOLBAR_ICONS);
-
 	gtk_box_pack_start (GTK_BOX (hbox), cd->toolbar_style, TRUE, TRUE, 0);
-
-	gtk_widget_show_all (hbox);
 
 	cd->paragraph_option = setup_paragraph_style_option_menu (cd->html),
 	gtk_toolbar_prepend_widget (GTK_TOOLBAR (cd->toolbar_style),
@@ -619,6 +615,9 @@ create_style_toolbar (GtkHTMLControlData *cd)
 
 	gtk_signal_connect (GTK_OBJECT (cd->html), "current_paragraph_alignment_changed",
 			    GTK_SIGNAL_FUNC (paragraph_alignment_changed_cb), cd);
+
+	gtk_toolbar_set_style (GTK_TOOLBAR (cd->toolbar_style), GTK_TOOLBAR_ICONS);
+	gtk_widget_show_all (hbox);
 
 	return hbox;
 }

@@ -1821,6 +1821,9 @@ html_object_engine_translation (HTMLObject *o, HTMLEngine *e, gint *tx, gint *ty
 		*tx += p->x;
 		*ty += p->y - p->ascent;
 	}
+
+	//*tx += e->leftBorder;
+	//*ty += e->topBorder;
 }
 
 gboolean
