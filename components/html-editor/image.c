@@ -80,6 +80,9 @@ struct _GtkHTMLEditImageProperties {
 	GtkWidget *entry_url;
 	gchar *url;
 
+	GtkWidget *entry_alt;
+	gchar *alt;
+
 	gboolean   disable_change;
 };
 typedef struct _GtkHTMLEditImageProperties GtkHTMLEditImageProperties;
@@ -113,7 +116,7 @@ static ImageInsertTemplate image_templates [TEMPLATES] = {
 	{
 		N_("Plain"), 1,
 		TRUE, TRUE, TRUE, TRUE, HTML_VALIGN_TOP, 0, 0, 0, 0, FALSE, 0, FALSE,
-		N_("@link_begin@<img@width@@height@@align@ border=@border@@padh@@padv@@src@>@link_end@")
+		N_("@link_begin@<img@alt@@width@@height@@align@ border=@border@@padh@@padv@@src@>@link_end@")
 	},
 	{
 		N_("Frame"), 1,
@@ -122,7 +125,7 @@ static ImageInsertTemplate image_templates [TEMPLATES] = {
 		   "<tr><td>"
 		   "<table bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\">"
 		   "<tr><td align=\"center\">"
-		   "<img @src@@width@@height@align=top border=0>"
+		   "<img @src@@alt@@width@@height@align=top border=0>"
 		   "</td></tr></table></td></tr></table></center>")
 	},
 	{
@@ -132,7 +135,7 @@ static ImageInsertTemplate image_templates [TEMPLATES] = {
 		   "<tr><td>"
 		   "<table bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\">"
 		   "<tr><td align=\"center\">"
-		   "<img @src@@width@@height@align=top border=0>"
+		   "<img @src@@alt@@width@@height@align=top border=0>"
 		   "</td></tr>"
 		   "<tr><td><b>[Place your comment here]</td></tr>"
 		   "</table></td></tr></table></center>")
@@ -200,7 +203,7 @@ get_location (GtkHTMLEditImageProperties *d)
 static gchar *
 get_sample_html (GtkHTMLEditImageProperties *d, gboolean insert)
 {
-	gchar *html, *image, *body, *width, *height, *align, *src, *border, *padh, *padv, *lbegin, *lend, *location;
+	gchar *html, *image, *body, *width, *height, *align, *src, *alt, *border, *padh, *padv, *lbegin, *lend, *location;
 
 	if ((d->width || d->width_percent == 1) && d->width_percent != 2)
 		width  = g_strdup_printf (" width=\"%d%s\"", d->width, d->width_percent ? "%" : "");
@@ -216,6 +219,7 @@ get_sample_html (GtkHTMLEditImageProperties *d, gboolean insert)
 				   ? "top" : (d->align == HTML_VALIGN_MIDDLE ? "middle" : "bottom"));
 	location = get_location (d);
 	src    = g_strdup_printf (" src=\"%s\"", location);
+	alt    = g_strdup_printf (" alt=\"%s\"", d->alt ? d->alt : "");
 	padh   = g_strdup_printf (" hspace=%d", d->padh);
 	padv   = g_strdup_printf (" vspace=%d", d->padv);
 	border = g_strdup_printf ("%d", d->border);
@@ -234,6 +238,7 @@ get_sample_html (GtkHTMLEditImageProperties *d, gboolean insert)
 
 	image   = g_strdup (image_templates [d->template].image);
 	image   = substitute_string (image, "@src@", src);
+	image   = substitute_string (image, "@alt@", alt);
 	image   = substitute_string (image, "@padh@", padh);
 	image   = substitute_string (image, "@padv@", padv);
 	image   = substitute_string (image, "@width@", width);
@@ -308,6 +313,15 @@ url_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 }
 
 static void
+alt_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
+{
+	g_free (d->alt);
+	d->alt = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+	CHANGE;
+	FILL;
+}
+
+static void
 changed_align (GtkWidget *w, GtkHTMLEditImageProperties *d)
 {
 	d->align = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w)));;
@@ -334,6 +348,15 @@ changed_height_percent (GtkWidget *w, GtkHTMLEditImageProperties *d)
 }
 
 static void
+test_url_clicked (GtkWidget *w, GtkHTMLEditImageProperties *d)
+{
+	const char *url = gtk_entry_get_text (GTK_ENTRY (d->entry_url));
+
+	if (url)
+		gnome_url_show (url, NULL);
+}
+
+static void
 fill_templates (GtkHTMLEditImageProperties *d)
 {
 	GtkWidget *menu;
@@ -351,6 +374,7 @@ static void
 set_ui (GtkHTMLEditImageProperties *d)
 {
 	gchar *url;
+	gchar *alt;
 
 	d->disable_change = TRUE;
 
@@ -367,6 +391,7 @@ set_ui (GtkHTMLEditImageProperties *d)
 
 	printf ("set ui (8) %s\n", d->url);
 	gtk_entry_set_text (GTK_ENTRY (d->entry_url), d->url ? d->url : "");
+	gtk_entry_set_text (GTK_ENTRY (d->entry_alt), d->alt ? d->alt : "");
 	gtk_entry_set_text (GTK_ENTRY (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (d->pentry))),
 			    d->location ? d->location : "");
 
@@ -551,6 +576,9 @@ image_widget (GtkHTMLEditImageProperties *d, gboolean insert)
 	d->entry_url = glade_xml_get_widget (xml, "entry_image_url");
 	g_signal_connect (GTK_OBJECT (d->entry_url), "changed", G_CALLBACK (url_changed), d);
 
+	d->entry_alt = glade_xml_get_widget (xml, "entry_image_alt");
+	g_signal_connect (d->entry_alt, "changed", G_CALLBACK (alt_changed), d);
+
 	d->pentry = glade_xml_get_widget (xml, "pentry_image_location");
 	g_signal_connect (GTK_OBJECT (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (d->pentry))),
 			    "changed", G_CALLBACK (pentry_changed), d);
@@ -559,6 +587,8 @@ image_widget (GtkHTMLEditImageProperties *d, gboolean insert)
 	if (!insert)
 		gtk_widget_hide (frame_template);
 	gnome_pixmap_entry_set_preview (GNOME_PIXMAP_ENTRY (d->pentry), FALSE);
+
+	glade_xml_signal_connect_data (xml, "image_test_url", GTK_SIGNAL_FUNC (test_url_clicked), d);
 
 	return d->page;
 }
@@ -613,6 +643,7 @@ get_data (GtkHTMLEditImageProperties *d, HTMLImage *image)
 	d->padv   = image->vspace;
 	d->border = image->border;
 	d->url    = image->url ? g_strconcat (image->url, image->target ? "#" : "", image->target, NULL) : g_strdup ("");
+	d->alt    = g_strdup (image->alt);
 }
 
 GtkWidget *
@@ -661,6 +692,7 @@ insert_or_apply (GtkHTMLControlData *cd, gpointer get_data, gboolean insert)
 		location = get_location (d);
 		html_image_edit_set_url (image, location);
 		g_free (location);
+		html_image_set_alt (image, d->url);
 
 		url = d->url;
 		target = NULL;
@@ -701,6 +733,7 @@ image_close_cb (GtkHTMLControlData *cd, gpointer get_data)
 	GtkHTMLEditImageProperties *d = (GtkHTMLEditImageProperties *) get_data;
 
 	g_free (d->url);
+	g_free (d->alt);
 	g_free (d->location);
 	g_free (d);
 }
