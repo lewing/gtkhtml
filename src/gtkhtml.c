@@ -50,6 +50,7 @@
 #include "htmlframe.h"
 #include "htmliframe.h"
 #include "htmlimage.h"
+#include "htmlinterval.h"
 #include "htmllinktext.h"
 #include "htmlmarshal.h"
 #include "htmlplainpainter.h"
