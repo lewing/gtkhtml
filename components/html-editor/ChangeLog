@@ -1,3 +1,9 @@
+2002-08-21  Radek Doulik  <rodo@ximian.com>
+
+	* menubar.c (indent_more_cb): removed properties menu item as it
+	doesn't play nice with evo. now clients have to call capplet or
+	provide own settings if needed
+
 2002-06-06  Radek Doulik  <rodo@ximian.com>
 
 	* menubar.c: added insert text/html file items and implemented
