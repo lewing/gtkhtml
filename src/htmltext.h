@@ -142,9 +142,14 @@ gint              html_text_text_line_length             (const gchar      *text
 							  gint             *line_offset,
 							  guint             len,
 							  gint             *tabs);
+gint              html_text_calc_part_width              (HTMLText         *text,
+							  gint              offset,
+							  gint              len);
 /*
  * protected
  */
+HTMLTextPangoInfo * html_text_get_pango_info (HTMLText *text, HTMLPainter *painter);
+
 typedef HTMLObject * (* HTMLTextHelperFunc)       (HTMLText *, gint begin, gint end);
 HTMLObject *html_text_op_copy_helper    (HTMLText           *text,
 					 GList              *from,

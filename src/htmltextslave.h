@@ -37,7 +37,7 @@ struct _HTMLTextSlave {
 	guint start_word;
 	gchar *charStart;
 
-	GList *items;
+	HTMLTextPangoInfo *pi;
 	GList *glyphs;
 };
 

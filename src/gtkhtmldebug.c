@@ -227,13 +227,13 @@ debug_word_width (HTMLText *t, gint level)
 {
 	guint i;
 
-	for (i = 0; i < level; i++)
+	/*	for (i = 0; i < level; i++)
 		g_print ("\t");
 
 	printf ("words: %d | ", t->words);
 	for (i = 0; i < t->words; i ++)
 		printf ("%d ", t->word_width [i]);
-	printf ("\n");
+		printf ("\n"); */
 }
 
 static void

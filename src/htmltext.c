@@ -339,7 +339,6 @@ html_text_op_cut_helper (HTMLText *text, HTMLEngine *e, GList *from, GList *to, 
 		*len += text->text_len;
 	}
 
-	html_text_clear_word_width (text);
 	html_object_change_set (HTML_OBJECT (text), HTML_CHANGE_ALL_CALC);
 
 	/* printf ("after cut '%s'\n", text->text);
@@ -401,7 +400,6 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, G
 	pi_destroy (t1);
 	pi_destroy (t2);
 
-	html_text_clear_word_width (t1);
 	/* html_text_request_word_width (t1, e->painter); */
 	/* printf ("merged '%s'\n", t1->text); */
 	/* printf ("--- after merge\n");
@@ -469,8 +467,6 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	html_object_change_set (self, HTML_CHANGE_ALL_CALC);
 	html_object_change_set (dup,  HTML_CHANGE_ALL_CALC);
 
-	html_text_clear_word_width (HTML_TEXT (self));
-	html_text_clear_word_width (HTML_TEXT (dup));
 	pi_destroy (HTML_TEXT (self));
 
 	level--;
@@ -621,8 +617,8 @@ get_item_index (HTMLText *text, gint offset, gint *item_offset)
 	return idx;
 }
 
-static gint
-calc_width (HTMLText *text, gint offset, gint len)
+gint
+html_text_calc_part_width (HTMLText *text, gint offset, gint len)
 {
 	gint idx, width = 0;
 
@@ -652,9 +648,7 @@ calc_preferred_width (HTMLObject *self,
 
 	text = HTML_TEXT (self);
 
-	html_text_request_word_width (text, painter);
-
-	width = calc_width (text, 0, text->text_len);
+	width = html_text_calc_part_width (text, 0, text->text_len);
 	if (html_clueflow_tabs (HTML_CLUEFLOW (self->parent), painter)) {
 		gint line_offset;
 		gint tabs;
@@ -833,8 +827,6 @@ html_text_get_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
 	    || (!begin && html_text_get_char (text, text->text_len - 1) == ' '))
 		return 0;
 
-	html_text_request_word_width (text, painter);
-
 	/* FIXME-words return min_word_width (text, painter, begin ? 0 : text->words - 1)
 	   + (text->words == 1 ? get_next_nb_width (text, painter, begin) : 0); */
 	return 10;
@@ -896,8 +888,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 	guint i, w, mw;
 
 	pi_destroy (text);
-	html_text_get_items (text, painter);
-	html_text_request_word_width (text, painter);
+	html_text_get_pango_info (text, painter);
 	mw = 0;
 
 	/* FIXME-words for (i = 0; i < text->words; i++) {
@@ -1119,12 +1110,12 @@ html_text_convert_nbsp (HTMLText *text, gboolean free_text)
 	gchar *to_free;
 
 	if (is_convert_nbsp_needed (text->text, &delta)) {
-		html_text_clear_word_width (text);
 		to_free    = text->text;
 		text->text = g_malloc (strlen (to_free) + delta + 1);
 		convert_nbsp (text->text, to_free);
 		if (free_text)
 			g_free (to_free);
+		html_object_change_set (HTML_OBJECT (text), HTML_CHANGE_ALL);
 		return TRUE;
 	}
 	return FALSE;
