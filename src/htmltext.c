@@ -943,7 +943,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 {
 	HTMLText *text = HTML_TEXT (self);
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
-	gint mw, ww = 0;
+	gint mw = 0, ww = 0;
 	gint ii, io, offset;
 
 	offset = 0;
