@@ -355,7 +355,7 @@ pop_clueflow_style (HTMLEngine *e)
 
 /* Utility functions.  */
 
-static void new_flow (HTMLEngine *e, HTMLObject *clue, HTMLObject *first_object);
+static void new_flow (HTMLEngine *e, HTMLObject *clue, HTMLObject *first_object, HTMLClearType clear);
 static void close_flow (HTMLEngine *e, HTMLObject *clue);
 
 static HTMLObject *
@@ -370,11 +370,11 @@ text_new (HTMLEngine *e, const gchar *text, GtkHTMLFontStyle style, HTMLColor *c
 }
 
 static HTMLObject *
-flow_new (HTMLEngine *e, HTMLClueFlowStyle style, guint8 level, HTMLListType item_type, gint item_number)
+flow_new (HTMLEngine *e, HTMLClueFlowStyle style, guint8 level, HTMLListType item_type, gint item_number, HTMLClearType clear)
 {
 	HTMLObject *o;
 
-	o = html_clueflow_new (style, level, item_type, item_number);
+	o = html_clueflow_new (style, level, item_type, item_number, clear);
 	html_engine_set_object_data (e, o);
 
 	return o;
@@ -397,7 +397,7 @@ insert_paragraph_break (HTMLEngine *e,
 {
 	
 	close_flow (e, clue);
-	new_flow (e, clue, create_empty_text (e));
+	new_flow (e, clue, create_empty_text (e), HTML_CLEAR_NONE);
 	close_flow (e, clue);
 }
 
@@ -417,8 +417,8 @@ add_line_break (HTMLEngine *e,
 		HTMLClearType clear)
 {
 	if (!e->flow && !HTML_CLUE (clue)->head)
-		new_flow (e, clue, create_empty_text (e));
-	new_flow (e, clue, NULL);
+		new_flow (e, clue, create_empty_text (e), HTML_CLEAR_NONE);
+	new_flow (e, clue, NULL, clear);
 }
 
 static void
@@ -463,11 +463,11 @@ close_flow (HTMLEngine *e,
 }
 
 static void
-new_flow (HTMLEngine *e, HTMLObject *clue, HTMLObject *first_object)
+new_flow (HTMLEngine *e, HTMLObject *clue, HTMLObject *first_object, HTMLClearType clear)
 {
 	close_flow (e, clue);
 
-	e->flow = flow_new (e, current_clueflow_style (e), e->indent_level, HTML_LIST_TYPE_UNORDERED, 0);
+	e->flow = flow_new (e, current_clueflow_style (e), e->indent_level, HTML_LIST_TYPE_UNORDERED, 0, clear);
 
 	HTML_CLUE (e->flow)->halign = e->pAlign;
 
@@ -487,7 +487,7 @@ append_element (HTMLEngine *e,
 	e->avoid_para = FALSE;
 
 	if (e->flow == NULL)
-		new_flow (e, clue, obj);
+		new_flow (e, clue, obj, HTML_CLEAR_NONE);
 	else
 		html_clue_append (HTML_CLUE (e->flow), obj);
 }
@@ -2499,7 +2499,7 @@ parse_l (HTMLEngine *p, HTMLObject *clue, const gchar *str)
 			
 		close_flow (p, clue);
 		
-		p->flow = flow_new (p, HTML_CLUEFLOW_STYLE_LIST_ITEM, p->indent_level, listType, itemNumber);
+		p->flow = flow_new (p, HTML_CLUEFLOW_STYLE_LIST_ITEM, p->indent_level, listType, itemNumber, HTML_CLEAR_NONE);
 		html_clue_append (HTML_CLUE (clue), p->flow);
 
 		p->avoid_para = TRUE;
@@ -3526,7 +3526,7 @@ html_engine_ensure_editable (HTMLEngine *engine)
 	if (head == NULL || HTML_OBJECT_TYPE (head) != HTML_TYPE_CLUEFLOW) {
 		HTMLObject *clueflow;
 
-		clueflow = flow_new (engine, HTML_CLUEFLOW_STYLE_NORMAL, 0, HTML_LIST_TYPE_UNORDERED, 0);
+		clueflow = flow_new (engine, HTML_CLUEFLOW_STYLE_NORMAL, 0, HTML_LIST_TYPE_UNORDERED, 0, HTML_CLEAR_NONE);
 		html_clue_prepend (HTML_CLUE (cluev), clueflow);
 
 		head = clueflow;

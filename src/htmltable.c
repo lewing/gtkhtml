@@ -1928,6 +1928,7 @@ fit_line (HTMLObject *o,
 	  HTMLPainter *painter,
 	  gboolean start_of_line,
 	  gboolean first_run,
+	  gboolean next_to_floating,
 	  gint width_left)
 {
 	return HTML_FIT_COMPLETE;

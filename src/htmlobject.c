@@ -229,10 +229,11 @@ fit_line (HTMLObject *o,
 	  HTMLPainter *painter,
 	  gboolean start_of_line,
 	  gboolean first_run,
+	  gboolean next_to_floating,
 	  gint width_left)
 {
 	html_object_calc_size (o, painter, FALSE);
-	return (o->width <= width_left || first_run) ? HTML_FIT_COMPLETE : HTML_FIT_NONE;
+	return (o->width <= width_left || (first_run && !next_to_floating)) ? HTML_FIT_COMPLETE : HTML_FIT_NONE;
 }
 
 static gboolean
@@ -272,13 +273,13 @@ set_max_width (HTMLObject *o, HTMLPainter *painter, gint max_width)
 }
 
 static gint
-get_left_margin (HTMLObject *self, HTMLPainter *painter, gint y)
+get_left_margin (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_aligned)
 {
 	return 0;
 }
 
 static gint
-get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y)
+get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_aligned)
 {
 	return MAX (self->max_width, self->width);
 }
@@ -597,7 +598,12 @@ tail (HTMLObject *self)
 	return NULL;
 }
 
-
+static HTMLClearType
+get_clear (HTMLObject *self)
+{
+	return HTML_CLEAR_NONE;
+}
+
 /* Class initialization.  */
 
 void
@@ -669,6 +675,7 @@ html_object_class_init (HTMLObjectClass *klass,
 	klass->head = head;
 	klass->tail = tail;
 	klass->get_engine = get_engine;
+	klass->get_clear = get_clear;
 }
 
 void
@@ -869,10 +876,10 @@ html_object_fit_line (HTMLObject *o,
 		      HTMLPainter *painter,
 		      gboolean start_of_line, 
 		      gboolean first_run,
+		      gboolean next_to_floating,
 		      gint width_left)
 {
-	return (* HO_CLASS (o)->fit_line) (o, painter, start_of_line,
-					   first_run, width_left);
+	return (* HO_CLASS (o)->fit_line) (o, painter, start_of_line, first_run, next_to_floating, width_left);
 }
 
 gboolean
@@ -905,15 +912,15 @@ html_object_set_max_width (HTMLObject *o, HTMLPainter *painter, gint max_width)
 }
 
 gint
-html_object_get_left_margin (HTMLObject *self, HTMLPainter *painter, gint y)
+html_object_get_left_margin (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_aligned)
 {
-	return (* HO_CLASS (self)->get_left_margin) (self, painter, y);
+	return (* HO_CLASS (self)->get_left_margin) (self, painter, y, with_aligned);
 }
 
 gint
-html_object_get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y)
+html_object_get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_aligned)
 {
-	return (* HO_CLASS (self)->get_right_margin) (self, painter, y);
+	return (* HO_CLASS (self)->get_right_margin) (self, painter, y, with_aligned);
 }
 
 static void
@@ -1909,4 +1916,10 @@ gint
 html_object_get_child_index (HTMLObject *self, HTMLObject *child)
 {
 	return HO_CLASS (self)->get_child_index ? (* HO_CLASS (self)->get_child_index) (self, child) : -1;
+}
+
+HTMLClearType
+html_object_get_clear (HTMLObject *self)
+{
+	return (* HO_CLASS (self)->get_clear) (self);
 }
