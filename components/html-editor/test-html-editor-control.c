@@ -23,6 +23,10 @@
 
 #include <config.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include <gnome.h>
 #include <bonobo.h>
 
@@ -113,6 +117,7 @@ save_through_plain_persist_stream (const gchar *filename,
 	CORBA_exception_init (&ev);
 
 	stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
+				     Bonobo_Storage_READ | 
 				     Bonobo_Storage_WRITE |
 				     Bonobo_Storage_CREATE |
 				     Bonobo_Storage_FAILIFEXIST, S_IRUSR | S_IWUSR);
