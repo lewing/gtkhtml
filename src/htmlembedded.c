@@ -69,8 +69,8 @@ draw (HTMLObject *o,
 		return;
 
 	if (element->widget) {
-		new_x = GTK_LAYOUT (element->parent)->hadjustment->value + o->x + tx;
-		new_y = GTK_LAYOUT (element->parent)->vadjustment->value + o->y + ty - o->ascent;
+		new_x = o->x + tx;
+		new_y = o->y + ty - o->ascent;
 		
 		if (element->widget->parent) {
 			if (new_x != element->abs_x || new_y != element->abs_y)
