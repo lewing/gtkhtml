@@ -531,7 +531,7 @@ get_level_indent (HTMLClueFlow *flow,
 									CLUEFLOW_BLOCKQUOTE_CITE, 
 									strlen (CLUEFLOW_BLOCKQUOTE_CITE), &line_offset,
 									GTK_HTML_FONT_STYLE_SIZE_3, 
-									NULL)
+									NULL);
 				break;
 			case HTML_LIST_TYPE_GLOSSARY_DL:
 				indent += 0;
