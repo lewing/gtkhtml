@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GtkHTML 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-06 17:40+0100\n"
-"PO-Revision-Date: 2004-07-04 11:19+0200\n"
+"POT-Creation-Date: 2005-01-25 15:46+0100\n"
+"PO-Revision-Date: 2005-01-25 15:47+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1642,6 +1642,8 @@ msgid ""
 "Unable to add word to dictionary,\n"
 "language settings are broken.\n"
 msgstr ""
+"Das Wort konnte nicht zum Wörterbuch hinzugefügt werden,\n"
+"da die Spracheinstellungen ungültig sind.\n"
 
 #: components/html-editor/spell.c:298
 msgid "No misspelled word found"
@@ -1923,94 +1925,3 @@ msgstr "Druckvorschau"
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML-Testanwendung"
 
-#~ msgid "<None>"
-#~ msgstr "<Nichts>"
-
-#~ msgid "\n"
-#~ msgstr "\n"
-
-#~ msgid "*********************"
-#~ msgstr "*********************"
-
-#~ msgid "Add Keyboard Shortcuts"
-#~ msgstr "Tastenkombinationen hinzufügen"
-
-#~ msgid "Automatically detect links"
-#~ msgstr "Links automatisch erkennen"
-
-#~ msgid "Behavior"
-#~ msgstr "Verhalten"
-
-#~ msgid "Composer Properties"
-#~ msgstr "Editoreigenschaften"
-
-#~ msgid "Composer Properties planned"
-#~ msgstr "Geplante Editoreigenschaften"
-
-#~ msgid "Configure spell checking"
-#~ msgstr "Rechtschreibprüfung konfigurieren"
-
-#~ msgid "Enable spell checking"
-#~ msgstr "Rechtschreibprüfung verwenden"
-
-#~ msgid "Fixed width"
-#~ msgstr "Dicktengleich"
-
-#~ msgid "Fonts"
-#~ msgstr "Schriften"
-
-#~ msgid "For printing"
-#~ msgstr "Zum Drucken"
-
-#~ msgid "Grab keys"
-#~ msgstr "Tasten festlegen"
-
-#~ msgid "Information"
-#~ msgstr "Informationen"
-
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "Tatenkombinationen"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "Verschiedenes"
-
-#~ msgid "New shortcut:"
-#~ msgstr "Neue Kombination:"
-
-#~ msgid "On screen"
-#~ msgstr "Auf dem Bildschirm"
-
-#~ msgid "Select HTML fixed width font"
-#~ msgstr "HTML-Schrift mit fester Breite festlegen"
-
-#~ msgid "Select HTML fixed width font for printing"
-#~ msgstr "Dicktengleiche HTML-Druckschrift festlegen"
-
-#~ msgid "Select HTML variable width font"
-#~ msgstr "HTML-Schrift mit variabler Breite festlegen"
-
-#~ msgid "Select HTML variable width font for printing"
-#~ msgstr "HTML-Druckschrift mit variabler Breite festlegen"
-
-#~ msgid "Shortcuts _type:"
-#~ msgstr "Kombinations_typ:"
-
-#~ msgid "Show animated images"
-#~ msgstr "Animierte Bilder anzeigen"
-
-#~ msgid "Variable width"
-#~ msgstr "Variable Breite"
-
-#~ msgid "_Add"
-#~ msgstr "_Hinzufügen"
-
-#~ msgid "_Delete"
-#~ msgstr "_Löschen"
-
-#~ msgid ""
-#~ "Cannot execute GNOME Spell control applet\n"
-#~ "Try to install GNOME Spell if you don't have it installed."
-#~ msgstr ""
-#~ "GNOME-Spell-Bedien-Applet konnte nicht ausgeführt werden\n"
-#~ "Versuchen Sie, GNOME-Spell zu installieren, falls Sie es nicht "
-#~ "installiert haben."
