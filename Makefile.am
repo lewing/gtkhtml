@@ -11,8 +11,6 @@ gtkhtmlConf.sh: gtkhtmlConf.sh.in Makefile
 	  && mv gtkhtmlConf.tmp gtkhtmlConf.sh
 
 SUBDIRS =					\
-	intl					\
-	macros					\
 	src					\
 	components				\
 	art					\
