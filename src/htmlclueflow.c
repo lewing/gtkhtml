@@ -1251,18 +1251,20 @@ draw_item (HTMLObject *self, HTMLPainter *painter, gint x, gint y, gint width, g
 {
 	HTMLClueFlow *flow;
 	HTMLObject *first;
+	gint indent;
 
 	first = HTML_CLUE (self)->head;
 
 	flow = HTML_CLUEFLOW (self);
 	html_painter_set_pen (painter, &html_colorset_get_color_allocated (painter, HTMLTextColor)->color);
 
+	indent = get_level_indent (flow, flow->levels->len - 1, painter);
 	if (flow->item_type == HTML_LIST_TYPE_UNORDERED) {
 		guint bullet_size;
 		gint xp, yp;
 		bullet_size = MAX (3, calc_bullet_size (painter));
 
-		xp = self->x + first->x - 2 * bullet_size;
+		xp = self->x + indent - 2 * bullet_size;
 		yp = self->y - self->ascent 
 			+ (first->y - first->ascent) 
 			+ (first->ascent + first->descent)/2 
@@ -1292,7 +1294,7 @@ draw_item (HTMLObject *self, HTMLPainter *painter, gint x, gint y, gint width, g
 
 			html_painter_set_font_style (painter, html_clueflow_get_default_font_style (flow));
 			html_painter_set_font_face  (painter, NULL);
-			html_painter_draw_text (painter, self->x + first->x - width + tx,
+			html_painter_draw_text (painter, self->x + indent - width + tx,
 						self->y - self->ascent + first->y + ty,
 						number, strlen (number), 0);
 		}
@@ -1844,6 +1846,7 @@ save_plain (HTMLObject *self,
 	GString *out = g_string_new ("");
 	size_t len;
 	gint pad;
+	gint align_pad;
 	gboolean firstline = TRUE;
 	gint max_len;
 
@@ -1888,6 +1891,24 @@ save_plain (HTMLObject *self,
 			}
 			
 		        plain_padding (flow, out, firstline);
+
+			switch (html_clueflow_get_halignment (flow)) {
+			case HTML_HALIGN_RIGHT:
+				align_pad = max_len - len;
+				break;
+			case HTML_HALIGN_CENTER:
+				align_pad = (max_len - len) / 2;
+				break;
+			default:
+				align_pad = 0;
+				break;
+			}
+			
+			while (align_pad > 0) {
+				g_string_append_c (out, ' ');
+				align_pad--;
+			}
+
 			s += string_append_nonbsp (out, s, len);
 			
 			/* Trim the space at the end */
