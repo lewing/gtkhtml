@@ -669,32 +669,16 @@ fill_rect (HTMLPainter *painter,
 }
 
 static gint
-draw_spell_error (HTMLPainter *painter, gint x, gint y, HTMLTextPangoInfo *pi, GList *glyphs)
+draw_spell_error (HTMLPainter *painter, int x, int y, int width)
 {
 	HTMLGdkPainter *gdk_painter;
 	GdkGCValues values;
 	gchar dash [2];
-	GList *gl;
-	PangoRectangle log_rect;
-	PangoGlyphString *str;
-	gint width, ii;
-
-	if (!pi || !glyphs)
-		return 0;
 
 	gdk_painter = HTML_GDK_PAINTER (painter);
 
 	x -= gdk_painter->x1;
 	y -= gdk_painter->y1;
-
-	width = 0;
-	for (gl = glyphs; gl; gl = gl->next) {
-		str = (PangoGlyphString *) gl->data;
-		gl = gl->next;
-		ii = GPOINTER_TO_INT (gl->data);
-		pango_glyph_string_extents (str, pi->entries [ii].glyph_item.item->analysis.font, NULL, &log_rect);
-		width += PANGO_PIXELS (log_rect.width);
-	}
 
 	gdk_gc_get_values (gdk_painter->gc, &values);
 	gdk_gc_set_fill (gdk_painter->gc, GDK_OPAQUE_STIPPLED);

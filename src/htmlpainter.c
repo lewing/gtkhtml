@@ -820,11 +820,9 @@ html_painter_get_pixel_size (HTMLPainter *painter)
 }
 
 gint
-html_painter_draw_spell_error (HTMLPainter *painter,
-			       gint x, gint y,
-			       HTMLTextPangoInfo *pi, GList *glyphs)
+html_painter_draw_spell_error (HTMLPainter *painter, int x, int y, int width)
 {
-	return (* HP_CLASS (painter)->draw_spell_error) (painter, x, y, pi, glyphs);
+	return (* HP_CLASS (painter)->draw_spell_error) (painter, x, y, width);
 }
 
 HTMLFont *
