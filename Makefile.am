@@ -23,6 +23,6 @@ EXTRA_DIST =					\
 	COPYING.LIB				\
 	BUGS					\
 	gtkhtmlConf.sh.in			\
-	xml-i18n-extract.in			\
-	xml-i18n-update.in			\
-	xml-i18n-merge.in
+	intltool-extract.in			\
+	intltool-update.in			\
+	intltool-merge.in
