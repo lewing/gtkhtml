@@ -34,13 +34,17 @@ struct _SpellError {
 	guint len;
 };
 
+struct _HTMLTextPangoInfo {
+	PangoItem *item;
+	PangoLogAttr *attrs;
+	PangoGlyphUnit *widths;
+};
+
 struct _HTMLText {
 	HTMLObject object;
 	
 	gchar   *text;
 	guint    text_len;
-	guint   *word_width;
-	guint    words;
 
 	GtkHTMLFontStyle  font_style;
 	HTMLFontFace     *face;
@@ -50,7 +54,9 @@ struct _HTMLText {
 	guint select_length;
 
 	GList *spell_errors;
-	GList *items;
+
+	HTMLTextPangoInfo *pi;
+	gint n_pi;
 };
 
 struct _HTMLTextClass {
@@ -128,8 +134,6 @@ gboolean          html_text_magic_link                   (HTMLText         *text
 							  guint             offset);
 gint              html_text_trail_space_width            (HTMLText         *text,
 							  HTMLPainter      *painter);
-void              html_text_request_word_width           (HTMLText         *text,
-							  HTMLPainter      *painter);
 gboolean          html_text_convert_nbsp                 (HTMLText         *text,
 							  gboolean          free_text);
 gint              html_text_get_line_offset              (HTMLText         *text,
@@ -155,6 +159,4 @@ HTMLObject *html_text_op_cut_helper     (HTMLText           *text,
 					 GList              *right,
 					 guint              *len,
 					 HTMLTextHelperFunc  f);
-void        html_text_clear_word_width  (HTMLText           *text);
-
 #endif /* _HTMLTEXT_H_ */
