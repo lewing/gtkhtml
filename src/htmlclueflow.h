@@ -91,7 +91,7 @@ void               html_clueflow_modify_indentation_by_delta  (HTMLClueFlow     
 							       gint                indentation);
 void               html_clueflow_set_indentation              (HTMLClueFlow       *flow,
 							       HTMLEngine         *engine,
-							       guint8              indentation);
+							       gint              indentation);
 guint8             html_clueflow_get_indentation              (HTMLClueFlow       *flow);
 void               html_clueflow_set_properties               (HTMLClueFlow       *flow,
 							       HTMLEngine         *engine,

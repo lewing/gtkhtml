@@ -1,3 +1,19 @@
+2002-05-15  Larry Ewing  <lewing@ximian.com>
+
+	* htmlclueflow.c (html_clueflow_set_indentation): if indentation
+	is less than zero set it to zero.
+
+	* htmlengine-edit-clueflowstyle.c (get_props_and_set): move the
+	indentation changes before the style changes and explicitly set
+	indentation for items.  As long as indentation is changed before
+	the item type we can correctly set the toplevel value of the
+	indentation array.
+
+	* htmlclueflow.h: change set_indentation prototype.
+
+	* gtkhtml.c (paragraph_style_to_clueflow_style): make the default
+	style be blockquote, and make item dotted be unordered.
+
 2002-05-14  Larry Ewing  <lewing@ximian.com>
 
 	* htmlclueflow.c (write_flow_tag): fix prev calc, rework <br>

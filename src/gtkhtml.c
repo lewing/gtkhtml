@@ -194,7 +194,7 @@ clueflow_style_to_paragraph_style (HTMLClueFlowStyle style, HTMLListType item_ty
 void
 paragraph_style_to_clueflow_style (GtkHTMLParagraphStyle style, HTMLClueFlowStyle *flow_style, HTMLListType *item_type)
 {
-	*item_type = HTML_LIST_TYPE_UNORDERED;
+	*item_type = HTML_LIST_TYPE_BLOCKQUOTE;
 	*flow_style = HTML_CLUEFLOW_STYLE_LIST_ITEM;
 
 	switch (style) {
@@ -226,6 +226,7 @@ paragraph_style_to_clueflow_style (GtkHTMLParagraphStyle style, HTMLClueFlowStyl
 		*flow_style = HTML_CLUEFLOW_STYLE_PRE;
 		break;
 	case GTK_HTML_PARAGRAPH_STYLE_ITEMDOTTED:
+		*item_type = HTML_LIST_TYPE_UNORDERED;
 		break;
 	case GTK_HTML_PARAGRAPH_STYLE_ITEMROMAN:
 		*item_type = HTML_LIST_TYPE_ORDERED_UPPER_ROMAN;

@@ -2526,13 +2526,13 @@ html_clueflow_modify_indentation_by_delta (HTMLClueFlow *flow,
 	g_return_if_fail (engine != NULL);
 	g_return_if_fail (HTML_IS_ENGINE (engine));
 
-	html_clueflow_set_indentation (flow, engine, flow->levels->len + indentation_delta);
+	html_clueflow_set_indentation (flow, engine, MAX (flow->levels->len + indentation_delta, 0));
 }
 
 void
 html_clueflow_set_indentation (HTMLClueFlow *flow,
 			       HTMLEngine *engine,
-			       guint8 indentation)
+			       gint indentation)
 {
 	int i;
 	g_return_if_fail (flow != NULL);
@@ -2541,16 +2541,17 @@ html_clueflow_set_indentation (HTMLClueFlow *flow,
 
 	if (flow->levels->len == indentation)
 		return;
-	g_warning ("SET indetation");
+
+	if (indentation < 0)
+		indentation = 0;
+
 	i = indentation - flow->levels->len;
 
 	if (i > 0) {
 		guint8 val;
-#if 0
-		val = flow->levels->len ? flow->levels->data[flow->levels->len - 1]: HTML_LIST_TYPE_BLOCKQUOTE;
-#else
+
 		val = HTML_LIST_TYPE_BLOCKQUOTE;
-#endif
+
 		while (i--)
 			g_byte_array_append (flow->levels, &val, 1);
 	} else {
