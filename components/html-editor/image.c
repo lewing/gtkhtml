@@ -138,6 +138,28 @@ static ImageInsertTemplate image_templates [TEMPLATES] = {
 	},
 };
 
+gboolean
+ensure_image (GtkHTMLEditImageProperties *d)
+{
+	HTMLEngine *e = d->cd->html->engine;
+	guint position = e->cursor->position;
+
+	if (e->cursor->object != HTML_OBJECT (d->image))
+		if (!html_cursor_jump_to (e->cursor, e, HTML_OBJECT (d->image), 1)) {
+			GtkWidget *dialog;
+			printf ("d: %p\n", d->cd->properties_dialog);
+			dialog = gtk_message_dialog_new (GTK_WINDOW (d->cd->properties_dialog->dialog),
+							 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+							 _("The editted image was removed from the document.\nCannot apply your changes."));
+			gtk_dialog_run (GTK_DIALOG (dialog));
+			gtk_widget_destroy (dialog);
+			html_cursor_jump_to_position (e->cursor, e, position);
+			return FALSE;
+		}
+
+	return TRUE;
+}
+
 static GtkHTMLEditImageProperties *
 data_new (GtkHTMLControlData *cd)
 {
@@ -196,92 +218,6 @@ get_location (GtkHTMLEditImageProperties *d)
 	return url;
 }
 
-static gchar *
-get_sample_html (GtkHTMLEditImageProperties *d, gboolean insert)
-{
-	gchar *html, *image, *body, *width, *height, *align, *src, *alt, *border, *padh, *padv, *lbegin, *lend, *location;
-
-	if ((d->width || d->width_percent == 1) && d->width_percent != 2)
-		width  = g_strdup_printf (" width=\"%d%s\"", d->width, d->width_percent ? "%" : "");
-	else
-		width  = g_strdup ("");
-
-	if ((d->height || d->height_percent == 1) && d->height_percent != 2)
-		height = g_strdup_printf (" height=\"%d%s\"", d->height, d->height_percent ? "%" : "");
-	else
-		height = g_strdup ("");
-
-	align  = g_strdup_printf (" align=%s", d->align == HTML_VALIGN_TOP
-				   ? "top" : (d->align == HTML_VALIGN_MIDDLE ? "middle" : "bottom"));
-	location = get_location (d);
-	src    = g_strdup_printf (" src=\"%s\"", location);
-	alt    = g_strdup_printf (" alt=\"%s\"", d->alt ? d->alt : "");
-	padh   = g_strdup_printf (" hspace=%d", d->padh);
-	padv   = g_strdup_printf (" vspace=%d", d->padv);
-	border = g_strdup_printf ("%d", d->border);
-
-	if (d->url && *d->url) {
-		gchar *encoded_url;
-
-		encoded_url = html_encode_entities (d->url, g_utf8_strlen (d->url, -1), NULL);
-		lbegin = g_strdup_printf ("<a href=\"%s\">", encoded_url);
-		lend   = "</a>";
-		g_free (encoded_url);
-	} else {
-		lbegin = g_strdup ("");
-		lend   = "";
-	}
-
-	image   = g_strdup (image_templates [d->template].image);
-	image   = substitute_string (image, "@src@", src);
-	image   = substitute_string (image, "@alt@", alt);
-	image   = substitute_string (image, "@padh@", padh);
-	image   = substitute_string (image, "@padv@", padv);
-	image   = substitute_string (image, "@width@", width);
-	image   = substitute_string (image, "@height@", height);
-	image   = substitute_string (image, "@align@", align);
-	image   = substitute_string (image, "@border@", border);
-	image   = substitute_string (image, "@link_begin@", lbegin);
-	image   = substitute_string (image, "@link_end@", lend);
-
-	body   = html_engine_save_get_sample_body (d->cd->html->engine, NULL);
-	if (insert) {
-		html   = g_strconcat (body, image, NULL);
-	} else {
-		if (strcasecmp(location, "") != 0) {
-			html = g_strconcat (body,
-				      _("This is sample text, designed to show "
-					"you how text would flow around this "
-					"image if you insert the image into "
-					"your message."),
-				      " ",
-				      image,
-				      _("This is sample text, designed to show "
-					"you how text would flow around this "
-					"image if you insert the image into "
-					"your message."),
-				      NULL);
-		} else {
-			html = g_strconcat (body, _("No image selected"), NULL);
-		}
-	}
-
-	g_free (location);
-	g_free (lbegin);
-	g_free (border);
-	g_free (src);
-	g_free (padv);
-	g_free (padh);
-	g_free (width);
-	g_free (height);
-	g_free (align);
-	g_free (body);
-
-	/* printf ("IMAGE: %s\n", html); */
-
-	return html;
-}
-
 static void
 pentry_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 {
@@ -301,35 +237,62 @@ pentry_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 static void
 url_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 {
-	g_free (d->url);
-	d->url = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+	char *url, *target;
+
+	url = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+	target = NULL;
+
+	if (url) {
+		target = strchr (url, '#');
+		if (target) {
+			*target = 0;
+			target ++;
+		}
+	}
+
+	html_object_set_link (HTML_OBJECT (d->image),
+			      url && *url
+			      ? html_colorset_get_color (d->cd->html->engine->settings->color_set, HTMLLinkColor)
+			      : html_colorset_get_color (d->cd->html->engine->settings->color_set, HTMLTextColor),
+			      url, target);
+	g_free (url);
 }
 
 static void
 alt_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 {
-	g_free (d->alt);
-	d->alt = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+	if (ensure_image (d))
+		html_image_set_alt (d->image, (char *) gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
 static void
 changed_align (GtkWidget *w, GtkHTMLEditImageProperties *d)
 {
-	d->align = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w)));;
+	if (ensure_image (d))
+		html_image_set_valign (d->image, g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))));
 }
 
 static void
-changed_width_percent (GtkWidget *w, GtkHTMLEditImageProperties *d)
+changed_size (GtkWidget *widget, GtkHTMLEditImageProperties *d)
 {
-	d->width_percent = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w)));
-	gtk_widget_set_sensitive (d->spin_width, d->width_percent != 2);
-}
+	GtkWidget *menu_width_p, *menu_height_p;
+	gint width, height, width_percent, height_percent;
 
-static void
-changed_height_percent (GtkWidget *w, GtkHTMLEditImageProperties *d)
-{
-	d->height_percent = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w)));
-	gtk_widget_set_sensitive (d->spin_height, d->height_percent != 2);
+	width = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width));
+	height = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_height));
+	menu_width_p = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width_percent));
+	menu_height_p = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_height_percent));
+	width_percent = g_list_index (GTK_MENU_SHELL (menu_width_p)->children,
+				      gtk_menu_get_active (GTK_MENU (menu_width_p)));
+	height_percent = g_list_index (GTK_MENU_SHELL (menu_height_p)->children,
+				       gtk_menu_get_active (GTK_MENU (menu_height_p)));
+	gtk_widget_set_sensitive (d->spin_width, width_percent != 2);
+	gtk_widget_set_sensitive (d->spin_height, height_percent != 2);
+
+	html_image_set_size (d->image,
+			     width_percent == 2 ? 0 : width,
+			     height_percent == 2 ? 0 : height,
+			     width_percent == 1, height_percent == 1);
 }
 
 static void
@@ -418,31 +381,17 @@ changed_template (GtkWidget *w, GtkHTMLEditImageProperties *d)
 static void
 changed_border (GtkWidget *check, GtkHTMLEditImageProperties *d)
 {
-	d->border = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_border));
+	if (ensure_image (d))
+		html_image_set_border (d->image, gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_border)));
 }
 
 static void
-changed_width (GtkWidget *check, GtkHTMLEditImageProperties *d)
+changed_padding (GtkWidget *check, GtkHTMLEditImageProperties *d)
 {
-	d->width = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width));
-}
-
-static void
-changed_height (GtkWidget *check, GtkHTMLEditImageProperties *d)
-{
-	d->height = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_height));
-}
-
-static void
-changed_padh (GtkWidget *check, GtkHTMLEditImageProperties *d)
-{
-	d->padh = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_padh));
-}
-
-static void
-changed_padv (GtkWidget *check, GtkHTMLEditImageProperties *d)
-{
-	d->padv = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_padv));
+	if (ensure_image (d))
+		html_image_set_spacing  (d->image,
+					 gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_padh)),
+					 gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_padv)));
 }
 
 static void
@@ -489,26 +438,26 @@ image_widget (GtkHTMLEditImageProperties *d, gboolean insert)
 			  "selection-done", G_CALLBACK (changed_align), d);
 	d->option_width_percent = glade_xml_get_widget (xml, "option_image_width_percent");
 	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width_percent)),
-			  "selection-done", G_CALLBACK (changed_width_percent), d);
+			  "selection-done", G_CALLBACK (changed_size), d);
 	d->option_height_percent = glade_xml_get_widget (xml, "option_image_height_percent");
 	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_height_percent)),
-			  "selection-done", G_CALLBACK (changed_height_percent), d);
+			  "selection-done", G_CALLBACK (changed_size), d);
 
 	d->spin_border = glade_xml_get_widget (xml, "spin_image_border");
 	UPPER_FIX (border);
 	g_signal_connect (d->spin_border, "value_changed", G_CALLBACK (changed_border), d);
 	d->spin_width = glade_xml_get_widget (xml, "spin_image_width");
 	UPPER_FIX (width);
-	g_signal_connect (d->spin_width, "value_changed", G_CALLBACK (changed_width), d);
+	g_signal_connect (d->spin_width, "value_changed", G_CALLBACK (changed_size), d);
 	d->spin_height = glade_xml_get_widget (xml, "spin_image_height");
 	UPPER_FIX (height);
-	g_signal_connect (d->spin_height, "value_changed", G_CALLBACK (changed_height), d);
+	g_signal_connect (d->spin_height, "value_changed", G_CALLBACK (changed_size), d);
 	d->spin_padh = glade_xml_get_widget (xml, "spin_image_padh");
 	UPPER_FIX (padh);
-	g_signal_connect (d->spin_padh, "value_changed", G_CALLBACK (changed_padh), d);
+	g_signal_connect (d->spin_padh, "value_changed", G_CALLBACK (changed_padding), d);
 	d->spin_padv = glade_xml_get_widget (xml, "spin_image_padv");
 	UPPER_FIX (padv);
-	g_signal_connect (d->spin_padv, "value_changed", G_CALLBACK (changed_padv), d);
+	g_signal_connect (d->spin_padv, "value_changed", G_CALLBACK (changed_padding), d);
 
 	/* d->option_template = glade_xml_get_widget (xml, "option_image_template");
 	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template)),
@@ -569,6 +518,7 @@ get_data (GtkHTMLEditImageProperties *d, HTMLImage *image)
 			off = 5;
 		d->location = g_strdup (ip->url + off);
 	}
+
 	if (image->percent_width) {
 		d->width_percent = 1;
 		d->width = image->specified_width;
@@ -585,6 +535,13 @@ get_data (GtkHTMLEditImageProperties *d, HTMLImage *image)
 		d->height = image->specified_height;
 	} else
 		d->height_percent = 2;
+
+	if ((d->width == 0 || d->width_percent == 2) && d->width_percent != 1)
+		d->width = html_image_get_actual_width (image, NULL);
+
+	if ((d->height == 0 || d->height_percent == 2) && d->height_percent != 1)
+		d->height = html_image_get_actual_height (image, NULL);
+
 	d->align  = image->valign;
 	d->padh   = image->hspace;
 	d->padv   = image->vspace;
@@ -616,71 +573,26 @@ static gboolean
 insert_or_apply (GtkHTMLControlData *cd, gpointer get_data, gboolean insert)
 {	
 	GtkHTMLEditImageProperties *d = (GtkHTMLEditImageProperties *) get_data;
+	HTMLImage *image = HTML_IMAGE (d->image);
+	HTMLEngine *e = d->cd->html->engine;
+	gchar *location, *url, *target;
+	gint position;
 
-	if (insert) {
-		gchar *html;
+	position = e->cursor->position;
 
-		html = get_sample_html (d, TRUE);
-		gtk_html_append_html (d->cd->html, html);
-	} else {
-		HTMLImage *image = HTML_IMAGE (d->image);
-		HTMLEngine *e = d->cd->html->engine;
-		gchar *location, *url, *target;
-		gint position;
+	g_assert (HTML_OBJECT_TYPE (d->image) == HTML_TYPE_IMAGE);
 
-		position = e->cursor->position;
+	if (!ensure_image (d))
+		return FALSE;
 
-		g_assert (HTML_OBJECT_TYPE (d->image) == HTML_TYPE_IMAGE);
+	if (HTML_OBJECT (image)->parent && html_object_get_data (HTML_OBJECT (image)->parent, "template_image"))
+		html_object_set_data_full (HTML_OBJECT (image)->parent, "template_image", NULL, NULL);
 
-		if (e->cursor->object != HTML_OBJECT (d->image))
-			if (!html_cursor_jump_to (e->cursor, e, HTML_OBJECT (d->image), 1)) {
-				GtkWidget *dialog;
-				printf ("d: %p\n", d->cd->properties_dialog);
-				dialog = gtk_message_dialog_new (GTK_WINDOW (d->cd->properties_dialog->dialog),
-								 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-								 _("The editted image was removed from the document.\nCannot apply your changes."));
-				gtk_dialog_run (GTK_DIALOG (dialog));
-				gtk_widget_destroy (dialog);
-				html_cursor_jump_to_position (e->cursor, e, position);
-				return FALSE;
-			}
+	location = get_location (d);
+	html_image_edit_set_url (image, location);
+	g_free (location);
 
-		if (HTML_OBJECT (image)->parent && html_object_get_data (HTML_OBJECT (image)->parent, "template_image"))
-			html_object_set_data_full (HTML_OBJECT (image)->parent, "template_image", NULL, NULL);
-
-		html_image_set_border (image, d->border);
-		html_image_set_size (image,
-				     d->width_percent == 2 ? 0 : d->width,
-				     d->height_percent == 2 ? 0 : d->height,
-				     d->width_percent == 1, d->height_percent == 1);
-		html_image_set_spacing  (image, d->padh, d->padv);
-		html_image_set_valign   (image, d->align);
-
-		location = get_location (d);
-		html_image_edit_set_url (image, location);
-		g_free (location);
-		html_image_set_alt (image, d->alt);
-
-		url = d->url;
-		target = NULL;
-
-		if (d->url) {
-			target = strchr (d->url, '#');
-			url = target ? g_strndup (d->url, target - d->url) : d->url;
-			if (target)
-				target ++;
-		}
-
-		html_object_set_link (HTML_OBJECT (d->image),
-				      url && *url
-				      ? html_colorset_get_color (d->cd->html->engine->settings->color_set, HTMLLinkColor)
-				      : html_colorset_get_color (d->cd->html->engine->settings->color_set, HTMLTextColor),
-				      url, target);
-		if (target)
-			g_free (url);
-		g_free (target);
-		html_cursor_jump_to_position (e->cursor, e, position);
-	}
+	html_cursor_jump_to_position (e->cursor, e, position);
 
 	return TRUE;
 }
