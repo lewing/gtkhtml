@@ -1,3 +1,8 @@
+2003-08-08  Yuedong Du  <yuedong.du@sun.com>
+                                                                                
+        * menubar.c: fix a typo cause bullet list not work. See bug
+        #47387
+                                                                                
 2003-07-28  Alex Jiang <alex.jiang@sun.com>
 
 	* image.c (changed_template): before clear option data, check 
