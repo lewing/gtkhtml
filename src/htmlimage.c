@@ -982,12 +982,16 @@ html_image_factory_end_pixbuf (GtkHTMLStream *stream,
 	HTMLImagePointer *ip = user_data;
 
 	gdk_pixbuf_loader_close (ip->loader, NULL);
+
 	if (!ip->animation && !ip->pixbuf) {
 		ip->pixbuf = gdk_pixbuf_loader_get_pixbuf (ip->loader);
 
 		if (ip->pixbuf)
 			gdk_pixbuf_ref (ip->pixbuf);
 	}
+
+	g_object_unref (ip->loader);
+	ip->loader = NULL;
 
 	update_or_redraw (ip);
 	if (ip->factory->engine->opened_streams)
@@ -1335,6 +1339,7 @@ static void
 free_image_ptr_data (HTMLImagePointer *ip)
 {
 	if (ip->loader) {
+		gdk_pixbuf_loader_close (ip->loader, NULL);
 		g_object_unref (G_OBJECT (ip->loader));
 		ip->loader = NULL;
 	}

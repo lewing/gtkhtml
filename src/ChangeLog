@@ -1,5 +1,9 @@
 2002-03-25  Radek Doulik  <rodo@ximian.com>
 
+	* htmlimage.c (html_image_factory_end_pixbuf): unref loader once
+	not needed
+	(free_image_ptr_data): close loader before unrefing
+
 	* htmlclueflow.c (end_of_word): don't check for *cn to recognize
 	one char length words
 
