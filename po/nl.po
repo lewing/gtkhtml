@@ -1,22 +1,25 @@
+# translation of gtkhtml.gnome-2-8.po to Dutch
 # The one and only funky gtkhtml dutch translation!
-# Copyright (C) 2000 Free Software Foundation, Inc.
-# Dennis Smit <synap@area101.penguin.nl>, 2000.
-# Tino Meinen <a.t.meinen@chello.nl>, 2002-2004.
-#  
+# Copyright (C) 2000, 2004 Free Software Foundation, Inc.
+#
 # TODO
 #  	snelkoppelingen
+# Dennis Smit <synap@area101.penguin.nl>, 2000.
+# Tino Meinen <a.t.meinen@chello.nl>, 2002-2004.
+# Vincent van Adrighem <adrighem@gnome.org>, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml cvs\n"
+"Project-Id-Version: gtkhtml.gnome-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-06 17:40+0100\n"
-"PO-Revision-Date: 2004-05-29 01:26+0200\n"
-"Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
-"Language-Team: Dutch <vertaling@nl.linux.org>\n"
+"POT-Creation-Date: 2004-12-14 21:11+0100\n"
+"PO-Revision-Date: 2004-12-14 21:29+0100\n"
+"Last-Translator: Vincent van Adrighem <adrighem@gnome.org>\n"
+"Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:1
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
@@ -1653,6 +1656,8 @@ msgid ""
 "Unable to add word to dictionary,\n"
 "language settings are broken.\n"
 msgstr ""
+"Kan woord niet toevoegen aan woordenboek.\n"
+"Taalinstellingen staan verkeerd.\n"
 
 #: components/html-editor/spell.c:298
 msgid "No misspelled word found"
@@ -1936,313 +1941,3 @@ msgstr "Afdrukvoorbeeld"
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML test-toepassing"
 
-#~ msgid "<None>"
-#~ msgstr "<Geen>"
-
-#~ msgid "\n"
-#~ msgstr "\n"
-
-#~ msgid "*********************"
-#~ msgstr "*********************"
-
-#~ msgid "Add Keyboard Shortcuts"
-#~ msgstr "Sneltoetsen toevoegen"
-
-#~ msgid "Automatically detect links"
-#~ msgstr "Automatisch links detecteren"
-
-#~ msgid "Behavior"
-#~ msgstr "Gedrag"
-
-#~ msgid "Composer Properties"
-#~ msgstr "Composer eigenschappen"
-
-#~ msgid "Composer Properties planned"
-#~ msgstr "Composer eigenschappen gepland"
-
-#~ msgid "Configure spell checking"
-#~ msgstr "Configureer spellingscontrole"
-
-#~ msgid "Enable spell checking"
-#~ msgstr "Directe spellingscontrole"
-
-#~ msgid "Fixed width"
-#~ msgstr "Vaste breedte"
-
-#~ msgid "Fonts"
-#~ msgstr "Lettertypen"
-
-#~ msgid "For printing"
-#~ msgstr "Voor afdrukken"
-
-# Toetsen grijpen?
-#~ msgid "Grab keys"
-#~ msgstr "Pluk een toets"
-
-#~ msgid "Information"
-#~ msgstr "Informatie"
-
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "Sneltoetsen"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "Diversen"
-
-#~ msgid "New shortcut:"
-#~ msgstr "Nieuwe sneltoets:"
-
-#~ msgid "On screen"
-#~ msgstr "Op het beeldscherm"
-
-#~ msgid "Select HTML fixed width font"
-#~ msgstr "Selecteer HTML vaste breedte-lettertype"
-
-#~ msgid "Select HTML fixed width font for printing"
-#~ msgstr "Selecteer HTML vaste breedte-lettertype voor printen"
-
-#~ msgid "Select HTML variable width font"
-#~ msgstr "Selecteer HTML variabele breedte-lettertype"
-
-#~ msgid "Select HTML variable width font for printing"
-#~ msgstr "Selecteer HTML variabele breedte-lettertype voor printen"
-
-#~ msgid "Shortcuts _type:"
-#~ msgstr "Snelkoppelings_type"
-
-#~ msgid "Show animated images"
-#~ msgstr "Animaties tonen"
-
-#~ msgid "Variable width"
-#~ msgstr "Variabele breedte"
-
-#~ msgid "_Add"
-#~ msgstr "_Toevoegen"
-
-#~ msgid "_Delete"
-#~ msgstr "_Verwijderen"
-
-#~ msgid ""
-#~ "Cannot execute GNOME Spell control applet\n"
-#~ "Try to install GNOME Spell if you don't have it installed."
-#~ msgstr ""
-#~ "Kon GNOME Spellingscontrole niet uitvoeren.\n"
-#~ "Probeer GNOME Spell te installeren als u dit nog niet heeft gedaan."
-
-#~ msgid "Plain"
-#~ msgstr "Gewoon"
-
-#~ msgid ""
-#~ "@link_begin@<img@alt@@width@@height@@align@ "
-#~ "border=@border@@padh@@padv@@src@>@link_end@"
-#~ msgstr ""
-#~ "@link_begin@<img@alt@@width@@height@@align@ "
-#~ "border=@border@@padh@@padv@@src@>@link_end@"
-
-#~ msgid "Frame"
-#~ msgstr "Frame"
-
-#~ msgid ""
-#~ "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-#~ "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-#~ "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-#~ "@src@@alt@@width@@height@align=top border=0></td></tr></table></td></tr></"
-#~ "table></center>"
-#~ msgstr ""
-#~ "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-#~ "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-#~ "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-#~ "@src@@alt@@width@@height@align=top border=0></td></tr></table></td></tr></"
-#~ "table></center>"
-
-#~ msgid "Caption"
-#~ msgstr "Onderschrift"
-
-#~ msgid ""
-#~ "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-#~ "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-#~ "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-#~ "@src@@alt@@width@@height@align=top border=0></td></tr><tr><td><b>[Place "
-#~ "your comment here]</td></tr></table></td></tr></table></center>"
-#~ msgstr ""
-#~ "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-#~ "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-#~ "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-#~ "@src@@alt@@width@@height@align=top border=0></td></tr><tr><td><b>[Zet "
-#~ "hier uw opmerkingen]</td></tr></table></td></tr></table></center>"
-
-#~ msgid "Find A Regular Expression"
-#~ msgstr "Een Reguliere Expressie Zoeken"
-
-#~ msgid "Find Regular E_xpression..."
-#~ msgstr "Zoeken Reguliere E_xpressie..."
-
-#~ msgid ""
-#~ "The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a "
-#~ "href=\"mailto:dog\">dog</a>."
-#~ msgstr ""
-#~ "Pa's wijze <a href=\"mailto:lynx\">lynx</a> bezag vroom het fikse <a href="
-#~ "\"mailto:aquaduct\">aquaduct</a>."
-
-#~ msgid "The quick brown fox jumps over the lazy dog."
-#~ msgstr "Pa's wijze lynx bezag vroom het fikse aquaduct."
-
-#~ msgid "Other"
-#~ msgstr "Andere"
-
-#~ msgid ""
-#~ "The editted cell was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "De bewerkte cel is verwijderd uit het document.\n"
-#~ "Kan uw veranderingen niet toepassen."
-
-#~ msgid "************"
-#~ msgstr "************"
-
-#~ msgid "***text***"
-#~ msgstr "***tekst***"
-
-#~ msgid "Apply changes to:"
-#~ msgstr "Veranderingen toepassen op:"
-
-#~ msgid "Border"
-#~ msgstr "Rand"
-
-#~ msgid "Click will follow this URL"
-#~ msgstr "Klikken om de URL te volgen"
-
-#~ msgid "Click will follow this URL:"
-#~ msgstr "Klikken om de URL te volgen:"
-
-#~ msgid "Don't wrap"
-#~ msgstr "Geen doorloop"
-
-#~ msgid "Font size"
-#~ msgstr "Grootte Lettertype"
-
-#~ msgid "Foreground color"
-#~ msgstr "Voorgrondkleur"
-
-#~ msgid "Header"
-#~ msgstr "Kop"
-
-#~ msgid "Link insert"
-#~ msgstr "Link invoeging"
-
-#~ msgid "Location"
-#~ msgstr "Lokatie"
-
-#~ msgid "Padding"
-#~ msgstr "Uitvullen"
-
-#~ msgid "Percent %"
-#~ msgstr "Percentage %"
-
-#~ msgid "Pixmap:"
-#~ msgstr "Pixmap:"
-
-#~ msgid "Points"
-#~ msgstr "Punten"
-
-#~ msgid "Scope"
-#~ msgstr "Bereik"
-
-#~ msgid "Spacing"
-#~ msgstr "Spatiëring"
-
-#~ msgid "Style:"
-#~ msgstr "Stijl:"
-
-#~ msgid "Table Insert"
-#~ msgstr "Tabel-invoeging"
-
-#~ msgid "Test URL..."
-#~ msgstr "Test URL..."
-
-#~ msgid "Wrap"
-#~ msgstr "Doorloop"
-
-#~ msgid "Wrapping:"
-#~ msgstr "Doorlopend:"
-
-#~ msgid "xxxxxxxxx"
-#~ msgstr "xxxxxxxxx"
-
-#~ msgid ""
-#~ "This is sample text, designed to show you how text would flow around this "
-#~ "image if you insert the image into your message."
-#~ msgstr ""
-#~ "Dit is voorbeeldtekst ontworpen om te laten zien hoe tekst rond deze "
-#~ "afbeeld zou worden gezet als u deze afbeelding in uw bericht zou invoegen."
-
-#~ msgid "No image selected"
-#~ msgstr "Geen afbeelding geselecteerd"
-
-#~ msgid ""
-#~ "The editted image was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "De bewerkte afbeelding is verwijderd uit het document.\n"
-#~ "Kan uw veranderingen niet toepassen."
-
-# Link = bijv.nmwrd
-#~ msgid "Link text"
-#~ msgstr "Link-tekst"
-
-#~ msgid ""
-#~ "The editted link was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "De bewerkte link is verwijderd uit het document.\n"
-#~ "Kan uw veranderingen niet toepassen."
-
-#~ msgid "Please fill 'Link text' and 'URL' entries"
-#~ msgstr "U moet de velden 'link-tekst' en 'URL' nog invullen"
-
-#~ msgid "Align"
-#~ msgstr "Uitlijnen"
-
-#~ msgid ""
-#~ "The editted paragraph was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "De bewerkte paragraaf is verwijderd uit het document.\n"
-#~ "Kan uw veranderingen niet toepassen."
-
-#~ msgid "Blue 3D"
-#~ msgstr "Blauw 3D"
-
-#~ msgid "Yellow, flowers"
-#~ msgstr "Geel, bloemen"
-
-#~ msgid ""
-#~ "The editted rule was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "De bewerkte regel is verwijderd uit het document.\n"
-#~ "Kan uw veranderingen niet toepassen."
-
-#~ msgid "Flat gray"
-#~ msgstr "Egaal grijs"
-
-#~ msgid "Dark header"
-#~ msgstr "Donkere kop"
-
-#~ msgid ""
-#~ "The editted table was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "De bewerkte tabel is verwijderd uit het document.\n"
-#~ "Kan uw veranderingen niet toepassen."
-
-#~ msgid "Color"
-#~ msgstr "Kleur"
-
-#~ msgid "The quick brown fox jumps over the lazy dog.</div>"
-#~ msgstr "Pa's wijze lynx bezag vroom het fikse aquaduct.</dev>"
-
-#~ msgid "Rectangles"
-#~ msgstr "Rechthoeken"
-
-#~ msgid "The quick brown fox jumped over the lazy dog."
-#~ msgstr "Pa's wijze lynx bezag vroom het fikse aquaduct."
