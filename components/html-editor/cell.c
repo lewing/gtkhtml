@@ -91,13 +91,8 @@ typedef struct
 	GtkWidget *spin_cspan;
 	GtkWidget *spin_rspan;
 
-	gboolean   wrap;
-	gboolean   changed_wrap;
-	GtkWidget *option_wrap;
-
-	gboolean   heading;
-	gboolean   changed_heading;
-	GtkWidget *option_heading;
+	GtkWidget *check_wrap;
+	GtkWidget *check_header;
 
 	gboolean   disable_change;
 
@@ -288,19 +283,27 @@ changed_height_percent (GtkWidget *w, GtkHTMLEditCellProperties *d)
 }
 
 static void
+set_wrap (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
+{
+	html_engine_table_cell_set_no_wrap (d->cd->html->engine, cell, !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_wrap)));
+}
+
+static void
 changed_wrap (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->wrap = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
-	if (!d->disable_change)
-		d->changed_wrap = TRUE;
+	cell_set_prop (d, set_wrap);
+}
+
+static void
+set_header (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
+{
+	html_engine_table_cell_set_heading (d->cd->html->engine, cell, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_header)));
 }
 
 static void
 changed_heading (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->heading = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
-	if (!d->disable_change)
-		d->changed_heading = TRUE;
+	cell_set_prop (d, set_header);
 }
 
 /*
@@ -397,12 +400,10 @@ cell_widget (GtkHTMLEditCellProperties *d)
 	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_height)), "selection-done",
 			  G_CALLBACK (changed_height_percent), d);
 
-	d->option_wrap    = glade_xml_get_widget (xml, "option_cell_wrap");
-	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_wrap)), "selection-done",
-			  G_CALLBACK (changed_wrap), d);
-	d->option_heading = glade_xml_get_widget (xml, "option_cell_style");
-	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_heading)), "selection-done",
-			  G_CALLBACK (changed_heading), d);
+	d->check_wrap = glade_xml_get_widget (xml, "check_cell_wrap");
+	d->check_header = glade_xml_get_widget (xml, "check_cell_header");
+	g_signal_connect (d->check_wrap, "toggled", G_CALLBACK (changed_wrap), d);
+	g_signal_connect (d->check_header, "toggled", G_CALLBACK (changed_heading), d);
 
         g_signal_connect (glade_xml_get_widget (xml, "cell_radio"), "toggled", G_CALLBACK (cell_scope_cell), d);
         g_signal_connect (glade_xml_get_widget (xml, "table_radio"), "toggled", G_CALLBACK (cell_scope_table), d);
@@ -453,8 +454,8 @@ set_ui (GtkHTMLEditCellProperties *d)
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_height),  d->height);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_height), d->height_percent ? 1 : 0);
 
-	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_wrap), d->wrap ? 1 : 0);
-	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_heading), d->heading ? 1 : 0);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_wrap), !d->cell->no_wrap);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_header), d->cell->heading);
 
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_cspan),  d->cspan);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_rspan),  d->rspan);
@@ -472,8 +473,6 @@ get_data (GtkHTMLEditCellProperties *d)
 
 	d->halign   = HTML_CLUE (d->cell)->halign;
 	d->valign   = HTML_CLUE (d->cell)->valign;
-	d->wrap     = d->cell->no_wrap;
-	d->heading  = d->cell->heading;
 
 	if (d->cell->percent_width) {
 		d->width = d->cell->fixed_width;
@@ -511,12 +510,6 @@ cell_apply_1 (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
 
 	if (d->changed_valign)
 		html_engine_table_cell_set_valign (d->cd->html->engine, cell, d->valign);
-
-	if (d->changed_wrap)
-		html_engine_table_cell_set_no_wrap (d->cd->html->engine, cell, d->wrap);
-
-	if (d->changed_heading)
-		html_engine_table_cell_set_heading (d->cd->html->engine, cell, d->heading);
 
 	if (d->changed_width)
 		html_engine_table_cell_set_width (d->cd->html->engine, cell,

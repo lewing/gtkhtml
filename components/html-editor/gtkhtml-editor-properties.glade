@@ -1212,14 +1212,6 @@
 					  <property name="use_underline">True</property>
 					</widget>
 				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget27">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">None</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
 				    </widget>
 				  </child>
 				</widget>
@@ -1328,7 +1320,7 @@
 			  <property name="spacing">12</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="checkbutton9">
+			    <widget class="GtkCheckButton" id="check_cell_wrap">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">_Wrap Text</property>
@@ -1347,7 +1339,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="checkbutton10">
+			    <widget class="GtkCheckButton" id="check_cell_header">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Hea_der style</property>
