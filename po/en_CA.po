@@ -1,14 +1,15 @@
 # English/Canada translation of gtkhtml.
 # Copyright (C) 2004 Adam Weinberger and the GNOME Foundation
-# This file is distributed under the same license as the gtkhtml package.
+# This file is distributed under the same licence as the gtkhtml package.
 # Maintainer: Adam Weinberger <adamw@gnome.org>
 # 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-11 20:55+0200\n"
-"PO-Revision-Date: 2004-05-24 15:11-0700\n"
+"POT-Creation-Date: 2004-10-20 17:12-0400\n"
+"PO-Revision-Date: 2004-10-20 15:11-0700\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -1633,15 +1634,23 @@ msgstr "_Backward"
 msgid "_Regular Expression"
 msgstr "_Regular Expression"
 
-#: components/html-editor/spell.c:278
+#: components/html-editor/spell.c:110
+msgid ""
+"Unable to add word to dictionary,\n"
+"language settings are broken.\n"
+msgstr ""
+"Unable to add word to dictionary;\n"
+"language settings are broken.\n"
+
+#: components/html-editor/spell.c:298
 msgid "No misspelled word found"
 msgstr "No misspelled word found"
 
-#: components/html-editor/spell.c:285
+#: components/html-editor/spell.c:305
 msgid "Spell checker"
 msgstr "Spell checker"
 
-#: components/html-editor/spell.c:378
+#: components/html-editor/spell.c:398
 msgid "Current _Languages"
 msgstr "Current _Languages"
 
