@@ -301,7 +301,6 @@ cut_partial (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *lef
 				    || ((r == end_row && c > end_col) || r > end_row)) {
 					html_table_set_cell (nt, r, c, html_engine_new_cell (e, nt));
 					html_table_cell_set_position (nt->cells [r][c], r, c);
-					(*len) ++;
 				} else {
 					HTMLTableCell *cell_cut;
 
@@ -319,10 +318,11 @@ cut_partial (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *lef
 						html_table_cell_set_position (t->cells [r][c], r, c);
 					}
 				}
+				(*len) ++;
 			}
 		}
 	}
-	(*len) += 2;
+	(*len) ++;
 
 #ifdef GTKHTML_DEBUG_TABLE
 	printf ("removed partial table len: %d\n", *len);
