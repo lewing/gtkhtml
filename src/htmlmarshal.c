@@ -250,6 +250,45 @@ html_g_cclosure_marshal_VOID__INT_INT_FLOAT (GClosure     *closure,
 }
 
 void
+html_g_cclosure_marshal_VOID__ENUM_ENUM_FLOAT (GClosure     *closure,
+					       GValue       *return_value,
+					       guint         n_param_values,
+					       const GValue *param_values,
+					       gpointer      invocation_hint,
+					       gpointer      marshal_data)
+{
+	typedef void (*HTMLGMarshalFunc_VOID__ENUM_ENUM_FLOAT) (gpointer     data1,
+								gint         arg_1,
+								gint         arg_2,
+								gfloat       arg_3,
+								gpointer     data2);
+
+	register HTMLGMarshalFunc_VOID__ENUM_ENUM_FLOAT ff;
+	register GCClosure *cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+
+	g_return_if_fail (n_param_values == 4);
+
+	if (G_CCLOSURE_SWAP_DATA (closure))
+		{
+			data1 = closure->data;
+			data2 = g_value_peek_pointer (param_values + 0);
+		}
+	else
+		{
+			data1 = g_value_peek_pointer (param_values + 0);
+			data2 = closure->data;
+		}
+	ff = (HTMLGMarshalFunc_VOID__ENUM_ENUM_FLOAT) (marshal_data ? marshal_data : cc->callback);
+
+	ff (data1,
+	    g_value_get_enum (param_values + 1),
+	    g_value_get_enum (param_values + 2),
+	    g_value_get_float (param_values + 3),
+	    data2);
+}
+
+void
 html_g_cclosure_marshal_VOID__INT_INT (GClosure     *closure,
 				       GValue       *return_value,
 				       guint         n_param_values,
@@ -283,5 +322,42 @@ html_g_cclosure_marshal_VOID__INT_INT (GClosure     *closure,
 	ff (data1,
 	    g_value_get_int (param_values + 1),
 	    g_value_get_int (param_values + 2),
+	    data2);
+}
+
+void
+html_g_cclosure_marshal_VOID__ENUM_ENUM (GClosure     *closure,
+					 GValue       *return_value,
+					 guint         n_param_values,
+					 const GValue *param_values,
+					 gpointer      invocation_hint,
+					 gpointer      marshal_data)
+{
+	typedef void (*HTMLGMarshalFunc_VOID__ENUM_ENUM) (gpointer     data1,
+							  gint         arg_1,
+							  gint         arg_2,
+							  gpointer     data2);
+
+	register HTMLGMarshalFunc_VOID__ENUM_ENUM ff;
+	register GCClosure *cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+
+	g_return_if_fail (n_param_values == 3);
+
+	if (G_CCLOSURE_SWAP_DATA (closure))
+		{
+			data1 = closure->data;
+			data2 = g_value_peek_pointer (param_values + 0);
+		}
+	else
+		{
+			data1 = g_value_peek_pointer (param_values + 0);
+			data2 = closure->data;
+		}
+	ff = (HTMLGMarshalFunc_VOID__ENUM_ENUM) (marshal_data ? marshal_data : cc->callback);
+
+	ff (data1,
+	    g_value_get_enum (param_values + 1),
+	    g_value_get_enum (param_values + 2),
 	    data2);
 }

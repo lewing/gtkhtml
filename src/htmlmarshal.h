@@ -68,9 +68,24 @@ html_g_cclosure_marshal_VOID__INT_INT_FLOAT (GClosure     *closure,
 					     gpointer      marshal_data);
 
 void
+html_g_cclosure_marshal_VOID__ENUM_ENUM_FLOAT (GClosure     *closure,
+					       GValue       *return_value,
+					       guint         n_param_values,
+					       const GValue *param_values,
+					       gpointer      invocation_hint,
+					       gpointer      marshal_data);
+void
 html_g_cclosure_marshal_VOID__INT_INT (GClosure     *closure,
 				       GValue       *return_value,
 				       guint         n_param_values,
 				       const GValue *param_values,
 				       gpointer      invocation_hint,
 				       gpointer      marshal_data);
+
+void
+html_g_cclosure_marshal_VOID__ENUM_ENUM (GClosure     *closure,
+					 GValue       *return_value,
+					 guint         n_param_values,
+					 const GValue *param_values,
+					 gpointer      invocation_hint,
+					 gpointer      marshal_data);

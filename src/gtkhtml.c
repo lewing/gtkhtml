@@ -2180,9 +2180,6 @@ drag_data_received (GtkWidget *widget, GdkDragContext *context,
 
 /* dnd end */
 
-typedef void (*GtkSignal_NONE__INT_INT_FLOAT) (GtkObject * object,
-					       gint arg1, gint arg2,
-					       gfloat arg3, gpointer user_data);
 static void
 class_init (GtkHTMLClass *klass)
 {
@@ -2374,7 +2371,7 @@ class_init (GtkHTMLClass *klass)
 			      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 			      G_STRUCT_OFFSET (GtkHTMLClass, scroll),
 			      NULL, NULL,
-			      html_g_cclosure_marshal_VOID__INT_INT_FLOAT,
+			      html_g_cclosure_marshal_VOID__ENUM_ENUM_FLOAT,
 			      G_TYPE_NONE, 3,
 			      GTK_TYPE_ORIENTATION,
 			      GTK_TYPE_SCROLL_TYPE, G_TYPE_FLOAT);
@@ -2385,7 +2382,7 @@ class_init (GtkHTMLClass *klass)
 			      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 			      G_STRUCT_OFFSET (GtkHTMLClass, cursor_move),
 			      NULL, NULL,
-			      html_g_cclosure_marshal_VOID__INT_INT,
+			      html_g_cclosure_marshal_VOID__ENUM_ENUM,
 			      G_TYPE_NONE, 2, GTK_TYPE_DIRECTION_TYPE, GTK_TYPE_HTML_CURSOR_SKIP);
 
 	signals [COMMAND] =
@@ -2394,7 +2391,7 @@ class_init (GtkHTMLClass *klass)
 			      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 			      G_STRUCT_OFFSET (GtkHTMLClass, command),
 			      NULL, NULL,
-			      gtk_marshal_NONE__ENUM,
+			      g_cclosure_marshal_VOID__ENUM,
 			      G_TYPE_NONE, 1, GTK_TYPE_HTML_COMMAND);
 
 	object_class->destroy = destroy;
@@ -2908,6 +2905,7 @@ gtk_html_private_calc_scrollbars (GtkHTML *html, gboolean *changed_x, gboolean *
 		if (changed_x)
 			*changed_x = TRUE;
 	}
+
 	if (vadj->value > height - html->engine->height) {
 		gtk_adjustment_set_value (vadj, height - html->engine->height);
 		if (changed_y)
@@ -2916,8 +2914,8 @@ gtk_html_private_calc_scrollbars (GtkHTML *html, gboolean *changed_x, gboolean *
 
 	if ((width != layout->width) || (height != layout->height)) {
 		/* printf ("set size\n"); */
-		gtk_signal_emit (GTK_OBJECT (html), signals[SIZE_CHANGED]);
-		gtk_layout_set_size (layout, hadj->upper, vadj->upper);
+		gtk_signal_emit (GTK_OBJECT (html), signals [SIZE_CHANGED]);
+		gtk_layout_set_size (layout, width, height);
 	}
 }
 
