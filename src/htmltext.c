@@ -959,7 +959,6 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 			translated = alloca (bytes);
 
 		html_replace_tabs (text->text, translated, bytes);
-		pango_context_set_font_description (pc, html_painter_get_font (painter, text->face, html_text_get_font_style (text)));
 		items = pango_itemize (pc, translated, 0, bytes, text->attr_list, NULL);
 		text->pi = html_text_pango_info_new (g_list_length (items));
 

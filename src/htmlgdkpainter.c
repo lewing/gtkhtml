@@ -80,7 +80,6 @@ html_gdk_painter_text_itemize_and_prepare_glyphs (HTMLGdkPainter *painter, Pango
 
 	/* printf ("itemize + glyphs\n"); */
 
-	pango_context_set_font_description (painter->pc, desc);
 	attrs = pango_attr_list_new ();
 	items = pango_itemize (painter->pc, text, 0, bytes, attrs, NULL);
 	pango_attr_list_unref (attrs);
