@@ -262,6 +262,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->combo [i] = combo = color_combo_new (NULL, _("Automatic"), \
 				 &color->color, \
 				 color_group_fetch ("body_" g, cd)); \
+        color_combo_box_set_preview_relief (COLOR_COMBO (data->combo [i]), GTK_RELIEF_NORMAL); \
         g_object_set_data (G_OBJECT (combo), "type", GINT_TO_POINTER (ct)); \
 	hbox = gtk_hbox_new (FALSE, 3); \
         label = gtk_label_new_with_mnemonic (x); \
