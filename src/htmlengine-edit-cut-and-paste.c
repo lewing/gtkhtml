@@ -907,9 +907,39 @@ append_object (HTMLEngine *e, HTMLObject *o, guint len, HTMLUndoDirection dir)
 {
 	GList *left = NULL, *right = NULL;
 	HTMLObject *where;
+	HTMLObject *c, *cn;
+	HTMLClue *clue;
 	gint back = 0;
 
 	html_engine_freeze (e);
+	if (!html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
+		insert_empty_paragraph (e, dir);
+		if (!html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
+			insert_empty_paragraph (e, dir);
+			html_cursor_backward (e->cursor, e);
+		}
+	}
+
+	g_return_if_fail (html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent)));
+
+	clue = HTML_CLUE (e->cursor->object->parent);
+	for (c = clue->head; c; c = cn) {
+		cn = c->next;
+		html_object_destroy (c);
+	}
+	clue->head = clue->tail = o;
+	e->cursor->object = o;
+	e->cursor->offset = 0;
+	o->parent = HTML_OBJECT (clue);
+
+	html_cursor_forward_n (e->cursor, e, len);
+	html_object_change_set (o, HTML_CHANGE_ALL_CALC);
+	html_engine_thaw (e);
+
+	insert_setup_undo (e, len, dir);
+
+	return;
+
 	if (html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
 		HTMLObject *c, *cn;
 		HTMLClue *clue = HTML_CLUE (e->cursor->object->parent);

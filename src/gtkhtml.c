@@ -3799,7 +3799,7 @@ gtk_html_insert_html (GtkHTML *html, const gchar *html_src)
 	o                 = tmp->engine->clue;
 	tmp->engine->clue = NULL;
 	html_image_factory_move_images (html->engine->image_factory, tmp->engine->image_factory);
-	html_engine_insert_object (html->engine, o, html_object_get_recursive_length (o));
+	html_engine_append_object (html->engine, o, html_object_get_recursive_length (o));
 	gtk_widget_destroy (window);
 }
 
