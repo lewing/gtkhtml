@@ -1,3 +1,8 @@
+2003-10-13  Frederic Crozat  <fcrozat@mandrakesoft.com>
+
+	* htmlobject.c: (object_save_data):
+	Close comment when saving object data (bug #38589).
+
 2003-07-31  Radek Doulik  <rodo@ximian.com>
 
 	* htmlengine-edit.c (html_engine_select_spell_word_editable): fix
