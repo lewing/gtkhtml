@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2002-05-29 09:15+0200\n"
-"PO-Revision-Date: 2002-05-29 09:15+0200\n"
+"POT-Creation-Date: 2002-06-07 22:54+0200\n"
+"PO-Revision-Date: 2002-06-07 23:00+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -322,6 +322,10 @@ msgid "Insert Frown smiley into document..."
 msgstr "Wstawia do dokumentu marszczącą się buźkę..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert HTML file into document..."
+msgstr "Wstawia do dokumentu plik w HTML-u..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "Insert HTML link into document..."
 msgstr "Wstawia do dokumentu odnośnik w HTML-u..."
 
@@ -364,6 +368,10 @@ msgstr "Wstawia do dokumentu linię..."
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "Insert table into document..."
 msgstr "Wstawia do dokumentu tabelę..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Insert text file into document..."
+msgstr "Wstawia do dokumentu plik tekstowy..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 #: components/html-editor/toolbar.c:1
@@ -573,6 +581,10 @@ msgid "Te_mplate..."
 msgstr "_Szablon..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "Te_xt file..."
+msgstr "Plik _tekstowy..."
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 #: components/html-editor/body.c:1
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/menubar.c:1
@@ -643,6 +655,10 @@ msgstr "_Rozmiar czcionki"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "_Frown"
 msgstr "M_arszczącą się"
+
+#: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
+msgid "_HTML file..."
+msgstr "Plik w _HTML-u..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 msgid "_Heading"
@@ -885,7 +901,11 @@ msgstr "Wyśrodkowanie"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/link.c:1 components/html-editor/text.c:1
 msgid "Click will follow this URL"
-msgstr "Kliknięcie spowoduje przejście do poniższego URL-a"
+msgstr "Kliknięcie spowoduje przejście do podanego URL-a"
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:1
+msgid "Click will follow this URL:"
+msgstr "Kliknięcie spowoduje przejście do poniższego URL-a:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Color:"
@@ -903,6 +923,10 @@ msgstr "Zajmowane kolumny:"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Columns:"
 msgstr "Kolumny:"
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:1
+msgid "Description:"
+msgstr "Opis:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Don't wrap"
@@ -1025,7 +1049,6 @@ msgstr "Zasięg"
 msgid "Shaded"
 msgstr "Cieniowana"
 
-#. , GTK_FILL | GTK_EXPAND, 0, 0, 0);
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/text.c:1
 msgid "Size"
@@ -1051,6 +1074,11 @@ msgstr "Styl:"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Table Insert"
 msgstr "Wstawienie tabeli"
+
+#: components/html-editor/gtkhtml-editor-properties.glade.h:1
+#: components/html-editor/link.c:1
+msgid "Test URL..."
+msgstr "Sprawdź URL..."
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Thickness:"
@@ -1096,10 +1124,10 @@ msgstr "Zwykły"
 
 #: components/html-editor/image.c:1
 msgid ""
-"@link_begin@<img@width@@height@@align@ "
+"@link_begin@<img@alt@@width@@height@@align@ "
 "border=@border@@padh@@padv@@src@>@link_end@"
 msgstr ""
-"@link_begin@<img@width@@height@@align@ "
+"@link_begin@<img@alt@@width@@height@@align@ "
 "border=@border@@padh@@padv@@src@>@link_end@"
 
 #: components/html-editor/image.c:1
@@ -1111,13 +1139,13 @@ msgid ""
 "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
 "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
 "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-"@src@@width@@height@align=top "
+"@src@@alt@@width@@height@align=top "
 "border=0></td></tr></table></td></tr></table></center>"
 msgstr ""
 "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
 "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
 "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-"@src@@width@@height@align=top "
+"@src@@alt@@width@@height@align=top "
 "border=0></td></tr></table></td></tr></table></center>"
 
 #: components/html-editor/image.c:1
@@ -1129,14 +1157,14 @@ msgid ""
 "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
 "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
 "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-"@src@@width@@height@align=top border=0></td></tr><tr><td><b>[Place your "
+"@src@@alt@@width@@height@align=top border=0></td></tr><tr><td><b>[Place your "
 "comment here]</td></tr></table></td></tr></table></center>"
 msgstr ""
 "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
 "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
 "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-"@src@@width@@height@align=top border=0></td></tr><tr><td><b>[Umieść tutaj "
-"swój komentarz]</td></tr></table></td></tr></table></center>"
+"@src@@alt@@width@@height@align=top border=0></td></tr><tr><td><b>[Umieść "
+"tutaj swój komentarz]</td></tr></table></td></tr></table></center>"
 
 #: components/html-editor/image.c:1
 msgid "The quick brown fox jumped over the lazy dog. "
@@ -1152,16 +1180,20 @@ msgstr ""
 msgid "Link text"
 msgstr "Tekst odnośnika"
 
-#: components/html-editor/link.c:1
-msgid "Test URL"
-msgstr "Sprawdź URL"
-
 #: components/html-editor/menubar.c:1 components/html-editor/menubar.c:1
 #: components/html-editor/menubar.c:1 components/html-editor/menubar.c:1
 #: components/html-editor/menubar.c:1
 #: components/html-editor/properties.c:1
 msgid "Insert"
 msgstr "Wstaw"
+
+#: components/html-editor/menubar.c:1
+msgid "Insert HTML file"
+msgstr "Wybór wstawianego pliku w HTML-u"
+
+#: components/html-editor/menubar.c:1
+msgid "Insert text file"
+msgstr "Wybór wstawianego pliku tekstowego"
 
 #: components/html-editor/menubar.c:1
 msgid "Cannot execute gtkhtml properties"
