@@ -681,6 +681,12 @@ object_nb_width (HTMLObject *o, HTMLPainter *painter, gboolean lineBegin)
 	return html_object_calc_min_width (o, painter);
 }
 
+static inline gboolean
+is_y_aligned (HTMLVAlignType valign)
+{
+	return valign == HTML_VALIGN_NONE || valign == HTML_VALIGN_BOTTOM;
+}
+
 static HTMLObject *
 layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	     GList **changed_objs, gboolean *leaf_childs_changed_size,
@@ -691,7 +697,7 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	gint old_y;
 	gint x;
 	gint start_lmargin;
-	gint a, d;
+	gint a, d, height;
 	gint nb_width;
 
 	if (html_object_is_text (begin)) {
@@ -703,14 +709,19 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 
 	old_y = o->y;
 	html_object_calc_size (begin, painter, changed_objs);
-	
-	a = begin->ascent;
-	d = begin->descent;
+
+	/* init vertical sizes */
+	if (is_y_aligned (html_object_get_valign (begin))) {
+		a = begin->ascent;
+		d = begin->descent;
+	} else
+		a = d = 0;
+	height = begin->ascent + begin->descent;
 
 	nb_width = object_nb_width (begin, painter, first);
 	if (*rmargin - *lmargin < nb_width)
 		html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
-					  nb_width, a + d,
+					  nb_width, height,
 					  indent, &o->y, lmargin, rmargin);
 
 	x = start_lmargin = *lmargin;
@@ -718,6 +729,7 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 
 	while (cur && !(cur->flags & HTML_OBJECT_FLAG_ALIGNED) && (x < *rmargin || first)) {
 		HTMLFitType fit;
+		HTMLVAlignType valign;
 
 		fit = html_object_fit_line (cur, painter, first, first, FALSE, width_left (o, x, *rmargin));
 		first = FALSE;
@@ -727,12 +739,18 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 		cur->x = x;
 		html_object_calc_size (cur, painter, changed_objs);
 
-		if (cur->ascent > a || cur->descent > d) {
+		valign = html_object_get_valign (cur);
+		if ((is_y_aligned (valign) && (cur->ascent > a || cur->descent > d))
+		    || cur->ascent + cur->descent > height) {
 			old_y = o->y;
-			a = MAX (a, cur->ascent);
-			d = MAX (d, cur->descent);
+			if (is_y_aligned (valign)) {
+				a = MAX (a, cur->ascent);
+				d = MAX (d, cur->descent);
+				height = MAX (height, a + d);
+			} else
+				height = MAX (height, cur->ascent + cur->descent);
 			html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
-						  object_nb_width (cur, painter, first), a + d,
+						  object_nb_width (cur, painter, first), height,
 						  indent, &o->y, lmargin, rmargin);
 
 			/* is there enough space for this object? */
@@ -767,13 +785,25 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 
 		while (begin && begin != cur) {
 			begin->x += xinc;
-			begin->y = o->ascent + a;
+
+			switch (html_object_get_valign (begin)) {
+			case HTML_VALIGN_NONE:
+			case HTML_VALIGN_BOTTOM:
+				begin->y = o->ascent + a;
+				break;
+			case HTML_VALIGN_MIDDLE:
+				begin->y = o->ascent + (height - begin->ascent - begin->descent) / 2 + begin->ascent;
+				break;
+			case HTML_VALIGN_TOP:
+				begin->y = o->ascent + begin->ascent;
+				break;
+			}
 			begin = begin->next;
 		}
 	}
 
-	o->y += a + d;
-	o->ascent += a + d;
+	o->y += height;
+	o->ascent += height;
 
 	calc_margins (o, painter, indent, lmargin, rmargin);
 
@@ -846,9 +876,6 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 	add_post_padding (cf, padding);
 
 	/* take care about changes */
-	//if (o->width < o->max_width)
-	//o->width = o->max_width;
-
 	if (o->ascent != oa || o->descent != od || o->width != ow)
 		changed = changed_size = TRUE;
 
