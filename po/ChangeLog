@@ -1,3 +1,7 @@
+2003-03-31  gettextize  <bug-gnu-utils@gnu.org>
+
+	* Makefile.in.in: Upgrade to gettext-0.10.40.
+
 2003-03-29  Duarte Loreto <happyguy_pt@hotmail.com>
 
         * pt.po: Updated Portuguese translation.
