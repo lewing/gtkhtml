@@ -1,3 +1,8 @@
+2003-03-30  Larry Ewing  <lewing@ximian.com>
+
+	* htmltextslave.c (hts_fit_line): backport fixes from 3.0.x to
+	avoid NULL dereferences.
+
 2003-03-23  Larry Ewing  <lewing@ximian.com>
 
 	* htmlengine.c (remove_font_style): always make sure that if there
