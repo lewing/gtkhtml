@@ -653,7 +653,7 @@ add_clear_area (GList **changed_objs, HTMLObject *o, gint x, gint w)
 	cr->height = o->ascent + o->descent;
 
 	*changed_objs = g_list_prepend (*changed_objs, cr);
-	/* NULL meens: clear rectangle follows */
+	/* NULL means: clear following rectangle */
 	*changed_objs = g_list_prepend (*changed_objs, NULL);
 }
 
@@ -680,8 +680,8 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	HTMLObject *cur = begin;
 	gboolean first = TRUE;
 	gint old_y;
-	gint x = *lmargin;
-	gint start_lmargin = *lmargin;
+	gint x;
+	gint start_lmargin;
 	gint a, d;
 
 	old_y = o->y;
@@ -690,12 +690,16 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	
 	a = begin->ascent;
 	d = begin->descent;
-	html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
-				  begin->min_width, a + d,
-				  indent, &o->y, lmargin, rmargin);
+
+	if (*rmargin - *lmargin < begin->min_width)
+		html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
+					  begin->min_width, a + d,
+					  indent, &o->y, lmargin, rmargin);
+
+	x = start_lmargin = *lmargin;
 	o->ascent += o->y - old_y;
 
-	while (cur && x < *rmargin) {
+	while (cur && !(cur->flags & HTML_OBJECT_FLAG_ALIGNED) && x < *rmargin) {
 		HTMLFitType fit;
 
 		fit = html_object_fit_line (cur, painter, first, first, FALSE, width_left (o, x, *rmargin));
@@ -735,7 +739,27 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	o->y += a + d;
 	o->ascent += a + d;
 
+	calc_margins (o, painter, indent, lmargin, rmargin);
+
 	return cur;
+}
+
+static HTMLObject *
+layout_aligned (HTMLObject *o, HTMLPainter *painter, HTMLObject *cur,
+		GList **changed_objs, gboolean *leaf_childs_changed_size,
+		gint *lmargin, gint *rmargin, gint indent, gboolean *changed)
+{
+	if (! html_clue_appended (HTML_CLUE (o->parent), HTML_CLUE (cur))) {
+		html_object_calc_size (cur, painter, changed_objs);
+
+		if (HTML_CLUE (cur)->halign == HTML_HALIGN_LEFT)
+			html_clue_append_left_aligned (HTML_CLUE (o->parent), HTML_CLUE (cur), lmargin, rmargin, indent);
+		else
+			html_clue_append_right_aligned (HTML_CLUE (o->parent), HTML_CLUE (cur), lmargin, rmargin, indent);
+		*changed = TRUE;
+	}
+
+	return cur->next;
 }
 
 static gboolean
@@ -744,17 +768,23 @@ layout (HTMLObject *o, HTMLPainter *painter, GList **changed_objs, gboolean *lea
 	HTMLClueFlow *cf = HTML_CLUEFLOW (o);
 	HTMLObject *cur = HTML_CLUE (o)->head, *end;
 	gint indent, lmargin, rmargin;
+	gboolean changed = FALSE;
 
 	/* prepare margins */
 	indent = get_indent (cf, painter);
 	calc_margins (o, painter, indent, &lmargin, &rmargin);
 
 	while (cur) {
-		end = layout_line (o, painter, cur, changed_objs, leaf_childs_changed_size, &lmargin, &rmargin, indent);
+		if (cur->flags & HTML_OBJECT_FLAG_ALIGNED)
+			end = layout_aligned (o, painter, cur, changed_objs, leaf_childs_changed_size,
+					      &lmargin, &rmargin, indent, &changed);
+		else
+			end = layout_line (o, painter, cur, changed_objs, leaf_childs_changed_size,
+					   &lmargin, &rmargin, indent);
 		cur = end;
 	}
 
-	return TRUE;
+	return changed;
 }
 
 static gboolean
@@ -910,7 +940,7 @@ calc_size_old (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 						obj->y = o->ascent + obj->ascent + a + d;
 						changed = TRUE;
 					}
-					html_clue_append_left_aligned (HTML_CLUE (o->parent), HTML_CLUE (c));
+					//html_clue_append_left_aligned (HTML_CLUE (o->parent), HTML_CLUE (c));
 
 					lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
 
@@ -931,7 +961,7 @@ calc_size_old (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 						changed = TRUE;
 					}
 					
-					html_clue_append_right_aligned (HTML_CLUE (o->parent), HTML_CLUE (c));
+					//html_clue_append_right_aligned (HTML_CLUE (o->parent), HTML_CLUE (c));
 
 					/* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
 					rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
