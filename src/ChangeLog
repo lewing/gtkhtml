@@ -1,3 +1,30 @@
+2002-05-22  Larry Ewing  <lewing@ximian.com>
+
+	* gtkhtml.c: merge undo changes. Cleanup skip_host.
+
+	* htmlengine-edit-cut-and-paste.c: merge undo changes and compare
+	levels in check_flows () to make sure when push when we need to.
+
+	* htmlengine-edit-clueflowstyle.c: merge undo changes from radek's
+	paragraph fix.
+
+	* htmlengine-edit-clueflowstyle.h: merge more undo changes.
+
+2002-05-20  Radek Doulik  <rodo@ximian.com>
+
+	* htmlengine-edit-clueflowstyle.c
+	(html_engine_set_clueflow_style): added dir parameter, fixed undo
+
+	* htmlengine-edit-cut-and-paste.c (check_flows): new helper
+	functions, takes care about clueflow's style changes
+
+2002-05-22  Larry Ewing  <lewing@ximian.com>
+
+	* htmlclueflow.c (save_plain): make len a gint, the unsignedness
+	was causing a nasty loop in the padding calculation.
+	(html_clueflow_set_item_type): preserve the toplevel type if it is
+	a blockquote.
+
 2002-05-21  Larry Ewing  <lewing@ximian.com>
 
 	* htmlclueflow.c (draw_item): draw the item number offset by the
@@ -32,14 +59,6 @@
 	(free_prop): free the array.
 	(get_props): dup the levels.
 	(undo_or_redo): set the levels.
-
-2002-05-20  Radek Doulik  <rodo@ximian.com>
-
-	* htmlengine-edit-clueflowstyle.c
-	(html_engine_set_clueflow_style): added dir parameter, fixed undo
-
-	* htmlengine-edit-cut-and-paste.c (check_flows): new helper
-	functions, takes care about clueflow's style changes
 
 2002-05-17  Larry Ewing  <lewing@ximian.com>
 

@@ -1089,10 +1089,12 @@ skip_host (const char *url)
 		url = host;
 
 		if (*host == '/') {
-			url = host++;
+			host++;
 
-			if ((host = strchr (host, '/')))
-				url = host;
+			while (*host && (*host != '/'))
+				host++;
+			
+			url = host;
 		}
 	}		
 	
@@ -3079,7 +3081,7 @@ gtk_html_set_paragraph_style (GtkHTML *html,
 		return;
 
 	if (! html_engine_set_clueflow_style (html->engine, clueflow_style, item_type, 0, 0,
-					      HTML_ENGINE_SET_CLUEFLOW_STYLE, TRUE))
+					      HTML_ENGINE_SET_CLUEFLOW_STYLE, HTML_UNDO_UNDO, TRUE))
 		return;
 
 	html->priv->paragraph_style = style;
@@ -3108,7 +3110,7 @@ gtk_html_set_indent (GtkHTML *html,
 	g_return_if_fail (GTK_IS_HTML (html));
 
 	html_engine_set_clueflow_style (html->engine, 0, 0, 0, level,
-					HTML_ENGINE_SET_CLUEFLOW_INDENTATION, TRUE);
+					HTML_ENGINE_SET_CLUEFLOW_INDENTATION, HTML_UNDO_UNDO, TRUE);
 
 	gtk_html_update_styles (html);
 }
@@ -3121,7 +3123,7 @@ gtk_html_modify_indent_by_delta (GtkHTML *html,
 	g_return_if_fail (GTK_IS_HTML (html));
 
 	html_engine_set_clueflow_style (html->engine, 0, 0, 0, delta,
-					HTML_ENGINE_SET_CLUEFLOW_INDENTATION_DELTA, TRUE);
+					HTML_ENGINE_SET_CLUEFLOW_INDENTATION_DELTA, HTML_UNDO_UNDO, TRUE);
 
 	gtk_html_update_styles (html);
 }
@@ -3180,7 +3182,7 @@ gtk_html_set_paragraph_alignment (GtkHTML *html,
 	align = paragraph_alignment_to_html (alignment);
 
 	if (html_engine_set_clueflow_style (html->engine, 0, 0, align, 0,
-					    HTML_ENGINE_SET_CLUEFLOW_ALIGNMENT, TRUE))
+					    HTML_ENGINE_SET_CLUEFLOW_ALIGNMENT, HTML_UNDO_UNDO, TRUE))
 		gtk_signal_emit (GTK_OBJECT (html), 
 				 signals [CURRENT_PARAGRAPH_ALIGNMENT_CHANGED],
 				 alignment);
