@@ -60,6 +60,7 @@ GTKHTML_EDITOR_SOURCES_COMMON =			\
 	dialog.c				\
 	dialog.h				\
 	editor-control-factory.c		\
+	editor-control-factory.h		\
 	engine.h				\
 	engine.c				\
 	image.c					\
@@ -117,13 +118,11 @@ libgnome_gtkhtml_editor_la_LDFLAGS = -release $(EDITOR_API_VERSION)
 
 bin_PROGRAMS = $(PRGS)
 
-oaf_in_in_files = GNOME_GtkHTML_Editor.oaf.in.in
-oaf_in_files = GNOME_GtkHTML_Editor.oaf.in
-oaf_DATA = $(oaf_in_files:.oaf.in=.oaf)
+serverdir = $(libdir)/bonobo/servers
+server_in_files = GNOME_GtkHTML_Editor.server.in
+server_DATA = $(server_in_files:.server.in=.server)
 
-oafdir = $(datadir)/oaf
-
-@XML_I18N_MERGE_OAF_RULE@
+@INTLTOOL_SERVER_RULE@
 
 GNOME_GtkHTML_Editor.xml: GNOME_GtkHTML_Editor.xml.in Makefile
 	sed -e 's?\@ICONSDIR\@?$(GTKHTML_DATADIR)/gtkhtml/icons?g' \
@@ -147,13 +146,13 @@ test_editor_SOURCES =				\
 EXTRA_DIST =					\
 	$(IDLS)					\
 	$(SPELL_IDLS)				\
-	$(oaf_in_files)				\
-	$(oaf_DATA)				\
 	ChangeLog				\
 	tt.xpm					\
 	$(ui_DATA)				\
 	GNOME_GtkHTML_Editor.xml.in		\
-	gtkhtml-editor-properties.glade
+	gtkhtml-editor-properties.glade		\
+	GNOME_GtkHTML_Editor.server.in.in	\
+	$(server_in_files) $(server_DATA)
 
 idldir = $(datadir)/gtkhtml
 idl_DATA = $(IDLS)

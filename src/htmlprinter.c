@@ -25,7 +25,6 @@
 #include <gnome.h>
 #include <ctype.h>
 #include <libgnomeprint/gnome-print.h>
-#include <gal/unicode/gunicode.h>
 
 #include "htmlembedded.h"
 #include "gtkhtml-embedded.h"

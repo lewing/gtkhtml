@@ -119,7 +119,7 @@ struct _GtkHTMLEditorAPI
 	/* unhandled commands */
 	gboolean  (* command)                 (GtkHTML *html, GtkHTMLCommandType com_type, gpointer data);
 
-	GtkArg  * (* event)                   (GtkHTML *html, GtkHTMLEditorEventType event_type, GtkArg *args, gpointer data);
+	GValue  * (* event)                   (GtkHTML *html, GtkHTMLEditorEventType event_type, GValue *args, gpointer data);
 
 	/* input line */
 	GtkWidget * (* create_input_line)     (GtkHTML *html, gpointer data);

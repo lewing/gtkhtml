@@ -79,7 +79,7 @@ void  gtk_html_editor_event_command     (GtkHTML                 *html,
 					 gboolean                 before);
 void  gtk_html_editor_event             (GtkHTML                 *html,
 					 GtkHTMLEditorEventType   event,
-					 GtkArg                  *args);
+					 GValue                  *args);
 void  gtk_html_api_set_language         (GtkHTML                 *html);
 
 #endif /* _GTKHTML_PRIVATE_H */

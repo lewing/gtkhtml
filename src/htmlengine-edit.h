@@ -23,7 +23,6 @@
 #define _HTMLENGINE_EDIT_H
 
 #include <glib.h>
-#include <gal/unicode/gunicode.h>
 
 #include "htmlengine.h"
 #include "htmlclueflow.h"

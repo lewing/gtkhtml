@@ -27,13 +27,7 @@
 #include <bonobo.h>
 
 #include <Editor.h>
-
-
-#ifdef USING_OAF
-#define HTML_EDITOR_CONTROL_ID "OAFIID:GNOME_GtkHTML_Editor"
-#else
-#define HTML_EDITOR_CONTROL_ID "control:html-editor"
-#endif
+#include "editor-control-factory.h"
 
 GtkWidget *control;
 gint formatHTML = 1;
@@ -45,13 +39,13 @@ static void
 load_through_persist_stream (const gchar *filename,
 			     Bonobo_PersistStream pstream)
 {
-	BonoboStream *stream;
+	BonoboStream *stream = NULL;
 	CORBA_Environment ev;
 
 	CORBA_exception_init (&ev);
 
-	stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
-				     Bonobo_Storage_READ, 0);
+	/* FIX2 stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
+	   Bonobo_Storage_READ, 0); */
 
 	if (stream == NULL) {
 		g_warning ("Couldn't load `%s'\n", filename);
@@ -75,15 +69,15 @@ static void
 save_through_persist_stream (const gchar *filename,
 			     Bonobo_PersistStream pstream)
 {
-	BonoboStream *stream;
+	BonoboStream *stream = NULL;
 	CORBA_Environment ev;
 
 	CORBA_exception_init (&ev);
 
-	stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
+	/* FIX2 stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
 				     Bonobo_Storage_WRITE |
 				     Bonobo_Storage_CREATE |
-				     Bonobo_Storage_FAILIFEXIST, 0);
+				     Bonobo_Storage_FAILIFEXIST, 0); */
 
 	if (stream == NULL) {
 		g_warning ("Couldn't create `%s'\n", filename);
@@ -107,15 +101,15 @@ static void
 save_through_plain_persist_stream (const gchar *filename,
 			     Bonobo_PersistStream pstream)
 {
-	BonoboStream *stream;
+	BonoboStream *stream = NULL;
 	CORBA_Environment ev;
 
 	CORBA_exception_init (&ev);
 
-	stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
+	/* FIX2 stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
 				     Bonobo_Storage_WRITE |
 				     Bonobo_Storage_CREATE |
-				     Bonobo_Storage_FAILIFEXIST, 0);
+				     Bonobo_Storage_FAILIFEXIST, 0); */
 
 	if (stream == NULL) {
 		g_warning ("Couldn't create `%s'\n", filename);
@@ -210,10 +204,7 @@ file_selection_ok_cb (GtkWidget *widget,
 		      gpointer data)
 {
 	CORBA_Object interface;
-	BonoboObjectClient *object_client;
 	const gchar *interface_name;
-
-	object_client = bonobo_widget_get_server (file_selection_info.control);
 
 	if (file_selection_info.operation == OP_SAVE_THROUGH_PERSIST_FILE
 	    || file_selection_info.operation == OP_LOAD_THROUGH_PERSIST_FILE)
@@ -221,8 +212,7 @@ file_selection_ok_cb (GtkWidget *widget,
 	else
 		interface_name = "IDL:Bonobo/PersistStream:1.0";
 
-	interface = bonobo_object_client_query_interface (object_client, interface_name,
-							  NULL);
+	interface = bonobo_object_query_interface (BONOBO_OBJECT (file_selection_info.control), interface_name, NULL);
 
 	if (interface == CORBA_OBJECT_NIL) {
 		g_warning ("The Control does not seem to support `%s'.", interface_name);
@@ -442,7 +432,7 @@ container_create (void)
 	window = GTK_WINDOW (win);
 
 	container = bonobo_ui_container_new ();
-	bonobo_ui_container_set_win (container, BONOBO_WINDOW (win));
+	/* FIX2 bonobo_ui_container_set_win (container, BONOBO_WINDOW (win)); */
 
 	gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			    GTK_SIGNAL_FUNC (app_delete_cb), NULL);
@@ -457,18 +447,16 @@ container_create (void)
 
 	bonobo_ui_component_set_container (
 		component,
-		bonobo_object_corba_objref (BONOBO_OBJECT (container)));
+		bonobo_object_corba_objref (BONOBO_OBJECT (container)), NULL);
 
 	bonobo_ui_component_add_verb_list_with_data (component, verbs, win);
 
 	bonobo_ui_component_set_translate (component, "/", ui, NULL);
 
-	control = bonobo_widget_new_control (
-		HTML_EDITOR_CONTROL_ID,
-		bonobo_object_corba_objref (BONOBO_OBJECT (container)));
+	control = bonobo_widget_new_control (CONTROL_ID, bonobo_object_corba_objref (BONOBO_OBJECT (container)));
 
 	if (control == NULL)
-		g_error ("Cannot get `%s'.", HTML_EDITOR_CONTROL_ID);
+		g_error ("Cannot get `%s'.", CONTROL_ID);
 
 	bonobo_widget_set_property (BONOBO_WIDGET (control), "FormatHTML", formatHTML, NULL);
 	bonobo_ui_component_set_prop (component, "/commands/FormatHTML", "state", formatHTML ? "1" : "0", NULL);
@@ -479,8 +467,8 @@ container_create (void)
 	gtk_widget_show_all (GTK_WIDGET (window));
 
 	CORBA_exception_init (&ev);
-	engine = (GNOME_GtkHTML_Editor_Engine) bonobo_object_client_query_interface
-		(bonobo_widget_get_server (BONOBO_WIDGET (control)), "IDL:GNOME/GtkHTML/Editor/Engine:1.0", &ev);
+	engine = (GNOME_GtkHTML_Editor_Engine) bonobo_object_query_interface
+		(BONOBO_OBJECT (control), "IDL:GNOME/GtkHTML/Editor/Engine:1.0", &ev);
 	GNOME_GtkHTML_Editor_Engine_runCommand (engine, "grab-focus", &ev);
 	Bonobo_Unknown_unref (engine, &ev);
 	CORBA_Object_release (engine, &ev);
@@ -489,46 +477,13 @@ container_create (void)
 	return FALSE;
 }
 
-#ifdef USING_OAF
-
-#include <liboaf/liboaf.h>
-
-static CORBA_ORB
-init_corba (int *argc, char **argv)
-{
-	gnome_init_with_popt_table ("test-gnome-gtkhtml-editor", "1.0", *argc, argv,
-				    NULL, 0, NULL);
-	return oaf_init (*argc, argv);
-}
-
-#else  /* USING_OAF */
-
-#include <libgnorba/gnorba.h>
-
-static CORBA_ORB
-init_corba (int *argc, char **argv)
-{
-	CORBA_Environment ev;
-
-	CORBA_exception_init (&ev);
-
-	gnome_CORBA_init ("test-gnome-gtkhtml-editor", "1.0", argc, argv, 0, &ev);
-
-	CORBA_exception_free (&ev);
-
-	return CORBA_OBJECT_NIL;
-}
-
-#endif /* USING_OAF */
-
 static gint
 load_file (const gchar *fname)
 {
 	CORBA_Object interface;
 
 	printf ("loading: %s\n", fname);
-	interface = bonobo_object_client_query_interface (bonobo_widget_get_server (BONOBO_WIDGET (control)),
-							  "IDL:Bonobo/PersistFile:1.0", NULL);
+	interface = bonobo_object_query_interface (BONOBO_OBJECT (control), "IDL:Bonobo/PersistFile:1.0", NULL);
 	load_through_persist_file (fname, interface);
 
 	return FALSE;
@@ -540,8 +495,10 @@ main (int argc, char **argv)
 	bindtextdomain(PACKAGE, GNOMELOCALEDIR);
 	textdomain(PACKAGE);
 	
-	if (bonobo_init (init_corba (&argc, argv), CORBA_OBJECT_NIL, CORBA_OBJECT_NIL) == FALSE)
+	gnome_init ("test-gnome-gtkhtml-editor", "1.0", argc, argv);
+	if (bonobo_init (&argc, argv) == FALSE)
 		g_error ("Could not initialize Bonobo\n");
+	bonobo_activate ();
 
 	/* We can't make any CORBA calls unless we're in the main loop.  So we
 	   delay creating the container here. */

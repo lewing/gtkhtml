@@ -26,7 +26,6 @@
 #include <config.h>
 #include <ctype.h>
 #include <gnome.h>
-#include <gal/unicode/gunicode.h>
 #include "htmltokenizer.h"
 #include "htmlentity.h"
 

@@ -469,18 +469,16 @@ html_image_resolve_image_url (GtkHTML *html, gchar *image_url)
 
 	/* printf ("html_image_resolve_image_url %p\n", html->editor_api); */
 	if (html->editor_api) {
-		GtkArg args [1];
-		GtkArg *arg;
+		GValue  args [1];
+		GValue *arg;
 
-		args [0].name = NULL;
-		args [0].type = GTK_TYPE_STRING;
-		args [0].d.string_data = image_url;
+		g_value_set_string (&args [0], image_url);
 
 		arg = (* html->editor_api->event) (html, GTK_HTML_EDITOR_EVENT_IMAGE_URL, args, html->editor_data);
 
 		if (arg) {
-			if (arg->type == GTK_TYPE_STRING)
-				url = arg->d.string_data;
+			if (G_VALUE_TYPE (arg) == GTK_TYPE_STRING)
+				url = (gchar *) g_value_get_string (arg);
 			g_free (arg);
 		}
 	}

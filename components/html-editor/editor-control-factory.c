@@ -636,7 +636,7 @@ send_event_stream (GNOME_GtkHTML_Editor_Engine engine,
 }
 		  
 static GValue *
-editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GValue **args, gpointer data)
+editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GValue *args, gpointer data)
 {
 	GtkHTMLControlData *cd = (GtkHTMLControlData *) data;
 	GValue *retval = NULL;
@@ -656,13 +656,13 @@ editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GValue **arg
 
 			switch (event_type) {
 			case GTK_HTML_EDITOR_EVENT_COMMAND_BEFORE:
-				retval = send_event_str (engine, listener, "command_before", args [0]);
+				retval = send_event_str (engine, listener, "command_before", &args [0]);
 				break;
 			case GTK_HTML_EDITOR_EVENT_COMMAND_AFTER:
-				retval = send_event_str (engine, listener, "command_after", args [0]);
+				retval = send_event_str (engine, listener, "command_after", &args [0]);
 				break;
 			case GTK_HTML_EDITOR_EVENT_IMAGE_URL:
-				retval = send_event_str (engine, listener, "image_url", args [0]);
+				retval = send_event_str (engine, listener, "image_url", &args [0]);
 				break;
 			case GTK_HTML_EDITOR_EVENT_DELETE:
 				send_event_void (engine, listener, "delete");
@@ -724,6 +724,8 @@ editor_control_factory (BonoboGenericFactory *factory, const gchar *component_id
 	BonoboControl *control;
 	GtkWidget *vbox;
 
+	printf ("factory: %s\n", component_id);
+
 	editor_control_init ();
 
 	vbox = gtk_vbox_new (FALSE, 0);
@@ -755,13 +757,11 @@ main (int argc, char **argv)
 #endif
 
 	/* Initialize the i18n support */
-	bindtextdomain(PACKAGE, GNOMELOCALEDIR);
-	textdomain(PACKAGE);
+	//bindtextdomain(PACKAGE, GNOMELOCALEDIR);
+	//textdomain(PACKAGE);
 
-	gnome_init ("gnome-gtkhtml-editor", VERSION, argc, argv);
-	if (!bonobo_init (&argc, argv))
+	if (!bonobo_ui_init ("gnome-gtkhtml-editor", VERSION, &argc, argv))
 		g_error (_("I could not initialize Bonobo"));
-	bonobo_activate ();
 
 #ifdef GTKHTML_HAVE_GCONF
 	if (!gconf_init (argc, argv, &gconf_error)) {
@@ -771,12 +771,6 @@ main (int argc, char **argv)
 	}
 #endif
 
-	factory = bonobo_generic_factory_new (CONTROL_FACTORY_ID, editor_control_factory, NULL);
-	if (factory == NULL)
-		g_error ("I could not register the GNOME_GtkHTML_Editor factory.");
-
-	bonobo_main ();
-
-	return 0;
+	return bonobo_generic_factory_main (CONTROL_FACTORY_ID, editor_control_factory, NULL);
 }
 #endif /* GNOME_GTKHTML_EDITOR_SHLIB */
