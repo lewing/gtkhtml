@@ -181,7 +181,7 @@ text_size (HTMLPainter *painter, PangoFontDescription *desc, const gchar *text, 
 			str = (PangoGlyphString *) gl->data;
 			gl = gl->next;
 			ii = GPOINTER_TO_INT (gl->data);
-			item = pi->entries [ii].item;
+			item = pi->entries [ii].glyph_item.item;
 			pango_glyph_string_extents (str, item->analysis.font, NULL, &log_rect);
 			width += log_rect.width;
 
@@ -586,7 +586,7 @@ html_painter_draw_entries (HTMLPainter *painter, gint x, gint y,
 	 */
 	while (gl) {
 		gint ii = GPOINTER_TO_INT (gl->next->data);
-		PangoItem *item = pi->entries[ii].item;
+		PangoItem *item = pi->entries[ii].glyph_item.item;
 		const gchar *item_end;
 		const gchar *next;
 
@@ -626,6 +626,12 @@ html_painter_draw_entries (HTMLPainter *painter, gint x, gint y,
 		bytes -= next - c_text;
 		c_text = next;
 	}
+}
+
+int
+html_painter_draw_glyphs (HTMLPainter *painter, int x, int y, PangoItem *item, PangoGlyphString *glyphs)
+{
+	return (* HP_CLASS (painter)->draw_glyphs) (painter, x, y, item, glyphs);
 }
 
 /**
@@ -981,7 +987,7 @@ html_painter_text_itemize_and_prepare_glyphs (HTMLPainter *painter, PangoFontDes
 
 		for (il = items; il; il = il->next) {
 			item = (PangoItem *) il->data;
-			pi->entries [i].item = item;
+			pi->entries [i].glyph_item.item = item;
 			end = g_utf8_offset_to_pointer (text, item->num_chars);
 			*glyphs = html_get_glyphs_non_tab (*glyphs, item, i, text, end - text, item->num_chars);
 			text = end;

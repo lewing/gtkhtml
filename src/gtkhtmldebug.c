@@ -200,7 +200,7 @@ gtk_html_debug_dump_object (HTMLObject *obj,
 /* 		debug_spell_errors (text->spell_errors); */
 		if (text->pi) {
 			for (i =0; i < text->pi->n; i ++)
-				g_print ("item %d offset: %d length: %d\n", i, text->pi->entries [i].item->offset, text->pi->entries [i].item->length);
+				g_print ("item %d offset: %d length: %d\n", i, text->pi->entries [i].glyph_item.item->offset, text->pi->entries [i].glyph_item.item->length);
 				
 			for (i = 0; i < text->text_len; i ++) {
 				union {

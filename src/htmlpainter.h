@@ -179,6 +179,11 @@ void              html_painter_draw_text                               (HTMLPain
 									gint               y,
 									const gchar       *text,
 									gint               len);
+int               html_painter_draw_glyphs                             (HTMLPainter       *painter,
+									int                x,
+									int                y,
+									PangoItem         *item,
+									PangoGlyphString  *glyphs);
 void              html_painter_draw_entries                            (HTMLPainter       *painter,
 									gint               x,
 									gint               y,

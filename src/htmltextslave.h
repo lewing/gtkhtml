@@ -37,7 +37,8 @@ struct _HTMLTextSlave {
 	gchar *charStart;
 
 	HTMLTextPangoInfo *pi;
-	GList *glyphs;
+	GList *glyphs; /* deprecated */
+	GList *glyph_items;
 };
 
 struct _HTMLTextSlaveClass {

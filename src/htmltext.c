@@ -95,7 +95,9 @@ html_text_pango_info_destroy (HTMLTextPangoInfo *pi)
 	gint i;
 
 	for (i = 0; i < pi->n; i ++) {
-		pango_item_free (pi->entries [i].item);
+		pango_item_free (pi->entries [i].glyph_item.item);
+		if (pi->entries [i].glyph_item.glyphs)
+			pango_glyph_string_free (pi->entries [i].glyph_item.glyphs);
 		g_free (pi->entries [i].widths);
 	}
 	g_free (pi->attrs);
@@ -835,8 +837,8 @@ html_text_get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gin
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 	gint idx = 0;
 
-	while (idx < pi->n - 1 && offset >= pi->entries [idx].item->num_chars) {
-		offset -= pi->entries [idx].item->num_chars;
+	while (idx < pi->n - 1 && offset >= pi->entries [idx].glyph_item.item->num_chars) {
+		offset -= pi->entries [idx].glyph_item.item->num_chars;
 		idx ++;
 	}
 
@@ -951,9 +953,9 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, char *start, gi
 	
 	idx = html_text_get_item_index (text, painter, offset, &offset);
 	if (need_ascent_descent) {
-		update_asc_dsc (painter, pi->entries [idx].item, &ascent, &descent);
-		font = pi->entries [idx].item->analysis.font;
-		language = pi->entries [idx].item->analysis.language;
+		update_asc_dsc (painter, pi->entries [idx].glyph_item.item, &ascent, &descent);
+		font = pi->entries [idx].glyph_item.item->analysis.font;
+		language = pi->entries [idx].glyph_item.item->analysis.language;
 	}
 	while (len > 0) {
 		if (*s == '\t') {
@@ -965,11 +967,12 @@ html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, char *start, gi
 			line_offset ++;
   		}
 		len --;
-		if (offset >= pi->entries [idx].item->num_chars - 1) {
+		if (offset >= pi->entries [idx].glyph_item.item->num_chars - 1) {
 			idx ++;
 			offset = 0;
-			if (len > 0 && (need_ascent_descent) && (pi->entries [idx].item->analysis.font != font || pi->entries [idx].item->analysis.language != language)) {
-				update_asc_dsc (painter, pi->entries [idx].item, &ascent, &descent);
+			if (len > 0 && (need_ascent_descent) && (pi->entries [idx].glyph_item.item->analysis.font != font
+								 || pi->entries [idx].glyph_item.item->analysis.language != language)) {
+				update_asc_dsc (painter, pi->entries [idx].glyph_item.item, &ascent, &descent);
 			}
 		} else
 			offset ++;
@@ -1111,7 +1114,7 @@ min_word_width_calc_tabs (HTMLText *text, HTMLPainter *p, gint idx, gint *len)
 gint
 html_text_pango_info_get_index (HTMLTextPangoInfo *pi, gint byte_offset, gint idx)
 {
-	while (idx < pi->n && pi->entries [idx].item->offset + pi->entries [idx].item->length <= byte_offset)
+	while (idx < pi->n && pi->entries [idx].glyph_item.item->offset + pi->entries [idx].glyph_item.item->length <= byte_offset)
 		idx ++;
 
 	return idx;
@@ -1164,6 +1167,107 @@ html_text_remove_unwanted_line_breaks (char *s, int len, PangoLogAttr *attrs)
 	}
 }
 
+static PangoAttrList *
+prepare_attrs (HTMLText *text, HTMLPainter *painter)
+{
+	PangoAttrList *attrs;
+	HTMLClueFlow *flow = NULL;
+	HTMLEngine *e = NULL;
+	PangoAttribute *attr;
+
+	attrs = pango_attr_list_new ();
+
+	if (HTML_OBJECT (text)->parent && HTML_IS_CLUEFLOW (HTML_OBJECT (text)->parent))
+		flow = HTML_CLUEFLOW (HTML_OBJECT (text)->parent);
+		
+	if (painter->widget && GTK_IS_HTML (painter->widget))
+		e = GTK_HTML (painter->widget)->engine;
+
+	if (flow && e)
+		html_text_add_cite_color (attrs, text, flow, e);
+
+	if (HTML_IS_PLAIN_PAINTER (painter)) {
+		attr = pango_attr_family_new (painter->font_manager.fixed.face);
+		attr->start_index = 0;
+		attr->end_index = text->text_bytes;
+		pango_attr_list_insert (attrs, attr);
+		if (painter->font_manager.fix_size != painter->font_manager.var_size) {
+			attr = pango_attr_size_new (painter->font_manager.fix_size);
+			attr->start_index = 0;
+			attr->end_index = text->text_bytes;
+			pango_attr_list_insert (attrs, attr);
+		}
+	} else
+		pango_attr_list_splice (attrs, text->attr_list, 0, 0);
+
+	if (text->extra_attr_list)
+		pango_attr_list_splice (attrs, text->extra_attr_list, 0, 0);
+	if (!HTML_IS_PLAIN_PAINTER (painter)) {
+		if (flow && e)
+			html_text_change_attrs (attrs, html_clueflow_get_default_font_style (flow), GTK_HTML (painter->widget)->engine, 0, text->text_bytes, TRUE);
+	}
+
+	if (text->links && e) {
+		HTMLColor *link_color = html_colorset_get_color (e->settings->color_set, HTMLLinkColor);
+		GSList *l;
+
+		for (l = text->links; l; l = l->next) {
+			PangoAttribute *attr;
+			Link *link;
+
+			link = (Link *) l->data;
+			attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+			attr->start_index = link->start_index;
+			attr->end_index = link->end_index;
+			pango_attr_list_change (attrs, attr);
+
+			attr = pango_attr_foreground_new (link_color->color.red, link_color->color.green, link_color->color.blue);
+			attr->start_index = link->start_index;
+			attr->end_index = link->end_index;
+			pango_attr_list_change (attrs, attr);
+		}
+	}
+
+	if (e && text->select_length) {
+		gchar *end;
+		gchar *start;
+		GdkColor fg = html_colorset_get_color_allocated
+			(e->settings->color_set, painter,
+			 painter->focus ? HTMLHighlightTextColor : HTMLHighlightTextNFColor)->color;
+		GdkColor bg = html_colorset_get_color_allocated
+			(e->settings->color_set, painter,
+			 painter->focus ? HTMLHighlightColor : HTMLHighlightNFColor)->color;
+			
+		start = html_text_get_text (text,  text->select_start);
+		end = g_utf8_offset_to_pointer (start, text->select_length);
+			
+		attr = pango_attr_background_new (bg.red, bg.green, bg.blue);
+		attr->start_index = start - text->text;
+		attr->end_index = end - text->text;
+		pango_attr_list_change (attrs, attr);
+			
+		attr = pango_attr_foreground_new (fg.red, fg.green, fg.blue);
+		attr->start_index = start - text->text;
+		attr->end_index = end - text->text;
+		pango_attr_list_change (attrs, attr);
+	}
+
+	return attrs;
+}
+
+PangoDirection
+html_text_get_pango_direction (HTMLText *text)
+{
+	switch (html_object_get_direction (HTML_OBJECT (text))) {
+	case HTML_DIRECTION_RTL:
+		return PANGO_DIRECTION_RTL;
+	case HTML_DIRECTION_LTR:
+	case HTML_DIRECTION_DERIVED:
+	default:
+		return PANGO_DIRECTION_LTR;
+	}
+}
+
 HTMLTextPangoInfo *
 html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 {
@@ -1174,148 +1278,67 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 	if (!text->pi) {
 		GList *items, *cur;
 		PangoAttrList *attrs;
-		PangoAttribute *attr;
-		HTMLClueFlow *flow = NULL;
-		HTMLEngine *e = NULL;
-		gchar *translated, *heap = NULL;
 		int i, offset;
 
-		if (text->text_bytes > HTML_ALLOCA_MAX)
-			heap = translated = g_malloc (text->text_bytes);
-		else 
-			translated = alloca (text->text_bytes);
-
-		html_replace_tabs (text->text, translated, text->text_bytes);
-		attrs = pango_attr_list_new ();
-
-		if (HTML_OBJECT (text)->parent && HTML_IS_CLUEFLOW (HTML_OBJECT (text)->parent))
-			flow = HTML_CLUEFLOW (HTML_OBJECT (text)->parent);
-		
-		if (painter->widget && GTK_IS_HTML (painter->widget))
-			e = GTK_HTML (painter->widget)->engine;
-
-		if (flow && e)
-			html_text_add_cite_color (attrs, text, flow, e);
-
-		if (HTML_IS_PLAIN_PAINTER (painter)) {
-			attr = pango_attr_family_new (painter->font_manager.fixed.face);
-			attr->start_index = 0;
-			attr->end_index = text->text_bytes;
-			pango_attr_list_insert (attrs, attr);
-			if (painter->font_manager.fix_size != painter->font_manager.var_size) {
-				attr = pango_attr_size_new (painter->font_manager.fix_size);
-				attr->start_index = 0;
-				attr->end_index = text->text_bytes;
-				pango_attr_list_insert (attrs, attr);
-			}
-		} else
-			pango_attr_list_splice (attrs, text->attr_list, 0, 0);
-
-		if (text->extra_attr_list)
-			pango_attr_list_splice (attrs, text->extra_attr_list, 0, 0);
-		if (!HTML_IS_PLAIN_PAINTER (painter)) {
-			if (flow && e)
-				html_text_change_attrs (attrs, html_clueflow_get_default_font_style (flow), GTK_HTML (painter->widget)->engine, 0, text->text_bytes, TRUE);
-		}
-
-		if (text->links && e) {
-			HTMLColor *link_color = html_colorset_get_color (e->settings->color_set, HTMLLinkColor);
-			GSList *l;
-
-			for (l = text->links; l; l = l->next) {
-				PangoAttribute *attr;
-				Link *link;
-
-				link = (Link *) l->data;
-				attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-				attr->start_index = link->start_index;
-				attr->end_index = link->end_index;
-				pango_attr_list_change (attrs, attr);
-
-				attr = pango_attr_foreground_new (link_color->color.red, link_color->color.green, link_color->color.blue);
-				attr->start_index = link->start_index;
-				attr->end_index = link->end_index;
-				pango_attr_list_change (attrs, attr);
-			}
-		}
-
-		if (e && text->select_length) {
-			gchar *end;
-			gchar *start;
-			GdkColor fg = html_colorset_get_color_allocated
-				(e->settings->color_set, painter,
-				 painter->focus ? HTMLHighlightTextColor : HTMLHighlightTextNFColor)->color;
-			GdkColor bg = html_colorset_get_color_allocated
-				(e->settings->color_set, painter,
-				 painter->focus ? HTMLHighlightColor : HTMLHighlightNFColor)->color;
-			
-			start = html_text_get_text (text,  text->select_start);
-			end = g_utf8_offset_to_pointer (start, text->select_length);
-			
-			attr = pango_attr_background_new (bg.red, bg.green, bg.blue);
-			attr->start_index = start - text->text;
-			attr->end_index = end - text->text;
-			pango_attr_list_change (attrs, attr);
-			
-			attr = pango_attr_foreground_new (fg.red, fg.green, fg.blue);
-			attr->start_index = start - text->text;
-			attr->end_index = end - text->text;
-			pango_attr_list_change (attrs, attr);
-		}
-
-		items = pango_itemize (painter->pango_context, translated, 0, text->text_bytes, attrs, NULL);
+		attrs = prepare_attrs (text, painter);
+		items = pango_itemize_with_base_dir (painter->pango_context, html_text_get_pango_direction (text), text->text, 0, text->text_bytes, attrs, NULL);
 		pango_attr_list_unref (attrs);
 
+		/* create pango info */
 		text->pi = html_text_pango_info_new (g_list_length (items));
 		text->pi->have_font = TRUE;
 		text->pi->font_style = html_text_get_font_style (text);
 		text->pi->face = g_strdup (text->face);
-
-		for (i = 0, cur = items; i < text->pi->n; i ++, cur = cur->next)
-			text->pi->entries [i].item = (PangoItem *) cur->data;
-
-		offset = 0;
 		text->pi->attrs = g_new (PangoLogAttr, text->text_len + 1);
-		for (i = 0; i < text->pi->n; i ++) {
-			PangoItem tmp_item;
-			int start_i, start_offset;
 
-			start_i = i;
+		/* get line breaks */
+		offset = 0;
+		for (cur = items; cur; cur = cur->next) {
+			PangoItem tmp_item;
+			PangoItem *item;
+			int start_offset;
+
 			start_offset = offset;
-			offset += text->pi->entries [i].item->num_chars;
-			tmp_item = *text->pi->entries [i].item;
-			while (i < text->pi->n - 1) {
-				if (tmp_item.analysis.lang_engine == text->pi->entries [i + 1].item->analysis.lang_engine) {
-					tmp_item.length += text->pi->entries [i + 1].item->length;
-					tmp_item.num_chars += text->pi->entries [i + 1].item->num_chars;
-					offset += text->pi->entries [i + 1].item->num_chars;
-					i ++;
+			item = (PangoItem *) cur->data;
+			offset += item->num_chars;
+			tmp_item = *item;
+			while (cur->next) {
+				PangoItem *next_item = (PangoItem *) cur->next->data;
+				if (tmp_item.analysis.lang_engine == next_item->analysis.lang_engine) {
+					tmp_item.length += next_item->length;
+					tmp_item.num_chars += next_item->num_chars;
+					offset += next_item->num_chars;
+					cur = cur->next;
 				} else
 					break;
 			}
 
-			pango_break (translated + tmp_item.offset, tmp_item.length, &tmp_item.analysis, text->pi->attrs + start_offset, tmp_item.num_chars + 1);
+			pango_break (text->text + tmp_item.offset, tmp_item.length, &tmp_item.analysis, text->pi->attrs + start_offset, tmp_item.num_chars + 1);
 		}
 
 		if (text->pi && text->pi->attrs)
 			html_text_remove_unwanted_line_breaks (text->text, text->text_len, text->pi->attrs);
 
-		for (i = 0; i < text->pi->n; i ++) {
-			PangoGlyphString *glyphs;
-			PangoItem *item;
+		items = pango_reorder_items (items);
 
-			item = text->pi->entries [i].item;
+		for (i = 0, cur = items; i < text->pi->n; i ++, cur = cur->next)
+			text->pi->entries [i].glyph_item.item = (PangoItem *) cur->data;
+
+		for (i = 0; i < text->pi->n; i ++) {
+			PangoItem *item;
+			PangoGlyphString *glyphs;
+
+			item = text->pi->entries [i].glyph_item.item;
+			glyphs = text->pi->entries [i].glyph_item.glyphs = pango_glyph_string_new ();
 
 			/* printf ("item pos %d len %d\n", item->offset, item->length); */
 
-			glyphs = pango_glyph_string_new ();
 			text->pi->entries [i].widths = g_new (PangoGlyphUnit, item->num_chars);
-			pango_shape (translated + item->offset, item->length, &item->analysis, glyphs);
-			pango_glyph_string_get_logical_widths (glyphs, translated + item->offset, item->length, item->analysis.level, text->pi->entries [i].widths);
-			pango_glyph_string_free (glyphs);
+			pango_shape (text->text + item->offset, item->length, &item->analysis, glyphs);
+			pango_glyph_string_get_logical_widths (glyphs, text->text + item->offset, item->length,
+							       item->analysis.level, text->pi->entries [i].widths);
 		}
 
-		g_free (heap);
 		g_list_free (items);
 	}
 	return text->pi;
@@ -1328,7 +1351,7 @@ html_text_pi_backward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
 		if (*ii <= 0)
 			return FALSE;
 		(*ii) --;
-		*io = pi->entries [*ii].item->num_chars - 1;
+		*io = pi->entries [*ii].glyph_item.item->num_chars - 1;
 	} else
 		(*io) --;
 
@@ -1338,7 +1361,7 @@ html_text_pi_backward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
 gboolean
 html_text_pi_forward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
 {
-	if (*io >= pi->entries [*ii].item->num_chars - 1) {
+	if (*io >= pi->entries [*ii].glyph_item.item->num_chars - 1) {
 		if (*ii >= pi->n -1)
 			return FALSE;
 		(*ii) ++;

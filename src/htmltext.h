@@ -44,7 +44,7 @@ struct _Link {
 };
 
 struct _HTMLTextPangoInfoEntry {
-	PangoItem *item;
+	PangoGlyphItem glyph_item;
 	PangoGlyphUnit *widths;
 };
 
