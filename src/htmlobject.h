@@ -122,7 +122,7 @@ struct _HTMLObjectClass {
 	/* Layout management and geometry handling.  */
 
 	HTMLFitType (* fit_line) (HTMLObject *o, HTMLPainter *painter,
-				  gboolean start_of_line, gboolean first_run,
+				  gboolean start_of_line, gboolean first_run, gboolean next_to_floating,
 				  gint width_left);
 	gboolean (* calc_size) (HTMLObject *o, HTMLPainter *painter, GList **changed_objs);
 	gint (* calc_min_width) (HTMLObject *o, HTMLPainter *painter);
@@ -170,8 +170,8 @@ struct _HTMLObjectClass {
            HTMLTable does not derive from HTMLClue and we don't want
            to spend time reorganizing the hierarchy now.  */
 
-	gint (* get_left_margin) (HTMLObject *self, HTMLPainter *painter, gint y);
-	gint (* get_right_margin) (HTMLObject *self, HTMLPainter *painter, gint y);
+	gint (* get_left_margin) (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_aligned);
+	gint (* get_right_margin) (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_aligned);
 
 	void (* set_painter) (HTMLObject *o, HTMLPainter *painter);
 
@@ -299,10 +299,12 @@ void            html_object_set_parent            (HTMLObject            *self,
 						   HTMLObject            *parent);
 gint            html_object_get_left_margin       (HTMLObject            *self,
 						   HTMLPainter           *painter,
-						   gint                   y);
+						   gint                   y,
+						   gboolean               with_aligned);
 gint            html_object_get_right_margin      (HTMLObject            *self,
 						   HTMLPainter           *painter,
-						   gint                   y);
+						   gint                   y,
+						   gboolean               with_aligned);
 void            html_object_set_painter           (HTMLObject            *o,
 						   HTMLPainter           *p);
 void            html_object_clear_word_width      (HTMLObject            *o);
@@ -365,6 +367,7 @@ HTMLFitType     html_object_fit_line              (HTMLObject            *o,
 						   HTMLPainter           *painter,
 						   gboolean               start_of_line,
 						   gboolean               first_run,
+						   gboolean               next_to_floating,
 						   gint                   width_left);
 gboolean        html_object_calc_size             (HTMLObject            *o,
 						   HTMLPainter           *painter,

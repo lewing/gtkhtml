@@ -91,7 +91,7 @@ static gint
 get_lmargin (HTMLObject *o, HTMLPainter *painter)
 {
 	return HTML_CLUEV (o)->padding * html_painter_get_pixel_size (painter)
-		+ (o->parent ?  html_object_get_left_margin (o->parent, painter, o->y) : 0);
+		+ (o->parent ?  html_object_get_left_margin (o->parent, painter, o->y, TRUE) : 0);
 }
 
 static void
@@ -514,7 +514,7 @@ relayout (HTMLObject *self,
 }
 
 static gint
-get_left_margin (HTMLObject *self, HTMLPainter *painter, gint y)
+get_left_margin (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_aligned)
 {
 	HTMLObject *aclue;
 	HTMLClueV *cluev;
@@ -523,21 +523,22 @@ get_left_margin (HTMLObject *self, HTMLPainter *painter, gint y)
 	cluev = HTML_CLUEV (self);
 	margin = 0;
 	
-	for (aclue = cluev->align_left_list;
-	     aclue != NULL;
-	     aclue = cluev_next_aligned (aclue)) {
-		if ((aclue->y - aclue->ascent + aclue->parent->y - aclue->parent->ascent
-		     <= y)
-		    && (aclue->y + aclue->parent->y - aclue->parent->ascent
-			> y))
-			margin = aclue->x + aclue->width;
-	}
+	if (with_aligned)
+		for (aclue = cluev->align_left_list;
+		     aclue != NULL;
+		     aclue = cluev_next_aligned (aclue)) {
+			if ((aclue->y - aclue->ascent + aclue->parent->y - aclue->parent->ascent
+			     <= y)
+			    && (aclue->y + aclue->parent->y - aclue->parent->ascent
+				> y))
+				margin = aclue->x + aclue->width;
+		}
 
 	return margin;
 }
 
 static gint
-get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y)
+get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_aligned)
 {
 	HTMLClueV *cluev;
 	/* FIXME: Should be HTMLAligned */
@@ -545,15 +546,16 @@ get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y)
 	gint margin;
 	
 	cluev = HTML_CLUEV (self);
-	margin = self->max_width - 2 * cluev->padding * html_painter_get_pixel_size (painter);
+	margin = MAX (self->max_width, self->width) - 2 * cluev->padding * html_painter_get_pixel_size (painter);
 
-	for (aclue = cluev->align_right_list;
-	     aclue != NULL;
-	     aclue = cluev_next_aligned (aclue)) {
-		if ((aclue->y - aclue->ascent + aclue->parent->y - aclue->parent->ascent) <= y
-		    && aclue->y + aclue->parent->y - aclue->parent->ascent > y)
-			margin = aclue->x;
-	}
+	if (with_aligned)
+		for (aclue = cluev->align_right_list;
+		     aclue != NULL;
+		     aclue = cluev_next_aligned (aclue)) {
+			if ((aclue->y - aclue->ascent + aclue->parent->y - aclue->parent->ascent) <= y
+			    && aclue->y + aclue->parent->y - aclue->parent->ascent > y)
+				margin = aclue->x;
+		}
 	
 	return margin;
 }
@@ -575,7 +577,8 @@ find_free_area (HTMLClue *clue, gint y, gint width, gint height,
 
 	while (1) {
 		lmargin = indent;
-		rmargin = MAX (HTML_OBJECT (clue)->max_width, HTML_OBJECT (clue)->width);
+		rmargin = MAX (HTML_OBJECT (clue)->max_width, HTML_OBJECT (clue)->width)
+			- 2 * cluev->padding; //fix * html_painter_get_pixel_size (painter);
 		next_y = 0;
 		
 		for (aclue = cluev->align_left_list; aclue != 0; aclue = cluev_next_aligned (aclue)) {
@@ -583,7 +586,7 @@ find_free_area (HTMLClue *clue, gint y, gint width, gint height,
 				  - aclue->parent->ascent);
 			top_y = base_y - aclue->ascent;
 
-			if ((top_y < try_y + height) && (base_y > try_y)) {
+			if ((top_y <= try_y) && (base_y >= try_y + height)) {
 				lm = aclue->x + aclue->width;
 				if (lm > lmargin)
 					lmargin = lm;
@@ -600,7 +603,7 @@ find_free_area (HTMLClue *clue, gint y, gint width, gint height,
 				  - aclue->parent->ascent);
 			top_y = base_y - aclue->ascent;
 
-			if ((top_y < try_y + height) && (base_y > try_y)) {
+			if ((top_y <= try_y) && (base_y >= try_y + height)) {
 				rm = aclue->x;
 				if (rm < rmargin)
 					rmargin = rm;

@@ -586,6 +586,7 @@ calc_min_width (HTMLObject *o,
 {
 	HTMLObject *cur;
 	gint min_width = 0;
+	gint aligned_min_width = 0;
 	gint w = 0;
 	gboolean add;
 
@@ -593,15 +594,21 @@ calc_min_width (HTMLObject *o,
 
 	cur = HTML_CLUE (o)->head;
 	while (cur) {
-		w += add ? html_object_calc_preferred_width (cur, painter) : html_object_calc_min_width (cur, painter);
-		if (!add || cur->flags & HTML_OBJECT_FLAG_NEWLINE || !cur->next) {
-			if (min_width < w) min_width = w;
-			w = 0;
+		if (cur->flags & HTML_OBJECT_FLAG_ALIGNED)
+			aligned_min_width = MAX (aligned_min_width, html_object_calc_min_width (cur, painter));
+		else {
+			w += add
+				? html_object_calc_preferred_width (cur, painter)
+				: html_object_calc_min_width (cur, painter);
+			if (!add || cur->flags & HTML_OBJECT_FLAG_NEWLINE || !cur->next) {
+				if (min_width < w) min_width = w;
+				w = 0;
+			}
 		}
 		cur = cur->next;
 	}
 
-	return min_width + get_indent (HTML_CLUEFLOW (o), painter);
+	return aligned_min_width + min_width + get_indent (HTML_CLUEFLOW (o), painter);
 }
 
 static gint
@@ -619,9 +626,9 @@ set_line_x (HTMLObject **obj, HTMLObject *run, gint x, gboolean *changed)
 }
 
 static gint
-pref_right_margin (HTMLPainter *p, HTMLClueFlow *clueflow, HTMLObject *o, gint y) 
+pref_right_margin (HTMLPainter *p, HTMLClueFlow *clueflow, HTMLObject *o, gint y, gboolean with_aligned) 
 {
-	gint fixed_margin = html_object_get_right_margin (o, p, y);
+	gint fixed_margin = html_object_get_right_margin (o, p, y, with_aligned);
 
 	/* FIXME: this hack lets us wrap the display at 72 characters when we are using
 	   a plain painter */
@@ -650,10 +657,149 @@ add_clear_area (GList **changed_objs, HTMLObject *o, gint x, gint w)
 	*changed_objs = g_list_prepend (*changed_objs, NULL);
 }
 
+static void
+calc_margins (HTMLObject *o, HTMLPainter *painter, gint indent, gint *lmargin, gint *rmargin)
+{
+	*lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
+	if (indent > *lmargin)
+		*lmargin = indent;
+	*rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
+}
+
+static inline gint
+width_left (HTMLObject *o, gint x, gint rmargin)
+{
+	return HTML_CLUEFLOW (o)->style == HTML_CLUEFLOW_STYLE_PRE ? G_MAXINT : rmargin - x;
+}
+
+static HTMLObject *
+layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
+	     GList **changed_objs, gboolean *leaf_childs_changed_size,
+	     gint *lmargin, gint *rmargin, gint indent)
+{
+	HTMLObject *cur = begin;
+	gboolean first = TRUE;
+	gint old_y;
+	gint x = *lmargin;
+	gint start_lmargin = *lmargin;
+	gint a, d;
+
+	old_y = o->y;
+	html_object_calc_min_width (begin, painter);
+	html_object_calc_size (begin, painter, changed_objs);
+	
+	a = begin->ascent;
+	d = begin->descent;
+	html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
+				  begin->min_width, a + d,
+				  indent, &o->y, lmargin, rmargin);
+	o->ascent += o->y - old_y;
+
+	while (cur && x < *rmargin) {
+		HTMLFitType fit;
+
+		fit = html_object_fit_line (cur, painter, first, first, FALSE, width_left (o, x, *rmargin));
+		first = FALSE;
+		if (fit == HTML_FIT_NONE)
+			break;
+
+		cur->x = x;
+		html_object_calc_size (cur, painter, changed_objs);
+
+		if (cur->ascent > a || cur->descent > d) {
+			old_y = o->y;
+			a = MAX (a, cur->ascent);
+			d = MAX (d, cur->descent);
+			html_object_calc_min_width (cur, painter);
+			html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
+						  cur->min_width, a + d,
+						  indent, &o->y, lmargin, rmargin);
+
+			/* is there enough space for this object? */
+			if (o->y != old_y || *rmargin - x < cur->min_width)
+				break;
+		}
+
+		x += cur->width;
+		cur = cur->next;
+
+		if (fit == HTML_FIT_PARTIAL)
+			break;
+	}
+
+	while (begin && begin != cur) {
+		begin->y = o->ascent + a;
+		begin = begin->next;
+	}
+
+	o->y += a + d;
+	o->ascent += a + d;
+
+	return cur;
+}
+
+static gboolean
+layout (HTMLObject *o, HTMLPainter *painter, GList **changed_objs, gboolean *leaf_childs_changed_size)
+{
+	HTMLClueFlow *cf = HTML_CLUEFLOW (o);
+	HTMLObject *cur = HTML_CLUE (o)->head, *end;
+	gint indent, lmargin, rmargin;
+
+	/* prepare margins */
+	indent = get_indent (cf, painter);
+	calc_margins (o, painter, indent, &lmargin, &rmargin);
+
+	while (cur) {
+		end = layout_line (o, painter, cur, changed_objs, leaf_childs_changed_size, &lmargin, &rmargin, indent);
+		cur = end;
+	}
+
+	return TRUE;
+}
+
+static gboolean
+calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
+{
+	HTMLClueFlow *cf = HTML_CLUEFLOW (o);
+	gint oa, od, ow, padding;
+	gboolean leaf_childs_changed_size = FALSE;
+	gboolean changed, changed_size = FALSE;
+
+	/* reset size */
+	oa = o->ascent;
+	od = o->descent;
+	ow = o->width;
+	o->ascent = 0;
+	o->descent = 0;
+	o->width = o->max_width;
+
+	/* calc size */
+	padding = calc_padding (painter);
+	add_pre_padding (cf, padding);
+	changed = layout (o, painter, changed_objs, &leaf_childs_changed_size);
+	add_post_padding (cf, padding);
+
+	/* take care about changes */
+	//if (o->width < o->max_width)
+	//o->width = o->max_width;
+
+	if (o->ascent != oa || o->descent != od || o->width != ow)
+		changed = changed_size = TRUE;
+
+	if (changed_size || leaf_childs_changed_size)
+		if (changed_objs) {
+			if (ow > o->max_width && o->width < ow)
+				add_clear_area (changed_objs, o, o->width, ow - o->width);
+			html_object_add_to_changed (changed_objs, o);
+		}
+
+	return changed;
+}
+
 /* EP CHECK: should be mostly OK.  */
 /* FIXME: But it's awful.  Too big and ugly.  */
 static gboolean
-calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
+calc_size_old (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 {
 	HTMLVSpace *vspace;
 	HTMLClue *clue;
@@ -664,6 +810,7 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 	gboolean newLine;
 	gboolean firstLine;
 	gint lmargin, rmargin;
+	gint orig_lmargin, orig_rmargin;
 	gint indent;
 	gint oldy;
 	gint w, a, d;
@@ -672,6 +819,8 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 	gint old_ascent, old_descent, old_width;
 	gint runWidth = 0;
 	gboolean have_valign_top;
+	gboolean no_fit = FALSE;
+	gboolean firstRun = FALSE;
 
 	html_clueflow_remove_text_slaves (HTML_CLUEFLOW (o));
 
@@ -700,11 +849,15 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 	padding = calc_padding (painter);
 	add_pre_padding (HTML_CLUEFLOW (o), padding);
 
-	lmargin = html_object_get_left_margin (o->parent, painter, o->y);
+	orig_lmargin = html_object_get_left_margin (o->parent, painter, o->y, FALSE);
+	lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
 	if (indent > lmargin)
 		lmargin = indent;
+	if (indent > orig_lmargin)
+		orig_lmargin = indent;
 	/* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
-	rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y);
+	orig_rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, FALSE);
+	rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
 
 	w = lmargin;
 	a = 0;
@@ -759,7 +912,7 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 					}
 					html_clue_append_left_aligned (HTML_CLUE (o->parent), HTML_CLUE (c));
 
-					lmargin = html_object_get_left_margin (o->parent, painter, o->y);
+					lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
 
 					if (indent > lmargin)
 						lmargin = indent;
@@ -781,7 +934,7 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 					html_clue_append_right_aligned (HTML_CLUE (o->parent), HTML_CLUE (c));
 
 					/* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
-					rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y);
+					rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
 				}
 			}
 
@@ -819,7 +972,6 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 				&& ! (run->flags & HTML_OBJECT_FLAG_ALIGNED)) {
 				HTMLFitType fit;
 				HTMLVAlignType valign;
-				gboolean firstRun;
 				gint width_left;
 
 				if (run && run->change & HTML_CHANGE_SIZE
@@ -838,12 +990,16 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 								    painter,
 								    w + runWidth == lmargin,
 								    firstRun,
+								    lmargin != orig_lmargin || rmargin != orig_rmargin,
 								    flow->style == HTML_CLUEFLOW_STYLE_PRE ? G_MAXINT : width_left);
+					printf ("fit %d\n", fit);
 				}
 
 				if (fit == HTML_FIT_NONE) {
+
 					w = set_line_x (&obj, run, w, &changed);
 					newLine = TRUE;
+					no_fit = TRUE;
 					break;
 				}
 
@@ -939,13 +1095,13 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 					/* we've used up this line so insert a newline */
 					newLine = TRUE;
 
-					lmargin = html_object_get_left_margin (o->parent, painter, o->y);
+					lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
 				
 					if (indent > lmargin)
 						lmargin = indent;
 
 				        /* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
-					rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y);
+					rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
 				}
 			}
 		}
@@ -1043,15 +1199,24 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 				o->y = html_clue_get_left_clear (HTML_CLUE (o->parent), oldy);
 			} else if (clear == HTML_CLEAR_RIGHT) {
 				o->y = html_clue_get_right_clear (HTML_CLUE (o->parent), oldy);
+			} else if (firstRun && no_fit && (lmargin != orig_lmargin || rmargin != orig_rmargin)) {
+				printf ("old y: %d lm %d rm %d\n", o->y, lmargin, rmargin);
+				html_clue_find_free_area (HTML_CLUE (o->parent),
+							  o->y, rmargin - lmargin + 1, 1, 0, &o->y,
+							  &lmargin, &rmargin);
+				printf ("new y: %d lm %d rm %d\n", o->y, lmargin, rmargin);
+				//o->ascent += o->y - oldy;
 			}
+			no_fit = FALSE;
+			firstRun = FALSE;
 
 			o->ascent += o->y - oldy;
 
-			lmargin = html_object_get_left_margin (o->parent, painter, o->y);
+			lmargin = html_object_get_left_margin (o->parent, painter, o->y, TRUE);
 			if (indent > lmargin)
 				lmargin = indent;
 			/* rmargin = html_object_get_right_margin (o->parent, painter, o->y); */
-			rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y);
+			rmargin = pref_right_margin (painter, HTML_CLUEFLOW (o), o->parent, o->y, TRUE);
 
 			w = lmargin;
 			d = 0;

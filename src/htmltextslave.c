@@ -388,11 +388,11 @@ get_next_nb_width (HTMLTextSlave *slave, HTMLPainter *painter)
 }
 
 static gboolean
-could_remove_leading_space (HTMLTextSlave *slave, gboolean firstRun)
+could_remove_leading_space (HTMLTextSlave *slave, gboolean lineBegin)
 {
 	HTMLObject *o = HTML_OBJECT (slave->owner);
 
-	if (firstRun && (HTML_OBJECT (slave)->prev != o || o->prev))
+	if (lineBegin && (HTML_OBJECT (slave)->prev != o || o->prev))
 		return TRUE;
 
 	if (!o->prev)
@@ -405,11 +405,8 @@ could_remove_leading_space (HTMLTextSlave *slave, gboolean firstRun)
 }
 
 static HTMLFitType
-hts_fit_line (HTMLObject *o,
-	  HTMLPainter *painter,
-	  gboolean startOfLine,
-	  gboolean firstRun,
-	  gint widthLeft)
+hts_fit_line (HTMLObject *o, HTMLPainter *painter,
+	      gboolean lineBegin, gboolean firstRun, gboolean next_to_floating, gint widthLeft)
 {
 	HTMLFitType rv = HTML_FIT_PARTIAL;
 	HTMLTextSlave *slave;
@@ -427,21 +424,13 @@ hts_fit_line (HTMLObject *o,
 	html_text_request_word_width (text, painter);
 
 	begin = html_text_slave_get_text (slave);
-	if (*begin == ' ') {
-		if (could_remove_leading_space (slave, firstRun)) {
-			if (slave->posStart == 0)
-				slave->start_word ++;
-			begin = g_utf8_next_char (begin);
-			slave->charStart = begin;
-			slave->posStart ++;
-			slave->posLen --;
-		} /* else {
-			if (slave->posStart == 0)
-				words ++;
-			else
-				add_width = text->space_width;
-			pos ++;
-			} */
+	if (*begin == ' ' && could_remove_leading_space (slave, lineBegin)) {
+		if (slave->posStart == 0)
+			slave->start_word ++;
+		begin = g_utf8_next_char (begin);
+		slave->charStart = begin;
+		slave->posStart ++;
+		slave->posLen --;
 	}
 
 	sep = begin;
@@ -471,7 +460,7 @@ hts_fit_line (HTMLObject *o,
 			} else
 				rv = HTML_FIT_NONE;
 		} else if (slave->start_word + 1 == text->words)
-			rv = HTML_FIT_COMPLETE;
+			rv = next_to_floating ? HTML_FIT_NONE : HTML_FIT_COMPLETE;
 		else {
 			words ++;
 			sep    = strchr (sep + (words > 1 ? 0 : 1), ' ');
