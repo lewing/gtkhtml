@@ -381,6 +381,7 @@ editor_set_format (GtkHTMLControlData *cd, gboolean format_html)
 		old_p = cd->gdk_painter;
 	}		
 
+	printf ("set format %d\n", format_html);
 	toolbar_update_format (cd);
 	menubar_update_format (cd);
 
@@ -763,8 +764,7 @@ main (int argc, char **argv)
 	factory = bonobo_generic_factory_new (CONTROL_FACTORY_ID, editor_control_factory, NULL);
 
 	if (factory) {
-		bonobo_running_context_auto_exit_unref (
-			BONOBO_OBJECT (factory));
+		bonobo_running_context_auto_exit_unref (BONOBO_OBJECT (factory));
 	
 		bonobo_activate ();
 		bonobo_main ();

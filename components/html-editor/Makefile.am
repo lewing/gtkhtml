@@ -1,15 +1,17 @@
 # Basic setup
 
-gladedir = $(datadir)/gtkhtml
-glade_DATA = 	gtkhtml-editor-properties.glade
+gtkhtml_data = $(datadir)/gtkhtml-@GTKHTML_RELEASE@
+
+gladedir = $(gtkhtml_data)
+glade_DATA = gtkhtml-editor-properties.glade
 
 INCLUDES = -I$(top_srcdir)/src
 
 CFLAGS += \
-	$(EDITOR_CFLAGS)				\
-	-DICONDIR=\"$(datadir)/gtkhtml/icons\"		\
-        -DGNOMEDATADIR=\""$(datadir)"\"			\
-        -DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
+	$(EDITOR_CFLAGS)							\
+	-DICONDIR=\"$(gtkhtml_data)/icons\"					\
+        -DGTKHTML_DATADIR=\""$(gtkhtml_data)"\"					\
+        -DGNOMELOCALEDIR=\""$(datadir)/locale"\"				\
 	-DGLADE_DATADIR=\"$(gladedir)\"
 
 # CORBA stuff
@@ -125,11 +127,11 @@ server_DATA = $(server_in_files:.server.in=.server)
 @INTLTOOL_SERVER_RULE@
 
 GNOME_GtkHTML_Editor.xml: GNOME_GtkHTML_Editor.xml.in Makefile
-	sed -e 's?\@ICONSDIR\@?$(datadir)/gtkhtml/icons?g' \
+	sed -e 's?\@ICONSDIR\@?$(gtkhtml_data)/icons?g' \
 	      < $(srcdir)/GNOME_GtkHTML_Editor.xml.in > GNOME_GtkHTML_Editor.xml.tmp \
 	  && mv GNOME_GtkHTML_Editor.xml.tmp GNOME_GtkHTML_Editor.xml
 
-uidir = $(datadir)/gnome/ui
+uidir = $(gtkhtml_data)
 ui_DATA = GNOME_GtkHTML_Editor.xml
 
 # The Test program
@@ -154,7 +156,7 @@ EXTRA_DIST =					\
 	GNOME_GtkHTML_Editor.server.in.in	\
 	$(server_in_files) $(server_DATA)
 
-idldir = $(datadir)/gtkhtml
+idldir = $(gtkhtml_data)
 idl_DATA = $(IDLS)
 
 CLEANFILES += $(IDL_GENERATED) $(SPELL_IDL_GENERATED)

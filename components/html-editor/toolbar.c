@@ -525,7 +525,7 @@ static GnomeUIInfo editor_toolbar_alignment_group[] = {
 static GnomeUIInfo editor_toolbar_style_uiinfo[] = {
 
 	{ GNOME_APP_UI_TOGGLEITEM, N_("Typewriter"), N_("Toggle typewriter font style"),
-	  editor_toolbar_tt_cb, NULL, NULL, GNOME_APP_PIXMAP_DATA, tt_xpm },
+	  editor_toolbar_tt_cb, NULL, NULL, GNOME_APP_PIXMAP_FILENAME, GTKHTML_DATADIR "/icons/font-tt-24.png" },
 	{ GNOME_APP_UI_TOGGLEITEM, N_("Bold"), N_("Makes the text bold"),
 	  editor_toolbar_bold_cb, NULL, NULL, GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TEXT_BOLD },
 	{ GNOME_APP_UI_TOGGLEITEM, N_("Italic"), N_("Makes the text italic"),

@@ -9,7 +9,7 @@ CFLAGS += -DICONDIR=\"$(datadir)/gtkhtml/icons\" -DGTK_ENABLE_BROKEN
 
 lib_LTLIBRARIES = libgtkhtml.la
 
-libgtkhtmldir = $(includedir)/$(GTKHTML_VERSION_TAG)/gtkhtml
+libgtkhtmldir = $(includedir)/libgtkhtml-@GTKHTML_RELEASE@/gtkhtml
 
 # FIXME not all the stuff should be installed!
 
@@ -191,15 +191,10 @@ dist-hook:
 	cp -f $(srcdir)/tests/*.html $(distdir)/tests
 	cp -f $(srcdir)/tests/*.jpg $(distdir)/tests
 
-EXTRA_DIST = \
-	keybindingsrc.emacs \
-	keybindingsrc.xemacs \
-	keybindingsrc.ms
-
-keybindingsdir = $(datadir)/gtkhtml/$(GTKHTML_RELEASE)
-keybindings_DATA = \
-	keybindingsrc.emacs \
-	keybindingsrc.xemacs \
+keybindingsdir = $(datadir)/gtkhtml-@GTKHTML_RELEASE@
+keybindings_DATA =		\
+	keybindingsrc.emacs	\
+	keybindingsrc.xemacs	\
 	keybindingsrc.ms
 
 noinst_PROGRAMS = gtest
@@ -209,3 +204,14 @@ gtest_SOURCES = \
 gtest_LDFLAGS = -static
 gtest_LDADD =	\
 	libgtkhtml.la
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libgtkhtml.pc
+
+EXTRA_DIST =			\
+	$(keybindings_DATA)	\
+	$(pkgconfig_DATA)	\
+	$(NULL)
+
+install-data-hook:
+	mv $(libdir)/pkgconfig/libgtkhtml.pc $(libdir)/pkgconfig/libgtkhtml-@GTKHTML_RELEASE@.pc

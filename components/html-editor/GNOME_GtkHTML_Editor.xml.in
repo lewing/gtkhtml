@@ -83,7 +83,8 @@
 			<cmd name="FormatItalic" _label="_Italic" type="toggle" accel="*Ctrl*i"/>
 			<cmd name="FormatUnderline" _label="_Underline" type="toggle" accel="*Ctrl*u"/>
 			<cmd name="FormatStrikeout" _label="Strikeout" type="toggle" accel="*Ctrl*s"/>
-			<cmd name="FormatFixed" _label="Typewriter" type="toggle" accel="*Ctrl*t"/>
+			<cmd name="FormatFixed" _label="Typewriter" type="toggle" accel="*Ctrl*t"
+				pixtype="filename" pixname="@ICONSDIR@/font-tt-16.png"/>
 			<cmd name="FormatSubscript" _label="Subscript" type="toggle"/>
 			<cmd name="FormatSuperscript" _label="Superscript" type="toggle"/>
 

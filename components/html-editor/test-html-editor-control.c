@@ -412,7 +412,7 @@ app_destroy_cb (GtkWidget *app, BonoboUIContainer *uic)
 {
 	bonobo_object_unref (BONOBO_OBJECT (uic));
 
-	gtk_main_quit ();
+	bonobo_main_quit ();
 }
 
 static int
@@ -449,6 +449,7 @@ container_create (void)
 	gtk_window_set_policy (window, TRUE, TRUE, FALSE);
 
 	component = bonobo_ui_component_new ("test-editor");
+	bonobo_running_context_auto_exit_unref (BONOBO_OBJECT (component));
 
 	bonobo_ui_component_set_container (component, BONOBO_OBJREF (container), NULL);
 	bonobo_ui_component_add_verb_list_with_data (component, verbs, win);
@@ -510,7 +511,8 @@ main (int argc, char **argv)
 	if (argc > 1 && *argv [argc - 1] != '-')
 		gtk_idle_add ((GtkFunction) load_file, argv [argc - 1]);
 
-	bonobo_ui_main ();
+	bonobo_activate ();
+	bonobo_main ();
 
-	return 0;
+	return bonobo_ui_debug_shutdown ();
 }

@@ -4025,7 +4025,7 @@ load_bindings_from_file (gboolean from_share, gchar *name)
 {
 	gchar *rcfile;
 
-	rcfile = g_strconcat ((from_share ? PREFIX "/share/gtkhtml/" GTK_HTML_RELEASE "/": gnome_util_user_home ()),
+	rcfile = g_strconcat ((from_share ? PREFIX "/share/gtkhtml-" GTK_HTML_RELEASE "/": gnome_util_user_home ()),
 			      (from_share ? "" : "/.gnome/"), name, NULL);
 	/* FIX2 if (g_file_test (rcfile, G_FILE_TEST_ISFILE)) */
 		gtk_rc_parse (rcfile);

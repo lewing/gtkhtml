@@ -933,8 +933,11 @@ calc_text_size (HTMLPainter *painter,
 	g_object_unref (layout);
 
 	*width = logical_rect.width / PANGO_SCALE;
-	*asc = ((3 * logical_rect.height) / 4) / PANGO_SCALE;
-	*dsc = (logical_rect.height / PANGO_SCALE) - *asc;
+
+	*asc = PANGO_ASCENT (logical_rect) / PANGO_SCALE;
+	*dsc = PANGO_DESCENT (logical_rect) / PANGO_SCALE;
+	//*asc = ((3 * logical_rect.height) / 4) / PANGO_SCALE;
+	//*dsc = (logical_rect.height / PANGO_SCALE) - *asc;
 }
 
 static void
@@ -960,8 +963,11 @@ calc_text_size_bytes (HTMLPainter *painter, const gchar *text,
 	g_object_unref (layout);
 
 	*width = logical_rect.width / PANGO_SCALE;
-	*asc = ((3 * logical_rect.height) / 4) / PANGO_SCALE;
-	*dsc = (logical_rect.height / PANGO_SCALE) - *asc;
+	*asc = PANGO_ASCENT (logical_rect) / PANGO_SCALE;
+	*dsc = PANGO_DESCENT (logical_rect) / PANGO_SCALE;
+
+	//*asc = ((3 * logical_rect.height) / 4) / PANGO_SCALE;
+	//*dsc = (logical_rect.height / PANGO_SCALE) - *asc;
 }
 
 static guint

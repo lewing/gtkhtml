@@ -36,6 +36,8 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtksignal.h>
 
+#include <libgnomeui/gnome-ui-init.h>
+
 #include "gtkhtml.h"
 #include "gtkhtmldebug.h"
 #include "gtkhtml-stream.h"
@@ -159,8 +161,7 @@ main (int argc, char **argv)
 	gchar *str []= {"Example 1", "Example 2", "Example 3", "Example 4", "Example 5", "Quit"};
 	int i = 0;
 	 
-	gtk_init (&argc, &argv);
-	gdk_rgb_init ();
+	gnome_program_init ("libgtkhtml test", "0.0", LIBGNOMEUI_MODULE, argc, argv, NULL);
 	
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	vbox = gtk_vbox_new (FALSE, 0);

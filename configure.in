@@ -42,6 +42,7 @@ GTKHTML_MODULES="libgnomeui-2.0 >= 1.112.1 libgnomeprint-2.0 >= 1.111.0"
 PKG_CHECK_MODULES(GTKHTML, $GTKHTML_MODULES)
 AC_SUBST(GTKHTML_CFLAGS)
 AC_SUBST(GTKHTML_LIBS)
+AC_SUBST(GTKHTML_MODULES)
 
 EDITOR_MODULES="${GTKHTML_MODULES} libbonoboui-2.0 >= 1.112.1 gal-2.0 >= 0.0.2"
 PKG_CHECK_MODULES(EDITOR, $EDITOR_MODULES)
@@ -106,6 +107,7 @@ Makefile
 gtkhtml.spec
 po/Makefile.in
 src/Makefile
+src/libgtkhtml.pc
 components/Makefile
 components/html-editor/Makefile
 components/html-editor/GNOME_GtkHTML_Editor.server.in
