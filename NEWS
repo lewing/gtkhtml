@@ -1,7 +1,11 @@
-gtkhtml-3.0.5 "Love Shack" 2003-06-02
+gtkhtml-3.0.7 "Project Blue" 2003-06-02
 ------------------------------------------------
 
 New in this release
+
+  * emergency bugfix in gtk_html_editor_event.
+
+New in 3.0.6
 
   * lots of leaks fixed.
   * printing now uses the same fonts as display.
