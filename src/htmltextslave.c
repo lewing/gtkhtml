@@ -1150,7 +1150,7 @@ html_text_slave_get_glyph_item_at_offset (HTMLTextSlave *slave, int offset, HTML
 		for (prev_gi = NULL; cur; cur = cur->next) {
 			HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) cur->data;
 
-			if (((prev_gi == NULL && index == gi->glyph_item.item->offset) || gi->glyph_item.item->offset < index)
+			if (gi->glyph_item.item->offset <= index
 			    && index <= gi->glyph_item.item->offset + gi->glyph_item.item->length) {
 				next_gi = cur->next ? (HTMLTextSlaveGlyphItem *) cur->next->data : NULL;
 				rv = gi;
@@ -1180,6 +1180,46 @@ html_text_slave_get_glyph_item_at_offset (HTMLTextSlave *slave, int offset, HTML
 }
 
 static gboolean
+html_text_slave_gi_left_edge (HTMLTextSlave *slave, HTMLCursor *cursor, HTMLTextSlaveGlyphItem *gi)
+{
+	int old_offset = cursor->offset;
+
+	if (gi->glyph_item.item->analysis.level % 2 == 0) {
+		/* LTR */
+		cursor->offset = slave->posStart + g_utf8_pointer_to_offset (html_text_slave_get_text (slave),
+									     slave->owner->text + gi->glyph_item.item->offset);
+		cursor->position += cursor->offset - old_offset;
+	} else {
+		/* RTL */
+		cursor->offset = slave->posStart + g_utf8_pointer_to_offset (html_text_slave_get_text (slave),
+									     slave->owner->text + gi->glyph_item.item->offset + gi->glyph_item.item->length);
+		cursor->position += cursor->offset - old_offset;
+	}
+
+	return TRUE;
+}
+
+static gboolean
+html_text_slave_gi_right_edge (HTMLTextSlave *slave, HTMLCursor *cursor, HTMLTextSlaveGlyphItem *gi)
+{
+	int old_offset = cursor->offset;
+
+	if (gi->glyph_item.item->analysis.level % 2 == 0) {
+		/* LTR */
+		cursor->offset = slave->posStart + g_utf8_pointer_to_offset (html_text_slave_get_text (slave),
+									     slave->owner->text + gi->glyph_item.item->offset + gi->glyph_item.item->length);
+		cursor->position += cursor->offset - old_offset;
+	} else {
+		/* RTL */
+		cursor->offset = slave->posStart + g_utf8_pointer_to_offset (html_text_slave_get_text (slave),
+									     slave->owner->text + gi->glyph_item.item->offset);
+		cursor->position += cursor->offset - old_offset;
+	}
+
+	return TRUE;
+}
+
+static gboolean
 html_text_slave_cursor_right_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 {
 	HTMLTextSlaveGlyphItem *prev, *next;
@@ -1199,12 +1239,16 @@ html_text_slave_cursor_right_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 		}
 	} else {
 		/* RTL */
-		if (index - gi->glyph_item.item->offset > 1 || (!prev && index - gi->glyph_item.item->offset > 0)) {
+		if (index - gi->glyph_item.item->offset > 1 || (!next && index - gi->glyph_item.item->offset > 0)) {
 			cursor->offset --;
 			cursor->position --;
 
 			return TRUE;
 		}
+	}
+
+	if (next) {
+		return html_text_slave_gi_left_edge (slave, cursor, next);
 	}
 
 	return FALSE;
@@ -1251,6 +1295,10 @@ html_text_slave_cursor_left_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 
 			return TRUE;
 		}
+	}
+
+	if (prev) {
+		return html_text_slave_gi_right_edge (slave, cursor, prev);
 	}
 
 	return FALSE;
