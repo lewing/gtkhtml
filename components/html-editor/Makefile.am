@@ -43,8 +43,8 @@ $(SPELL_IDL_GENERATED): $(SPELL_IDLS)
 	$(ORBIT_IDL) $(BONOBO_IDL_INCLUDES) $(srcdir)/Spell.idl
 
 LDADD =	\
-	$(top_builddir)/src/libgtkhtml.la	\
-	$(top_builddir)/a11y/libgtkhtml-a11y.la	\
+	$(top_builddir)/src/libgtkhtml-@GTKHTML_RELEASE@.la	\
+	$(top_builddir)/a11y/libgtkhtml-a11y-@GTKHTML_RELEASE@.la	\
 	$(EDITOR_LIBS)
 
 # -lpspell-modules -lpspell_aspell -laspell -lpspell -lstdc++
