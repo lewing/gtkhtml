@@ -136,7 +136,7 @@ draw_shade_line (HTMLPainter *painter,
 }
 
 static void
-init (GtkObject *object)
+html_plain_painter_init (GObject *object)
 {
 }
 
@@ -188,11 +188,12 @@ get_page_height (HTMLPainter *painter, HTMLEngine *e)
 }
 
 static void
-class_init (GtkObjectClass *object_class)
+html_plain_painter_class_init (GObjectClass *object_class)
 {
 	HTMLPainterClass *painter_class;
 
 	painter_class = HTML_PAINTER_CLASS (object_class);
+	parent_class = g_type_class_ref (HTML_TYPE_GDK_PAINTER);
 
 	painter_class->alloc_font = alloc_fixed_font;
 	painter_class->draw_rect = draw_rect;
@@ -204,41 +205,38 @@ class_init (GtkObjectClass *object_class)
 	painter_class->draw_background = draw_background;
 	painter_class->get_page_width = get_page_width;
 	painter_class->get_page_height = get_page_height;
-
-	parent_class = gtk_type_class (html_gdk_painter_get_type ());
 }
 
-GtkType
+GType
 html_plain_painter_get_type (void)
 {
-	static GtkType type = 0;
+	static GType html_plain_painter_type = 0;
 
-	if (type == 0) {
-		static const GtkTypeInfo info = {
-			"HTMLPlainPainter",
-			sizeof (HTMLPlainPainter),
+	if (html_plain_painter_type == 0) {
+		static const GTypeInfo html_plain_painter_info = {
 			sizeof (HTMLPlainPainterClass),
-			(GtkClassInitFunc) class_init,
-			(GtkObjectInitFunc) init,
-			/* reserved_1 */ NULL,
-			/* reserved_2 */ NULL,
-			(GtkClassInitFunc) NULL,
+			NULL,
+			NULL,
+			(GClassInitFunc) html_plain_painter_class_init,
+			NULL,
+			NULL,
+			sizeof (HTMLPlainPainter),
+			1,
+			(GInstanceInitFunc) html_plain_painter_init,
 		};
-
-		type = gtk_type_unique (HTML_TYPE_GDK_PAINTER, &info);
+		html_plain_painter_type = g_type_register_static (HTML_TYPE_GDK_PAINTER, "HTMLPlainPainter",
+								  &html_plain_painter_info, 0);
 	}
 
-	return type;
+	return html_plain_painter_type;
 }
 
-
 HTMLPainter *
 html_plain_painter_new (gboolean double_buffer)
 {
 	HTMLPlainPainter *new;
 
-	new = gtk_type_new (html_plain_painter_get_type ());
-
+	new = g_object_new (HTML_TYPE_PLAIN_PAINTER, NULL);
 	HTML_GDK_PAINTER (new)->double_buffer = double_buffer;
 
 	return HTML_PAINTER (new);

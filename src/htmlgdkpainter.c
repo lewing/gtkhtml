@@ -1078,7 +1078,6 @@ html_gdk_painter_get_type (void)
 	return html_gdk_painter_type;
 }
 
-
 HTMLPainter *
 html_gdk_painter_new (GtkWidget *widget, gboolean double_buffer)
 {
@@ -1088,6 +1087,7 @@ html_gdk_painter_new (GtkWidget *widget, gboolean double_buffer)
 
 	new->double_buffer = double_buffer;
 	new->pc = gtk_widget_get_pango_context (widget);
+	g_object_ref (new->pc);
 
 	return HTML_PAINTER (new);
 }

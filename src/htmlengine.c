@@ -3987,7 +3987,7 @@ html_engine_stream_end (GtkHTMLStream *stream,
 		html_cursor_home (e->cursor, e);
 	}
 
-	gtk_signal_emit (GTK_OBJECT (e), signals[LOAD_DONE]);
+	g_signal_emit (e, signals [LOAD_DONE], NULL);
 }
 
 

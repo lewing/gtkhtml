@@ -747,9 +747,9 @@ get_page_height (HTMLPainter *painter, HTMLEngine *e)
 {
 	return html_printer_get_page_height (HTML_PRINTER (painter));
 }
-
+
 static void
-init (GtkObject *object)
+html_printer_init (GObject *object)
 {
 	HTMLPrinter *printer;
 
@@ -759,11 +759,13 @@ init (GtkObject *object)
 }
 
 static void
-class_init (GObjectClass *object_class)
+html_printer_class_init (GObjectClass *object_class)
 {
 	HTMLPainterClass *painter_class;
 
 	painter_class = HTML_PAINTER_CLASS (object_class);
+
+	parent_class = g_type_class_ref (HTML_TYPE_PAINTER);
 
 	object_class->finalize = finalize;
 
@@ -792,40 +794,37 @@ class_init (GObjectClass *object_class)
 	painter_class->draw_embedded = draw_embedded;
 	painter_class->get_page_width = get_page_width;
 	painter_class->get_page_height = get_page_height;
-
-	parent_class = gtk_type_class (html_painter_get_type ());
 }
 
-GtkType
+GType
 html_printer_get_type (void)
 {
-	static GtkType type = 0;
+	static GType html_printer_type = 0;
 
-	if (type == 0) {
-		static const GtkTypeInfo info = {
-			"HTMLPrinter",
-			sizeof (HTMLPrinter),
+	if (html_printer_type == 0) {
+		static const GTypeInfo html_printer_info = {
 			sizeof (HTMLPrinterClass),
-			(GtkClassInitFunc) class_init,
-			(GtkObjectInitFunc) init,
-			/* reserved_1 */ NULL,
-			/* reserved_2 */ NULL,
-			(GtkClassInitFunc) NULL,
+			NULL,
+			NULL,
+			(GClassInitFunc) html_printer_class_init,
+			NULL,
+			NULL,
+			sizeof (HTMLPrinter),
+			1,
+			(GInstanceInitFunc) html_printer_init,
 		};
-
-		type = gtk_type_unique (HTML_TYPE_PAINTER, &info);
+		html_printer_type = g_type_register_static (HTML_TYPE_PAINTER, "HTMLPrinter", &html_printer_info, 0);
 	}
 
-	return type;
+	return html_printer_type;
 }
 
-
 HTMLPainter *
 html_printer_new (GnomePrintContext *print_context, GnomePrintMaster *print_master)
 {
 	HTMLPrinter *new;
 
-	new = gtk_type_new (html_printer_get_type ());
+	new = g_object_new (HTML_TYPE_PRINTER, NULL);
 
 	gtk_object_ref (GTK_OBJECT (print_context));
 	new->print_context = print_context;

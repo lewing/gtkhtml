@@ -166,7 +166,6 @@ html_painter_class_init (GObjectClass *object_class)
 	class->get_page_height = (gpointer) get_page_height_unimplemented;
 }
 
-
 GType
 html_painter_get_type (void)
 {
