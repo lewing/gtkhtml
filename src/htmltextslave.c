@@ -780,9 +780,10 @@ draw_text (HTMLTextSlave *self,
 			SpellError *se;
 			guint ma, mi;
 
-			se = (SpellError *) cur->data;
+			se = (SpellError *) cur_se->data;
 			ma = MAX (se->off, self->posStart);
 			mi = MIN (se->off + se->len, self->posStart + self->posLen);
+
 			if (ma < mi) {
 				int width, height, asc, start_x;
 
@@ -801,7 +802,8 @@ draw_text (HTMLTextSlave *self,
 												     p, HTMLSpellErrorColor)->color);
 				        /* printf ("spell error: %s\n", html_text_get_text (slave->owner, off)); */
 			
-					html_painter_draw_spell_error (p, obj->x + tx + run_width + start_x, obj->y + ty + get_ys (self->owner, p), width);
+					html_painter_draw_spell_error (p, obj->x + tx + run_width + html_painter_pango_to_engine (p, start_x),
+								       obj->y + ty + get_ys (self->owner, p), html_painter_pango_to_engine (p, width));
 				}
 			}
 			if (se->off > self->posStart + self->posLen)
