@@ -26,6 +26,7 @@
 
 #include "cell.h"
 #include "image.h"
+#include "link.h"
 #include "paragraph.h"
 #include "table.h"
 #include "text.h"
@@ -41,8 +42,10 @@ create_accessible (HTMLObject *o, AtkObject *parent)
 		accessible = html_a11y_paragraph_new (o);
 		break;
 	case HTML_TYPE_TEXT:
-	case HTML_TYPE_LINKTEXT:
 		accessible = html_a11y_text_new (o);
+		break;
+	case HTML_TYPE_LINKTEXT:
+		accessible = html_a11y_link_new (o);
 		break;
 	case HTML_TYPE_IMAGE:
 		accessible = html_a11y_image_new (o);
