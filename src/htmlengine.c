@@ -3569,6 +3569,7 @@ html_engine_init (HTMLEngine *engine)
 	engine->allow_frameset = FALSE;
 
 	engine->editable = FALSE;
+	engine->caret_mode = FALSE;
 	engine->clipboard = NULL;
 	engine->clipboard_stack = NULL;
 	engine->selection_stack  = NULL;
@@ -4593,8 +4594,12 @@ html_engine_set_editable (HTMLEngine *e,
 		if (e->have_focus)
 			html_engine_setup_blinking_cursor (e);
 	} else {
-		if (e->have_focus)
-			html_engine_stop_blinking_cursor (e);
+		if (e->have_focus )
+			if (e->caret_mode)
+				html_engine_setup_blinking_cursor (e);
+			else
+				html_engine_stop_blinking_cursor (e);
+
 	}
 }
 
@@ -4626,7 +4631,7 @@ html_engine_set_focus (HTMLEngine *engine,
 	g_return_if_fail (engine != NULL);
 	g_return_if_fail (HTML_IS_ENGINE (engine));
 
-	if (engine->editable) {
+	if (engine->editable || engine->caret_mode) {
 		if (! engine->have_focus && have_focus)
 			html_engine_setup_blinking_cursor (engine);
 		else if (engine->have_focus && ! have_focus)
@@ -4666,7 +4671,7 @@ html_engine_make_cursor_visible (HTMLEngine *e)
 
 	g_return_val_if_fail (e != NULL, FALSE);
 
-	if (! e->editable)
+	if (! e->editable && !e->caret_mode)
 		return FALSE;
 
 	if (e->cursor->object == NULL)
