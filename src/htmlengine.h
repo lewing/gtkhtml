@@ -252,6 +252,9 @@ struct _HTMLEngine {
 	PspellConfig  *spell_config;
 	PspellManager *spell_checker;
 #endif
+	
+	/* image id storage */
+	GHashTable *imageid_table;
 };
 
 /* must be forward referenced *sigh* */
