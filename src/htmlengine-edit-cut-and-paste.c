@@ -903,15 +903,8 @@ html_engine_insert_link (HTMLEngine *e, const gchar *url, const gchar *target)
 }
 
 static void
-append_object (HTMLEngine *e, HTMLObject *o, guint len, HTMLUndoDirection dir)
+prepare_empty_flow (HTMLEngine *e, HTMLUndoDirection dir)
 {
-	GList *left = NULL, *right = NULL;
-	HTMLObject *where;
-	HTMLObject *c, *cn;
-	HTMLClue *clue;
-	gint back = 0;
-
-	html_engine_freeze (e);
 	if (!html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
 		insert_empty_paragraph (e, dir);
 		if (e->cursor->object->parent->prev
@@ -922,6 +915,16 @@ append_object (HTMLEngine *e, HTMLObject *o, guint len, HTMLUndoDirection dir)
 			html_cursor_backward (e->cursor, e);
 		}
 	}
+}
+
+static void
+append_object (HTMLEngine *e, HTMLObject *o, guint len, HTMLUndoDirection dir)
+{
+	HTMLObject *c, *cn;
+	HTMLClue *clue;
+
+	html_engine_freeze (e);
+	prepare_empty_flow (e, dir);
 
 	g_return_if_fail (html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent)));
 
@@ -949,5 +952,45 @@ html_engine_append_object (HTMLEngine *e, HTMLObject *o, guint len)
 {
 	html_undo_level_begin (e->undo, "Append object", "Remove appended object");
 	append_object (e, o, len, HTML_UNDO_UNDO);
+	html_undo_level_end (e->undo);
+}
+
+static void
+append_flow (HTMLEngine *e, HTMLObject *o, guint len, HTMLUndoDirection dir)
+{
+	HTMLObject *where;
+	guint position;
+
+	html_engine_freeze (e);
+	prepare_empty_flow (e, dir);
+
+	g_return_if_fail (html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent)));
+
+	where = e->cursor->object->parent;
+
+	e->cursor->object = html_object_get_head_leaf (o);
+	e->cursor->offset = 0;
+	position = e->cursor->position;
+	while (html_cursor_backward (e->cursor, e))
+		;
+	e->cursor->position = position;
+	html_clue_append_after (HTML_CLUE (where->parent), o, where);
+	html_object_remove_child (where->parent, where);
+	html_object_destroy (where);
+
+	html_cursor_forward_n (e->cursor, e, len);
+	html_object_change_set (o, HTML_CHANGE_ALL_CALC);
+	html_engine_thaw (e);
+
+	insert_setup_undo (e, len, dir);
+
+	return;
+}
+
+void
+html_engine_append_flow (HTMLEngine *e, HTMLObject *o, guint len)
+{
+	html_undo_level_begin (e->undo, "Append flow", "Remove appended flow");
+	append_flow (e, o, len, HTML_UNDO_UNDO);
 	html_undo_level_end (e->undo);
 }

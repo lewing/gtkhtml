@@ -51,6 +51,7 @@
 #include "htmlsettings.h"
 #include "htmltable.h"
 #include "htmlselection.h"
+#include "htmlundo.h"
 
 #include "gtkhtml.h"
 #include "gtkhtml-embedded.h"
@@ -3796,22 +3797,25 @@ gtk_html_insert_html_generic (GtkHTML *html, const gchar *html_src, gboolean obj
 	gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (sw));
 	gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (tmp));
 	gtk_widget_realize (GTK_WIDGET (tmp));
+	html_image_factory_move_images (html->engine->image_factory, tmp->engine->image_factory);
 	if (obj_only) {
+		HTMLObject *next;
 		g_return_if_fail (tmp->engine->clue && HTML_CLUE (tmp->engine->clue)->head
 				  && HTML_CLUE (HTML_CLUE (tmp->engine->clue)->head)->head);
 
-		o = HTML_CLUE (HTML_CLUE (tmp->engine->clue)->head)->head;
-		HTML_CLUE (HTML_CLUE (tmp->engine->clue)->head)->head = NULL;
+		html_undo_level_begin (html->engine->undo, "Append HTML", "Remove appended HTML");
+		o = HTML_CLUE (tmp->engine->clue)->head;
+		for (; o; o = next) {
+			next = o->next;
+			html_object_remove_child (o->parent, o);
+			html_engine_append_flow (html->engine, o, html_object_get_recursive_length (o));
+		}
+		html_undo_level_end (html->engine->undo);
 	} else {
 		g_return_if_fail (tmp->engine->clue);
 
 		o = tmp->engine->clue;
 		tmp->engine->clue = NULL;
-	}
-	html_image_factory_move_images (html->engine->image_factory, tmp->engine->image_factory);
-	if (obj_only) {
-		html_engine_append_object (html->engine, o, html_object_get_recursive_length (o));
-	} else {
 		html_engine_insert_object (html->engine, o, html_object_get_recursive_length (o));
 	}
 	gtk_widget_destroy (window);
@@ -3824,7 +3828,7 @@ gtk_html_insert_html (GtkHTML *html, const gchar *html_src)
 }
 
 void
-gtk_html_insert_html_object (GtkHTML *html, const gchar *html_src)
+gtk_html_append_html (GtkHTML *html, const gchar *html_src)
 {
 	gtk_html_insert_html_generic (html, html_src, TRUE);
 }
