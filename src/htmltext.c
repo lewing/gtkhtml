@@ -1225,10 +1225,8 @@ save_link_open (Link *link, HTMLEngineSaveState *state, GSList **attrs)
 }
 
 static gboolean
-save_link_close (Link *link, HTMLEngineSaveState *state, GSList **attrs)
+save_link_close (Link *link, HTMLEngineSaveState *state)
 {
-	/* TODO: remove underline and blue from attrs */
-
 	return html_engine_save_output_string (state, "%s", "</A>");
 }
 
@@ -1256,18 +1254,18 @@ save (HTMLObject *self, HTMLEngineSaveState *state)
 			if (end_index == G_MAXINT)
 				end_index = text->text_bytes;
 
+			if (last_attrs) {
+				save_close_attrs (state, last_attrs);
+				free_attrs (last_attrs);
+			}
 			if (l && link_started) {
 				Link *link = (Link *) l->data;
 
 				if (link->end_index == start_index) {
-					save_link_close (link, state, &last_attrs);
+					save_link_close (link, state);
 					l = l->next;
 					link_started = FALSE;
 				}
-			}
-			if (last_attrs) {
-				save_close_attrs (state, last_attrs);
-				free_attrs (last_attrs);
 			}
 			if (l && !link_started) {
 				Link *link = (Link *) l->data;
