@@ -56,7 +56,6 @@
 #include "htmlengine-edit-cut-and-paste.h"
 #include "htmlengine-edit-selection-updater.h"
 #include "htmlengine-print.h"
-#include "htmlselection.h"
 #include "htmlcolor.h"
 #include "htmlinterval.h"
 #include "htmlobject.h"
@@ -87,6 +86,7 @@
 #include "htmlclueflow.h"
 #include "htmlstack.h"
 #include "htmlstringtokenizer.h"
+#include "htmlselection.h"
 #include "htmlform.h"
 #include "htmlbutton.h"
 #include "htmltextinput.h"
@@ -103,6 +103,7 @@
 #include "htmliframe.h"
 #include "htmlshape.h"
 #include "htmlmap.h"
+#include "htmlmarshal.h"
 
 /* #define CHECK_CURSOR */
 #ifdef CHECK_CURSOR
@@ -3171,157 +3172,6 @@ html_engine_set_arg (GtkObject        *object,
 
 		prop = GTK_HTML_CLASS (GTK_WIDGET_GET_CLASS (engine->widget))->properties;
 	}
-}
-
-static void 
-html_g_cclosure_marshal_VOID__STRING_POINTER (GClosure     *closure,
-					      GValue       *return_value,
-					      guint         n_param_values,
-					      const GValue *param_values,
-					      gpointer      invocation_hint,
-					      gpointer      marshal_data)
-{
-	typedef void (*HTMLGMarshalFunc_VOID__STRING_POINTER) (gpointer     data1,
-							       const gchar *arg_1,
-							       gpointer     arg_2,
-							       gpointer     data2);
-
-	register HTMLGMarshalFunc_VOID__STRING_POINTER ff;
-	register GCClosure *cc = (GCClosure*) closure;
-	register gpointer data1, data2;
-
-	g_return_if_fail (n_param_values == 3);
-
-	if (G_CCLOSURE_SWAP_DATA (closure))
-		{
-			data1 = closure->data;
-			data2 = g_value_peek_pointer (param_values + 0);
-		}
-	else
-		{
-			data1 = g_value_peek_pointer (param_values + 0);
-			data2 = closure->data;
-		}
-	ff = (HTMLGMarshalFunc_VOID__STRING_POINTER) (marshal_data ? marshal_data : cc->callback);
-
-	ff (data1,
-	    g_value_get_string (param_values + 1),
-	    g_value_get_pointer (param_values + 2),
-	    data2);
-}
-
-static void 
-html_g_cclosure_marshal_BOOL__POINTER (GClosure     *closure,
-				       GValue       *return_value,
-				       guint         n_param_values,
-				       const GValue *param_values,
-				       gpointer      invocation_hint,
-				       gpointer      marshal_data)
-{
-	typedef gboolean (*HTMLGMarshalFunc_BOOL__POINTER) (gpointer     data1,
-							    gpointer     arg_1,
-							    gpointer     data2);
-
-	register HTMLGMarshalFunc_BOOL__POINTER ff;
-	register GCClosure *cc = (GCClosure*) closure;
-	register gpointer data1, data2;
-	gboolean v_return;
-
-	g_return_if_fail (n_param_values == 2);
-
-	if (G_CCLOSURE_SWAP_DATA (closure))
-		{
-			data1 = closure->data;
-			data2 = g_value_peek_pointer (param_values + 0);
-		}
-	else
-		{
-			data1 = g_value_peek_pointer (param_values + 0);
-			data2 = closure->data;
-		}
-	ff = (HTMLGMarshalFunc_BOOL__POINTER) (marshal_data ? marshal_data : cc->callback);
-
-	v_return = ff (data1,
-		       g_value_get_pointer (param_values + 1),
-		       data2);
-
-	g_value_set_boolean (return_value, v_return);
-}
-
-static void 
-html_g_cclosure_marshal_VOID__POINTER_INT (GClosure     *closure,
-					   GValue       *return_value,
-					   guint         n_param_values,
-					   const GValue *param_values,
-					   gpointer      invocation_hint,
-					   gpointer      marshal_data)
-{
-	typedef void (*HTMLGMarshalFunc_VOID__POINTER_INT) (gpointer     data1,
-							    gpointer     arg_1,
-							    gint         arg_2,
-							    gpointer     data2);
-
-	register HTMLGMarshalFunc_VOID__POINTER_INT ff;
-	register GCClosure *cc = (GCClosure*) closure;
-	register gpointer data1, data2;
-
-	g_return_if_fail (n_param_values == 3);
-
-	if (G_CCLOSURE_SWAP_DATA (closure))
-		{
-			data1 = closure->data;
-			data2 = g_value_peek_pointer (param_values + 0);
-		}
-	else
-		{
-			data1 = g_value_peek_pointer (param_values + 0);
-			data2 = closure->data;
-		}
-	ff = (HTMLGMarshalFunc_VOID__POINTER_INT) (marshal_data ? marshal_data : cc->callback);
-
-	ff (data1,
-	    g_value_get_pointer (param_values + 1),
-	    g_value_get_int (param_values + 2),
-	    data2);
-}
-
-static void 
-html_g_cclosure_marshal_VOID__POINTER_POINTER_POINTER (GClosure     *closure,
-						       GValue       *return_value,
-						       guint         n_param_values,
-						       const GValue *param_values,
-						       gpointer      invocation_hint,
-						       gpointer      marshal_data)
-{
-	typedef void (*HTMLGMarshalFunc_VOID__POINTER_POINTER_POINTER) (gpointer     data1,
-							       gpointer     arg_1,
-							       gpointer     arg_2,
-							       gpointer     arg_3,
-							       gpointer     data2);
-
-	register HTMLGMarshalFunc_VOID__POINTER_POINTER_POINTER ff;
-	register GCClosure *cc = (GCClosure*) closure;
-	register gpointer data1, data2;
-
-	g_return_if_fail (n_param_values == 4);
-
-	if (G_CCLOSURE_SWAP_DATA (closure))
-		{
-			data1 = closure->data;
-			data2 = g_value_peek_pointer (param_values + 0);
-		}
-	else
-		{
-			data1 = g_value_peek_pointer (param_values + 0);
-			data2 = closure->data;
-		}
-	ff = (HTMLGMarshalFunc_VOID__POINTER_POINTER_POINTER) (marshal_data ? marshal_data : cc->callback);
-
-	ff (data1,
-	    g_value_get_pointer (param_values + 1),
-	    g_value_get_pointer (param_values + 2),
-	    g_value_get_pointer (param_values + 3),
-	    data2);
 }
 
 static void

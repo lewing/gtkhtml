@@ -48,6 +48,7 @@
 #include "htmlframe.h"
 #include "htmliframe.h"
 #include "htmlimage.h"
+#include "htmlmarshal.h"
 #include "htmlplainpainter.h"
 #include "htmlsettings.h"
 #include "htmltable.h"
@@ -2184,17 +2185,6 @@ typedef void (*GtkSignal_NONE__INT_INT_FLOAT) (GtkObject * object,
 					       gint arg1, gint arg2,
 					       gfloat arg3, gpointer user_data);
 static void
-gtk_marshal_NONE__INT_INT_FLOAT (GtkObject * object,
-				 GtkSignalFunc func,
-				 gpointer func_data, GtkArg * args)
-{
-	GtkSignal_NONE__INT_INT_FLOAT rfunc;
-	rfunc = (GtkSignal_NONE__INT_INT_FLOAT) func;
-	(*rfunc) (object,
-		  GTK_VALUE_INT (args[0]), GTK_VALUE_INT (args[1]), GTK_VALUE_FLOAT (args[2]), func_data);
-}
-
-static void
 class_init (GtkHTMLClass *klass)
 {
 	GtkHTMLClass      *html_class;
@@ -2213,182 +2203,200 @@ class_init (GtkHTMLClass *klass)
 
 	parent_class = gtk_type_class (GTK_TYPE_LAYOUT);
 
-	/* FIX2 signals [TITLE_CHANGED] = 
-	  gtk_signal_new ("title_changed",
-			  GTK_RUN_FIRST,
-			  object_class->type,
-			  GTK_SIGNAL_OFFSET (GtkHTMLClass, title_changed),
-			  gtk_marshal_NONE__STRING,
-			  GTK_TYPE_NONE, 1,
-			  GTK_TYPE_STRING);
+	signals [TITLE_CHANGED] = 
+		g_signal_new ("title_changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, title_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_STRING);
 	signals [URL_REQUESTED] =
-	  gtk_signal_new ("url_requested",
-			  GTK_RUN_FIRST,
-			  object_class->type,
-			  GTK_SIGNAL_OFFSET (GtkHTMLClass, url_requested),
-			  gtk_marshal_NONE__POINTER_POINTER,
-			  GTK_TYPE_NONE, 2,
-			  GTK_TYPE_STRING,
-			  GTK_TYPE_POINTER);
+		g_signal_new ("url_requested",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, url_requested),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_VOID__POINTER_POINTER,
+			      G_TYPE_NONE, 2,
+			      G_TYPE_POINTER,
+			      G_TYPE_POINTER);
 	signals [LOAD_DONE] = 
-	  gtk_signal_new ("load_done",
-			  GTK_RUN_FIRST,
-			  object_class->type,
-			  GTK_SIGNAL_OFFSET (GtkHTMLClass, load_done),
-			  gtk_marshal_NONE__NONE,
-			  GTK_TYPE_NONE, 0);
+		g_signal_new ("load_done",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, load_done),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 	signals [LINK_CLICKED] =
-	  gtk_signal_new ("link_clicked",
-			  GTK_RUN_FIRST,
-			  object_class->type,
-			  GTK_SIGNAL_OFFSET (GtkHTMLClass, link_clicked),
-			  gtk_marshal_NONE__STRING,
-			  GTK_TYPE_NONE, 1,
-			  GTK_TYPE_STRING);
+		g_signal_new ("link_clicked",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, link_clicked),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_STRING);
 	signals [SET_BASE] =
-		gtk_signal_new ("set_base",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, set_base),
-				gtk_marshal_NONE__STRING,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_STRING);
+		g_signal_new ("set_base",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, set_base),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_STRING);
 	signals [SET_BASE_TARGET] =
-		gtk_signal_new ("set_base_target",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, set_base_target),
-				gtk_marshal_NONE__STRING,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_STRING);
+		g_signal_new ("set_base_target",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, set_base_target),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_STRING);
 	
 	signals [ON_URL] =
-		gtk_signal_new ("on_url",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, on_url),
-				gtk_marshal_NONE__STRING,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_STRING);
+		g_signal_new ("on_url",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, on_url),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_STRING);
 	
 	signals [REDIRECT] =
-		gtk_signal_new ("redirect",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, redirect),
-				gtk_marshal_NONE__POINTER_INT,
-				GTK_TYPE_NONE, 2,
-				GTK_TYPE_STRING,
-				GTK_TYPE_INT);
+		g_signal_new ("redirect",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, redirect),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_VOID__POINTER_INT,
+			      G_TYPE_NONE, 2,
+			      G_TYPE_STRING,
+			      G_TYPE_INT);
 	
 	signals [SUBMIT] =
-		gtk_signal_new ("submit",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, submit),
-				gtk_marshal_NONE__POINTER_POINTER_POINTER,
-				GTK_TYPE_NONE, 3,
-				GTK_TYPE_STRING,
-				GTK_TYPE_STRING,
-				GTK_TYPE_STRING);
+		g_signal_new ("submit",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, submit),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_VOID__POINTER_POINTER_POINTER,
+			      G_TYPE_NONE, 3,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING);
 
 	signals [OBJECT_REQUESTED] =
-		gtk_signal_new ("object_requested",
-				GTK_RUN_LAST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, object_requested),
-				gtk_marshal_BOOL__POINTER,
-				GTK_TYPE_BOOL, 1,
-				GTK_TYPE_OBJECT);
+		g_signal_new ("object_requested",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_LAST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, object_requested),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_BOOL__POINTER,
+			      G_TYPE_BOOLEAN, 1,
+			      G_TYPE_OBJECT);
 	
 	signals [CURRENT_PARAGRAPH_STYLE_CHANGED] =
-		gtk_signal_new ("current_paragraph_style_changed",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, current_paragraph_style_changed),
-				gtk_marshal_NONE__INT,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_INT);
+		g_signal_new ("current_paragraph_style_changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, current_paragraph_style_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_INT);
 
 	signals [CURRENT_PARAGRAPH_INDENTATION_CHANGED] =
-		gtk_signal_new ("current_paragraph_indentation_changed",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, current_paragraph_indentation_changed),
-				gtk_marshal_NONE__INT,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_INT);
+		g_signal_new ("current_paragraph_indentation_changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, current_paragraph_indentation_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_INT);
 
 	signals [CURRENT_PARAGRAPH_ALIGNMENT_CHANGED] =
-		gtk_signal_new ("current_paragraph_alignment_changed",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, current_paragraph_alignment_changed),
-				gtk_marshal_NONE__INT,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_INT);
+		g_signal_new ("current_paragraph_alignment_changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, current_paragraph_alignment_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_INT);
 
 	signals [INSERTION_FONT_STYLE_CHANGED] =
-		gtk_signal_new ("insertion_font_style_changed",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, insertion_font_style_changed),
-				gtk_marshal_NONE__INT,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_INT);
+		g_signal_new ("insertion_font_style_changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, insertion_font_style_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_INT);
 	
 	signals [INSERTION_COLOR_CHANGED] =
-		gtk_signal_new ("insertion_color_changed",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, insertion_color_changed),
-				gtk_marshal_NONE__POINTER,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_POINTER);
+		g_signal_new ("insertion_color_changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, insertion_color_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_POINTER);
 	
 	signals [SIZE_CHANGED] = 
-		gtk_signal_new ("size_changed",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, size_changed),
-				gtk_marshal_NONE__NONE,
-				GTK_TYPE_NONE, 0);
+		g_signal_new ("size_changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, size_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 	signals [IFRAME_CREATED] = 
-		gtk_signal_new ("iframe_created",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, iframe_created),
-				gtk_marshal_NONE__POINTER,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_HTML);
+		g_signal_new ("iframe_created",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkHTMLClass, iframe_created),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1,
+			      GTK_TYPE_HTML);
 
 	signals [SCROLL] =
-		gtk_signal_new ("scroll",
-				GTK_RUN_LAST | GTK_RUN_ACTION,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, scroll),
-				gtk_marshal_NONE__INT_INT_FLOAT,
-				GTK_TYPE_NONE, 3,
-				GTK_TYPE_ORIENTATION,
-				GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
+		g_signal_new ("scroll",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			      G_STRUCT_OFFSET (GtkHTMLClass, scroll),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_VOID__INT_INT_FLOAT,
+			      G_TYPE_NONE, 3,
+			      GTK_TYPE_ORIENTATION,
+			      GTK_TYPE_SCROLL_TYPE, G_TYPE_FLOAT);
 
 	signals [CURSOR_MOVE] =
-		gtk_signal_new ("cursor_move",
-				GTK_RUN_LAST | GTK_RUN_ACTION,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, cursor_move),
-				gtk_marshal_NONE__INT_INT,
-				GTK_TYPE_NONE, 2, GTK_TYPE_DIRECTION_TYPE, GTK_TYPE_HTML_CURSOR_SKIP);
+		g_signal_new ("cursor_move",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			      G_STRUCT_OFFSET (GtkHTMLClass, cursor_move),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_VOID__INT_INT,
+			      G_TYPE_NONE, 2, GTK_TYPE_DIRECTION_TYPE, GTK_TYPE_HTML_CURSOR_SKIP);
 
 	signals [COMMAND] =
-		gtk_signal_new ("command",
-				GTK_RUN_LAST | GTK_RUN_ACTION,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GtkHTMLClass, command),
-				gtk_marshal_NONE__ENUM,
-				GTK_TYPE_NONE, 1, GTK_TYPE_HTML_COMMAND);
-
-	gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL); */
+		g_signal_new ("command",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			      G_STRUCT_OFFSET (GtkHTMLClass, command),
+			      NULL, NULL,
+			      gtk_marshal_NONE__ENUM,
+			      G_TYPE_NONE, 1, GTK_TYPE_HTML_COMMAND);
 
 	object_class->destroy = destroy;
 	

@@ -1339,7 +1339,7 @@ static void
 free_image_ptr_data (HTMLImagePointer *ip)
 {
 	if (ip->loader) {
-		gtk_object_unref (GTK_OBJECT (ip->loader));
+		g_object_unref (G_OBJECT (ip->loader));
 		ip->loader = NULL;
 	}
 	if (ip->animation) {
@@ -1411,21 +1411,21 @@ html_image_factory_register (HTMLImageFactory *factory, HTMLImage *i, const char
 	if (!retval){
 		retval = html_image_pointer_new (filename, factory);
 		if (*filename) {
-			gtk_signal_connect (GTK_OBJECT (retval->loader), "area_prepared",
-					    GTK_SIGNAL_FUNC (html_image_factory_area_prepared),
-					    retval);
+			g_signal_connect (G_OBJECT (retval->loader), "area_prepared",
+					  G_CALLBACK (html_image_factory_area_prepared),
+					  retval);
 
-			gtk_signal_connect (GTK_OBJECT (retval->loader), "area_updated",
-					    GTK_SIGNAL_FUNC (html_image_factory_area_updated),
-					    retval);
+			g_signal_connect (G_OBJECT (retval->loader), "area_updated",
+					  G_CALLBACK (html_image_factory_area_updated),
+					  retval);
 
-			gtk_signal_connect (GTK_OBJECT (retval->loader), "frame_done",
-					    GTK_SIGNAL_FUNC (html_image_factory_frame_done),
-					    retval);
+			/* FIX2 g_signal_connect (G_OBJECT (retval->loader), "frame_done",
+					  G_CALLBACK (html_image_factory_frame_done),
+					  retval);
 
-			gtk_signal_connect (GTK_OBJECT (retval->loader), "animation_done",
-					    GTK_SIGNAL_FUNC (html_image_factory_animation_done),
-					    retval);
+			g_signal_connect (G_OBJECT (retval->loader), "animation_done",
+					  G_CALLBACK (html_image_factory_animation_done),
+					  retval); */
 
 			g_hash_table_insert (factory->loaded_images, retval->url, retval);
 			html_image_pointer_load (retval);

@@ -70,6 +70,7 @@ libgtkhtml_HEADERS =				\
 	htmllinktext.h				\
 	htmllist.h				\
 	htmlmap.h				\
+	htmlmarshal.h				\
 	htmlobject.h				\
 	htmlpainter.h				\
 	htmlprinter.h				\
@@ -155,6 +156,7 @@ libgtkhtml_la_SOURCES =				\
 	htmllinktext.c				\
 	htmllist.c				\
 	htmlmap.c				\
+	htmlmarshal.c				\
 	htmlobject.c				\
 	htmlpainter.c				\
 	htmlprinter.c				\
