@@ -1,3 +1,8 @@
+2002-05-07  Larry Ewing  <lewing@ximian.com>
+
+	* test-html-editor-control.c (save_through_plain_persist_stream):
+	give a reasonable mode for the new file.
+
 2002-05-01  Larry Ewing  <lewing@ximian.com>
 
 	* test-html-editor-control.c (HTML_EDITOR_CONTROL_ID): add the

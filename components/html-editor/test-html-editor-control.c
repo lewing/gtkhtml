@@ -115,7 +115,7 @@ save_through_plain_persist_stream (const gchar *filename,
 	stream = bonobo_stream_open (BONOBO_IO_DRIVER_FS, filename,
 				     Bonobo_Storage_WRITE |
 				     Bonobo_Storage_CREATE |
-				     Bonobo_Storage_FAILIFEXIST, 0);
+				     Bonobo_Storage_FAILIFEXIST, S_IRUSR | S_IWUSR);
 
 	if (stream == NULL) {
 		g_warning ("Couldn't create `%s'\n", filename);
