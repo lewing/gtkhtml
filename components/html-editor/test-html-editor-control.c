@@ -412,7 +412,7 @@ app_destroy_cb (GtkWidget *app, BonoboUIContainer *uic)
 {
 	bonobo_object_unref (BONOBO_OBJECT (uic));
 
-	bonobo_main_quit ();
+	gtk_main_quit ();
 }
 
 static int
@@ -500,8 +500,7 @@ main (int argc, char **argv)
 	bindtextdomain(PACKAGE, GNOMELOCALEDIR);
 	textdomain(PACKAGE);
 	
-	gnome_init ("test-gnome-gtkhtml-editor", "1.0", argc, argv);
-	if (bonobo_init (&argc, argv) == FALSE)
+	if (bonobo_ui_init ("test-gnome-gtkhtml-editor", "1.0", &argc, argv) == FALSE)
 		g_error ("Could not initialize Bonobo\n");
 	bonobo_activate ();
 
@@ -511,7 +510,7 @@ main (int argc, char **argv)
 	if (argc > 1 && *argv [argc - 1] != '-')
 		gtk_idle_add ((GtkFunction) load_file, argv [argc - 1]);
 
-	bonobo_main ();
+	bonobo_ui_main ();
 
 	return 0;
 }

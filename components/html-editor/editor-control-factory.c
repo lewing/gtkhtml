@@ -108,11 +108,14 @@ set_frame_cb (BonoboControl *control,
 	GtkHTMLControlData *control_data;
 	GtkWidget *toolbar;
 	GtkWidget *scroll_frame;
+	Bonobo_ControlFrame frame;
 
 	control_data = (GtkHTMLControlData *) data;
 
-	if (bonobo_control_get_control_frame (control, NULL) == CORBA_OBJECT_NIL)
+	frame = bonobo_control_get_control_frame (control, NULL);
+	if (frame == CORBA_OBJECT_NIL)
 		return;
+	CORBA_Object_release (frame, NULL);
 
 	remote_ui_container = bonobo_control_get_remote_ui_container (control, NULL);
 	control_data->uic = ui_component = bonobo_control_get_ui_component (control);
@@ -142,6 +145,8 @@ set_frame_cb (BonoboControl *control,
 		control_data->has_spell_control = TRUE;
 
 	gtk_html_set_editor_api (GTK_HTML (control_data->html), editor_api, control_data);
+
+	bonobo_object_release_unref (remote_ui_container, NULL);
 }
 
 static gint
@@ -735,6 +740,7 @@ BONOBO_OAF_SHLIB_FACTORY (CONTROL_FACTORY_ID, "GNOME HTML Editor factory", edito
 int
 main (int argc, char **argv)
 {
+	BonoboGenericFactory *factory;
 #ifdef GTKHTML_HAVE_GCONF
 	GError  *gconf_error  = NULL;
 #endif
@@ -746,14 +752,26 @@ main (int argc, char **argv)
 	if (!bonobo_ui_init ("gnome-gtkhtml-editor", VERSION, &argc, argv))
 		g_error (_("I could not initialize Bonobo"));
 
-#ifdef GTKHTML_HAVE_GCONF
+	/* #ifdef GTKHTML_HAVE_GCONF
 	if (!gconf_init (argc, argv, &gconf_error)) {
 		g_assert (gconf_error != NULL);
 		g_error ("GConf init failed:\n  %s", gconf_error->message);
 		return 1;
 	}
-#endif
+	#endif */
 
-	return bonobo_generic_factory_main (CONTROL_FACTORY_ID, editor_control_factory, NULL);
+	factory = bonobo_generic_factory_new (CONTROL_FACTORY_ID, editor_control_factory, NULL);
+
+	if (factory) {
+		bonobo_running_context_auto_exit_unref (
+			BONOBO_OBJECT (factory));
+	
+		bonobo_activate ();
+		bonobo_main ();
+
+		return bonobo_ui_debug_shutdown ();
+	} else
+		return 1;
+
 }
 #endif /* GNOME_GTKHTML_EDITOR_SHLIB */
