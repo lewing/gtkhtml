@@ -743,47 +743,6 @@ ht_fit_line (HTMLObject *o,
 }
 
 static gint
-forward_get_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
-{
-	HTMLObject *obj;
-
-	g_assert (text);
-	g_assert (html_object_is_text (HTML_OBJECT (text)));
-	g_assert (text->text_len == 0);
-
-	/* find prev/next object */
-	obj = begin
-		? html_object_next_not_slave (HTML_OBJECT (text))
-		: html_object_prev_not_slave (HTML_OBJECT (text));
-
-	/* if not found or not text return 0, otherwise forward get_nb_with there */
-	if (!obj || !html_object_is_text (obj))
-		return 0;
-	else
-		return html_text_get_nb_width (HTML_TEXT (obj), painter, begin);
-}
-
-static gint
-get_next_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
-{
-	HTMLObject *obj;
-
-	g_assert (text);
-	g_assert (html_object_is_text (HTML_OBJECT (text)));
-
-	/* find prev/next object */
-	obj = begin
-		? html_object_next_not_slave (HTML_OBJECT (text))
-		: html_object_prev_not_slave (HTML_OBJECT (text));
-
-	/* if not found or not text return 0, otherwise forward get_nb_with there */
-	if (!obj || !html_object_is_text (obj))
-		return 0;
-	else
-		return html_text_get_nb_width (HTML_TEXT (obj), painter, begin);
-}
-
-static gint
 min_word_width_calc_tabs (HTMLText *text, HTMLPainter *p, gint idx, gint *len)
 {
 	gchar *str, *end;
@@ -845,24 +804,6 @@ min_word_width_calc_tabs (HTMLText *text, HTMLPainter *p, gint idx, gint *len)
 	return rv;
 }
 
-/* return non-breakable text width on begin/end of this text */
-gint
-html_text_get_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
-{
-	/* handle "" case */
-	if (text->text_len == 0)
-		return forward_get_nb_width (text, painter, begin);
-
-	/* if begins/ends with ' ' the width is 0 */
-	if ((begin && html_text_get_char (text, 0) == ' ')
-	    || (!begin && html_text_get_char (text, text->text_len - 1) == ' '))
-		return 0;
-
-	/* FIXME-words return min_word_width (text, painter, begin ? 0 : text->words - 1)
-	   + (text->words == 1 ? get_next_nb_width (text, painter, begin) : 0); */
-	return 10;
-}
-
 gint
 html_text_pango_info_get_index (HTMLTextPangoInfo *pi, gint byte_offset, gint idx)
 {
@@ -898,9 +839,7 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 
 		html_replace_tabs (text->text, translated, bytes);
 		pango_context_set_font_description (pc, html_painter_get_font (painter, text->face, html_text_get_font_style (text)));
-		attrs = pango_attr_list_new ();
-		items = pango_itemize (pc, translated, 0, bytes, attrs, NULL);
-		pango_attr_list_unref (attrs);
+		items = pango_itemize (pc, translated, 0, bytes, text->attr_list, NULL);
 		text->pi = html_text_pango_info_new (g_list_length (items));
 
 		for (i = 0, cur = items; i < text->pi->n; i ++, cur = cur->next) {
@@ -995,87 +934,6 @@ html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, gint offset, g
 	return ww;
 }
 
-static gint
-calc_nb_before (HTMLText *text, HTMLPainter *painter)
-{
-	gint nbw = 0;
-	HTMLObject *prev = html_object_prev_not_slave (HTML_OBJECT (text));
-
-	if (prev && text->text_len > 0 && html_object_is_text (prev) && HTML_TEXT (prev)->text_len > 0) {
-		HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
-
-		if (!pi->entries [0].attrs [0].is_line_break) {
-			gint ii, io, offset;
-
-			pi = html_text_get_pango_info (HTML_TEXT (prev), painter);
-			ii = pi->n - 1;
-			io = pi->entries [ii].item->num_chars - 1;
-			offset = HTML_TEXT (prev)->text_len;
-
-			while (!pi->entries [ii].attrs [io].is_line_break) {
-				if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
-					nbw += PANGO_PIXELS (pi->entries [ii].widths [io]);
-				offset --;
-				if (!html_text_pi_backward (pi, &ii, &io)) {
-					nbw += calc_nb_before (HTML_TEXT (prev), painter);
-					break;
-				}
-			}
-
-			if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter)) {
-				gint w;
-
-				html_painter_calc_text_size (painter, html_text_get_text (HTML_TEXT (prev), offset),
-							     HTML_TEXT (prev)->text_len - offset, NULL, NULL, 0, NULL, html_text_get_font_style (text), text->face,
-							     &w, NULL, NULL);
-
-				nbw += w;
-			}
-		}
-	}
-
-	return nbw;
-}
-
-static gint
-calc_nb_after (HTMLText *text, HTMLPainter *painter)
-{
-	gint nbw = 0;
-	HTMLObject *next = html_object_next_not_slave (HTML_OBJECT (text));
-
-	if (next && text->text_len > 0 && html_object_is_text (next) && HTML_TEXT (next)->text_len > 0) {
-		HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
-
-		if (!pi->entries [pi->n - 1].attrs [pi->entries [pi->n - 1].item->num_chars - 1].is_line_break) {
-			gint ii, io, offset;
-
-			pi = html_text_get_pango_info (HTML_TEXT (next), painter);
-			ii = io = offset = 0;
-
-			while (!pi->entries [ii].attrs [io].is_line_break) {
-				if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
-					nbw += PANGO_PIXELS (pi->entries [ii].widths [io]);
-				if (!html_text_pi_forward (pi, &ii, &io)) {
-					nbw += calc_nb_after (HTML_TEXT (next), painter);
-					break;
-				}
-			}
-
-			if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter)) {
-				gint w;
-
-				html_painter_calc_text_size (painter, html_text_get_text (HTML_TEXT (next), 0),
-							     offset, NULL, NULL, 0, NULL, html_text_get_font_style (text), text->face,
-							     &w, NULL, NULL);
-
-				nbw += w;
-			}
-		}
-	}
-
-	return nbw;
-}
-
 static void
 update_mw (HTMLText *text, HTMLPainter *painter, gint offset, gint *last_offset, gint *ww, gint *mw, gint ii, gint io, gchar *s, gint line_offset) {
 	if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter)) {
@@ -1102,7 +960,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 	gint ii, io, offset, last_offset, line_offset;
 	gchar *s;
 
-	ww = calc_nb_before (text, painter);
+	ww = 0;
 
 	last_offset = offset = 0;
 	ii = io = 0;
@@ -1138,7 +996,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 		html_painter_calc_text_size (painter, html_text_get_text (text, last_offset),
 					     offset - last_offset, NULL, NULL, 0, NULL, html_text_get_font_style (text), text->face,
 					     &ww, NULL, NULL);
-	ww += calc_nb_after (text, painter);
+
 	if (ww > mw)
 		mw = ww;
 
@@ -1509,6 +1367,8 @@ destroy (HTMLObject *obj)
 	g_free (text->text);
 	g_free (text->face);
 	pango_info_destroy (text);
+	pango_attr_list_unref (text->attr_list);
+	text->attr_list = NULL;
 
 	HTML_OBJECT_CLASS (parent_class)->destroy (obj);
 }
@@ -1795,6 +1655,7 @@ html_text_init (HTMLText *text,
 	text->select_start  = 0;
 	text->select_length = 0;
 	text->pi            = NULL;
+	text->attr_list     = pango_attr_list_new ();
 
 	html_color_ref (color);
 }

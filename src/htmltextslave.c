@@ -271,24 +271,6 @@ html_text_slave_get_line_offset (HTMLTextSlave *slave, gint offset, HTMLPainter 
 		return html_text_get_line_offset (slave->owner, p, slave->posStart + offset);
 }
 
-static gint
-get_next_nb_width (HTMLTextSlave *slave, HTMLPainter *painter)
-{
-	
-	gint width = 0;
-
-	if (HTML_TEXT (slave->owner)->text_len == 0
-	    || html_text_get_char (HTML_TEXT (slave->owner), slave->posStart + slave->posLen - 1) != ' ') {
-		HTMLObject *obj;
-		obj = html_object_next_not_slave (HTML_OBJECT (slave));
-		if (obj && html_object_is_text (obj)
-		    && html_text_get_char (HTML_TEXT (obj), 0) != ' ')
-			width = html_text_get_nb_width (HTML_TEXT (obj), painter, TRUE);
-	}
-
-	return width;
-}
-
 static gboolean
 could_remove_leading_space (HTMLTextSlave *slave, gboolean lineBegin)
 {
@@ -304,14 +286,6 @@ could_remove_leading_space (HTMLTextSlave *slave, gboolean lineBegin)
 		o = o->prev;
 
 	return o->prev ? FALSE : TRUE;
-}
-
-gint
-html_text_slave_nb_width (HTMLTextSlave *slave, HTMLPainter *painter, gint words)
-{
-	/* FIXME-words return get_words_width (slave, painter, words)
-	   + (slave->start_word + words == slave->owner->words ? get_next_nb_width (slave, painter) : 0); */
-	return 0;
 }
 
 gchar *
@@ -334,12 +308,8 @@ gint
 html_text_slave_get_nb_width (HTMLTextSlave *slave, HTMLPainter *painter, gboolean lineBegin)
 {
 	html_text_slave_remove_leading_space (slave, painter, lineBegin);
-	/* FIXME-words
-	   if (slave->owner->words - slave->start_word > 1)
-		return html_text_slave_nb_width (slave, painter, 1);
 
-		return html_object_calc_min_width (HTML_OBJECT (slave), painter); */
-	return 0;
+	return html_object_calc_min_width (HTML_OBJECT (slave), painter);
 }
 
 static gboolean
@@ -388,22 +358,6 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	HTMLFitType rv = HTML_FIT_NONE;
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, painter);
 	gboolean force_fit = lineBegin;
-
-	if (slave->posStart == 0) {
-		HTMLObject *prev = html_object_prev_not_slave (HTML_OBJECT (slave->owner));
-		if (prev && html_object_is_text (prev) && HTML_TEXT (prev)->text_len > 0 && slave->posLen > 0) {
-			HTMLTextPangoInfo *ppi = html_text_get_pango_info (HTML_TEXT (prev), painter);
-
-			/* if (!pi->entries [0].attrs [0].is_line_break) */
-			/* FIXME: this sucks for more complicated languages.
-			   the solution is not easy though, we need to put text
-			   with different styles (even links) into one text object
-			   and keep style info with interval position
-			 */
-			if (HTML_TEXT (prev)->text [strlen (HTML_TEXT (prev)->text) - 1] != ' ')
-				force_fit = TRUE;
-		}
-	}
 
 	if (rv == HTML_FIT_COMPLETE)
 		return rv;
@@ -671,11 +625,6 @@ draw_normal (HTMLTextSlave *self,
 	str = html_text_slave_get_text (self);
 	if (*str) {
 		GList *glyphs, *items;
-
-		html_painter_set_font_style (p, font_style);
-		html_painter_set_font_face  (p, HTML_TEXT (self->owner)->face);
-		html_color_alloc (HTML_TEXT (self->owner)->color, p);
-		html_painter_set_pen (p, &HTML_TEXT (self->owner)->color->color);
 
 		if (self->posStart > 0)
 			glyphs = get_glyphs_part (self, p, 0, self->posLen);

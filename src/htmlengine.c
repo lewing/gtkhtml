@@ -874,6 +874,26 @@ check_prev (const HTMLObject *p, HTMLType type, GtkHTMLFontStyle font_style, HTM
 }
 
 static void
+apply_attributes (HTMLText *text, GtkHTMLFontStyle style, gint last_pos)
+{
+	PangoAttribute *attr;
+
+	if (style & GTK_HTML_FONT_STYLE_BOLD) {
+		attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
+		attr->start_index = last_pos;
+		attr->end_index = text->text_len;
+		pango_attr_list_change (text->attr_list, attr);
+	}
+
+	if (style & GTK_HTML_FONT_STYLE_ITALIC) {
+		attr = pango_attr_style_new (PANGO_STYLE_ITALIC);
+		attr->start_index = last_pos;
+		attr->end_index = text->text_len;
+		pango_attr_list_change (text->attr_list, attr);
+	}
+}
+
+static void
 insert_text (HTMLEngine *e,
 	     HTMLObject *clue,
 	     const gchar *text)
@@ -884,6 +904,7 @@ insert_text (HTMLEngine *e,
 	HTMLColor *color;
 	gchar *face;
 	gboolean create_link;
+	gint last_pos = 0;
 
 	if (text [0] == ' ' && text [1] == 0) {
 		if (e->eat_space)
@@ -920,18 +941,18 @@ insert_text (HTMLEngine *e,
 	else
 		type = HTML_TYPE_TEXT;
 
-	if (! check_prev (prev, type, font_style, color, face, e->url)) {
-		HTMLObject *obj;
+	if (!prev || !HTML_IS_TEXT (prev)) {
+		prev = text_new (e, text, font_style, color);
+		html_text_set_font_face (HTML_TEXT (prev), current_font_face (e));
 
-		if (create_link)
-			obj = html_link_text_new (text, font_style, color, e->url, e->target);
-		else
-			obj = text_new (e, text, font_style, color);
-		html_text_set_font_face (HTML_TEXT (obj), current_font_face (e));
-
-		append_element (e, clue, obj);
-	} else
+		append_element (e, clue, prev);
+	} else {
+		last_pos = HTML_TEXT (prev)->text_len;
 		html_text_append (HTML_TEXT (prev), text, -1);
+	}
+
+	if (prev && HTML_IS_TEXT (prev))
+		apply_attributes (HTML_TEXT (prev), font_style, last_pos);
 }
 
 
