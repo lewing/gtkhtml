@@ -241,6 +241,9 @@ struct _HTMLEngine {
 	/* table contains data, which are set to objects by type during parse time */
 	GHashTable *class_data;
 
+	/* table of maps */
+	GHashTable *map_table;
+
 	gdouble min_split_index;
 
 	gboolean need_spell_check;
@@ -458,5 +461,7 @@ void        html_engine_set_focus_object   (HTMLEngine       *e,
 					    HTMLObject       *o);
 void        html_engine_draw_focus_object  (HTMLEngine       *e);
 
+HTMLMap *html_engine_get_map  (HTMLEngine  *e,
+			       const gchar *name);
 
 #endif /* _HTMLENGINE_H_ */

@@ -141,6 +141,9 @@ static void      parse_f                   (HTMLEngine *p,
 static void      update_embedded           (GtkWidget *widget,
 					    gpointer );
 
+static void      html_engine_map_table_clear (HTMLEngine *e);
+static void      html_engine_add_map (HTMLEngine *e, HTMLMap *map);
+
 static GtkLayoutClass *parent_class = NULL;
 
 enum {
@@ -2566,15 +2569,7 @@ parse_m (HTMLEngine *e, HTMLObject *_clue, const gchar *str )
 				if (e->map == NULL)
 					return;
 
-				html_engine_add_object_with_id (e, name, 
-								HTML_OBJECT (e->map));
-				if (e->flow == NULL) {
-					html_clue_append (HTML_CLUE (_clue),
-							  HTML_OBJECT (e->map));
-				} else { 
-					html_clue_append (HTML_CLUE (e->flow),
-							  HTML_OBJECT (e->map));  
-				}
+				html_engine_add_map (e, e->map);
 			}
 		}
 	} else if (strncmp (str, "/map", 4) == 0) {
@@ -3458,6 +3453,8 @@ html_engine_init (HTMLEngine *engine)
 
 	engine->block = FALSE;
 	engine->save_data = FALSE;
+
+	engine->map_table = NULL;
 }
 
 HTMLEngine *
@@ -3652,6 +3649,7 @@ html_engine_begin (HTMLEngine *e, char *content_type)
 
 	html_engine_id_table_clear (e);
 	html_engine_class_data_clear (e);
+	html_engine_map_table_clear (e);
 	html_image_factory_stop_animations (e->image_factory);
 
 	new_stream = gtk_html_stream_new (GTK_HTML (e->widget),
@@ -5460,3 +5458,39 @@ html_engine_set_focus_object (HTMLEngine *e, HTMLObject *o)
 	}
 }
 
+static void
+html_engine_add_map (HTMLEngine *e, HTMLMap *map)
+{
+	gpointer old_key = NULL, old_val;
+
+	if (!e->map_table)
+		e->map_table = g_hash_table_new (g_str_hash, g_str_equal);
+	else if (!g_hash_table_lookup_extended (e->map_table, map->name, &old_key, &old_val))
+		old_key = NULL;
+	g_hash_table_insert (e->map_table, map->name, map);
+}
+
+static gboolean
+map_table_free_func (gpointer key, gpointer val, gpointer data)
+{
+	html_map_destroy (HTML_MAP (val));
+	return TRUE;
+}
+
+static void
+html_engine_map_table_clear (HTMLEngine *e)
+{
+	if (e->map_table) {
+		g_hash_table_freeze (e->map_table);
+		g_hash_table_foreach_remove (e->map_table, map_table_free_func, NULL);
+		g_hash_table_thaw (e->map_table);
+		g_hash_table_destroy (e->map_table);
+		e->map_table = NULL;
+	}
+}
+
+HTMLMap *
+html_engine_get_map (HTMLEngine *e, const gchar *name)
+{
+	return e->map_table ? HTML_MAP (g_hash_table_lookup (e->map_table, name)) : NULL;
+}
