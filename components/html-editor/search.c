@@ -38,13 +38,9 @@ struct _GtkHTMLSearchDialog {
 static void
 search_cb (GtkWidget *but, GtkHTMLSearchDialog *d)
 {
-	char *text;
-
-	text = e_utf8_gtk_entry_get_text (GTK_ENTRY (d->entry));
-	html_engine_search (d->html->engine, text,
+	html_engine_search (d->html->engine, gtk_entry_get_text (GTK_ENTRY (d->entry)),
 			    GTK_TOGGLE_BUTTON (d->case_sensitive)->active,
 			    GTK_TOGGLE_BUTTON (d->backward)->active == 0, d->regular);
-	g_free (text);
 }
 
 static void
@@ -82,7 +78,7 @@ gtk_html_search_dialog_new (GtkHTML *html)
 	gtk_widget_show (dialog->entry);
 	gtk_widget_show_all (hbox);
 
-	gnome_dialog_button_connect (dialog->dialog, 0, search_cb, dialog);
+	gnome_dialog_button_connect (dialog->dialog, 0, GTK_SIGNAL_FUNC (search_cb), dialog);
 	gnome_dialog_close_hides (dialog->dialog, TRUE);
 	gnome_dialog_set_close (dialog->dialog, TRUE);
 
@@ -90,9 +86,9 @@ gtk_html_search_dialog_new (GtkHTML *html)
 	gtk_widget_grab_focus (dialog->entry);
 
 	gtk_signal_connect (GTK_OBJECT (dialog->entry), "changed",
-			    entry_changed, dialog);
+			    GTK_SIGNAL_FUNC (entry_changed), dialog);
 	gtk_signal_connect (GTK_OBJECT (dialog->entry), "activate",
-			    entry_activate, dialog);
+			    GTK_SIGNAL_FUNC (entry_activate), dialog);
 
 	return dialog;
 }

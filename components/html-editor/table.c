@@ -56,7 +56,7 @@ typedef struct
 
 	gboolean   has_bg_pixmap;
 	gboolean   changed_bg_pixmap;
-	gchar     *bg_pixmap;
+	const gchar *bg_pixmap;
 	GtkWidget *entry_bg_pixmap;
 	GtkWidget *check_bg_pixmap;
 
@@ -523,7 +523,7 @@ table_widget (GtkHTMLEditTableProperties *d)
 	GtkWidget *table_page;
 	GladeXML *xml;
 
-	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "table_page");
+	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "table_page", NULL);
 	if (!xml)
 		g_error (_("Could not load glade file."));
 
@@ -539,9 +539,9 @@ table_widget (GtkHTMLEditTableProperties *d)
 			  1, 2, 0, 1, 0, 0, 0, 0);
 
 	d->check_bg_color  = glade_xml_get_widget (xml, "check_table_bg_color");
-	gtk_signal_connect (GTK_OBJECT (d->check_bg_color), "toggled", set_has_bg_color, d);
+	gtk_signal_connect (GTK_OBJECT (d->check_bg_color), "toggled", GTK_SIGNAL_FUNC (set_has_bg_color), d);
 	d->check_bg_pixmap = glade_xml_get_widget (xml, "check_table_bg_pixmap");
-	gtk_signal_connect (GTK_OBJECT (d->check_bg_pixmap), "toggled", set_has_bg_pixmap, d);
+	gtk_signal_connect (GTK_OBJECT (d->check_bg_pixmap), "toggled", GTK_SIGNAL_FUNC (set_has_bg_pixmap), d);
 	d->entry_bg_pixmap = glade_xml_get_widget (xml, "entry_table_bg_pixmap");
 
 	d->disable_change = TRUE;
@@ -555,32 +555,32 @@ table_widget (GtkHTMLEditTableProperties *d)
 
 
 	d->spin_spacing = glade_xml_get_widget (xml, "spin_spacing");
-	gtk_signal_connect (GTK_OBJECT (d->spin_spacing), "changed", changed_spacing, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_spacing), "changed", GTK_SIGNAL_FUNC (changed_spacing), d);
 	d->spin_padding = glade_xml_get_widget (xml, "spin_padding");
-	gtk_signal_connect (GTK_OBJECT (d->spin_padding), "changed", changed_padding, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_padding), "changed", GTK_SIGNAL_FUNC (changed_padding), d);
 	d->spin_border  = glade_xml_get_widget (xml, "spin_border");
-	gtk_signal_connect (GTK_OBJECT (d->spin_border), "changed", changed_border, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_border), "changed", GTK_SIGNAL_FUNC (changed_border), d);
 	UPPER_FIX (padding);
 	UPPER_FIX (spacing);
 	UPPER_FIX (border);
 
 	d->option_align = glade_xml_get_widget (xml, "option_table_align");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_align))), "selection-done",
-			    changed_align, d);
+			    GTK_SIGNAL_FUNC (changed_align), d);
 
 	d->spin_width   = glade_xml_get_widget (xml, "spin_table_width");
-	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", changed_width, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", GTK_SIGNAL_FUNC (changed_width), d);
 	UPPER_FIX (width);
 	d->check_width  = glade_xml_get_widget (xml, "check_table_width");
-	gtk_signal_connect (GTK_OBJECT (d->check_width), "toggled", set_has_width, d);
+	gtk_signal_connect (GTK_OBJECT (d->check_width), "toggled", GTK_SIGNAL_FUNC (set_has_width), d);
 	d->option_width = glade_xml_get_widget (xml, "option_table_width");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width))), "selection-done",
-			    changed_width_percent, d);
+			    GTK_SIGNAL_FUNC (changed_width_percent), d);
 
 	d->spin_cols = glade_xml_get_widget (xml, "spin_table_columns");
-	gtk_signal_connect (GTK_OBJECT (d->spin_cols), "changed", changed_cols, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_cols), "changed", GTK_SIGNAL_FUNC (changed_cols), d);
 	d->spin_rows = glade_xml_get_widget (xml, "spin_table_rows");
-	gtk_signal_connect (GTK_OBJECT (d->spin_rows), "changed", changed_rows, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_rows), "changed", GTK_SIGNAL_FUNC (changed_rows), d);
 	UPPER_FIX (cols);
 	UPPER_FIX (rows);
 
@@ -614,41 +614,41 @@ table_insert_widget (GtkHTMLEditTableProperties *d)
 	GladeXML *xml;
 
 	d->insert = TRUE;
-	xml       = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "table_insert_page");
+	xml       = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "table_insert_page", NULL);
 	if (!xml)
 		g_error (_("Could not load glade file."));
 
 	table_page = glade_xml_get_widget (xml, "table_insert_page");
 
 	d->spin_cols = glade_xml_get_widget (xml, "spin_table_columns");
-	gtk_signal_connect (GTK_OBJECT (d->spin_cols), "changed", changed_cols, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_cols), "changed", GTK_SIGNAL_FUNC (changed_cols), d);
 	d->spin_rows = glade_xml_get_widget (xml, "spin_table_rows");
-	gtk_signal_connect (GTK_OBJECT (d->spin_rows), "changed", changed_rows, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_rows), "changed", GTK_SIGNAL_FUNC (changed_rows), d);
 	UPPER_FIX (cols);
 	UPPER_FIX (rows);
 
 	d->spin_width   = glade_xml_get_widget (xml, "spin_table_width");
 	UPPER_FIX (width);
-	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", changed_width, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_width), "changed", GTK_SIGNAL_FUNC (changed_width), d);
 	d->check_width  = glade_xml_get_widget (xml, "check_table_width");
-	gtk_signal_connect (GTK_OBJECT (d->check_width), "toggled", set_has_width, d);
+	gtk_signal_connect (GTK_OBJECT (d->check_width), "toggled", GTK_SIGNAL_FUNC (set_has_width), d);
 	d->option_width = glade_xml_get_widget (xml, "option_table_width");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width))), "selection-done",
-			    changed_width_percent, d);
+			    GTK_SIGNAL_FUNC (changed_width_percent), d);
 
 	d->spin_spacing = glade_xml_get_widget (xml, "spin_spacing");
-	gtk_signal_connect (GTK_OBJECT (d->spin_spacing), "changed", changed_spacing, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_spacing), "changed", GTK_SIGNAL_FUNC (changed_spacing), d);
 	d->spin_padding = glade_xml_get_widget (xml, "spin_padding");
-	gtk_signal_connect (GTK_OBJECT (d->spin_padding), "changed", changed_padding, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_padding), "changed", GTK_SIGNAL_FUNC (changed_padding), d);
 	d->spin_border  = glade_xml_get_widget (xml, "spin_border");
-	gtk_signal_connect (GTK_OBJECT (d->spin_border), "changed", changed_border, d);
+	gtk_signal_connect (GTK_OBJECT (d->spin_border), "changed", GTK_SIGNAL_FUNC (changed_border), d);
 	UPPER_FIX (padding);
 	UPPER_FIX (spacing);
 	UPPER_FIX (border);
 
 	d->option_template = glade_xml_get_widget (xml, "option_table_template");
 	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template))), "selection-done",
-			    changed_template, d);
+			    GTK_SIGNAL_FUNC (changed_template), d);
 	fill_templates (d);
 	gtk_box_pack_start (GTK_BOX (table_page), sample_frame (&d->sample), FALSE, FALSE, 0);
 

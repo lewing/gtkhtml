@@ -152,9 +152,9 @@ spell_suggestion_request (GtkHTML *html, const gchar *word, gpointer data)
 	sp->window = gtk_window_new (GTK_WINDOW_POPUP);
 	gtk_window_set_policy (GTK_WINDOW (sp->window), FALSE, FALSE, FALSE);
 	gtk_widget_set_name (sp->window, "html-editor-spell-suggestions");
-	scroll_frame = e_scroll_frame_new (NULL, NULL);
-	e_scroll_frame_set_shadow_type (E_SCROLL_FRAME (scroll_frame), GTK_SHADOW_IN);
-	e_scroll_frame_set_policy (E_SCROLL_FRAME (scroll_frame), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	scroll_frame = gtk_scrolled_window_new (NULL, NULL);
+	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scroll_frame), GTK_SHADOW_IN);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll_frame), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	sp->clist  = gtk_clist_new (1);
 	gtk_clist_set_selection_mode (GTK_CLIST (sp->clist), GTK_SELECTION_BROWSE);
 	frame = gtk_frame_new (NULL);
@@ -175,9 +175,9 @@ spell_suggestion_request (GtkHTML *html, const gchar *word, gpointer data)
 	y += yw + e->cursor->object->ascent + e->cursor->object->descent + e->topBorder + 4;
 	/* printf ("x: %d y: %d\n", x, y); */
 
-	gtk_signal_connect (GTK_OBJECT (sp->window),   "key_press_event", key_press_event, sp);
-	gtk_signal_connect (GTK_OBJECT (sp->window),   "destroy",         destroy, sp);
-	gtk_signal_connect (GTK_OBJECT (sp->clist),    "select_row",      select_row, sp);
+	gtk_signal_connect (GTK_OBJECT (sp->window),   "key_press_event", GTK_SIGNAL_FUNC (key_press_event), sp);
+	gtk_signal_connect (GTK_OBJECT (sp->window),   "destroy",         GTK_SIGNAL_FUNC (destroy), sp);
+	gtk_signal_connect (GTK_OBJECT (sp->clist),    "select_row",      GTK_SIGNAL_FUNC (select_row), sp);
 
 	gtk_widget_popup (sp->window, x, y);
 	gtk_grab_add (sp->window);
@@ -314,11 +314,7 @@ check_next_word (GtkHTMLControlData *cd, gboolean update)
 }
 
 static void 
-replace_cb (BonoboListener    *listener,
-	    char              *event_name, 
-	    CORBA_any         *arg,
-	    CORBA_Environment *ev,
-	    gpointer           user_data)
+replace_cb (BonoboListener *listener, const char *event_name, const CORBA_any *arg, CORBA_Environment *ev, gpointer user_data)
 {
 	GtkHTMLControlData *cd = (GtkHTMLControlData *) user_data;
 
@@ -329,21 +325,13 @@ replace_cb (BonoboListener    *listener,
 }
 
 static void 
-skip_cb (BonoboListener    *listener,
-	    char              *event_name, 
-	    CORBA_any         *arg,
-	    CORBA_Environment *ev,
-	    gpointer           user_data)
+skip_cb (BonoboListener *listener, const char *event_name, const CORBA_any *arg, CORBA_Environment *ev, gpointer user_data)
 {
 	check_next_word ((GtkHTMLControlData *) user_data, FALSE);
 }
 
 static void 
-add_cb (BonoboListener    *listener,
-	char              *event_name, 
-	CORBA_any         *arg,
-	CORBA_Environment *ev,
-	gpointer           user_data)
+add_cb (BonoboListener *listener, const char *event_name, const CORBA_any *arg, CORBA_Environment *ev, gpointer user_data)
 {
 	GtkHTMLControlData *cd = (GtkHTMLControlData *) user_data;
 	gchar *word;
@@ -357,11 +345,7 @@ add_cb (BonoboListener    *listener,
 }
 
 static void 
-ignore_cb (BonoboListener    *listener,
-	   char              *event_name, 
-	   CORBA_any         *arg,
-	   CORBA_Environment *ev,
-	   gpointer           user_data)
+ignore_cb (BonoboListener *listener, const char *event_name, const CORBA_any *arg, CORBA_Environment *ev, gpointer user_data)
 {
 	GtkHTMLControlData *cd = (GtkHTMLControlData *) user_data;
 	gchar *word;
@@ -427,7 +411,7 @@ spell_check_dialog (GtkHTMLControlData *cd, gboolean whole_document)
         cd->spell_control_pb = bonobo_control_frame_get_control_property_bag
 		(bonobo_widget_get_control_frame (BONOBO_WIDGET (control)), NULL);
 	bonobo_property_bag_client_set_value_string (cd->spell_control_pb, "language",
-						     GTK_HTML_CLASS (GTK_OBJECT (cd->html)->klass)->properties->language,
+						     GTK_HTML_CLASS (GTK_OBJECT_GET_CLASS (cd->html))->properties->language,
 						     NULL);
 	bonobo_event_source_client_add_listener (cd->spell_control_pb, replace_cb, "Bonobo/Property:change:replace", NULL, cd);
 	bonobo_event_source_client_add_listener (cd->spell_control_pb, add_cb, "Bonobo/Property:change:add", NULL, cd);

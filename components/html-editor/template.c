@@ -239,14 +239,14 @@ template_widget (GtkHTMLEditTemplateProperties *d, gboolean insert)
 	GtkWidget *template_page, *frame;
 	GladeXML *xml;
 
-	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "vbox_template");
+	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "vbox_template", NULL);
 	if (!xml)
 		g_error (_("Could not load glade file."));
 
 	template_page = glade_xml_get_widget (xml, "vbox_template");
 
 	d->clist_template = glade_xml_get_widget (xml, "clist_templates");
-	gtk_signal_connect (GTK_OBJECT (d->clist_template), "select_row", changed_template, d);
+	gtk_signal_connect (GTK_OBJECT (d->clist_template), "select_row", GTK_SIGNAL_FUNC (changed_template), d);
 	fill_templates (d);
 
 	d->spin_width           = glade_xml_get_widget (xml, "spin_template_width");
