@@ -2,16 +2,17 @@
 # Copyright (C) 2000-2004 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtkhtml package.
 # Gustavo Maciel Dias Vieira <gustavo@sagui.org>, 2000,2004.
-# Alexandre Folle de Menezes <afmenez@terra.com.br>, 2002-2003.
+# Alexandre Folle de Menezes <afmenez@terra.com.br>, 2002, 2003, 2005.
+# João Paulo Gomes Vanzuita <joaopaulo99@terra.com.br>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 3.1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-06 17:40+0100\n"
-"PO-Revision-Date: 2004-06-17 12:56-0400\n"
-"Last-Translator: João Paulo Gomes Vanzuita <joaopaulo99@terra.com.br>\n"
-"Language-Team: Portuguese/Brazil\n"
+"POT-Creation-Date: 2005-02-21 08:10+0100\n"
+"PO-Revision-Date: 2005-02-22 01:30-0300\n"
+"Last-Translator: Alexandre Folle de Menezes <afmenez@terra.com.br>\n"
+"Language-Team: Portuguese/Brazil <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1634,21 +1635,24 @@ msgstr "_Regressivo"
 msgid "_Regular Expression"
 msgstr "Expressão _Regular"
 
-#: components/html-editor/spell.c:110
+#: components/html-editor/spellchecker.c:110
 msgid ""
 "Unable to add word to dictionary,\n"
 "language settings are broken.\n"
 msgstr ""
+"Impossível adicionar palavra ao dicionário,\n"
+"configuração de linguagem pode esta errada.\n"
 
-#: components/html-editor/spell.c:298
+
+#: components/html-editor/spellchecker.c:298
 msgid "No misspelled word found"
 msgstr "Nenhuma palavra errada foi encontrada"
 
-#: components/html-editor/spell.c:305
+#: components/html-editor/spellchecker.c:305
 msgid "Spell checker"
 msgstr "Verificador ortográfico"
 
-#: components/html-editor/spell.c:398
+#: components/html-editor/spellchecker.c:398
 msgid "Current _Languages"
 msgstr "_Línguas atuais"
 
