@@ -32,6 +32,8 @@
 #include "htmlcolor.h"
 #include "htmlcolorset.h"
 #include "htmlpainter.h"
+#include "htmlplainpainter.h"
+#include "htmlgdkpainter.h"
 
 
 /* #define HTML_TEXT_SLAVE_DEBUG */
@@ -296,7 +298,8 @@ calc_size (HTMLObject *self, HTMLPainter *painter, GList **changed_objs)
 	}
 
 	new_width = MAX (1, calc_width (slave, painter));
-	if (new_width > HTML_OBJECT (owner)->max_width)
+	if ((HTML_IS_PLAIN_PAINTER (painter) || HTML_IS_GDK_PAINTER (painter))
+	    && new_width > HTML_OBJECT (owner)->max_width)
 		slave_split_if_too_long (slave, painter, &new_width);
 
 	changed = FALSE;
