@@ -608,7 +608,7 @@ calc_min_width (HTMLObject *o,
 		cur = cur->next;
 	}
 
-	return aligned_min_width + min_width + get_indent (HTML_CLUEFLOW (o), painter);
+	return MAX (aligned_min_width, min_width) + get_indent (HTML_CLUEFLOW (o), painter);
 }
 
 static gint
@@ -672,28 +672,45 @@ width_left (HTMLObject *o, gint x, gint rmargin)
 	return HTML_CLUEFLOW (o)->style == HTML_CLUEFLOW_STYLE_PRE ? G_MAXINT : rmargin - x;
 }
 
+static gint
+object_nb_width (HTMLObject *o, HTMLPainter *painter, gboolean lineBegin)
+{
+	if (HTML_IS_TEXT_SLAVE (o))
+		return html_text_slave_nb_width (HTML_TEXT_SLAVE (o), painter, lineBegin);
+		
+	return html_object_calc_min_width (o, painter);
+}
+
 static HTMLObject *
 layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 	     GList **changed_objs, gboolean *leaf_childs_changed_size,
 	     gint *lmargin, gint *rmargin, gint indent)
 {
-	HTMLObject *cur = begin;
+	HTMLObject *cur;
 	gboolean first = TRUE;
 	gint old_y;
 	gint x;
 	gint start_lmargin;
 	gint a, d;
+	gint nb_width;
+
+	if (html_object_is_text (begin)) {
+		/* this ever succeds and creates slaves */
+		html_object_fit_line (begin, painter, first, first, FALSE, 0);
+		begin = begin->next;
+	}
+	cur = begin;
 
 	old_y = o->y;
-	html_object_calc_min_width (begin, painter);
 	html_object_calc_size (begin, painter, changed_objs);
 	
 	a = begin->ascent;
 	d = begin->descent;
 
-	if (*rmargin - *lmargin < begin->min_width)
+	nb_width = object_nb_width (begin, painter, first);
+	if (*rmargin - *lmargin < nb_width)
 		html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
-					  begin->min_width, a + d,
+					  nb_width, a + d,
 					  indent, &o->y, lmargin, rmargin);
 
 	x = start_lmargin = *lmargin;
@@ -714,9 +731,8 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 			old_y = o->y;
 			a = MAX (a, cur->ascent);
 			d = MAX (d, cur->descent);
-			html_object_calc_min_width (cur, painter);
 			html_clue_find_free_area (HTML_CLUE (o->parent), o->y,
-						  cur->min_width, a + d,
+						  object_nb_width (cur, painter, first), a + d,
 						  indent, &o->y, lmargin, rmargin);
 
 			/* is there enough space for this object? */
@@ -801,7 +817,7 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 	ow = o->width;
 	o->ascent = 0;
 	o->descent = 0;
-	o->width = o->max_width;
+	o->width = MAX (o->max_width, html_object_calc_min_width (o, painter));
 
 	/* calc size */
 	padding = calc_padding (painter);

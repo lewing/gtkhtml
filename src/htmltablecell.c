@@ -135,6 +135,16 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 		return FALSE;
 }
 
+static void
+set_max_width (HTMLObject *o, HTMLPainter *painter, gint max_width)
+{
+	HTMLObject *obj;
+
+	//(*HTML_OBJECT_CLASS (parent_class)->set_max_width) (o, painter,
+	//						    MAX (max_width, html_object_calc_min_width (o, painter)));
+	(*HTML_OBJECT_CLASS (parent_class)->set_max_width) (o, painter, max_width);
+}
+
 static gint
 calc_min_width (HTMLObject *o,
 		HTMLPainter *painter)
@@ -360,6 +370,7 @@ html_table_cell_class_init (HTMLTableCellClass *klass,
 	object_class->calc_min_width = calc_min_width;
 	object_class->calc_preferred_width = calc_preferred_width;
 	object_class->calc_size = calc_size;
+	object_class->set_max_width = set_max_width;
 	object_class->draw = draw;
 	object_class->draw_background = draw_background;
 	object_class->set_bg_color = set_bg_color;

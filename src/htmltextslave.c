@@ -185,6 +185,7 @@ calc_width (HTMLTextSlave *slave, HTMLPainter *painter)
 	HTMLText *text = slave->owner;
 	HTMLObject *next, *prev;
 
+	html_text_request_word_width (text, painter);
 	if (slave->posStart == 0 && slave->posLen == text->text_len)
 		return text->word_width [text->words - 1];
 
@@ -404,6 +405,43 @@ could_remove_leading_space (HTMLTextSlave *slave, gboolean lineBegin)
 	return o->prev ? FALSE : TRUE;
 }
 
+inline gint
+html_text_slave_nb_width (HTMLTextSlave *slave, HTMLPainter *painter, gint words)
+{
+	return get_words_width (slave->owner, painter, slave->start_word, words)
+		+ (slave->start_word + words == slave->owner->words ? get_next_nb_width (slave, painter) : 0);
+}
+
+inline gchar *
+html_text_slave_remove_leading_space (HTMLTextSlave *slave, HTMLPainter *painter, gboolean lineBegin)
+{
+	gchar *begin;
+
+	html_text_request_word_width (slave->owner, painter);
+
+	begin = html_text_slave_get_text (slave);
+	if (*begin == ' ' && could_remove_leading_space (slave, lineBegin)) {
+		if (slave->posStart == 0)
+			slave->start_word ++;
+		begin = g_utf8_next_char (begin);
+		slave->charStart = begin;
+		slave->posStart ++;
+		slave->posLen --;
+	}
+
+	return begin;
+}
+
+gint
+html_text_slave_get_nb_width (HTMLTextSlave *slave, HTMLPainter *painter, gboolean lineBegin)
+{
+	html_text_slave_remove_leading_space (slave, painter, lineBegin);
+	if (slave->owner->words - slave->start_word > 1)
+		return html_text_slave_nb_width (slave, painter, 1);
+
+	return html_object_calc_min_width (HTML_OBJECT (slave), painter);
+}
+
 static HTMLFitType
 hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	      gboolean lineBegin, gboolean firstRun, gboolean next_to_floating, gint widthLeft)
@@ -421,22 +459,11 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	slave = HTML_TEXT_SLAVE (o);
 	text  = HTML_TEXT (slave->owner);
 
-	html_text_request_word_width (text, painter);
-
-	begin = html_text_slave_get_text (slave);
-	if (*begin == ' ' && could_remove_leading_space (slave, lineBegin)) {
-		if (slave->posStart == 0)
-			slave->start_word ++;
-		begin = g_utf8_next_char (begin);
-		slave->charStart = begin;
-		slave->posStart ++;
-		slave->posLen --;
-	}
+	begin = html_text_slave_remove_leading_space (slave, painter, lineBegin);
 
 	sep = begin;
 	while (sep
-	       && widthLeft >= get_words_width (text, painter, slave->start_word, words + 1)
-	       + (slave->start_word + words + 1 == text->words ? get_next_nb_width (slave, painter) : 0)) {
+	       && widthLeft >= html_text_slave_nb_width (slave, painter, words + 1)) {
 		words ++;
 		lsep   = sep;
 		sep    = strchr (lsep + (words > 1 ? 1 : 0), ' ');
