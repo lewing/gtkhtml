@@ -62,6 +62,9 @@ gtk_html_persist_stream_class_init (GtkHTMLPersistStreamClass *klass)
 	
 	gtk_html_persist_stream_parent_class = g_type_class_peek_parent (klass);
 
+	epv->load = impl_load;
+	epv->save = impl_save;
+
 	object_class->finalize = finalize;
 	persist_class->get_content_types = get_content_types;
 }
@@ -85,8 +88,8 @@ gtk_html_persist_stream_get_type (void)
 		};
 
 		type = bonobo_type_unique (
-			BONOBO_TYPE_OBJECT,
-			POA_Bonobo_PersistStream__init, NULL,
+			BONOBO_TYPE_PERSIST,
+			POA_Bonobo_PersistStream__init, POA_Bonobo_PersistStream__fini,
 			G_STRUCT_OFFSET (GtkHTMLPersistStreamClass, epv),
 			&info, "GtkHTMLPersistStream");
 	}

@@ -93,7 +93,7 @@ struct _GtkHTMLControlData {
 	GNOME_Spell_Dictionary  dict;
 	EditorEngine           *editor_bonobo_engine;
 	BonoboObject           *persist_stream;
-	/* FIX2 BonoboPersistFile      *persist_file; */
+        BonoboObject           *persist_file;
 	BonoboControl          *control;
 
 	GtkWidget *spell_dialog;

@@ -56,7 +56,7 @@
 
 #include "engine.h"
 #include "menubar.h"
-/* FIX2 #include "persist-file-impl.h" */
+#include "persist-file.h"
 #include "persist-stream.h"
 #include "popup.h"
 #include "toolbar.h"
@@ -479,11 +479,11 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 
 	/* Bonobo::PersistStream */
 	cd->persist_stream = gtk_html_persist_stream_new (GTK_HTML (html_widget));
-	bonobo_object_add_interface (BONOBO_OBJECT (control), BONOBO_OBJECT (cd->persist_stream));
+	bonobo_object_add_interface (BONOBO_OBJECT (control), cd->persist_stream);
 
-	/* Bonobo::PersistFile FIX2
-	cd->persist_file = persist_file_impl_new (GTK_HTML (html_widget));
-	bonobo_object_add_interface (BONOBO_OBJECT (control), BONOBO_OBJECT (cd->persist_file)); */
+	/* Bonobo::PersistFile */
+	cd->persist_file = gtk_html_persist_file_new (GTK_HTML (html_widget));
+	bonobo_object_add_interface (BONOBO_OBJECT (control), cd->persist_file);
 
 	/* PropertyBag */
 	pb = bonobo_property_bag_new (editor_get_prop, editor_set_prop, cd);

@@ -78,6 +78,8 @@ GTKHTML_EDITOR_SOURCES_COMMON =			\
 	menubar.h				\
 	paragraph.c				\
 	paragraph.h				\
+	persist-file.c				\
+	persist-file.h				\
 	persist-stream.c			\
 	persist-stream.h			\
 	popup.c					\
