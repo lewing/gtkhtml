@@ -1,3 +1,8 @@
+2002-05-23  Radek Doulik  <rodo@ximian.com>
+
+	* gtkhtml.c: moved properties initialization to instance init,
+	suggested by Michael Meeks
+
 2002-05-22  Radek Doulik  <rodo@ximian.com>
 
 	* gtkhtml.c (gtk_html_set_paragraph_style): fix the styles equal
