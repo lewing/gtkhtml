@@ -1,3 +1,8 @@
+2002-05-07  Larry Ewing  <lewing@ximian.com>
+
+	* htmlclueflow.c (plain_padding): more tweaks to make save_plain
+	mostly work.  More to come.
+
 2002-05-06  Larry Ewing  <lewing@ximian.com>
 
 	* htmlclueflow.c: chain to the parent class destroy method.

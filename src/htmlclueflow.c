@@ -66,7 +66,7 @@ static gchar * get_end_tag_item (HTMLObject *self);
 
 #define CLUEFLOW_ITEM_MARKER        "    * "
 #define CLUEFLOW_ITEM_MARKER_PAD    "      "
-#define CLUEFLOW_INDENT             "    "
+#define CLUEFLOW_INDENT             "      "
 #define CLUEFLOW_BLOCKQUOTE_CITE    "> "
           
 
@@ -541,12 +541,12 @@ get_level_indent (HTMLClueFlow *flow,
 				indent += 0;
 				break;
 			default:
-				g_warning ("Hit default");
+				//g_warning ("Hit default");
 				indent += calc_indent_unit (painter);
 				break;
 			}
 			
-			g_warning ("data[%d] = %d indent = %d", i,flow->levels->data[i], indent); 
+			//g_warning ("data[%d] = %d indent = %d", i,flow->levels->data[i], indent); 
 			i++;
 		}
 	} else {
@@ -1982,22 +1982,30 @@ plain_padding (HTMLClueFlow *flow, GString *out, gboolean firstline)
         pad += strlen (w); \
         if (out) g_string_append (out, w); 
 
-	for (i = 0; i < flow->levels->len - 1; i++) {
-		if (flow->levels->data[i] == HTML_LIST_TYPE_BLOCKQUOTE_CITE) {
-			APPEND_PLAIN (CLUEFLOW_BLOCKQUOTE_CITE);
-		} else {			
-			APPEND_PLAIN (CLUEFLOW_INDENT);
+	if (flow->levels->len) {
+		for (i = 0; i < flow->levels->len; i++) {
+			if (flow->levels->data[i] == HTML_LIST_TYPE_BLOCKQUOTE_CITE) {
+				APPEND_PLAIN (CLUEFLOW_BLOCKQUOTE_CITE);
+			} else {			
+				if ((i == flow->levels->len - 1) 
+				    && is_item (flow) 
+				    && firstline) {
+					APPEND_PLAIN (item_marker);
+				} else {
+					APPEND_PLAIN (CLUEFLOW_INDENT);
+				}
+			}
+		}
+	} else {
+		/* FIXME item not inside a list... bad item */
+		if (is_item (flow)) {
+			if (firstline) {
+				APPEND_PLAIN (item_marker);
+			} else {
+				APPEND_PLAIN (item_pad_str);
+			}
 		}
 	}
-	
-	if (is_item (flow)) {
-		if (firstline) {
-			APPEND_PLAIN (item_marker);
-		} else {
-			APPEND_PLAIN (item_pad_str);
-		}
-	}
-
 	g_free (item_marker);
 	g_free (item_pad_str);
 
