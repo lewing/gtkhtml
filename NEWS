@@ -1,3 +1,19 @@
+gtkhtml-3.6.2 "Woodlark" 2004-04-04
+------------------------------------------------
+
+New in this release
+
+   * fixed font magnification
+   * fixed table editing - setting number of rows/columns
+   * fixed color and settings management in frames
+   * fixed table cells padding
+   * fixed problem with text foreground color
+   * fixed several cursor movement problems
+   * fixed DIV parsing
+   * added and updated translations (Pawan Chitrakar,
+     Ahmad Riza H Nst, Adam Weinberger, Roozbeh Pournader,
+     Steve Murphy, Adi Attar)
+
 gtkhtml-3.6.1 "Parrot" 2004-03-14
 ------------------------------------------------
 
