@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 1.0.0\n"
-"POT-Creation-Date: 2002-03-18 11:02-0600\n"
+"POT-Creation-Date: 2002-04-18 16:02-0500\n"
 "PO-Revision-Date: 2001-11-26 10:38+0800\n"
 "Last-Translator: Joe Man <trmetal@yahoo.com.hk>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
