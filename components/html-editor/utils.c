@@ -103,13 +103,13 @@ sample_frame (GtkHTML **html)
 
 	frame = gtk_frame_new (_("Sample"));
 	*html = GTK_HTML (gtk_html_new ());
-	scroll_frame = e_scroll_frame_new (NULL, NULL);
-	e_scroll_frame_set_shadow_type (E_SCROLL_FRAME (scroll_frame), GTK_SHADOW_IN);
+	scroll_frame = gtk_scrolled_window_new (NULL, NULL);
+	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scroll_frame), GTK_SHADOW_IN);
 	gtk_container_border_width (GTK_CONTAINER (scroll_frame), 3);
-	e_scroll_frame_set_policy (E_SCROLL_FRAME (scroll_frame), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll_frame), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add (GTK_CONTAINER (scroll_frame), GTK_WIDGET (*html));
 	gtk_container_add (GTK_CONTAINER (frame), scroll_frame);
-	gtk_signal_connect (GTK_OBJECT (*html), "url_requested", url_requested, NULL);
+	gtk_signal_connect (GTK_OBJECT (*html), "url_requested", GTK_SIGNAL_FUNC (url_requested), NULL);
 	gtk_widget_set_usize (frame, -1, 120);
 
 	return frame;

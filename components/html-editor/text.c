@@ -163,7 +163,7 @@ static void
 set_url (GtkWidget *w, GtkHTMLEditTextProperties *data)
 {
 	g_free (data->url);
-	data->url = e_utf8_from_gtk_string (data->entry_url, gtk_entry_get_text (GTK_ENTRY (data->entry_url)));
+	data->url = g_strdup (gtk_entry_get_text (GTK_ENTRY (data->entry_url)));
 	data->url_changed = TRUE;
 
 	gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
@@ -210,7 +210,7 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->check [i] = gtk_check_button_new_with_label (x); \
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (data->check [i]), data->style_or & styles [i]); \
         gtk_object_set_data (GTK_OBJECT (data->check [i]), "style", GUINT_TO_POINTER (styles [i])); \
-        gtk_signal_connect (GTK_OBJECT (data->check [i]), "toggled", set_style, data); \
+        gtk_signal_connect (GTK_OBJECT (data->check [i]), "toggled", GTK_SIGNAL_FUNC (set_style), data); \
 	gtk_table_attach (GTK_TABLE (t1), data->check [i], c, c + 1, r, r + 1, GTK_FILL | GTK_EXPAND, 0, 0, 0); \
         i++
 
@@ -229,11 +229,7 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 		frame = gtk_frame_new (_("Click will follow this URL"));
 		data->entry_url = gtk_entry_new ();
 		if (data->url) {
-			gchar *url;
-
-			url = e_utf8_to_gtk_string (data->entry_url, data->url);
-			gtk_entry_set_text (GTK_ENTRY (data->entry_url), url);
-			g_free (url);
+			gtk_entry_set_text (GTK_ENTRY (data->entry_url), data->url);
 		}
 		f1 = gtk_frame_new (NULL);
 		gtk_container_set_border_width (GTK_CONTAINER (f1), 3);

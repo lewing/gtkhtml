@@ -244,8 +244,9 @@ void
 toolbar_apply_color (GtkHTMLControlData *cd)
 {
 	GdkColor *color;
+	gboolean default_color;
 
-	color = color_combo_get_color (COLOR_COMBO (cd->combo));
+	color = color_combo_get_color (COLOR_COMBO (cd->combo), &default_color);
 	apply_color (color, cd);
 	if (color)
 		gdk_color_free (color);
@@ -279,7 +280,7 @@ static void
 realize_engine (GtkHTML *html, GtkHTMLControlData *cd)
 {
 	set_color_combo (html, cd);
-	gtk_signal_disconnect_by_func (GTK_OBJECT (html), realize_engine, cd);
+	gtk_signal_disconnect_by_func (GTK_OBJECT (html), GTK_SIGNAL_FUNC (realize_engine), cd);
 }
 
 static void
@@ -288,7 +289,7 @@ load_done (GtkHTML *html, GtkHTMLControlData *cd)
 	if (GTK_WIDGET_REALIZED (cd->html))
 		set_color_combo (html, cd);
 	else
-		gtk_signal_connect (GTK_OBJECT (cd->html), "realize", realize_engine, cd);
+		gtk_signal_connect (GTK_OBJECT (cd->html), "realize", GTK_SIGNAL_FUNC (realize_engine), cd);
 }
 
 static GtkWidget *
@@ -300,7 +301,7 @@ setup_color_combo (GtkHTMLControlData *cd)
 	if (GTK_WIDGET_REALIZED (cd->html))
 		html_color_alloc (color, cd->html->engine->painter);
 	else
-		gtk_signal_connect (GTK_OBJECT (cd->html), "realize", realize_engine, cd);
+		gtk_signal_connect (GTK_OBJECT (cd->html), "realize", GTK_SIGNAL_FUNC (realize_engine), cd);
         gtk_signal_connect (GTK_OBJECT (cd->html), "load_done", GTK_SIGNAL_FUNC (load_done), cd);
 
 	cd->combo = color_combo_new (NULL, _("Automatic"), &color->color, color_group_fetch ("toolbar_text", cd));
@@ -572,7 +573,7 @@ create_style_toolbar (GtkHTMLControlData *cd)
 	frame = gtk_frame_new (NULL);
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
 
-	cd->toolbar_style = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_ICONS);
+	cd->toolbar_style = gtk_toolbar_new ();
 
 	gtk_container_add (GTK_CONTAINER (frame), cd->toolbar_style);
 	gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
