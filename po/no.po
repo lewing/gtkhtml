@@ -5,8 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 0.8\n"
-"POT-Creation-Date: 2003-09-25 18:00+0200\n"
-"PO-Revision-Date: 2003-08-18 13:25+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-10-09 11:00+0200\n"
+"PO-Revision-Date: 2003-10-09 10:58+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -956,7 +957,7 @@ msgstr "GNOME HTML-redigering factory"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:152
 msgid "_Wrap Lines"
-msgstr ""
+msgstr "_Bryt linjer"
 
 #: components/html-editor/body.c:66
 #: components/html-editor/gtkhtml-editor-properties.glade.h:48
@@ -1568,11 +1569,11 @@ msgstr "Celleinnhold"
 
 #: components/html-editor/popup.c:539
 msgid "Check Word Spelling..."
-msgstr ""
+msgstr "Sjekk staving av ord..."
 
 #: components/html-editor/popup.c:544
 msgid "Add Word to"
-msgstr ""
+msgstr "Legg til ord i"
 
 #: components/html-editor/popup.c:548
 #, c-format
@@ -1580,17 +1581,16 @@ msgid "%s Dictionary"
 msgstr "%s ordbok"
 
 #: components/html-editor/popup.c:557
-#, fuzzy
 msgid "Add Word to Dictionary"
-msgstr "%s ordbok"
+msgstr "Legg til ord i ordbok"
 
 #: components/html-editor/popup.c:560
 msgid "Ignore Misspelled Word"
-msgstr ""
+msgstr "Ignorer feilstavede ord"
 
 #: components/html-editor/popup.c:563
 msgid "Input Methods"
-msgstr ""
+msgstr "Inndatametoder"
 
 #: components/html-editor/replace.c:75
 msgid "Replace confirmation"
@@ -1644,15 +1644,11 @@ msgstr "_Bakover"
 msgid "Find Regular Expression"
 msgstr "Finn vanlig uttrykk"
 
-#: components/html-editor/spell.c:278
-msgid "No misspelled word found"
-msgstr ""
-
-#: components/html-editor/spell.c:285
+#: components/html-editor/spell.c:277
 msgid "Spell checker"
 msgstr "Stavekontroll"
 
-#: components/html-editor/spell.c:378
+#: components/html-editor/spell.c:366
 msgid "Current _Languages"
 msgstr "Tilgjengelige _språk"
 
@@ -1686,7 +1682,7 @@ msgstr "Bilderamme"
 
 #: components/html-editor/template.c:281
 msgid "Labels"
-msgstr ""
+msgstr "Etiketter"
 
 #: components/html-editor/test-html-editor-control.c:317
 msgid "Open file..."
