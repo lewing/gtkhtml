@@ -1,3 +1,8 @@
+2002-11-06  Larry Ewing  <lewing@ximian.com>
+
+	* gtkhtml.c (selection_received): add a <br> to cited pasted to
+	work around over-agressive merging.
+
 2002-10-30  Larry Ewing  <lewing@ximian.com>
 
 	* htmlclueflow.c (draw_quotes): fix quote drawing for printing.
