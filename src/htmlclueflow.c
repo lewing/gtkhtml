@@ -1531,6 +1531,9 @@ save (HTMLObject *self,
 			return FALSE;
 	}
 
+	if (!html_object_save_data (HTML_OBJECT (self), state))
+		return FALSE;
+
 	/* Paragraph's content.  */
 	if (! HTML_OBJECT_CLASS (&html_clue_class)->save (self, state))
 		return FALSE;
@@ -2673,8 +2676,9 @@ html_clueflow_is_empty (HTMLClueFlow *flow)
 
 	clue = HTML_CLUE (flow);
 
-	if (clue->head && html_object_is_text (clue->head)
-	    && HTML_TEXT (clue->head)->text_len == 0 && !html_object_next_not_slave (clue->head))
+	if (!clue->head
+	    || (clue->head && html_object_is_text (clue->head)
+		&& HTML_TEXT (clue->head)->text_len == 0 && !html_object_next_not_slave (clue->head)))
 		return TRUE;
 	return FALSE;
 }
