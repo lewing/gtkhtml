@@ -201,7 +201,7 @@ noinst_PROGRAMS = gtest
 
 gtest_SOURCES = \
 	test.c
-gtest_LDFLAGS = -static
+gtest_LDFLAGS =
 gtest_LDADD =	\
 	libgtkhtml-@GTKHTML_RELEASE@.la ../a11y/libgtkhtml-a11y-@GTKHTML_RELEASE@.la
 

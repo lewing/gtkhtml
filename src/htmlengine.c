@@ -3651,6 +3651,7 @@ html_engine_begin (HTMLEngine *e, char *content_type)
 
 	html_engine_stop_parser (e);
 	e->writing = TRUE;
+	e->focus_object = NULL;
 
 	html_engine_id_table_clear (e);
 	html_engine_class_data_clear (e);
@@ -5242,4 +5243,58 @@ html_engine_set_language (HTMLEngine *e, const gchar *language)
 	e->language = g_strdup (language);
 
 	gtk_html_api_set_language (GTK_HTML (e->widget));
+}
+
+gboolean
+html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
+{
+	if (e->clue && dir == GTK_DIR_TAB_FORWARD || dir == GTK_DIR_TAB_BACKWARD) {
+		HTMLObject *cur;
+		gint offset;
+
+		/* try to move focus in child embedded widget */
+		if (e->focus_object) {
+			printf ("try to focus in current child\n");
+			if (html_object_is_embedded (e->focus_object)) {
+				if (gtk_widget_child_focus (HTML_EMBEDDED (e->focus_object)->widget, dir))
+					return TRUE;
+			}
+			printf ("no, OK, let's move focus to next child\n");
+		}
+
+		if (e->focus_object) {
+			offset = dir == GTK_DIR_TAB_FORWARD ? html_object_get_length (e->focus_object) : 0;
+			cur = dir == GTK_DIR_TAB_FORWARD
+				? html_object_next_cursor (e->focus_object, &offset)
+				: html_object_prev_cursor (e->focus_object, &offset);
+		} else
+			cur = html_object_get_head_leaf (e->clue);
+
+		while (cur) {
+			printf ("try child %p\n", cur);
+			if (HTML_IS_LINK_TEXT (cur)) {
+				e->focus_object = cur;
+				printf ("focus link: %s\n", HTML_LINK_TEXT (cur)->url);
+				return TRUE;
+				break;
+			} else if (html_object_is_embedded (cur) && !html_object_is_frame (cur)) {
+				if (GTK_WIDGET_DRAWABLE (HTML_EMBEDDED (cur)->widget) &&
+				    gtk_widget_is_ancestor (HTML_EMBEDDED (cur)->widget, HTML_EMBEDDED (cur)->parent)) {
+					if (gtk_widget_child_focus (HTML_EMBEDDED (cur)->widget, dir)) {
+						e->focus_object = cur;
+						return TRUE;
+					}
+				}
+			}
+			offset = dir == GTK_DIR_TAB_FORWARD ? html_object_get_length (cur) : 0;
+			cur = dir == GTK_DIR_TAB_FORWARD
+				? html_object_next_cursor (cur, &offset)
+				: html_object_prev_cursor (cur, &offset);
+		}
+	}
+
+	printf ("no focus\n");
+	e->focus_object = NULL;
+
+	return FALSE;
 }

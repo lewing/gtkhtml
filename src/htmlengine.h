@@ -259,6 +259,8 @@ struct _HTMLEngine {
 
 	gboolean block;
 	gint opened_streams;
+
+	HTMLObject *focus_object;
 };
 
 /* must be forward referenced *sigh* */
@@ -434,4 +436,7 @@ void  html_engine_add_expose  (HTMLEngine *e,
 			       gint        width,
 			       gint        height);
 void html_engine_redraw_selection (HTMLEngine *e);
+
+gboolean html_engine_focus (HTMLEngine *e, GtkDirectionType dir);
+
 #endif /* _HTMLENGINE_H_ */

@@ -1981,53 +1981,45 @@ init_properties (GtkHTMLClass *klass)
 	initialized = TRUE;
 }
 
-static gint
-focus (GtkContainer *container, GtkDirectionType direction)
+static gboolean
+focus (GtkWidget *w, GtkDirectionType direction)
 {
-#if 1
-	/* FIX2 gint rv; */
+	if (html_engine_focus (GTK_HTML (w)->engine, direction)) {
+		if (GTK_HTML (w)->engine->focus_object) {
+			HTMLEngine *e = GTK_HTML (w)->engine;
+			HTMLObject *obj = e->focus_object;
+			gint x1, y1, x2, y2, xo, yo;
 
-	/* printf ("focus %d\n", direction); */
-	/* FIX2 rv = (*GTK_CONTAINER_CLASS (parent_class)->focus) (container, direction);
-	   html_engine_set_focus (GTK_HTML (container)->engine, rv);
-	   return rv; */
-	return 0;
-#else
-	GtkWidget *focus_child;
-	GtkHTML *html;
+			xo = e->x_offset;
+			yo = e->y_offset;
 
-	g_return_val_if_fail (container != NULL, FALSE);
-	g_return_val_if_fail (GTK_IS_HTML (container), FALSE);
+			html_object_calc_abs_position (obj, &x1, &y1);
+			y2 = y1 + obj->descent;
+			y1 -= obj->ascent;
+			x2 = x1 + obj->width;
+			printf ("child pos: %d,%d x %d,%d\n", x1, y1, x2, y2);
 
-	if (!GTK_WIDGET_IS_SENSITIVE (container))
-		return FALSE;
+			if (x1 < e->x_offset)
+				e->x_offset = x1;
+			else if (x2 > e->x_offset + e->width)
+				e->x_offset = MIN (x1, x2 - e->width);
 
-	if (GTK_WIDGET_HAS_FOCUS (container))
-		return FALSE;
-	    
-	html = GTK_HTML (container);
-	focus_child = container->focus_child;
-	
-	switch (direction) {
-	case GTK_DIR_LEFT:
-	case GTK_DIR_RIGHT:
-		{
+			if (y1 < e->y_offset)
+				e->y_offset = y1;
+			else if (y2 >= e->y_offset + e->height)
+				e->y_offset = MIN (y1, y2 - e->height + 1);
+
+			if (e->x_offset != xo)
+				gtk_adjustment_set_value (GTK_LAYOUT (w)->hadjustment, (gfloat) e->x_offset);
+			if (e->y_offset != yo)
+				gtk_adjustment_set_value (GTK_LAYOUT (w)->vadjustment, (gfloat) e->y_offset);
+			printf ("engine pos: %d,%d x %d,%d\n",
+				e->x_offset, e->y_offset, e->x_offset + e->width, e->y_offset + e->height);
 		}
-	case GTK_DIR_DOWN:
-	case GTK_DIR_TAB_FORWARD:
-		{
-		}
-	case GTK_DIR_UP:
-	case GTK_DIR_TAB_BACKWARD:
-		{
-		}
-	default:
-		break;
+		return TRUE;
 	}
 
-	gtk_container_set_focus_child (container, NULL);
 	return FALSE;
-#endif
 }
 
 /* dnd begin */
@@ -2460,8 +2452,7 @@ gtk_html_class_init (GtkHTMLClass *klass)
 	widget_class->drag_begin = drag_begin;
 	widget_class->drag_end = drag_end;
 	widget_class->drag_data_received = drag_data_received;
-
-	/* FIX2 container_class->focus = focus; */
+	widget_class->focus = focus;
 
 	layout_class->set_scroll_adjustments = set_adjustments;
 
