@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: capplet/gnome-bindings-prop.c:157
@@ -43,7 +43,7 @@ msgstr "Automatisk gjenkjenning av lenker"
 
 #: capplet/gtkhtml-capplet.glade.h:5
 msgid "Behavior"
-msgstr "Oppførsel"
+msgstr "OppfÃ¸rsel"
 
 #: capplet/gtkhtml-capplet.glade.h:6
 msgid "Composer Properties"
@@ -96,7 +96,7 @@ msgstr "Ny snarvei:"
 
 #: capplet/gtkhtml-capplet.glade.h:18
 msgid "On screen"
-msgstr "På skjermen"
+msgstr "PÃ¥ skjermen"
 
 #: capplet/gtkhtml-capplet.glade.h:19
 msgid "Select HTML fixed width font"
@@ -139,8 +139,8 @@ msgid ""
 "Cannot execute GNOME Spell control applet\n"
 "Try to install GNOME Spell if you don't have it installed."
 msgstr ""
-"Kan ikke kjøre GNOME stavekontrollapplet\n"
-"Prøv å installere GNOME stavekontroll hvis du ikke har gjort det."
+"Kan ikke kjÃ¸re GNOME stavekontrollapplet\n"
+"PrÃ¸v Ã¥ installere GNOME stavekontroll hvis du ikke har gjort det."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.server.in.in.h:1
 msgid "GNOME HTML Editor"
@@ -199,7 +199,7 @@ msgstr "Bakgrunnsfarge"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:10
 msgid "Blue"
-msgstr "Blå"
+msgstr "BlÃ¥"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:11
 #: components/html-editor/toolbar.c:52
@@ -252,11 +252,11 @@ msgstr "Finn"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:22
 msgid "Find A Regular Expression"
-msgstr "Søk etter et vanlig uttrykk"
+msgstr "SÃ¸k etter et vanlig uttrykk"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:23
 msgid "Find And Replace"
-msgstr "Søk og erstatt"
+msgstr "SÃ¸k og erstatt"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:24
 msgid "Find Regular E_xpression..."
@@ -272,7 +272,7 @@ msgstr "Finn igjen"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:27
 msgid "Find and Replace"
-msgstr "Søk og erstatt"
+msgstr "SÃ¸k og erstatt"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:28
 msgid "For_mat"
@@ -280,7 +280,7 @@ msgstr "For_mater"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:29
 msgid "Green"
-msgstr "Grønn"
+msgstr "GrÃ¸nn"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:30
 msgid "Header _1"
@@ -331,7 +331,7 @@ msgstr "Sett inn smilefjes som ler i dokumentet..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:41
 msgid "Insert Oh no! smiley into document..."
-msgstr "Sett inn smilefjes som uttrykker «Å nei!» i dokumentet..."
+msgstr "Sett inn smilefjes som uttrykker Â«Ã… nei!Â» i dokumentet..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:42
 msgid "Insert Smile smiley into document..."
@@ -382,47 +382,47 @@ msgstr "Bruk Preformat som stil for dette avsnittet"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:53
 msgid "Make the current paragraph a bulleted list"
-msgstr "Gjør dette avsnittet om til en punktliste"
+msgstr "GjÃ¸r dette avsnittet om til en punktliste"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:54
 msgid "Make the current paragraph a list with roman numerals"
-msgstr "Gjør dette avsnittet om til en liste med romerske tall"
+msgstr "GjÃ¸r dette avsnittet om til en liste med romerske tall"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:55
 msgid "Make the current paragraph a numbered list"
-msgstr "Gjør dette avsnittet om til en nummerert liste"
+msgstr "GjÃ¸r dette avsnittet om til en nummerert liste"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:56
 msgid "Make the current paragraph an H1 header"
-msgstr "Gjør dette avsnittet om til en H1 tittel"
+msgstr "GjÃ¸r dette avsnittet om til en H1 tittel"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:57
 msgid "Make the current paragraph an H2 header"
-msgstr "Gjør dette avsnittet om til en H2 tittel"
+msgstr "GjÃ¸r dette avsnittet om til en H2 tittel"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:58
 msgid "Make the current paragraph an H3 header"
-msgstr "Gjør dette avsnittet om til en H3 tittel"
+msgstr "GjÃ¸r dette avsnittet om til en H3 tittel"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:59
 msgid "Make the current paragraph an H4 header"
-msgstr "Gjør dette avsnittet om til en H4 tittel"
+msgstr "GjÃ¸r dette avsnittet om til en H4 tittel"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:60
 msgid "Make the current paragraph an H5 header"
-msgstr "Gjør dette avsnittet om til en H5 tittel"
+msgstr "GjÃ¸r dette avsnittet om til en H5 tittel"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:61
 msgid "Make the current paragraph an H6 header"
-msgstr "Gjør dette avsnittet om til en H6 tittel"
+msgstr "GjÃ¸r dette avsnittet om til en H6 tittel"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:62
 msgid "Make the current paragraph an address"
-msgstr "Gjør dette avsnittet om til en adresse"
+msgstr "GjÃ¸r dette avsnittet om til en adresse"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:63
 msgid "Make the current paragraph an alphabetical list"
-msgstr "Gjør dette avsnittet om til en alfabetisk liste"
+msgstr "GjÃ¸r dette avsnittet om til en alfabetisk liste"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:64
 msgid "Modify the file's properties"
@@ -445,7 +445,7 @@ msgstr "Nummerert _liste"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:68
 msgid "Oh _no!"
-msgstr "Å _nei!"
+msgstr "Ã… _nei!"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:69
 msgid "Orange"
@@ -483,7 +483,7 @@ msgstr "Purpur"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:77
 msgid "Red"
-msgstr "Rød"
+msgstr "RÃ¸d"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:78
 msgid "Redo"
@@ -506,7 +506,7 @@ msgstr "Erstatt"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:82
 #: components/html-editor/toolbar.c:514
 msgid "Right justifies the paragraphs"
-msgstr "Høyrejusterer avsnittene"
+msgstr "HÃ¸yrejusterer avsnittene"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:83
 msgid "Roman Numeral List"
@@ -634,7 +634,7 @@ msgstr "_Finn..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:111
 msgid "_Font Size"
-msgstr "Skri_fttypestørrelse"
+msgstr "Skri_fttypestÃ¸rrelse"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:112
 msgid "_Frown"
@@ -650,7 +650,7 @@ msgstr "B_ilde..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:115
 msgid "_Increase Indent"
-msgstr "Øk _innrykk"
+msgstr "Ã˜k _innrykk"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:116
 msgid "_Insert"
@@ -706,7 +706,7 @@ msgstr "E_rstatt..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:129
 msgid "_Right"
-msgstr "Høy_re"
+msgstr "HÃ¸y_re"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:130
 msgid "_Roman Numeral List"
@@ -849,7 +849,7 @@ msgstr "Justering:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:13
 msgid "Apply changes to:"
-msgstr "Påfør endringer til:"
+msgstr "PÃ¥fÃ¸r endringer til:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
 #: components/html-editor/text.c:219 components/html-editor/toolbar.c:523
@@ -881,7 +881,7 @@ msgstr "Senter"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:22
 #: components/html-editor/link.c:107 components/html-editor/text.c:230
 msgid "Click will follow this URL"
-msgstr "Klikk for å følge denne URLen"
+msgstr "Klikk for Ã¥ fÃ¸lge denne URLen"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:23
 msgid "Color:"
@@ -906,15 +906,15 @@ msgstr "Ikke bryt"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:29
 msgid "Enable"
-msgstr "Slå på"
+msgstr "SlÃ¥ pÃ¥"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:30
 msgid "Follow"
-msgstr "Følg"
+msgstr "FÃ¸lg"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:31
 msgid "Font size"
-msgstr "Skriftstørrelse"
+msgstr "SkriftstÃ¸rrelse"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:32
 msgid "Foreground color"
@@ -926,7 +926,7 @@ msgstr "Tittel"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:34
 msgid "Height:"
-msgstr "Høyde:"
+msgstr "HÃ¸yde:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:35
 msgid "Horizontal alignment:"
@@ -964,7 +964,7 @@ msgstr "Lokasjon"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:44
 msgid "Middle"
-msgstr "Midt på"
+msgstr "Midt pÃ¥"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:48
 msgid "Padding"
@@ -998,7 +998,7 @@ msgstr "Punkter"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:57
 #: components/html-editor/paragraph.c:160
 msgid "Right"
-msgstr "Høyre"
+msgstr "HÃ¸yre"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:58
 #: components/html-editor/popup.c:472
@@ -1015,7 +1015,7 @@ msgstr "Rader:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:62
 msgid "Scope"
-msgstr "Område"
+msgstr "OmrÃ¥de"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:63
 msgid "Shaded"
@@ -1025,7 +1025,7 @@ msgstr "Skyggelagt"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:64
 #: components/html-editor/text.c:246
 msgid "Size"
-msgstr "Størrelse"
+msgstr "StÃ¸rrelse"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:65
 msgid "Spacing"
@@ -1147,7 +1147,7 @@ msgstr "Sett inn"
 
 #: components/html-editor/menubar.c:196
 msgid "Cannot execute gtkhtml properties"
-msgstr "Kan ikke kjøre gtkhtml egenskaper"
+msgstr "Kan ikke kjÃ¸re gtkhtml egenskaper"
 
 #: components/html-editor/paragraph.c:125
 msgid "Pre"
@@ -1183,19 +1183,19 @@ msgstr "Adresse"
 
 #: components/html-editor/paragraph.c:133
 msgid "Dot item"
-msgstr "Prikkoppføring"
+msgstr "PrikkoppfÃ¸ring"
 
 #: components/html-editor/paragraph.c:134
 msgid "Number item"
-msgstr "Talloppføring"
+msgstr "TalloppfÃ¸ring"
 
 #: components/html-editor/paragraph.c:135
 msgid "Roman item"
-msgstr "Romersk oppføring"
+msgstr "Romersk oppfÃ¸ring"
 
 #: components/html-editor/paragraph.c:136
 msgid "Alphabeta item"
-msgstr "Alfabetisk oppføring"
+msgstr "Alfabetisk oppfÃ¸ring"
 
 #: components/html-editor/paragraph.c:145
 msgid "Align"
@@ -1222,7 +1222,7 @@ msgstr "Stavekontroll"
 
 #: components/html-editor/popup.c:383
 msgid "Suggest word"
-msgstr "Foreslå ord"
+msgstr "ForeslÃ¥ ord"
 
 #: components/html-editor/popup.c:402
 msgid "Remove link"
@@ -1271,7 +1271,7 @@ msgstr "Raden under"
 
 #: components/html-editor/popup.c:467
 msgid "Column before"
-msgstr "Kolonnen før"
+msgstr "Kolonnen fÃ¸r"
 
 #: components/html-editor/popup.c:468
 msgid "Column after"
@@ -1303,11 +1303,11 @@ msgstr "Neste"
 
 #: components/html-editor/replace.c:152
 msgid "search backward"
-msgstr "søk bakover"
+msgstr "sÃ¸k bakover"
 
 #: components/html-editor/replace.c:153 components/html-editor/search.c:67
 msgid "case sensitive"
-msgstr "skill mellom store/små bokstaver"
+msgstr "skill mellom store/smÃ¥ bokstaver"
 
 #: components/html-editor/replace.c:161
 msgid "with"
@@ -1315,7 +1315,7 @@ msgstr "med"
 
 #: components/html-editor/rule.c:97
 msgid "Blue 3D"
-msgstr "Blå 3D"
+msgstr "BlÃ¥ 3D"
 
 #: components/html-editor/rule.c:109
 msgid "Yellow, flowers"
@@ -1335,15 +1335,15 @@ msgstr "Ingen feilstavede ord funnet"
 
 #: components/html-editor/spell.c:346
 msgid "Spell Checking _Languages"
-msgstr "S_pråkstøtte i stavekontroll"
+msgstr "S_prÃ¥kstÃ¸tte i stavekontroll"
 
 #: components/html-editor/table.c:198
 msgid "Flat gray"
-msgstr "Flat grå"
+msgstr "Flat grÃ¥"
 
 #: components/html-editor/table.c:207
 msgid "Dark header"
-msgstr "Mørk topptekst"
+msgstr "MÃ¸rk topptekst"
 
 #: components/html-editor/template.c:82
 msgid "Note"
@@ -1381,7 +1381,7 @@ msgstr ""
 
 #: components/html-editor/test-html-editor-control.c:262
 msgid "Open file..."
-msgstr "Åpne fil..."
+msgstr "Ã…pne fil..."
 
 #: components/html-editor/test-html-editor-control.c:264
 msgid "Save file as..."
@@ -1402,19 +1402,19 @@ msgstr "Venstrejuster"
 
 #: components/html-editor/toolbar.c:514
 msgid "Right align"
-msgstr "Høyrejuster"
+msgstr "HÃ¸yrejuster"
 
 #: components/html-editor/toolbar.c:521
 msgid "Toggle typewriter font style"
-msgstr "Slå av/på skrivemaskin stil for skrifttype"
+msgstr "SlÃ¥ av/pÃ¥ skrivemaskin stil for skrifttype"
 
 #: components/html-editor/toolbar.c:523
 msgid "Makes the text bold"
-msgstr "Gjør teksten fet"
+msgstr "GjÃ¸r teksten fet"
 
 #: components/html-editor/toolbar.c:525
 msgid "Makes the text italic"
-msgstr "Gjør teksten kursiv"
+msgstr "GjÃ¸r teksten kursiv"
 
 #: components/html-editor/toolbar.c:527
 msgid "Underlines the text"
@@ -1438,7 +1438,7 @@ msgstr "Innrykk"
 
 #: components/html-editor/toolbar.c:540
 msgid "Indents the paragraphs more"
-msgstr "Større innrykk for avsnittene"
+msgstr "StÃ¸rre innrykk for avsnittene"
 
 #: components/html-editor/utils.c:104
 msgid "Sample"
@@ -1494,7 +1494,7 @@ msgstr "_Oppdater"
 
 #: src/html-component.c:613
 msgid "Reload the page"
-msgstr "Les siden på nytt"
+msgstr "Les siden pÃ¥ nytt"
 
 #: src/html-component.c:660
 msgid "Could not initialize Bonobo!"
@@ -1502,7 +1502,7 @@ msgstr "Kunne ikke initiere Bonobo!"
 
 #: src/htmlbutton.c:142
 msgid "Submit Query"
-msgstr "Send spørring"
+msgstr "Send spÃ¸rring"
 
 #: src/htmlbutton.c:145
 msgid "Reset"
@@ -1518,11 +1518,11 @@ msgstr "GtkHTML test"
 
 #: src/testgtkhtml.c:113
 msgid "Print pre_view"
-msgstr "Forhånds_visning"
+msgstr "ForhÃ¥nds_visning"
 
 #: src/testgtkhtml.c:113
 msgid "Print preview"
-msgstr "Forhåndsvisning"
+msgstr "ForhÃ¥ndsvisning"
 
 #~ msgid "EBrowser control"
 #~ msgstr "EBrowser kontroll"
@@ -1537,7 +1537,7 @@ msgstr "Forhåndsvisning"
 #~ msgstr "HTML-leser kontroll"
 
 #~ msgid "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
-#~ msgstr "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzÆæØøÅå"
+#~ msgstr "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzÃ†Ã¦Ã˜Ã¸Ã…Ã¥"
 
 #~ msgid "Command"
 #~ msgstr "Kommando"
@@ -1558,13 +1558,13 @@ msgstr "Forhåndsvisning"
 #~ msgstr "US-letter"
 
 #~ msgid "Language"
-#~ msgstr "Språk"
+#~ msgstr "SprÃ¥k"
 
 #~ msgid "Pick a color"
 #~ msgstr "Velg en farge"
 
 #~ msgid "Clear"
-#~ msgstr "Tøm"
+#~ msgstr "TÃ¸m"
 
 #~ msgid "URL"
 #~ msgstr "URL"
@@ -1576,7 +1576,7 @@ msgstr "Forhåndsvisning"
 #~ msgstr "bredde"
 
 #~ msgid "height"
-#~ msgstr "høyde"
+#~ msgstr "hÃ¸yde"
 
 #~ msgid "_Numbered List"
 #~ msgstr "_Nummerert liste"
