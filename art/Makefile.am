@@ -1,4 +1,4 @@
-iconsdir = $(datadir)/gtkhtml/icons
+iconsdir = $(datadir)/gtkhtml-@GTKHTML_RELEASE@/icons
 icons_DATA = \
 	16_cut.png			\
 	24_cut.png			\
@@ -9,6 +9,8 @@ icons_DATA = \
 	bulb.png			\
 	empty_image.png			\
 	flowers.png			\
+	font-tt-16.png			\
+	font-tt-24.png			\
 	html-viewer.png			\
 	insert-table-16.png		\
 	insert-table-24.png		\
