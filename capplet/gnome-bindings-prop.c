@@ -24,6 +24,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <gdk/gdkkeysyms.h>
+#include <gtk/gtktreeview.h>
+#include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkclist.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenuitem.h>
@@ -34,7 +36,6 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <glade/glade.h>
-#include <libgnome/gnome-defs.h>
 #include <libgnome/gnome-i18n.h>
 #include "gnome-bindings-prop.h"
 
@@ -172,27 +173,21 @@ changed_option_keymap (GtkWidget *w, GnomeBindingsProperties *prop)
 	KeymapEntry *ke = get_keymap (prop);
 	GnomeBindingEntry *be;
 	GList *cur;
-	GtkCList *clist;
+	GtkTreeIter iter;
 
 	g_return_if_fail (ke);
 
-	clist = GTK_CLIST (prop->clist_keymap);
-	gtk_clist_freeze (clist);
-	gtk_clist_clear (clist);
-
 	for (cur = ke->bindings; cur; cur = cur->next) {
-		gchar *name [2];
+
+		gchar *key_str;
 
 		be = (GnomeBindingEntry *) cur->data;
-		name [0] = string_from_key (be->keyval, be->modifiers);
-		name [1] = be->command;
-		gtk_clist_set_row_data (clist, gtk_clist_append (clist, name), be);
-		g_free (name [0]);
-	}
 
-	gtk_clist_columns_autosize (clist);
-	gtk_clist_thaw (clist);
-	gtk_clist_select_row (clist, 0, 0);
+		gtk_list_store_append (prop->store, &iter);
+		key_str = string_from_key (be->keyval, be->modifiers);
+		gtk_list_store_set (prop->store, &iter, 0, key_str, 1, be->command, -1);
+		g_free (key_str);
+	}
 
 	/* gtk_widget_set_sensitive (prop->button_add, ke->editable);
 	   gtk_widget_set_sensitive (prop->button_delete, ke->editable); */
@@ -210,15 +205,26 @@ init (GnomeBindingsProperties *prop)
 	prop->bindingsets = g_hash_table_new (g_str_hash, g_str_equal);
 
 	glade_gnome_init ();
-	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-capplet.glade", "vbox_ks");
+	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-capplet.glade", "vbox_ks", NULL);
 
 	if (!xml)
 		g_error (_("Could not load glade file."));
 
 	prop->option_keymap = glade_xml_get_widget (xml, "option_keymap");
-	gtk_signal_connect (GTK_OBJECT (gtk_option_menu_get_menu (GTK_OPTION_MENU (prop->option_keymap))), "selection-done",
-			    changed_option_keymap, prop);
-	prop->clist_keymap  = glade_xml_get_widget (xml, "clist_keymap");
+	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (prop->option_keymap)), "selection-done",
+			  G_CALLBACK (changed_option_keymap), prop);
+	prop->view_keymap  = glade_xml_get_widget (xml, "tview_keymap");
+	prop->store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (prop->view_keymap), GTK_TREE_MODEL (prop->store));
+
+	gtk_tree_view_append_column (GTK_TREE_VIEW (prop->view_keymap),
+				     gtk_tree_view_column_new_with_attributes ("Shortcut",
+									       gtk_cell_renderer_text_new (),
+									       "text", 0, NULL));
+	gtk_tree_view_append_column (GTK_TREE_VIEW (prop->view_keymap),
+				     gtk_tree_view_column_new_with_attributes ("Command",
+									       gtk_cell_renderer_text_new (),
+									       "text", 0, NULL));
 
 	/* prop->button_add     = glade_xml_get_widget (xml, "button_shortcut_add");
 	   prop->button_delete  = glade_xml_get_widget (xml, "button_shortcut_delete");
@@ -260,19 +266,17 @@ class_init (GnomeBindingsPropertiesClass *klass)
 	gnome_bindings_properties_signals [CHANGED] =
 		gtk_signal_new ("changed",
 				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GnomeBindingsPropertiesClass, changed),
+				G_TYPE_FROM_CLASS (object_class),
+				G_STRUCT_OFFSET (GnomeBindingsPropertiesClass, changed),
 				gtk_marshal_NONE__NONE,
 				GTK_TYPE_NONE, 0);
 	gnome_bindings_properties_signals [KEYMAP_SELECTED] =
 		gtk_signal_new ("keymap_selected",
 				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (GnomeBindingsPropertiesClass, changed),
+				G_TYPE_FROM_CLASS (object_class),
+				G_STRUCT_OFFSET (GnomeBindingsPropertiesClass, changed),
 				gtk_marshal_NONE__NONE,
 				GTK_TYPE_NONE, 0);
-
-	gtk_object_class_add_signals (object_class, gnome_bindings_properties_signals, LAST_SIGNAL);
 }
 
 GtkType

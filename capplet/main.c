@@ -37,10 +37,8 @@ static GtkWidget *capplet, *variable, *variable_print, *fixed, *fixed_print, *an
 static GtkWidget *bi, *live_spell_check, *live_spell_frame, *magic_check, *button_cfg_spell;
 
 static gboolean active = FALSE;
-#ifdef GTKHTML_HAVE_GCONF
 static GError      *error  = NULL;
 static GConfClient *client = NULL;
-#endif
 static GtkHTMLClassProperties *saved_prop;
 static GtkHTMLClassProperties *orig_prop;
 static GtkHTMLClassProperties *actual_prop;
@@ -87,9 +85,9 @@ set_ui ()
 }
 
 static gchar *
-get_attr (gchar *font_name, gint n)
+get_attr (const gchar *font_name, gint n)
 {
-    gchar *s, *end;
+    const gchar *s, *end;
 
     /* Search paramether */
     for (s=font_name; n; n--,s++)
@@ -169,11 +167,7 @@ apply (void)
 {
 	apply_fonts ();
 	apply_editable ();
-#ifdef GTKHTML_HAVE_GCONF
 	gtk_html_class_properties_update (actual_prop, client, saved_prop);
-#else
-	gtk_html_class_properties_save (actual_prop);
-#endif
 	gtk_html_class_properties_copy   (saved_prop, actual_prop);
 
 }
@@ -186,11 +180,7 @@ revert (void)
 	saved_bindings = gnome_binding_entry_list_copy (orig_bindings);
 	gnome_bindings_properties_save_keymap (GNOME_BINDINGS_PROPERTIES (bi), CUSTOM_KEYMAP_NAME, home_rcfile);
 	*/
-#ifdef GTKHTML_HAVE_GCONF
 	gtk_html_class_properties_update (orig_prop, client, saved_prop);
-#else
-	gtk_html_class_properties_save (orig_prop);
-#endif
 	gtk_html_class_properties_copy   (saved_prop, orig_prop);
 	gtk_html_class_properties_copy   (actual_prop, orig_prop);
 
@@ -220,11 +210,11 @@ picker_clicked (GtkWidget *w, gpointer data)
 {
 	gchar *mono_spaced [] = { "c", "m", NULL };
 	
-	if (!GPOINTER_TO_INT (data))
+	/* FIX2 if (!GPOINTER_TO_INT (data))
 		gtk_font_selection_dialog_set_filter (SELECTOR (w),
 						      GTK_FONT_FILTER_BASE, GTK_FONT_ALL,
 						      NULL, NULL, NULL, NULL,
-						      mono_spaced, NULL);
+						      mono_spaced, NULL); */
 }
 
 static void
@@ -245,7 +235,7 @@ setup (void)
 	gchar *base, *rcfile;
 
 	glade_gnome_init ();
-	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-capplet.glade", "prefs_widget");
+	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-capplet.glade", "prefs_widget", NULL);
 
 	if (!xml)
 		g_error (_("Could not load glade file."));
@@ -327,24 +317,13 @@ main (int argc, char **argv)
         if (gnome_capplet_init ("gtkhtml-properties", VERSION, argc, argv, NULL, 0, NULL) < 0)
 		return 1;
 
-#ifdef GTKHTML_HAVE_GCONF
-	if (!gconf_init(argc, argv, &error)) {
-		g_assert(error != NULL);
-		g_warning("GConf init failed:\n  %s", error->message);
-		return 1;
-	}
-
 	client = gconf_client_get_default ();
 	gconf_client_add_dir(client, GTK_HTML_GCONF_DIR, GCONF_CLIENT_PRELOAD_NONE, NULL);
-#endif
+
 	orig_prop = gtk_html_class_properties_new ();
 	saved_prop = gtk_html_class_properties_new ();
 	actual_prop = gtk_html_class_properties_new ();
-#ifdef GTKHTML_HAVE_GCONF
 	gtk_html_class_properties_load (actual_prop, client);
-#else
-	gtk_html_class_properties_load (actual_prop);
-#endif
 	gtk_html_class_properties_copy (saved_prop, actual_prop);
 	gtk_html_class_properties_copy (orig_prop, actual_prop);
 

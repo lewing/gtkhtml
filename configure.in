@@ -6,8 +6,13 @@ AM_CONFIG_HEADER(config.h)
 PACKAGE=gtkhtml
 
 GTKHTML_RELEASE=3.0
-AC_DEFINE_UNQUOTED(GTK_HTML_RELEASE, "${GTKHTML_RELEASE}")
+AC_DEFINE_UNQUOTED(GTKHTML_RELEASE, "${GTKHTML_RELEASE}")
 AC_SUBST(GTKHTML_RELEASE)
+
+GTKHTML_RELEASE_STRING=${PACKAGE}-${GTKHTML_RELEASE}
+AC_DEFINE_UNQUOTED(GTKHTML_RELEASE_STRING, "${GTKHTML_RELEASE_STRING}")
+AC_SUBST(GTKHTML_RELEASE_STRING)
+
 AM_INIT_AUTOMAKE($PACKAGE, $GTKHTML_RELEASE.0.99)
 
 EDITOR_API_VERSION=3.0
@@ -31,9 +36,14 @@ AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
-GETTEXT_PACKAGE=gtkhtml-${GTKHTML_RELEASE}
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
+if test -f $srcdir/po/Makefile.in.in ; then
+   cp $srcdir/po/Makefile.in.in $srcdir/po/Makefile.in.in.bak
+   sed -e  "s/\@PACKAGE\@/\@GTKHTML_RELEASE_STRING\@/" $srcdir/po/Makefile.in.in.bak > $srcdir/po/Makefile.in.in
+else
+    AC_MSG_ERROR([
+""
+"Can not find Makefile: $srcdir/po/Makefile.in.in"])
+fi
 
 ALL_LINGUAS="az cs da de el es et eu fi fr gl hu it ja ko lt lv ms nl nn no pl pt pt_BR ru sk sl sv tr uk zh_CN zh_TW"
 AM_GLIB_GNU_GETTEXT
@@ -43,6 +53,11 @@ PKG_CHECK_MODULES(GTKHTML, $GTKHTML_MODULES)
 AC_SUBST(GTKHTML_CFLAGS)
 AC_SUBST(GTKHTML_LIBS)
 AC_SUBST(GTKHTML_MODULES)
+
+CAPPLET_MODULES="${GTKHTML_MODULES} libcapplet-2.0 >= 1.9.0 libglade-2.0 >= 1.99.9"
+PKG_CHECK_MODULES(CAPPLET, ${CAPPLET_MODULES})
+AC_SUBST(CAPPLET_CFLAGS)
+AC_SUBST(CAPPLET_LIBS)
 
 EDITOR_MODULES="${GTKHTML_MODULES} libbonoboui-2.0 >= 1.112.1 gal-2.0 >= 0.0.2"
 PKG_CHECK_MODULES(EDITOR, $EDITOR_MODULES)
@@ -108,6 +123,7 @@ gtkhtml.spec
 po/Makefile.in
 src/Makefile
 src/libgtkhtml.pc
+capplet/Makefile
 components/Makefile
 components/html-editor/Makefile
 components/html-editor/GNOME_GtkHTML_Editor.server.in

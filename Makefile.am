@@ -1,5 +1,6 @@
 SUBDIRS =					\
 	src					\
+	capplet					\
 	components				\
 	art					\
 	po
