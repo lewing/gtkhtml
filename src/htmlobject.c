@@ -191,6 +191,27 @@ draw (HTMLObject *o,
 	/* Do nothing by default.  We don't know how to paint ourselves.  */
 }
 
+static void
+draw_background (HTMLObject *self,
+		 HTMLPainter *p,
+		 gint x, gint y,
+		 gint width, gint height,
+		 gint tx, gint ty)
+{
+	/* By default, objects are transparent so they simply forward
+           this to the parent.  */
+	if (self->parent != NULL) {
+		html_object_draw_background (self->parent, p,
+					     x + self->parent->x,
+					     y + self->parent->y - self->parent->ascent,
+					     width, height,
+					     tx - self->parent->x,
+					     ty - self->parent->y + self->parent->ascent);
+	} else {
+		/* FIXME this should draw the default background somehow.  */
+	}
+}
+
 static gboolean
 is_transparent (HTMLObject *self)
 {
@@ -600,6 +621,7 @@ html_object_class_init (HTMLObjectClass *klass,
 	klass->remove_child = remove_child;
 	klass->split = split;
 	klass->draw = draw;
+	klass->draw_background = draw_background;
 	klass->is_transparent = is_transparent;
 	klass->fit_line = fit_line;
 	klass->calc_size = calc_size;
@@ -674,7 +696,6 @@ html_object_init (HTMLObject *o,
 	o->redraw_pending = FALSE;
 	o->free_pending = FALSE;
 	o->selected = FALSE;
-	o->draw_focused = FALSE;
 
 	g_datalist_init (&o->object_data);
 }
@@ -844,6 +865,16 @@ html_object_draw (HTMLObject *o,
 		  gint tx, gint ty)
 {
 	(* HO_CLASS (o)->draw) (o, p, x, y, width, height, tx, ty);
+}
+
+void
+html_object_draw_background (HTMLObject *o,
+			     HTMLPainter *p,
+			     gint x, gint y,
+			     gint width, gint height,
+			     gint tx, gint ty)
+{
+	(* HO_CLASS (o)->draw_background) (o, p, x, y, width, height, tx, ty);
 }
 
 gboolean
@@ -1382,7 +1413,7 @@ html_object_cursor_backward (HTMLObject *self, HTMLCursor *cursor)
 		return FALSE;
 
 	if (cursor->offset > 1 || (cursor->offset > 0 && (! (prev = html_object_prev_not_slave (self))
-							  || HTML_IS_CLUEALIGNED (prev) || !html_object_accepts_cursor (prev)))) {
+							  || HTML_IS_CLUEALIGNED (prev)))) {
 		cursor->offset --;
 		cursor->position --;
 		return TRUE;
@@ -1481,22 +1512,11 @@ next_object_uptree_cursor (HTMLObject *obj, HTMLObject * (*next_fn ) (HTMLObject
 /* go down in tree to leaf in way given by down_fn children */
 
 static HTMLObject *
-move_object_downtree_cursor (HTMLObject *obj, HTMLObject * (*down_fn ) (HTMLObject *), HTMLObject * (*next_fn ) (HTMLObject *))
+move_object_downtree_cursor (HTMLObject *obj, HTMLObject * (*down_fn ) (HTMLObject *))
 {
-	HTMLObject *last_obj = obj;
-
 	while ((obj = (*down_fn) (obj))) {
 		if (html_object_accepts_cursor (obj))
 			break;
-		last_obj = obj;
-	}
-
-	if (!obj && last_obj) {
-		obj = last_obj;
-
-		while ((obj = (*next_fn) (obj)))
-			if (html_object_accepts_cursor (obj))
-				break;
 	}
 
 	return obj;
@@ -1512,7 +1532,7 @@ move_object_cursor (HTMLObject *obj, gint *offset, gboolean forward,
 		gboolean found = FALSE;
 		if (((*offset == 0 && forward) || (*offset && !forward)) && html_object_is_container (obj))
 			if ((down = (*down_fn) (obj))) {
-				down = move_object_downtree_cursor (down, down_fn, next_fn);
+				down = move_object_downtree_cursor (down, down_fn);
 				if (down) {
 					if (html_object_is_container (down))
 						*offset = forward ? 0 : 1;
@@ -1532,7 +1552,7 @@ move_object_cursor (HTMLObject *obj, gint *offset, gboolean forward,
 					found = TRUE;
 				} else {
 					HTMLObject *down;
-					down = move_object_downtree_cursor (obj, down_fn, next_fn);
+					down = move_object_downtree_cursor (obj, down_fn);
 					if (down) {
 						if (html_object_is_container (down))
 							*offset = forward ? 0 : 1;
@@ -1789,19 +1809,6 @@ html_object_get_head_leaf (HTMLObject *o)
 	} while (head);
 
 	return rv;
-}
-
-static void
-clear_word_width (HTMLObject *o, HTMLEngine *e, gpointer data)
-{
-	if (html_object_is_text (o))
-		html_text_clear_word_width (HTML_TEXT (o));
-}
-
-void
-html_object_clear_word_width (HTMLObject *o)
-{
-	html_object_forall (o, NULL, clear_word_width, NULL);
 }
 
 HTMLObject *

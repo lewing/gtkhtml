@@ -65,7 +65,7 @@ html_font_set_release (HTMLFontSet *set, HTMLPainter *painter)
 
 	for (i=0; i<GTK_HTML_FONT_STYLE_MAX_FONT; i++) {
 		if (set->font [i])
-			html_font_unref (set->font [i], painter);
+			html_painter_unref_font (painter, set->font [i]);
 		set->font [i] = NULL;
 	}
 }
@@ -224,7 +224,7 @@ html_font_set_font (HTMLFontManager *manager, HTMLFontSet *set, GtkHTMLFontStyle
 	/* set font in font set */
 	idx = html_font_set_get_idx (style);
 	if (set->font [idx] && font != set->font [idx])
-		html_font_unref (set->font [idx], manager->painter);
+		html_painter_unref_font (manager->painter, set->font [idx]);
 	set->font [idx] = font;
 }
 
@@ -352,9 +352,8 @@ html_font_manager_get_font (HTMLFontManager *manager, gchar *face_list, GtkHTMLF
 					g_warning ("Cannot allocate fixed font\n");
 			} else {
 				/* some unavailable non-default font => use default one */
-			
-			       font = html_font_manager_get_font (manager, NULL, style);
-			       html_font_ref (font, manager->painter);
+				font = html_font_manager_get_font (manager, NULL, style);
+				html_font_ref (font, manager->painter);
 			}
 			if (font)
 				html_font_set_font (manager, set, style, font);
@@ -366,7 +365,9 @@ html_font_manager_get_font (HTMLFontManager *manager, gchar *face_list, GtkHTMLF
 
 HTMLFont *
 html_font_new (gpointer data, 
-	       guint space_width, 
+	       guint space_width,
+	       guint space_asc,
+	       guint space_dsc,
 	       guint nbsp_width, 
 	       guint tab_width,
 	       guint indent_width,
@@ -376,6 +377,8 @@ html_font_new (gpointer data,
 
 	font->data = data;
 	font->space_width = space_width;
+	font->space_asc = space_asc;
+	font->space_dsc = space_dsc;
 	font->nbsp_width = nbsp_width;
 	font->tab_width = tab_width;
 	font->indent_width = indent_width;
@@ -401,9 +404,8 @@ html_font_ref (HTMLFont *font, HTMLPainter *painter)
 void
 html_font_unref (HTMLFont *font, HTMLPainter *painter)
 {
-	font->ref_count --;
 	html_painter_unref_font (painter, font);
-
-	if (font->ref_count < 1)
+	font->ref_count --;
+	if (font->ref_count <= 0)
 		html_font_destroy (font);
 }
