@@ -874,7 +874,7 @@ check_prev (const HTMLObject *p, HTMLType type, GtkHTMLFontStyle font_style, HTM
 }
 
 static void
-apply_attributes (HTMLText *text, GtkHTMLFontStyle style, gint last_pos)
+apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLColor *color, gint last_pos, gboolean link)
 {
 	PangoAttribute *attr;
 
@@ -891,6 +891,27 @@ apply_attributes (HTMLText *text, GtkHTMLFontStyle style, gint last_pos)
 		attr->end_index = text->text_len;
 		pango_attr_list_change (text->attr_list, attr);
 	}
+
+	if (style & GTK_HTML_FONT_STYLE_UNDERLINE || link) {
+		attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+		attr->start_index = last_pos;
+		attr->end_index = text->text_len;
+		pango_attr_list_change (text->attr_list, attr);
+	}
+
+	if (style & GTK_HTML_FONT_STYLE_STRIKEOUT) {
+		attr = pango_attr_strikethrough_new (TRUE);
+		attr->start_index = last_pos;
+		attr->end_index = text->text_len;
+		pango_attr_list_change (text->attr_list, attr);
+	}
+
+	if (link || color != html_colorset_get_color (e->settings->color_set, HTMLTextColor)) {
+		attr = pango_attr_foreground_new (color->color.red, color->color.green, color->color.blue);
+		attr->start_index = last_pos;
+		attr->end_index = text->text_len;
+		pango_attr_list_change (text->attr_list, attr);
+	}
 }
 
 static void
@@ -900,7 +921,6 @@ insert_text (HTMLEngine *e,
 {
 	GtkHTMLFontStyle font_style;
 	HTMLObject *prev;
-	HTMLType type;
 	HTMLColor *color;
 	gchar *face;
 	gboolean create_link;
@@ -936,11 +956,6 @@ insert_text (HTMLEngine *e,
 	else
 		prev = HTML_CLUE (e->flow)->tail;
 
-	if (e->url != NULL || e->target != NULL)
-		type = HTML_TYPE_LINKTEXT;
-	else
-		type = HTML_TYPE_TEXT;
-
 	if (!prev || !HTML_IS_TEXT (prev)) {
 		prev = text_new (e, text, font_style, color);
 		html_text_set_font_face (HTML_TEXT (prev), current_font_face (e));
@@ -952,7 +967,7 @@ insert_text (HTMLEngine *e,
 	}
 
 	if (prev && HTML_IS_TEXT (prev))
-		apply_attributes (HTML_TEXT (prev), font_style, last_pos);
+		apply_attributes (HTML_TEXT (prev), e, font_style, color, last_pos, create_link);
 }
 
 
