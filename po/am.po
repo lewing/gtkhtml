@@ -800,11 +800,11 @@ msgstr "ምንም"
 
 #: components/html-editor/body.c:69
 msgid "Test"
-msgstr ""
+msgstr "ፈተና"
 
 #: components/html-editor/body.c:76
 msgid "Test 1"
-msgstr ""
+msgstr "ፈተና 1"
 
 #: components/html-editor/body.c:252
 msgid "Document Title"
@@ -1091,7 +1091,7 @@ msgstr ""
 #: components/html-editor/gtkhtml-editor-properties.glade.h:75
 #: components/html-editor/link.c:112
 msgid "Test URL..."
-msgstr ""
+msgstr "የURL ፈተና.."
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:77
 msgid "Thickness:"
@@ -1526,35 +1526,35 @@ msgstr "Html"
 
 #: src/html-component.c:220
 msgid "Html test"
-msgstr ""
+msgstr "የHtml ፈተና"
 
 #: src/html-component.c:226
 msgid "Test1"
-msgstr ""
+msgstr "ፈተና1"
 
 #: src/html-component.c:233
 msgid "Test2"
-msgstr ""
+msgstr "ፈተና2"
 
 #: src/html-component.c:239
 msgid "Test3"
-msgstr ""
+msgstr "ፈተና3"
 
 #: src/html-component.c:245
 msgid "Test4"
-msgstr ""
+msgstr "ፈተና4"
 
 #: src/html-component.c:251
 msgid "Test5"
-msgstr ""
+msgstr "ፈተና5"
 
 #: src/html-component.c:257
 msgid "Test6"
-msgstr ""
+msgstr "ፈተና6"
 
 #: src/html-component.c:263
 msgid "Test7"
-msgstr ""
+msgstr "ፈተና7"
 
 #: src/html-component.c:612
 msgid "_Refresh"
@@ -1582,7 +1582,7 @@ msgstr ""
 
 #: src/test.c:192
 msgid "GtkHTML Test"
-msgstr ""
+msgstr "የGtkHTML ፈተና"
 
 #: src/testgtkhtml.c:113
 msgid "Print pre_view"
