@@ -215,7 +215,7 @@ file_dialog_destroy (GtkWidget *w, GtkHTMLControlData *cd)
 static void
 file_dialog_ok (GtkWidget *w, GtkHTMLControlData *cd)
 {
-	const gchar *filename;
+	gchar *filename;
 	gint fd;
 
 	filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (cd->file_dialog));
@@ -267,13 +267,14 @@ insert_file_dialog (GtkHTMLControlData *cd, gboolean html)
 	cd->file_dialog = gtk_file_selection_new (html ? _("Insert HTML file") : _("Insert text file"));
 	gtk_file_selection_set_filename (GTK_FILE_SELECTION (cd->file_dialog), "~/");
 
-	g_signal_connect_object (GTK_FILE_SELECTION (cd->file_dialog)->cancel_button,
-				 "clicked", G_CALLBACK (gtk_widget_destroy), GTK_OBJECT (cd->file_dialog),
-				 G_CONNECT_SWAPPED);
+	gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (cd->file_dialog)->cancel_button),
+				   "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy), GTK_OBJECT (cd->file_dialog));
 
-	g_signal_connect (GTK_FILE_SELECTION (cd->file_dialog)->ok_button, "clicked", G_CALLBACK (file_dialog_ok), cd);
+	gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (cd->file_dialog)->ok_button),
+			    "clicked", GTK_SIGNAL_FUNC (file_dialog_ok), cd);
 
-	g_signal_connect (cd->file_dialog, "destroy", G_CALLBACK (file_dialog_destroy), cd);
+	gtk_signal_connect (GTK_OBJECT (cd->file_dialog), "destroy",
+			    GTK_SIGNAL_FUNC (file_dialog_destroy), cd);
 
 	gtk_widget_show (cd->file_dialog);
 }
@@ -668,85 +669,84 @@ menubar_update_format (GtkHTMLControlData *cd)
 	gchar *sensitive;
 
 	uic = bonobo_control_get_ui_component (cd->control);
+
+	g_return_if_fail (uic != NULL);
+
+	sensitive = (cd->format_html ? "1" : "0");
+
+	CORBA_exception_init (&ev);
+
+	bonobo_ui_component_freeze (uic, &ev);
+
+	bonobo_ui_component_set_prop (uic, "/commands/InsertImage",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertLink",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertRule",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertTable",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertTemplate",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertTemplate",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley1",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley2",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley3",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley4",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley5",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley6",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley8",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley9",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley10",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley11",
+				      "sensitive", sensitive, &ev);
+
+	bonobo_ui_component_set_prop (uic, "/commands/FormatBold",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/FormatItalic",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/FormatUnderline",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/FormatStrikeout",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/FormatPlain",
+				      "sensitive", sensitive, &ev);
 	
-	if (uic != CORBA_OBJECT_NIL && bonobo_ui_component_get_container (uic) != CORBA_OBJECT_NIL) {
+	bonobo_ui_component_set_prop (uic, "/commands/AlignLeft",
+				      "sensitive", sensitive, &ev);		
+	bonobo_ui_component_set_prop (uic, "/commands/AlignRight",
+				      "sensitive", sensitive, &ev);	
+	bonobo_ui_component_set_prop (uic, "/commands/AlignCenter",
+				      "sensitive", sensitive, &ev);	
 
-		sensitive = (cd->format_html ? "1" : "0");
+	bonobo_ui_component_set_prop (uic, "/commands/HeadingH1",
+				      "sensitive", sensitive, &ev);	
+	bonobo_ui_component_set_prop (uic, "/commands/HeadingH2",
+				      "sensitive", sensitive, &ev);	
+	bonobo_ui_component_set_prop (uic, "/commands/HeadingH3",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/HeadingH4",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/HeadingH5",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/HeadingH6",
+				      "sensitive", sensitive, &ev);
+	bonobo_ui_component_set_prop (uic, "/commands/HeadingAddress",
+				      "sensitive", sensitive, &ev);
 
-		CORBA_exception_init (&ev);
+	bonobo_ui_component_thaw (uic, &ev);	
 
-		bonobo_ui_component_freeze (uic, &ev);
-
-		bonobo_ui_component_set_prop (uic, "/commands/InsertImage",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertLink",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertRule",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertTable",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertTemplate",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertTemplate",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley1",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley2",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley3",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley4",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley5",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley6",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley8",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley9",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley10",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/InsertSmiley11",
-					      "sensitive", sensitive, &ev);
-
-		bonobo_ui_component_set_prop (uic, "/commands/FormatBold",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/FormatItalic",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/FormatUnderline",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/FormatStrikeout",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/FormatPlain",
-					      "sensitive", sensitive, &ev);
-	
-		bonobo_ui_component_set_prop (uic, "/commands/AlignLeft",
-					      "sensitive", sensitive, &ev);		
-		bonobo_ui_component_set_prop (uic, "/commands/AlignRight",
-					      "sensitive", sensitive, &ev);	
-		bonobo_ui_component_set_prop (uic, "/commands/AlignCenter",
-					      "sensitive", sensitive, &ev);	
-
-		bonobo_ui_component_set_prop (uic, "/commands/HeadingH1",
-					      "sensitive", sensitive, &ev);	
-		bonobo_ui_component_set_prop (uic, "/commands/HeadingH2",
-					      "sensitive", sensitive, &ev);	
-		bonobo_ui_component_set_prop (uic, "/commands/HeadingH3",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/HeadingH4",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/HeadingH5",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/HeadingH6",
-					      "sensitive", sensitive, &ev);
-		bonobo_ui_component_set_prop (uic, "/commands/HeadingAddress",
-					      "sensitive", sensitive, &ev);
-
-		bonobo_ui_component_thaw (uic, &ev);	
-
-		CORBA_exception_free (&ev);
-	}
+	CORBA_exception_free (&ev);	
 }
 
 void
@@ -811,10 +811,14 @@ menubar_setup (BonoboUIComponent  *uic,
 	g_return_if_fail (GTK_IS_HTML (cd->html));
 	g_return_if_fail (BONOBO_IS_UI_COMPONENT (uic));
 
-	g_signal_connect (cd->html, "current_paragraph_style_changed", G_CALLBACK (menubar_update_paragraph_style), cd);
-	g_signal_connect (cd->html, "current_paragraph_alignment_changed",
-			  G_CALLBACK (menubar_update_paragraph_alignment), cd);
-	g_signal_connect (cd->html, "insertion_font_style_changed", G_CALLBACK (menubar_update_font_style), cd);
+	gtk_signal_connect (GTK_OBJECT (cd->html), "current_paragraph_style_changed",
+			    GTK_SIGNAL_FUNC (menubar_update_paragraph_style), cd);
+
+	gtk_signal_connect (GTK_OBJECT (cd->html), "current_paragraph_alignment_changed",
+			    GTK_SIGNAL_FUNC (menubar_update_paragraph_alignment), cd);
+
+	gtk_signal_connect (GTK_OBJECT (cd->html), "insertion_font_style_changed",
+			    GTK_SIGNAL_FUNC (menubar_update_font_style), cd);
 
 	bonobo_ui_component_add_verb_list_with_data (uic, verbs, cd);
 
@@ -830,8 +834,7 @@ menubar_setup (BonoboUIComponent  *uic,
 		bonobo_ui_component_add_listener (uic, font_style_assoc[i].verb + 10, font_size_cb, cd);
 	}
 
-	printf ("xml: %s/%s\n", GTKHTML_DATADIR, "GNOME_GtkHTML_Editor.xml");
-	bonobo_ui_util_set_ui (uic, GTKHTML_DATADIR, "GNOME_GtkHTML_Editor.xml", "GNOME_GtkHTML_Editor", NULL);
-	spell_create_language_menu (cd);
-	menubar_update_format (cd);
+	bonobo_ui_util_set_ui (uic, GNOMEDATADIR,
+			       "GNOME_GtkHTML_Editor.xml",
+			       "GNOME_GtkHTML_Editor");
 }
