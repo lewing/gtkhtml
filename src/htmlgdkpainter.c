@@ -75,12 +75,17 @@ HTMLTextPangoInfo *
 html_gdk_painter_text_itemize_and_prepare_glyphs (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *text, gint bytes, GList **glyphs)
 {
 	PangoAttrList *attrs;
+	PangoAttribute *attr;
 	GList *items = NULL;
 	HTMLTextPangoInfo *pi = NULL;
 
 	/* printf ("itemize + glyphs\n"); */
 
 	attrs = pango_attr_list_new ();
+	attr = pango_attr_font_desc_new (desc);
+	attr->start_index = 0;
+	attr->end_index = bytes;
+	pango_attr_list_insert (attrs, attr);
 	items = pango_itemize (painter->pc, text, 0, bytes, attrs, NULL);
 	pango_attr_list_unref (attrs);
 

@@ -222,7 +222,7 @@ draw_rect (HTMLPainter *painter,
 static guint
 get_page_width (HTMLPainter *painter, HTMLEngine *e)
 {
-	return MIN (72 * html_painter_get_space_width (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL),
+	return MIN (72 * html_painter_get_space_width (painter, GTK_HTML_FONT_STYLE_SIZE_3 | GTK_HTML_FONT_STYLE_FIXED, NULL),
 		    html_engine_get_view_width (e)) + (html_engine_get_left_border (e) + html_engine_get_right_border (e));
 }
 
@@ -242,7 +242,7 @@ html_plain_painter_class_init (GObjectClass *object_class)
 
 	painter_class->alloc_font = alloc_fixed_font;
 	painter_class->draw_rect = draw_rect;
-	painter_class->draw_text = draw_text;
+	//painter_class->draw_text = draw_text;
 	painter_class->fill_rect = fill_rect;
 	painter_class->draw_pixmap = draw_pixmap;
 	painter_class->draw_shade_line = draw_shade_line;

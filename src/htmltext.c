@@ -948,6 +948,7 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 		PangoContext *pc = gtk_widget_get_pango_context (painter->widget);;
 		GList *items, *cur;
 		PangoAttrList *attrs;
+		PangoAttribute *attr;
 		gchar *translated, *heap = NULL;
 		guint bytes;
 		gint i;
@@ -959,7 +960,18 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 			translated = alloca (bytes);
 
 		html_replace_tabs (text->text, translated, bytes);
-		items = pango_itemize (pc, translated, 0, bytes, text->attr_list, NULL);
+		if (HTML_IS_PLAIN_PAINTER (painter)) {
+			attrs = pango_attr_list_new ();
+			attr = pango_attr_family_new (painter->font_manager.fixed.face);
+			attr->start_index = 0;
+			attr->end_index = text->text_bytes;
+			pango_attr_list_insert (attrs, attr);
+		} else
+			attrs = text->attr_list;
+		items = pango_itemize (pc, translated, 0, bytes, attrs, NULL);
+		if (HTML_IS_PLAIN_PAINTER (painter))
+			pango_attr_list_unref (attrs);
+
 		text->pi = html_text_pango_info_new (g_list_length (items));
 
 		for (i = 0, cur = items; i < text->pi->n; i ++, cur = cur->next) {
