@@ -1,3 +1,14 @@
+2004-07-15  Owen Taylor  <otaylor@redhat.com>
+
+	* test.c: Automatically scan tests/ directories for
+	files and display them in a popup menu. Add a "Print"
+	button to generate a PS file and run ggv on it.
+	(#59711)
+
+	* tests/pango.html: Add a test that stresses the
+	internationalization abilities of GtkHTML's Pango
+	usage a bit more.
+
 2004-06-25  Radek Doulik  <rodo@ximian.com>
 
 	* htmlengine-edit-text.c (html_engine_set_link): update it so that
