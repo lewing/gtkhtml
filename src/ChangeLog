@@ -1,3 +1,8 @@
+2003-12-10  Yong Sun <Yong.Sun@sun.com>
+
+	* htmlengine-edit-cursor.c: correct the calculation of 
+	cursor's height
+	
 2003-11-20  Radek Doulik  <rodo@ximian.com>
 
 	* htmlengine-edit-text.c (upper_lower): use g_utf8 functions to
