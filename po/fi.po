@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 1.1.0.99\n"
-"POT-Creation-Date: 2002-05-28 09:26+0200\n"
-"PO-Revision-Date: 2002-05-31 18:09+0200\n"
+"POT-Creation-Date: 2002-06-03 14:21+0300\n"
+"PO-Revision-Date: 2002-06-03 19:49+0300\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,14 +18,10 @@ msgstr ""
 msgid "<None>"
 msgstr "<Ei mikään>"
 
-#: capplet/gnome-bindings-prop.c:211
-#: capplet/main.c:241
-#: components/html-editor/cell.c:385
-#: components/html-editor/image.c:509
-#: components/html-editor/rule.c:315
-#: components/html-editor/table.c:528
-#: components/html-editor/table.c:612
-#: components/html-editor/template.c:260
+#: capplet/gnome-bindings-prop.c:211 capplet/main.c:241
+#: components/html-editor/cell.c:385 components/html-editor/image.c:509
+#: components/html-editor/rule.c:315 components/html-editor/table.c:528
+#: components/html-editor/table.c:612 components/html-editor/template.c:260
 msgid "Could not load glade file."
 msgstr "Glade-tiedostoa ei voitu ladata."
 
@@ -140,9 +136,11 @@ msgid "_Delete"
 msgstr "_Poista"
 
 #: capplet/main.c:226
-msgid "Cannot execute GNOME Spell control applet\n"
+msgid ""
+"Cannot execute GNOME Spell control applet\n"
 "Try to install GNOME Spell if you don't have it installed."
-msgstr "Ei voi käynnistää GNOME-oikoluvun hallintasovelmaa.\n"
+msgstr ""
+"Ei voi käynnistää GNOME-oikoluvun hallintasovelmaa.\n"
 "Yritä GNOME-oikoluvun asentamista, jos sitä ei ole vielä tehty."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.server.in.in.h:1
@@ -249,8 +247,7 @@ msgid "Cut the selection"
 msgstr "Leikkaa valinta"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:21
-#: components/html-editor/search.c:64
-#: components/html-editor/search.c:103
+#: components/html-editor/search.c:64 components/html-editor/search.c:103
 msgid "Find"
 msgstr "Etsi"
 
@@ -313,8 +310,7 @@ msgstr "Otsikko _6"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:36
 #: components/html-editor/editor-control-factory.c:181
 #: components/html-editor/gtkhtml-editor-properties.glade.h:37
-#: components/html-editor/menubar.c:109
-#: components/html-editor/popup.c:170
+#: components/html-editor/menubar.c:109 components/html-editor/popup.c:170
 msgid "Image"
 msgstr "Kuva"
 
@@ -347,7 +343,7 @@ msgid "Insert Smiley 7 smiley into document..."
 msgstr "Lisää asiakirjaan hymiö 7..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:44
-msgid "Insert Surpriced smiley into document..."
+msgid "Insert Surprised smiley into document..."
 msgstr "Lisää asiakirjaan yllättynyt hymiö..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:45
@@ -372,10 +368,8 @@ msgid "Left justifies the paragraphs"
 msgstr "Tasaa kappaleet vasemmalle"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:50
-#: components/html-editor/body.c:304
-#: components/html-editor/menubar.c:125
-#: components/html-editor/popup.c:163
-#: components/html-editor/popup.c:236
+#: components/html-editor/body.c:304 components/html-editor/menubar.c:125
+#: components/html-editor/popup.c:163 components/html-editor/popup.c:236
 msgid "Link"
 msgstr "Linkki"
 
@@ -437,8 +431,7 @@ msgstr "Muokkaa tiedoston ominaisuuksia"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:65
 #: components/html-editor/gtkhtml-editor-properties.glade.h:47
-#: components/html-editor/paragraph.c:124
-#: components/html-editor/toolbar.c:50
+#: components/html-editor/paragraph.c:124 components/html-editor/toolbar.c:50
 msgid "Normal"
 msgstr "Tavallinen"
 
@@ -506,10 +499,8 @@ msgid "Redo the undone action"
 msgstr "Tekee kumotun toiminnon uudelleen"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:81
-#: components/html-editor/replace.c:84
-#: components/html-editor/replace.c:146
-#: components/html-editor/replace.c:158
-#: components/html-editor/replace.c:201
+#: components/html-editor/replace.c:84 components/html-editor/replace.c:146
+#: components/html-editor/replace.c:158 components/html-editor/replace.c:201
 msgid "Replace"
 msgstr "Korvaa"
 
@@ -525,8 +516,7 @@ msgstr "Luettelo roomalaisin numeroin"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:84
 #: components/html-editor/editor-control-factory.c:201
 #: components/html-editor/gtkhtml-editor-properties.glade.h:61
-#: components/html-editor/menubar.c:143
-#: components/html-editor/popup.c:191
+#: components/html-editor/menubar.c:143 components/html-editor/popup.c:191
 msgid "Rule"
 msgstr "Viiva"
 
@@ -544,8 +534,7 @@ msgstr "Hymiö _7"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:88
 #: components/html-editor/gtkhtml-editor-properties.glade.h:67
-#: components/html-editor/text.c:222
-#: components/html-editor/toolbar.c:529
+#: components/html-editor/text.c:222 components/html-editor/toolbar.c:529
 msgid "Strikeout"
 msgstr "Yliviivaa"
 
@@ -554,7 +543,7 @@ msgid "Su_perscript"
 msgstr "Yläi_ndeksi"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:90
-msgid "Su_rpriced"
+msgid "Su_rprised"
 msgstr "_Yllättynyt"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:91
@@ -571,10 +560,8 @@ msgstr "Yläindeksi"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:94
 #: components/html-editor/gtkhtml-editor-properties.glade.h:70
-#: components/html-editor/menubar.c:160
-#: components/html-editor/popup.c:198
-#: components/html-editor/popup.c:462
-#: components/html-editor/popup.c:471
+#: components/html-editor/menubar.c:160 components/html-editor/popup.c:198
+#: components/html-editor/popup.c:462 components/html-editor/popup.c:471
 msgid "Table"
 msgstr "Taulukko"
 
@@ -791,8 +778,7 @@ msgstr "Testi 1"
 msgid "Document Title"
 msgstr "Asiakirjan otsikko"
 
-#: components/html-editor/body.c:256
-#: components/html-editor/body.c:259
+#: components/html-editor/body.c:256 components/html-editor/body.c:259
 #: components/html-editor/gtkhtml-editor-properties.glade.h:15
 msgid "Background Image"
 msgstr "Taustakuva"
@@ -802,10 +788,8 @@ msgstr "Taustakuva"
 msgid "Colors"
 msgstr "Värit"
 
-#: components/html-editor/body.c:291
-#: components/html-editor/cell.c:391
-#: components/html-editor/table.c:534
-#: components/html-editor/text.c:279
+#: components/html-editor/body.c:291 components/html-editor/cell.c:391
+#: components/html-editor/table.c:534 components/html-editor/text.c:279
 #: components/html-editor/toolbar.c:302
 msgid "Automatic"
 msgstr "Automaattinen"
@@ -813,8 +797,7 @@ msgstr "Automaattinen"
 #: components/html-editor/body.c:303
 #: components/html-editor/editor-control-factory.c:190
 #: components/html-editor/gtkhtml-editor-properties.glade.h:73
-#: components/html-editor/menubar.c:244
-#: components/html-editor/popup.c:156
+#: components/html-editor/menubar.c:244 components/html-editor/popup.c:156
 msgid "Text"
 msgstr "Teksti"
 
@@ -824,24 +807,20 @@ msgid "Background"
 msgstr "Tausta"
 
 #: components/html-editor/editor-control-factory.c:171
-#: components/html-editor/menubar.c:223
-#: components/html-editor/menubar.c:241
-#: components/html-editor/menubar.c:259
-#: components/html-editor/popup.c:148
+#: components/html-editor/menubar.c:223 components/html-editor/menubar.c:241
+#: components/html-editor/menubar.c:259 components/html-editor/popup.c:148
 #: components/html-editor/popup.c:233
 msgid "Properties"
 msgstr "Ominaisuudet"
 
 #: components/html-editor/editor-control-factory.c:211
-#: components/html-editor/menubar.c:262
-#: components/html-editor/popup.c:177
+#: components/html-editor/menubar.c:262 components/html-editor/popup.c:177
 msgid "Paragraph"
 msgstr "Kappale"
 
 #: components/html-editor/editor-control-factory.c:216
 #: components/html-editor/gtkhtml-editor-properties.glade.h:50
-#: components/html-editor/menubar.c:226
-#: components/html-editor/popup.c:184
+#: components/html-editor/menubar.c:226 components/html-editor/popup.c:184
 msgid "Page"
 msgstr "Sivu"
 
@@ -874,8 +853,7 @@ msgid "Apply changes to:"
 msgstr "Muutosten kohde:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
-#: components/html-editor/text.c:219
-#: components/html-editor/toolbar.c:523
+#: components/html-editor/text.c:219 components/html-editor/toolbar.c:523
 msgid "Bold"
 msgstr "Lihavoi"
 
@@ -897,14 +875,12 @@ msgid "Cell"
 msgstr "Solu"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
-#: components/html-editor/paragraph.c:159
-#: components/html-editor/toolbar.c:512
+#: components/html-editor/paragraph.c:159 components/html-editor/toolbar.c:512
 msgid "Center"
 msgstr "Keski"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:22
-#: components/html-editor/link.c:107
-#: components/html-editor/text.c:230
+#: components/html-editor/link.c:107 components/html-editor/text.c:230
 msgid "Click will follow this URL"
 msgstr "Napsauttaminen avaa tämän URL:n"
 
@@ -962,8 +938,7 @@ msgid "Horizontal:"
 msgstr "Vaaka:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:38
-#: components/html-editor/text.c:220
-#: components/html-editor/toolbar.c:525
+#: components/html-editor/text.c:220 components/html-editor/toolbar.c:525
 msgid "Italic"
 msgstr "Kursivoi"
 
@@ -1005,7 +980,6 @@ msgid "Percent"
 msgstr "Prosenttia"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:53
-#, no-c-format
 msgid "Percent %"
 msgstr "Prosenttia %"
 
@@ -1062,8 +1036,7 @@ msgid "Spacing:"
 msgstr "Välit:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:68
-#: components/html-editor/paragraph.c:110
-#: components/html-editor/text.c:206
+#: components/html-editor/paragraph.c:110 components/html-editor/text.c:206
 msgid "Style"
 msgstr "Tyyli"
 
@@ -1084,8 +1057,7 @@ msgid "Top"
 msgstr "Ylä"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:76
-#: components/html-editor/text.c:221
-#: components/html-editor/toolbar.c:527
+#: components/html-editor/text.c:221 components/html-editor/toolbar.c:527
 msgid "Underline"
 msgstr "Alleviivaa"
 
@@ -1113,31 +1085,50 @@ msgstr "xxxxxxxxx"
 msgid "xxxxxxxxxxxxxx"
 msgstr "xxxxxxxxxxxxxx"
 
-#: components/html-editor/image.c:114
-#: components/html-editor/rule.c:92
+#: components/html-editor/image.c:114 components/html-editor/rule.c:92
 #: components/html-editor/table.c:190
 msgid "Plain"
 msgstr "Tavallinen"
 
 #: components/html-editor/image.c:116
-msgid "@link_begin@<img@width@@height@@align@ border=@border@@padh@@padv@@src@>@link_end@"
-msgstr "@link_begin@<img@width@@height@@align@ border=@border@@padh@@padv@@src@>@link_end@"
+msgid ""
+"@link_begin@<img@width@@height@@align@ border=@border@@padh@@padv@@src@>@link_end@"
+msgstr ""
+"@link_begin@<img@width@@height@@align@ border=@border@@padh@@padv@@src@>@link_end@"
 
 #: components/html-editor/image.c:119
 msgid "Frame"
 msgstr "Kehys"
 
 #: components/html-editor/image.c:121
-msgid "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img @src@@width@@height@align=top border=0></td></tr></table></td></tr></table></center>"
-msgstr "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img @src@@width@@height@align=top border=0></td></tr></table></td></tr></table></center>"
+msgid ""
+"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
+"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
+"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
+"@src@@width@@height@align=top border=0></td></tr></table></td></tr></table></center>"
+msgstr ""
+"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
+"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
+"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
+"@src@@width@@height@align=top border=0></td></tr></table></td></tr></table></center>"
 
 #: components/html-editor/image.c:129
 msgid "Caption"
 msgstr "Kuvateksti"
 
 #: components/html-editor/image.c:131
-msgid "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img @src@@width@@height@align=top border=0></td></tr><tr><td><b>[Place your comment here]</td></tr></table></td></tr></table></center>"
-msgstr "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img @src@@width@@height@align=top border=0></td></tr><tr><td><b>[Lisää kommenttisi tähän]</td></tr></table></td></tr></table></center>"
+msgid ""
+"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
+"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
+"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
+"@src@@width@@height@align=top border=0></td></tr><tr><td><b>[Place your "
+"comment here]</td></tr></table></td></tr></table></center>"
+msgstr ""
+"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
+"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
+"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
+"@src@@width@@height@align=top border=0></td></tr><tr><td><b>[Lisää "
+"kommenttisi tähän]</td></tr></table></td></tr></table></center>"
 
 #: components/html-editor/image.c:251
 msgid "The quick brown fox jumped over the lazy dog. "
@@ -1155,10 +1146,8 @@ msgstr "Linkin teksti"
 msgid "Test URL"
 msgstr "Testi-URL"
 
-#: components/html-editor/menubar.c:107
-#: components/html-editor/menubar.c:122
-#: components/html-editor/menubar.c:140
-#: components/html-editor/menubar.c:157
+#: components/html-editor/menubar.c:107 components/html-editor/menubar.c:122
+#: components/html-editor/menubar.c:140 components/html-editor/menubar.c:157
 #: components/html-editor/menubar.c:180
 #: components/html-editor/properties.c:120
 msgid "Insert"
@@ -1172,38 +1161,31 @@ msgstr "gtkhtml:n ominaisuuksia ei voi käynnistää"
 msgid "Pre"
 msgstr "Esi"
 
-#: components/html-editor/paragraph.c:126
-#: components/html-editor/toolbar.c:56
+#: components/html-editor/paragraph.c:126 components/html-editor/toolbar.c:56
 msgid "Header 1"
 msgstr "Otsikko 1"
 
-#: components/html-editor/paragraph.c:127
-#: components/html-editor/toolbar.c:57
+#: components/html-editor/paragraph.c:127 components/html-editor/toolbar.c:57
 msgid "Header 2"
 msgstr "Otsikko 2"
 
-#: components/html-editor/paragraph.c:128
-#: components/html-editor/toolbar.c:58
+#: components/html-editor/paragraph.c:128 components/html-editor/toolbar.c:58
 msgid "Header 3"
 msgstr "Otsikko 3"
 
-#: components/html-editor/paragraph.c:129
-#: components/html-editor/toolbar.c:59
+#: components/html-editor/paragraph.c:129 components/html-editor/toolbar.c:59
 msgid "Header 4"
 msgstr "Otsikko 4"
 
-#: components/html-editor/paragraph.c:130
-#: components/html-editor/toolbar.c:60
+#: components/html-editor/paragraph.c:130 components/html-editor/toolbar.c:60
 msgid "Header 5"
 msgstr "Otsikko 5"
 
-#: components/html-editor/paragraph.c:131
-#: components/html-editor/toolbar.c:61
+#: components/html-editor/paragraph.c:131 components/html-editor/toolbar.c:61
 msgid "Header 6"
 msgstr "Otsikko 6"
 
-#: components/html-editor/paragraph.c:132
-#: components/html-editor/toolbar.c:62
+#: components/html-editor/paragraph.c:132 components/html-editor/toolbar.c:62
 msgid "Address"
 msgstr "Osoite"
 
@@ -1242,8 +1224,7 @@ msgstr "Lisää \"%s\" sanastoon"
 msgid "Ignore '%s'"
 msgstr "Sivuuta \"%s\""
 
-#: components/html-editor/popup.c:379
-#: components/html-editor/spell.c:266
+#: components/html-editor/popup.c:379 components/html-editor/spell.c:266
 msgid "Spell checker"
 msgstr "Oikoluku"
 
@@ -1259,8 +1240,7 @@ msgstr "Poista linkki"
 msgid "Text..."
 msgstr "Teksti..."
 
-#: components/html-editor/popup.c:423
-#: components/html-editor/popup.c:430
+#: components/html-editor/popup.c:423 components/html-editor/popup.c:430
 #: components/html-editor/popup.c:442
 msgid "Paragraph..."
 msgstr "Kappale..."
@@ -1277,8 +1257,7 @@ msgstr "Viiva..."
 msgid "Image..."
 msgstr "Kuva..."
 
-#: components/html-editor/popup.c:448
-#: components/html-editor/popup.c:458
+#: components/html-editor/popup.c:448 components/html-editor/popup.c:458
 msgid "Table..."
 msgstr "Taulukko..."
 
@@ -1334,8 +1313,7 @@ msgstr "Seuraava"
 msgid "search backward"
 msgstr "etsi taaksepäin"
 
-#: components/html-editor/replace.c:153
-#: components/html-editor/search.c:67
+#: components/html-editor/replace.c:153 components/html-editor/search.c:67
 msgid "case sensitive"
 msgstr "sama kirjainkoko"
 
@@ -1380,24 +1358,40 @@ msgid "Note"
 msgstr "Muistiinpano"
 
 #: components/html-editor/template.c:84
-msgid "<table cellspacing=0 cellpadding=1 bgcolor=\"#ccccc0\"@width@@align@><tr><td><table bgcolor=\"#fffff0\" cellpadding=3 cellspacing=0 width=\"100%\"><tr><td valign=top><img src=\"file://"
-msgstr "<table cellspacing=0 cellpadding=1 bgcolor=\"#ccccc0\"@width@@align@><tr><td><table bgcolor=\"#fffff0\" cellpadding=3 cellspacing=0 width=\"100%\"><tr><td valign=top><img src=\"file://"
+msgid ""
+"<table cellspacing=0 cellpadding=1 bgcolor=\"#ccccc0\"@width@@align@><tr><td><table bgcolor=\"#fffff0\" cellpadding=3 cellspacing=0 width=\"100%\"><tr><td valign=top><img src=\"file://"
+msgstr ""
+"<table cellspacing=0 cellpadding=1 bgcolor=\"#ccccc0\"@width@@align@><tr><td><table bgcolor=\"#fffff0\" cellpadding=3 cellspacing=0 width=\"100%\"><tr><td valign=top><img src=\"file://"
 
 #: components/html-editor/template.c:86
-msgid "/bulb.png\" hspace=10></td><td width=\"100%\">Place your text here</td></tr></table></td></tr></table>"
-msgstr "/bulb.png\" hspace=10></td><td width=\"100%\">Lisää tekstisi tähän</td></tr></table></td></tr></table>"
+msgid ""
+"/bulb.png\" hspace=10></td><td width=\"100%\">Place your text "
+"here</td></tr></table></td></tr></table>"
+msgstr ""
+"/bulb.png\" hspace=10></td><td width=\"100%\">Lisää tekstisi "
+"tähän</td></tr></table></td></tr></table>"
 
 #: components/html-editor/template.c:92
 msgid "Image frame"
 msgstr "Kuvan kehys"
 
 #: components/html-editor/template.c:94
-msgid "<table bgcolor=\"#c0c0c0\" cellspacing=\"0\" @width@@align@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img src=\"file://"
-msgstr "<table bgcolor=\"#c0c0c0\" cellspacing=\"0\" @width@@align@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img src=\"file://"
+msgid ""
+"<table bgcolor=\"#c0c0c0\" cellspacing=\"0\" @width@@align@><tr><td><table "
+"bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" "
+"width=\"100%\"><tr><td align=\"center\"><img src=\"file://"
+msgstr ""
+"<table bgcolor=\"#c0c0c0\" cellspacing=\"0\" @width@@align@><tr><td><table "
+"bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" "
+"width=\"100%\"><tr><td align=\"center\"><img src=\"file://"
 
 #: components/html-editor/template.c:98
-msgid "/empty_image.png\" align=\"top\" border=\"0\"></td></tr><tr><td><font size=\"-1\">Image 1: <b>description</b></font></td></tr></table></td></tr></table>"
-msgstr "/empty_image.png\" align=\"top\" border=\"0\"></td></tr><tr><td><font size=\"-1\">Kuva 1: <b>kuvateksti</b></font></td></tr></table></td></tr></table>"
+msgid ""
+"/empty_image.png\" align=\"top\" border=\"0\"></td></tr><tr><td><font "
+"size=\"-1\">Image 1: <b>description</b></font></td></tr></table></td></tr></table>"
+msgstr ""
+"/empty_image.png\" align=\"top\" border=\"0\"></td></tr><tr><td><font "
+"size=\"-1\">Kuva 1: <b>kuvateksti</b></font></td></tr></table></td></tr></table>"
 
 #: components/html-editor/test-html-editor-control.c:262
 msgid "Open file..."
