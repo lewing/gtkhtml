@@ -264,6 +264,8 @@ struct _HTMLObjectClass {
 
 	gboolean (*cursor_forward)       (HTMLObject *self, HTMLCursor *cursor);
 	gboolean (*cursor_backward)       (HTMLObject *self, HTMLCursor *cursor);
+	gboolean (*cursor_right)         (HTMLObject *self, HTMLCursor *cursor);
+	gboolean (*cursor_left)          (HTMLObject *self, HTMLCursor *cursor);
 };
 
 
@@ -458,6 +460,10 @@ gboolean        html_object_cursor_forward        (HTMLObject            *self,
 						   HTMLCursor            *cursor);
 gboolean        html_object_cursor_backward       (HTMLObject            *self,
 						   HTMLCursor            *cursor);
+gboolean        html_object_cursor_left           (HTMLObject            *self,
+						   HTMLCursor            *cursor);
+gboolean        html_object_cursor_right          (HTMLObject            *self,
+						   HTMLCursor            *cursor);
 
 /* get prev/next object in scope of parent */
 HTMLObject     *html_object_next                  (HTMLObject            *self,
@@ -484,11 +490,6 @@ HTMLObject     *html_object_prev_cursor           (HTMLObject            *self,
 						   gint                  *offset);
 GdkRectangle   *html_object_get_bounds            (HTMLObject            *o,
 						   GdkRectangle          *bounds);
-
-gboolean        html_object_cursor_forward        (HTMLObject            *self,
-						   HTMLCursor            *cursor);
-gboolean        html_object_cursor_backward       (HTMLObject            *self,
-						   HTMLCursor            *cursor);
 
 /* Page splitting.  */
 gint  html_object_check_page_split  (HTMLObject  *self,

@@ -2237,16 +2237,9 @@ select_range (HTMLObject *self,
 
 	/* printf ("updated offset: %d length: %d (end offset %d)\n", offset, length, offset + length); */
 
-	if (offset != text->select_start || length != text->select_length) {
-		HTMLObject *slave;
+	if (offset != text->select_start || length != text->select_length)
 		changed = TRUE;
-		html_object_change_set (self, HTML_CHANGE_RECALC_PI);
-		slave = self->next;
-		while (slave && HTML_IS_TEXT_SLAVE (slave)) {
-			html_object_change_set (slave, HTML_CHANGE_RECALC_PI);
-			slave = slave->next;
-		}
-	} else
+	else
 		changed = FALSE;
 
 	/* printf ("select range %d, %d\n", offset, length); */
@@ -2374,36 +2367,14 @@ html_text_get_cursor_base (HTMLObject *self,
 {
 	HTMLTextSlave *slave = html_text_get_slave_at_offset (HTML_TEXT (self), NULL, offset);
 
-	printf ("slave: %p\n", slave);
+	/* printf ("slave: %p\n", slave); */
 
 	if (slave)
 		html_text_slave_get_cursor_base (slave, painter, offset - slave->posStart, x, y);
-
-/* 	HTMLObject *obj; */
-
-/* 	for (obj = self->next; obj != NULL; obj = obj->next) { */
-/* 		HTMLTextSlave *slave; */
-
-/* 		if (HTML_OBJECT_TYPE (obj) != HTML_TYPE_TEXTSLAVE) */
-/* 			break; */
-
-/* 		slave = HTML_TEXT_SLAVE (obj); */
-
-/* 		if (offset <= slave->posStart + slave->posLen */
-/* 		    || obj->next == NULL */
-/* 		    || HTML_OBJECT_TYPE (obj->next) != HTML_TYPE_TEXTSLAVE) { */
-/* 			html_object_calc_abs_position (obj, x, y); */
-/* 			if (offset > slave->posStart) */
-/* 				*x += html_text_calc_part_width (HTML_TEXT (self), painter, html_text_slave_get_text (slave), */
-/* 								 slave->posStart, offset - slave->posStart, NULL, NULL); */
-
-/* 			return; */
-/* 		} */
-/* 	} */
-
-/* 	g_warning ("Getting cursor base for an HTMLText with no slaves -- %p\n", */
-/* 		   self); */
-/* 	html_object_calc_abs_position (self, x, y); */
+	else {
+		g_warning ("Getting cursor base for an HTMLText with no slaves -- %p\n", self);
+		html_object_calc_abs_position (self, x, y);
+	}
 }
 
 Link *
@@ -2452,7 +2423,7 @@ html_text_get_slave_at_offset (HTMLText *text, HTMLTextSlave *start, int offset)
 }
 
 static gboolean
-html_text_cursor_forward (HTMLObject *self, HTMLCursor *cursor)
+html_text_cursor_right (HTMLObject *self, HTMLCursor *cursor)
 {
 	HTMLTextSlave *slave;
 
@@ -2464,7 +2435,7 @@ html_text_cursor_forward (HTMLObject *self, HTMLCursor *cursor)
 	printf ("cursor offset: %d slave: %p\n", cursor->offset, slave);
 
 	if (slave) {
-		if (html_text_slave_cursor_forward (slave, cursor))
+		if (html_text_slave_cursor_left (slave, cursor))
 			return TRUE;
 		else {
 			HTMLObject *next = HTML_OBJECT (slave)->next;
@@ -2478,7 +2449,7 @@ html_text_cursor_forward (HTMLObject *self, HTMLCursor *cursor)
 }
 
 static gboolean
-html_text_cursor_backward (HTMLObject *self, HTMLCursor *cursor)
+html_text_cursor_left (HTMLObject *self, HTMLCursor *cursor)
 {
 	HTMLTextSlave *slave;
 
@@ -2488,7 +2459,7 @@ html_text_cursor_backward (HTMLObject *self, HTMLCursor *cursor)
 	slave = html_text_get_slave_at_offset (HTML_TEXT (self), NULL, cursor->offset);
 
 	if (slave) {
-		if (html_text_slave_cursor_backward (slave, cursor))
+		if (html_text_slave_cursor_left (slave, cursor))
 			return TRUE;
 		else {
 			HTMLObject *prev = HTML_OBJECT (slave)->prev;
@@ -2542,8 +2513,8 @@ html_text_class_init (HTMLTextClass *klass,
 	object_class->append_selection_string = append_selection_string;
 	object_class->get_url = get_url;
 	object_class->get_target = get_target;
-	//object_class->cursor_forward = html_text_cursor_forward;
-	//object_class->cursor_backward = html_text_cursor_backward;
+	object_class->cursor_right = html_text_cursor_right;
+	object_class->cursor_left = html_text_cursor_left;
 
 	/* HTMLText methods.  */
 

@@ -748,15 +748,15 @@ draw_lines (PangoGlyphString *str, gint x, gint y, GdkDrawable *drawable, GdkGC 
 
 	pango_glyph_string_extents (str, item->analysis.font, NULL, &log_rect);
 
-	width = PANGO_PIXELS (log_rect.width);
+	width = log_rect.width;
 	dsc = PANGO_PIXELS (PANGO_DESCENT (log_rect));
 	asc = PANGO_PIXELS (PANGO_ASCENT (log_rect));
 
 	if (properties->underline)
-		gdk_draw_line (drawable, gc, x, y + dsc - 2, x + width, y + dsc - 2);
+		gdk_draw_line (drawable, gc, x, y + dsc - 2, x + PANGO_PIXELS (width), y + dsc - 2);
 
 	if (properties->strikethrough)
-		gdk_draw_line (drawable, gc, x, y - asc + (asc + dsc)/2, x + width, y - asc + (asc + dsc)/2);
+		gdk_draw_line (drawable, gc, x, y - asc + (asc + dsc)/2, x + PANGO_PIXELS (width), y - asc + (asc + dsc)/2);
 
 	return width;
 }
@@ -806,7 +806,7 @@ draw_glyphs (HTMLPainter *painter, gint x, gint y, PangoItem *item, PangoGlyphSt
 		cw = draw_lines (glyphs, x, y, gdk_painter->pixmap, gdk_painter->gc, item, &properties);
 	else
 		for (i=0; i < glyphs->num_glyphs; i ++)
-			cw += PANGO_PIXELS (glyphs->glyphs [i].geometry.width);
+			cw += glyphs->glyphs [i].geometry.width;
 
 	if (bg_text_color)
 		g_free (bg_text_color);

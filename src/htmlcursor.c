@@ -898,3 +898,87 @@ html_cursor_child_of (HTMLCursor *cursor, HTMLObject *parent)
 
 	return NULL;
 }
+
+static gboolean
+move_left (HTMLCursor *cursor)
+{
+	gboolean retval;
+
+	retval = TRUE;
+	if (!html_object_cursor_left (cursor->object, cursor)) {
+		HTMLObject *prev;
+
+		prev = html_object_prev_cursor (cursor->object, &cursor->offset);
+		if (prev) {
+			if (!html_object_is_container (prev))
+				cursor->offset = html_object_get_length (prev);
+			cursor->object = prev;
+			cursor->position --;
+		} else
+			retval = FALSE;
+	}
+	return retval;
+}
+
+gboolean
+html_cursor_left (HTMLCursor *cursor, HTMLEngine *engine)
+{
+	gboolean retval;
+
+	g_return_val_if_fail (cursor != NULL, FALSE);
+	g_return_val_if_fail (engine != NULL, FALSE);
+
+	gtk_html_im_reset (engine->widget);
+
+	if (engine->need_spell_check)
+		html_engine_spell_check_range (engine, engine->cursor, engine->cursor);
+
+	cursor->have_target_x = FALSE;
+	retval = move_left (cursor);
+
+	debug_location (cursor);
+
+	return retval;
+}
+
+static gboolean
+move_right (HTMLCursor *cursor)
+{
+	gboolean retval;
+
+	retval = TRUE;
+	if (!html_object_cursor_right (cursor->object, cursor)) {
+		HTMLObject *next;
+
+		next = html_object_next_cursor (cursor->object, &cursor->offset);
+		if (next) {
+			if (!html_object_is_container (next))
+				cursor->offset = (next->parent == cursor->object->parent) ? 1 : 0;
+			cursor->object = next;
+			cursor->position ++;
+		} else
+			retval = FALSE;
+	}
+	return retval;
+}
+
+gboolean
+html_cursor_right (HTMLCursor *cursor, HTMLEngine *engine)
+{
+	gboolean retval;
+
+	g_return_val_if_fail (cursor != NULL, FALSE);
+	g_return_val_if_fail (engine != NULL, FALSE);
+
+	gtk_html_im_reset (engine->widget);
+
+	if (engine->need_spell_check)
+		html_engine_spell_check_range (engine, engine->cursor, engine->cursor);
+
+	cursor->have_target_x = FALSE;
+	retval = move_right (cursor);
+
+	debug_location (cursor);
+
+	return retval;
+}
