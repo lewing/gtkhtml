@@ -2637,3 +2637,84 @@ html_text_calc_font_size (HTMLText *text, HTMLEngine *e)
 {
 	pango_attr_list_filter (text->attr_list, calc_font_size_filter, e);
 }
+
+static GtkHTMLFontStyle
+style_from_attrs (PangoAttrIterator *iter)
+{
+	GtkHTMLFontStyle style = GTK_HTML_FONT_STYLE_DEFAULT;
+	GSList *list, *l;
+
+	list = pango_attr_iterator_get_attrs (iter);
+	for (l = list; l; l = l->next) {
+		PangoAttribute *attr = (PangoAttribute *) l->data;
+
+		switch (attr->klass->type) {
+		case PANGO_ATTR_WEIGHT:
+			style |= GTK_HTML_FONT_STYLE_BOLD;
+			break;
+		case PANGO_ATTR_UNDERLINE:
+			style |= GTK_HTML_FONT_STYLE_UNDERLINE;
+			break;
+		case PANGO_ATTR_STRIKETHROUGH:
+			style |= GTK_HTML_FONT_STYLE_STRIKEOUT;
+			break;
+		case PANGO_ATTR_STYLE:
+			style |= GTK_HTML_FONT_STYLE_ITALIC;
+			break;
+		case PANGO_ATTR_SIZE:
+			style |= ((HTMLPangoAttrFontSize *) attr)->style;
+			break;
+		}
+	}
+
+	free_attrs (list);
+
+	return style;
+}
+
+GtkHTMLFontStyle
+html_text_get_fontstyle_at_offset (HTMLText *text, gint offset)
+{
+	GtkHTMLFontStyle style = GTK_HTML_FONT_STYLE_DEFAULT;
+	PangoAttrIterator *iter = pango_attr_list_get_iterator (text->attr_list);
+
+	if (iter) {
+		gint index = g_utf8_offset_to_pointer (text->text, offset) - text->text;
+		do {
+			gint start_index, end_index;
+
+			pango_attr_iterator_range (iter, &start_index, &end_index);
+			if (start_index <= index && index <= end_index) {
+				style |= style_from_attrs (iter);
+				break;
+			}
+		} while (pango_attr_iterator_next (iter));
+
+		pango_attr_iterator_destroy (iter);
+	}
+
+	return style;
+}
+
+GtkHTMLFontStyle
+html_text_get_style_conflicts (HTMLText *text, GtkHTMLFontStyle style, gint start_index, gint end_index)
+{
+	GtkHTMLFontStyle conflicts = GTK_HTML_FONT_STYLE_DEFAULT;
+	PangoAttrIterator *iter = pango_attr_list_get_iterator (text->attr_list);
+
+	if (iter) {
+		do {
+			gint iter_start_index, iter_end_index;
+
+			pango_attr_iterator_range (iter, &iter_start_index, &iter_end_index);
+			if (MAX (start_index, iter_start_index)  < MIN (end_index, iter_end_index))
+				conflicts |= style_from_attrs (iter) ^ style;
+			if (iter_start_index > end_index)
+				break;
+		} while (pango_attr_iterator_next (iter));
+
+		pango_attr_iterator_destroy (iter);
+	}
+
+	return conflicts;
+}

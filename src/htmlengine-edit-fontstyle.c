@@ -45,6 +45,7 @@ get_font_style_from_selection (HTMLEngine *engine)
 	GtkHTMLFontStyle conflicts;
 	gboolean first;
 	HTMLPoint p;
+	gint offset;
 
 	g_return_val_if_fail (engine->clue != NULL, GTK_HTML_FONT_STYLE_DEFAULT);
 	g_return_val_if_fail (html_engine_is_selection_active (engine), GTK_HTML_FONT_STYLE_DEFAULT);
@@ -60,20 +61,28 @@ get_font_style_from_selection (HTMLEngine *engine)
 	first = TRUE;
 
 	p = engine->selection->from;
+	offset = p.offset;
 
 	while (1) {
 		if (html_object_is_text (p.object) && p.offset != html_object_get_length (p.object)) {
 			if (first) {
-				style = HTML_TEXT (p.object)->font_style;
+				style = html_text_get_fontstyle_at_offset (HTML_TEXT (p.object), offset);
 				first = FALSE;
+				conflicts |= html_text_get_style_conflicts (HTML_TEXT (p.object), style, g_utf8_offset_to_pointer (HTML_TEXT (p.object)->text, offset) - HTML_TEXT (p.object)->text,
+									    p.object == engine->selection->to.object
+									    ? engine->selection->to.offset : HTML_TEXT (p.object)->text_bytes);
 			} else
-				conflicts |= HTML_TEXT (p.object)->font_style ^ style;
+				conflicts |= html_text_get_style_conflicts (HTML_TEXT (p.object), style, 0,
+									    p.object == engine->selection->to.object
+									    ? engine->selection->to.offset : HTML_TEXT (p.object)->text_bytes);
+				/* conflicts |= HTML_TEXT (p.object)->font_style ^ style; */
 		}
 
 		if (html_point_cursor_object_eq (&p, &engine->selection->to))
 			break;
 
 		html_point_next_cursor (&p);
+		offset = 0;
 
 		if (p.object == NULL) {
 			g_warning ("Unable to find style for end of selection");
@@ -124,6 +133,7 @@ html_engine_get_document_font_style (HTMLEngine *engine)
 		return get_font_style_from_selection (engine);
 	else {
 		HTMLObject *curr = engine->cursor->object;
+		gint offset;
 
 		if (curr == NULL)
 			return GTK_HTML_FONT_STYLE_DEFAULT;
@@ -132,9 +142,9 @@ html_engine_get_document_font_style (HTMLEngine *engine)
 		else {
 			HTMLObject *obj;
 
-			obj = html_engine_text_style_object (engine, NULL);
+			obj = html_engine_text_style_object (engine, &offset);
 			return obj
-				? HTML_TEXT (obj)->font_style
+				? html_text_get_fontstyle_at_offset (HTML_TEXT (obj), offset)
 				: GTK_HTML_FONT_STYLE_DEFAULT;
 		}
 	}

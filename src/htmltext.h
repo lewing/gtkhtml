@@ -224,6 +224,13 @@ gchar            *html_text_get_link_text                (HTMLText           *te
 							  gint                offset);
 void              html_text_calc_font_size               (HTMLText           *text,
 							  HTMLEngine         *e);
+GtkHTMLFontStyle  html_text_get_fontstyle_at_offset      (HTMLText           *text,
+							  gint                offset);
+GtkHTMLFontStyle  html_text_get_style_conflicts          (HTMLText           *text,
+						          GtkHTMLFontStyle    style,
+						          gint                start_index,
+						          gint                end_index);
+
 
 Link     *html_link_new                 (gchar *url,
 					 gchar *target,
