@@ -5252,9 +5252,9 @@ draw_link_text (HTMLLinkText *lt, HTMLEngine *e)
 {
 	HTMLObject *cur = HTML_OBJECT (lt)->next;
 
-	printf ("draw link text\n");
+	/* printf ("draw link text\n"); */
 	while (cur && HTML_IS_TEXT_SLAVE (cur)) {
-		printf ("slave\n");
+		/* printf ("slave\n"); */
 		html_engine_queue_draw (e, cur);
 		cur = cur->next;
 	}
@@ -5293,7 +5293,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 				: html_object_get_tail_leaf (e->clue);
 
 		while (cur) {
-			printf ("try child %p\n", cur);
+			/* printf ("try child %p\n", cur); */
 			if (HTML_IS_LINK_TEXT (cur)
 			    || (HTML_IS_IMAGE (cur) && HTML_IMAGE (cur)->url && *HTML_IMAGE (cur)->url)) {
 				html_engine_set_focus_object (e, cur);
@@ -5315,7 +5315,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 			}
 			cur = next_focus_object (cur, e, dir, &offset);
 		}
-		printf ("no focus\n");
+		/* printf ("no focus\n"); */
 		html_engine_set_focus_object (e, NULL);
 	}
 
