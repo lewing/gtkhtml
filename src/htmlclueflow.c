@@ -87,6 +87,9 @@ is_levels_equal (HTMLClueFlow *me, HTMLClueFlow *you)
 	if (me->levels->len != you->levels->len)
 		return FALSE;
 
+	if (me->levels->len == 0)
+		return TRUE;
+
 	return !memcmp (me->levels->data, you->levels->data, you->levels->len);
 }
 

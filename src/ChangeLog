@@ -1,6 +1,12 @@
 2002-05-09  Larry Ewing  <lewing@ximian.com>
 
+	* htmlclueflow.c (is_levels_equal): return true if both levels are 0.
+
+	* htmlengine-edit-table.c (html_engine_new_cell): initialize level
+	with a new byte array.
+
 	* htmlclueflow.c (get_level_indent): fix the indent calculation.
+	(get_level_indent): fix typo.
 
 2002-05-07  Larry Ewing  <lewing@ximian.com>
 
