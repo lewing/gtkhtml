@@ -2685,12 +2685,10 @@ load_keybindings (GtkHTMLClass *klass)
 	BMOVE (GDK_CONTROL_MASK, KP_Left,  LEFT,  WORD);
 	BMOVE (GDK_CONTROL_MASK, Left,     LEFT,  WORD);
 	BMOVE (GDK_MOD1_MASK,    Left,     LEFT,  WORD);
-	BMOVE (GDK_MOD1_MASK,    b,        LEFT,  WORD);
 
 	BMOVE (GDK_CONTROL_MASK, KP_Right, RIGHT, WORD);
 	BMOVE (GDK_CONTROL_MASK, Right,    RIGHT, WORD);
 	BMOVE (GDK_MOD1_MASK,    Right,    RIGHT, WORD);
-	BMOVE (GDK_MOD1_MASK,    f,        RIGHT, WORD);
 
 	BMOVE (0, Page_Up,       UP,   PAGE);
 	BMOVE (0, KP_Page_Up,    UP,   PAGE);
