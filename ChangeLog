@@ -1,4 +1,8 @@
-2003-09-22  Radek Doulik  <rodo@ximian.com>
+2004-02-18  JP Rosevear <jpr@ximian.com>
+
+	* configure.in: bump version, libtool numbers, gal requirement
+
+2004-02-18  Radek Doulik  <rodo@ximian.com>
 
 	* configure.in: increase GTKHTML_CURRENT again, as we don't
 	install a11y lib anymore, we link it to libgtkhtml

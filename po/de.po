@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GtkHTML 3.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-14 15:22+0100\n"
+"POT-Creation-Date: 2004-02-19 16:04-0500\n"
 "PO-Revision-Date: 2003-11-14 15:22+0200\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -216,7 +216,7 @@ msgstr "Ungeordnete Liste"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:12
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:12
-#: components/html-editor/toolbar.c:511
+#: components/html-editor/toolbar.c:509
 msgid "Center justifies the paragraphs"
 msgstr "Absätze zentrieren"
 
@@ -436,7 +436,7 @@ msgstr "Eine Textdatei in das Dokument einfügen..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:55
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:55
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left justifies the paragraphs"
 msgstr "Absätze linksbündig ausrichten"
 
@@ -610,14 +610,13 @@ msgstr "Die rückgängig gemachte Aktion wiederholen"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:88
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:88
-#: components/html-editor/replace.c:79 components/html-editor/replace.c:153
-#: components/html-editor/replace.c:215
+#: components/html-editor/replace.c:153 components/html-editor/replace.c:215
 msgid "Replace"
 msgstr "Ersetzen"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:89
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:89
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right justifies the paragraphs"
 msgstr "Absätze rechtsbündig ausrichten"
 
@@ -647,7 +646,7 @@ msgstr "Den gesamten Inhalt des Dokuments markieren"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:94
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:94
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
-#: components/html-editor/text.c:239 components/html-editor/toolbar.c:528
+#: components/html-editor/text.c:239 components/html-editor/toolbar.c:526
 msgid "Strikeout"
 msgstr "Durchgestrichen"
 
@@ -704,7 +703,7 @@ msgstr "Vorlage"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:104
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:104
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Typewriter"
 msgstr "Schreibmaschine"
 
@@ -1087,7 +1086,7 @@ msgid "Apply changes to:"
 msgstr "Änderungen anwenden auf:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
-#: components/html-editor/text.c:236 components/html-editor/toolbar.c:522
+#: components/html-editor/text.c:236 components/html-editor/toolbar.c:520
 msgid "Bold"
 msgstr "Fett"
 
@@ -1109,7 +1108,7 @@ msgid "Cell"
 msgstr "Zelle"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
-#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:511
+#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:509
 msgid "Center"
 msgstr "Zentriert"
 
@@ -1181,7 +1180,7 @@ msgid "Horizontal:"
 msgstr "Horizontal:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:40
-#: components/html-editor/text.c:237 components/html-editor/toolbar.c:524
+#: components/html-editor/text.c:237 components/html-editor/toolbar.c:522
 msgid "Italic"
 msgstr "Kursiv"
 
@@ -1306,7 +1305,7 @@ msgid "Top"
 msgstr "Oben"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:79
-#: components/html-editor/text.c:238 components/html-editor/toolbar.c:526
+#: components/html-editor/text.c:238 components/html-editor/toolbar.c:524
 msgid "Underline"
 msgstr "Unterstrichen"
 
@@ -1603,12 +1602,19 @@ msgid "Replace confirmation"
 msgstr "Ersetzen bestätigen"
 
 #: components/html-editor/replace.c:76
-msgid "Replace all"
+#, fuzzy
+msgid "Replace _All"
 msgstr "Alle ersetzen"
 
 #: components/html-editor/replace.c:77
-msgid "Next"
+#, fuzzy
+msgid "_Next"
 msgstr "Nächste"
+
+#: components/html-editor/replace.c:79
+#, fuzzy
+msgid "_Replace"
+msgstr "Ersetzen"
 
 #: components/html-editor/replace.c:161
 msgid "Search _backward"
@@ -1650,11 +1656,16 @@ msgstr "_Rückwärts"
 msgid "Find Regular Expression"
 msgstr "Regulären Ausdruck suchen"
 
-#: components/html-editor/spell.c:277
+#: components/html-editor/spell.c:278
+#, fuzzy
+msgid "No misspelled word found"
+msgstr "Falsch geschriebenes Wort ignorieren"
+
+#: components/html-editor/spell.c:285
 msgid "Spell checker"
 msgstr "Rechtschreibprüfung"
 
-#: components/html-editor/spell.c:366
+#: components/html-editor/spell.c:378
 msgid "Current _Languages"
 msgstr "Momentan verwendete _Sprachen"
 
@@ -1719,47 +1730,47 @@ msgstr ""
 msgid "Roman List"
 msgstr "Römisch nummerierte Liste"
 
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left align"
 msgstr "Linksbündig"
 
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right align"
 msgstr "Rechtsbündig"
 
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Toggle typewriter font style"
 msgstr "Schreibmaschinen-Schriftstil ein/aus"
 
-#: components/html-editor/toolbar.c:522
+#: components/html-editor/toolbar.c:520
 msgid "Makes the text bold"
 msgstr "Den Text fett machen"
 
-#: components/html-editor/toolbar.c:524
+#: components/html-editor/toolbar.c:522
 msgid "Makes the text italic"
 msgstr "Den Text kursiv machen"
 
-#: components/html-editor/toolbar.c:526
+#: components/html-editor/toolbar.c:524
 msgid "Underlines the text"
 msgstr "Den Text unterstreichen"
 
-#: components/html-editor/toolbar.c:528
+#: components/html-editor/toolbar.c:526
 msgid "Strikes out the text"
 msgstr "Den Text durchstreichen"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Unindent"
 msgstr "Einzug vermindern"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Indents the paragraphs less"
 msgstr "Den Einzug der Absätze vermindern"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indent"
 msgstr "Einzug erhöhen"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indents the paragraphs more"
 msgstr "Den Einzug der Absätze erhöhen"
 

@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-11 19:26+0100\n"
+"POT-Creation-Date: 2004-02-19 16:04-0500\n"
 "PO-Revision-Date: 2003-12-11 19:27+0100\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -216,7 +216,7 @@ msgstr "Попис"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:12
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:12
-#: components/html-editor/toolbar.c:511
+#: components/html-editor/toolbar.c:509
 msgid "Center justifies the paragraphs"
 msgstr "Центрирај пасусе"
 
@@ -436,7 +436,7 @@ msgstr "Уметни садржај датотеке у документ..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:55
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:55
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left justifies the paragraphs"
 msgstr "Поравнава пасусе на лево"
 
@@ -616,7 +616,7 @@ msgstr "Замени"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:89
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:89
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right justifies the paragraphs"
 msgstr "Поравнај пасусе на десно"
 
@@ -646,7 +646,7 @@ msgstr "Изабери сав садржај документа"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:94
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:94
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
-#: components/html-editor/text.c:239 components/html-editor/toolbar.c:528
+#: components/html-editor/text.c:239 components/html-editor/toolbar.c:526
 msgid "Strikeout"
 msgstr "Прецртај"
 
@@ -703,7 +703,7 @@ msgstr "Шаблон"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:104
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:104
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Typewriter"
 msgstr "Куцаћа машина"
 
@@ -1087,7 +1087,7 @@ msgid "Apply changes to:"
 msgstr "Примени измене на:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
-#: components/html-editor/text.c:236 components/html-editor/toolbar.c:522
+#: components/html-editor/text.c:236 components/html-editor/toolbar.c:520
 msgid "Bold"
 msgstr "Масно"
 
@@ -1109,7 +1109,7 @@ msgid "Cell"
 msgstr "Ћелија"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
-#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:511
+#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:509
 msgid "Center"
 msgstr "Центрирај"
 
@@ -1181,7 +1181,7 @@ msgid "Horizontal:"
 msgstr "Водоравно:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:40
-#: components/html-editor/text.c:237 components/html-editor/toolbar.c:524
+#: components/html-editor/text.c:237 components/html-editor/toolbar.c:522
 msgid "Italic"
 msgstr "Курзив"
 
@@ -1306,7 +1306,7 @@ msgid "Top"
 msgstr "Врх"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:79
-#: components/html-editor/text.c:238 components/html-editor/toolbar.c:526
+#: components/html-editor/text.c:238 components/html-editor/toolbar.c:524
 msgid "Underline"
 msgstr "Подвлачење"
 
@@ -1727,47 +1727,47 @@ msgstr ""
 msgid "Roman List"
 msgstr "Списак са римским бројевима"
 
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left align"
 msgstr "Лево поравнање"
 
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right align"
 msgstr "Десно поравнање"
 
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Toggle typewriter font style"
 msgstr "Измени стил писма за куцаћу машину"
 
-#: components/html-editor/toolbar.c:522
+#: components/html-editor/toolbar.c:520
 msgid "Makes the text bold"
 msgstr "Чини текст масним"
 
-#: components/html-editor/toolbar.c:524
+#: components/html-editor/toolbar.c:522
 msgid "Makes the text italic"
 msgstr "Чини текст курзивом"
 
-#: components/html-editor/toolbar.c:526
+#: components/html-editor/toolbar.c:524
 msgid "Underlines the text"
 msgstr "Подвлачи текст"
 
-#: components/html-editor/toolbar.c:528
+#: components/html-editor/toolbar.c:526
 msgid "Strikes out the text"
 msgstr "Прецртава текст"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Unindent"
 msgstr "Поништи увлачење"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Indents the paragraphs less"
 msgstr "Мање увлачи пасус"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indent"
 msgstr "Увуци"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indents the paragraphs more"
 msgstr "Више увлачи пасус"
 

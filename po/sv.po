@@ -3,12 +3,12 @@
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004.
 # Martin Norbäck <d95mback@dtek.chalmers.se>, 2000.
 #
-# $Id: sv.po,v 1.73.2.4 2004/01/03 12:30:53 menthos Exp $
+# $Id: sv.po,v 1.73.2.5 2004/02/19 22:37:21 jpr Exp $
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2004-01-03 13:29+0100\n"
+"POT-Creation-Date: 2004-02-19 16:04-0500\n"
 "PO-Revision-Date: 2004-01-03 13:30+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -214,7 +214,7 @@ msgstr "Punktlista"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:12
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:12
-#: components/html-editor/toolbar.c:511
+#: components/html-editor/toolbar.c:509
 msgid "Center justifies the paragraphs"
 msgstr "Centrerar styckena"
 
@@ -436,7 +436,7 @@ msgstr "Infoga textfil i dokumentet..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:55
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:55
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left justifies the paragraphs"
 msgstr "Vänsterställer styckena"
 
@@ -615,7 +615,7 @@ msgstr "Ersätt"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:89
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:89
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right justifies the paragraphs"
 msgstr "Högerställer styckena"
 
@@ -645,7 +645,7 @@ msgstr "Markera hela innehållet i dokumentet"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:94
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:94
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
-#: components/html-editor/text.c:239 components/html-editor/toolbar.c:528
+#: components/html-editor/text.c:239 components/html-editor/toolbar.c:526
 msgid "Strikeout"
 msgstr "Genomstruken"
 
@@ -702,7 +702,7 @@ msgstr "Mall"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:104
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:104
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Typewriter"
 msgstr "Skrivmaskin"
 
@@ -1085,7 +1085,7 @@ msgid "Apply changes to:"
 msgstr "Tillämpa ändringar på:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
-#: components/html-editor/text.c:236 components/html-editor/toolbar.c:522
+#: components/html-editor/text.c:236 components/html-editor/toolbar.c:520
 msgid "Bold"
 msgstr "Fet"
 
@@ -1107,7 +1107,7 @@ msgid "Cell"
 msgstr "Cell"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
-#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:511
+#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:509
 msgid "Center"
 msgstr "Centrera"
 
@@ -1178,7 +1178,7 @@ msgid "Horizontal:"
 msgstr "Vågrät:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:40
-#: components/html-editor/text.c:237 components/html-editor/toolbar.c:524
+#: components/html-editor/text.c:237 components/html-editor/toolbar.c:522
 msgid "Italic"
 msgstr "Kursiv"
 
@@ -1303,7 +1303,7 @@ msgid "Top"
 msgstr "Överkant"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:79
-#: components/html-editor/text.c:238 components/html-editor/toolbar.c:526
+#: components/html-editor/text.c:238 components/html-editor/toolbar.c:524
 msgid "Underline"
 msgstr "Understruken"
 
@@ -1724,47 +1724,47 @@ msgstr ""
 msgid "Roman List"
 msgstr "Romerskt numrerad lista"
 
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left align"
 msgstr "Vänsterställ"
 
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right align"
 msgstr "Högerställ"
 
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Toggle typewriter font style"
 msgstr "Använd/använd inte skrivmaskinstypsnitt"
 
-#: components/html-editor/toolbar.c:522
+#: components/html-editor/toolbar.c:520
 msgid "Makes the text bold"
 msgstr "Gör texten fetstilt"
 
-#: components/html-editor/toolbar.c:524
+#: components/html-editor/toolbar.c:522
 msgid "Makes the text italic"
 msgstr "Gör texten kursiv"
 
-#: components/html-editor/toolbar.c:526
+#: components/html-editor/toolbar.c:524
 msgid "Underlines the text"
 msgstr "Stryker under texten"
 
-#: components/html-editor/toolbar.c:528
+#: components/html-editor/toolbar.c:526
 msgid "Strikes out the text"
 msgstr "Genomstryker texten"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Unindent"
 msgstr "Ta bort indragning"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Indents the paragraphs less"
 msgstr "Gör styckena mindre indragna"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indent"
 msgstr "Dra in"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indents the paragraphs more"
 msgstr "Drar in styckena mer"
 

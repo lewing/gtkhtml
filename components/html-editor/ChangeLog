@@ -1,4 +1,4 @@
-2003-09-22  Radek Doulik  <rodo@ximian.com>
+2004-02-18  Radek Doulik  <rodo@ximian.com>
 
 	* Makefile.am (glade_DATA): don't link with a11y, it's already in
 	libgtkhtml
@@ -7,6 +7,22 @@
 
 	* Makefile.am: remove disable deprecated flags
 
+2004-02-13  Radek Doulik  <rodo@ximian.com>
+  
+  	* toolbar.c (create_style_toolbar): unset focus for all toolbar
+  	widgets
+  
+2004-02-13  Radek Doulik  <rodo@ximian.com>
+  
+  	* toolbar.c (create_style_toolbar): set initial unindent button
+  	sensitivity
+  	(toolbar_item_represents): new helper function
+  	(toolbar_item_update_sensitivity): use toolbar_item_represents,
+  	newer gtk toolbar contains gtktoolitems so we have to be more
+  	careful
+  	(toolbar_update_format): use gtk_container_foreach instead of
+  	forall
+ 
 2004-02-11  Yong Sun <Yong.Sun@sun.com>
 
 	* toolbar.c: (create_style_toolbar) steal domain for libgnomeui to 

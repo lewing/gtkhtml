@@ -9,14 +9,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-09-28 22:03+0200\n"
+"POT-Creation-Date: 2004-02-19 16:04-0500\n"
 "PO-Revision-Date: 2003-05-09 00:59+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -216,7 +216,7 @@ msgstr "Lista wypunktowana"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:12
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:12
-#: components/html-editor/toolbar.c:511
+#: components/html-editor/toolbar.c:509
 msgid "Center justifies the paragraphs"
 msgstr "Wyśrodkowuje akapity"
 
@@ -345,7 +345,7 @@ msgstr "Nagłówek _6"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:37
 #: components/html-editor/editor-control-factory.c:187
 #: components/html-editor/gtkhtml-editor-properties.glade.h:39
-#: components/html-editor/menubar.c:91 components/html-editor/popup.c:208
+#: components/html-editor/menubar.c:91 components/html-editor/popup.c:209
 msgid "Image"
 msgstr "Obraz"
 
@@ -436,7 +436,7 @@ msgstr "Wstawia do dokumentu plik tekstowy..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:55
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:55
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left justifies the paragraphs"
 msgstr "Wyrównuje akapity do lewej"
 
@@ -448,8 +448,8 @@ msgstr "O_blizująca"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:57
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:57
 #: components/html-editor/body.c:328 components/html-editor/menubar.c:107
-#: components/html-editor/popup.c:105 components/html-editor/popup.c:201
-#: components/html-editor/popup.c:274
+#: components/html-editor/popup.c:106 components/html-editor/popup.c:202
+#: components/html-editor/popup.c:275
 msgid "Link"
 msgstr "Odnośnik"
 
@@ -609,14 +609,13 @@ msgstr "Ponawia cofniętą czynność"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:88
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:88
-#: components/html-editor/replace.c:79 components/html-editor/replace.c:153
-#: components/html-editor/replace.c:215
+#: components/html-editor/replace.c:153 components/html-editor/replace.c:215
 msgid "Replace"
 msgstr "Zmień"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:89
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:89
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right justifies the paragraphs"
 msgstr "Wyrównuje akapity do prawej"
 
@@ -629,7 +628,7 @@ msgstr "Lista numerowana liczbami rzymskimi"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:91
 #: components/html-editor/editor-control-factory.c:207
 #: components/html-editor/gtkhtml-editor-properties.glade.h:63
-#: components/html-editor/menubar.c:125 components/html-editor/popup.c:229
+#: components/html-editor/menubar.c:125 components/html-editor/popup.c:230
 msgid "Rule"
 msgstr "Linia"
 
@@ -646,7 +645,7 @@ msgstr "Zaznacza całą treść dokumentu"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:94
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:94
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
-#: components/html-editor/text.c:239 components/html-editor/toolbar.c:528
+#: components/html-editor/text.c:239 components/html-editor/toolbar.c:526
 msgid "Strikeout"
 msgstr "Przekreślenie"
 
@@ -678,8 +677,8 @@ msgstr "Indeks górny"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:100
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:100
 #: components/html-editor/gtkhtml-editor-properties.glade.h:72
-#: components/html-editor/menubar.c:142 components/html-editor/popup.c:236
-#: components/html-editor/popup.c:517 components/html-editor/popup.c:526
+#: components/html-editor/menubar.c:142 components/html-editor/popup.c:237
+#: components/html-editor/popup.c:518 components/html-editor/popup.c:527
 msgid "Table"
 msgstr "Tabela"
 
@@ -703,7 +702,7 @@ msgstr "Szablon"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:104
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:104
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Typewriter"
 msgstr "Maszyna do pisania"
 
@@ -1012,7 +1011,7 @@ msgstr "Automatycznie"
 #: components/html-editor/body.c:327
 #: components/html-editor/editor-control-factory.c:196
 #: components/html-editor/gtkhtml-editor-properties.glade.h:76
-#: components/html-editor/menubar.c:338 components/html-editor/popup.c:194
+#: components/html-editor/menubar.c:338 components/html-editor/popup.c:195
 msgid "Text"
 msgstr "Tekst"
 
@@ -1041,19 +1040,19 @@ msgstr ""
 
 #: components/html-editor/editor-control-factory.c:176
 #: components/html-editor/menubar.c:317 components/html-editor/menubar.c:335
-#: components/html-editor/menubar.c:353 components/html-editor/popup.c:186
-#: components/html-editor/popup.c:271
+#: components/html-editor/menubar.c:353 components/html-editor/popup.c:187
+#: components/html-editor/popup.c:272
 msgid "Properties"
 msgstr "Właściwości"
 
 #: components/html-editor/editor-control-factory.c:217
-#: components/html-editor/menubar.c:356 components/html-editor/popup.c:215
+#: components/html-editor/menubar.c:356 components/html-editor/popup.c:216
 msgid "Paragraph"
 msgstr "Akapit"
 
 #: components/html-editor/editor-control-factory.c:222
 #: components/html-editor/gtkhtml-editor-properties.glade.h:52
-#: components/html-editor/menubar.c:320 components/html-editor/popup.c:222
+#: components/html-editor/menubar.c:320 components/html-editor/popup.c:223
 msgid "Page"
 msgstr "Strona"
 
@@ -1086,7 +1085,7 @@ msgid "Apply changes to:"
 msgstr "Zakres wprowadzanych zmian:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
-#: components/html-editor/text.c:236 components/html-editor/toolbar.c:522
+#: components/html-editor/text.c:236 components/html-editor/toolbar.c:520
 msgid "Bold"
 msgstr "Pogrubienie"
 
@@ -1103,12 +1102,12 @@ msgid "Bottom"
 msgstr "Dół"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:20
-#: components/html-editor/popup.c:243
+#: components/html-editor/popup.c:244
 msgid "Cell"
 msgstr "Komórka"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
-#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:511
+#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:509
 msgid "Center"
 msgstr "Wyśrodkowanie"
 
@@ -1126,7 +1125,7 @@ msgid "Color:"
 msgstr "Kolor:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:26
-#: components/html-editor/popup.c:528
+#: components/html-editor/popup.c:529
 msgid "Column"
 msgstr "Kolumna"
 
@@ -1179,7 +1178,7 @@ msgid "Horizontal:"
 msgstr "Poziome:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:40
-#: components/html-editor/text.c:237 components/html-editor/toolbar.c:524
+#: components/html-editor/text.c:237 components/html-editor/toolbar.c:522
 msgid "Italic"
 msgstr "Pochylenie"
 
@@ -1243,7 +1242,7 @@ msgid "Right"
 msgstr "Do prawej"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:60
-#: components/html-editor/popup.c:527
+#: components/html-editor/popup.c:528
 msgid "Row"
 msgstr "Wiersz"
 
@@ -1277,7 +1276,7 @@ msgid "Spacing:"
 msgstr "Odstępy:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:70
-#: components/html-editor/paragraph.c:116 components/html-editor/popup.c:472
+#: components/html-editor/paragraph.c:116 components/html-editor/popup.c:473
 #: components/html-editor/text.c:223
 msgid "Style"
 msgstr "Styl"
@@ -1304,7 +1303,7 @@ msgid "Top"
 msgstr "Góra"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:79
-#: components/html-editor/text.c:238 components/html-editor/toolbar.c:526
+#: components/html-editor/text.c:238 components/html-editor/toolbar.c:524
 msgid "Underline"
 msgstr "Podkreślenie"
 
@@ -1415,7 +1414,7 @@ msgstr ""
 
 #: components/html-editor/menubar.c:88 components/html-editor/menubar.c:104
 #: components/html-editor/menubar.c:122 components/html-editor/menubar.c:139
-#: components/html-editor/menubar.c:162 components/html-editor/popup.c:102
+#: components/html-editor/menubar.c:162 components/html-editor/popup.c:103
 #: components/html-editor/properties.c:121
 msgid "Insert"
 msgstr "Wstaw"
@@ -1498,101 +1497,101 @@ msgstr ""
 "Redagowany paragraf został usunięty z dokumentu.\n"
 "Nie można wprowadzić zmian."
 
-#: components/html-editor/popup.c:456
+#: components/html-editor/popup.c:457
 msgid "Paste Quotation"
 msgstr "Wklej cytat"
 
-#: components/html-editor/popup.c:459
+#: components/html-editor/popup.c:460
 msgid "Insert link"
 msgstr "Wstaw odnośnik"
 
-#: components/html-editor/popup.c:467
+#: components/html-editor/popup.c:468
 msgid "Remove link"
 msgstr "Usuń odnośnik"
 
-#: components/html-editor/popup.c:475
+#: components/html-editor/popup.c:476
 msgid "Text Style..."
 msgstr "Styl tekstu..."
 
-#: components/html-editor/popup.c:477 components/html-editor/popup.c:483
-#: components/html-editor/popup.c:493
+#: components/html-editor/popup.c:478 components/html-editor/popup.c:484
+#: components/html-editor/popup.c:494
 msgid "Paragraph Style..."
 msgstr "Styl akapitu..."
 
-#: components/html-editor/popup.c:481
+#: components/html-editor/popup.c:482
 msgid "Link Style..."
 msgstr "Styl odnośnika..."
 
-#: components/html-editor/popup.c:487
+#: components/html-editor/popup.c:488
 msgid "Rule Style..."
 msgstr "Styl zasady..."
 
-#: components/html-editor/popup.c:491
+#: components/html-editor/popup.c:492
 msgid "Image Style..."
 msgstr "Styl Obrazu..."
 
-#: components/html-editor/popup.c:502
+#: components/html-editor/popup.c:503
 msgid "Cell Style..."
 msgstr "Styl komórki..."
 
-#: components/html-editor/popup.c:505
+#: components/html-editor/popup.c:506
 msgid "Table Style..."
 msgstr "Styl tabeli..."
 
-#: components/html-editor/popup.c:511
+#: components/html-editor/popup.c:512
 msgid "Page Style..."
 msgstr "Styl strony..."
 
-#: components/html-editor/popup.c:516
+#: components/html-editor/popup.c:517
 msgid "Table insert"
 msgstr "Wstawienie do tabeli"
 
-#: components/html-editor/popup.c:519
+#: components/html-editor/popup.c:520
 msgid "Row above"
 msgstr "Wiersz powyżej"
 
-#: components/html-editor/popup.c:520
+#: components/html-editor/popup.c:521
 msgid "Row below"
 msgstr "Wiersz poniżej"
 
-#: components/html-editor/popup.c:522
+#: components/html-editor/popup.c:523
 msgid "Column before"
 msgstr "Kolumna przed"
 
-#: components/html-editor/popup.c:523
+#: components/html-editor/popup.c:524
 msgid "Column after"
 msgstr "Kolumna po"
 
-#: components/html-editor/popup.c:525
+#: components/html-editor/popup.c:526
 msgid "Table delete"
 msgstr "Usunięcie z tabeli"
 
-#: components/html-editor/popup.c:529
+#: components/html-editor/popup.c:530
 msgid "Cell contents"
 msgstr "Zawartość komórki"
 
-#: components/html-editor/popup.c:539
+#: components/html-editor/popup.c:540
 msgid "Check Word Spelling..."
 msgstr "Sprawdź pisownię..."
 
-#: components/html-editor/popup.c:544
+#: components/html-editor/popup.c:545
 msgid "Add Word to"
 msgstr "Dodaj słowo do"
 
-#: components/html-editor/popup.c:548
+#: components/html-editor/popup.c:549
 #, c-format
 msgid "%s Dictionary"
 msgstr "Słownik %s"
 
-#: components/html-editor/popup.c:557
+#: components/html-editor/popup.c:558
 msgid "Add Word to Dictionary"
 msgstr "Dodaj słowo do słownika"
 
-#: components/html-editor/popup.c:560
+#: components/html-editor/popup.c:561
 msgid "Ignore Misspelled Word"
 msgstr "Ignoruj źle wpisane słowa"
 
-#: components/html-editor/popup.c:563
+#: components/html-editor/popup.c:564
 msgid "Input Methods"
 msgstr "Metoda wprowadzania"
 
@@ -1601,12 +1600,19 @@ msgid "Replace confirmation"
 msgstr "Potwierdzenie zmiany"
 
 #: components/html-editor/replace.c:76
-msgid "Replace all"
+#, fuzzy
+msgid "Replace _All"
 msgstr "Zastąp wszystkie"
 
 #: components/html-editor/replace.c:77
-msgid "Next"
+#, fuzzy
+msgid "_Next"
 msgstr "Następne"
+
+#: components/html-editor/replace.c:79
+#, fuzzy
+msgid "_Replace"
+msgstr "Zmień"
 
 #: components/html-editor/replace.c:161
 msgid "Search _backward"
@@ -1648,11 +1654,15 @@ msgstr "_Wstecz"
 msgid "Find Regular Expression"
 msgstr "Wyszukiwanie według wyrażenia regularnego"
 
-#: components/html-editor/spell.c:277
+#: components/html-editor/spell.c:278
+msgid "No misspelled word found"
+msgstr "Nie odnaleziono niepoprawnie zapisanych słów"
+
+#: components/html-editor/spell.c:285
 msgid "Spell checker"
 msgstr "Sprawdzanie pisowni"
 
-#: components/html-editor/spell.c:366
+#: components/html-editor/spell.c:378
 msgid "Current _Languages"
 msgstr "Aktualne ję_zyki"
 
@@ -1717,47 +1727,47 @@ msgstr ""
 msgid "Roman List"
 msgstr "Lista numerowana liczbami rzymskimi"
 
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left align"
 msgstr "Wyrównanie do lewej"
 
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right align"
 msgstr "Wyrównanie do prawej"
 
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Toggle typewriter font style"
 msgstr "Przełącza styl czcionki pomiędzy zwykłą i maszynową"
 
-#: components/html-editor/toolbar.c:522
+#: components/html-editor/toolbar.c:520
 msgid "Makes the text bold"
 msgstr "Wytłuszcza tekst"
 
-#: components/html-editor/toolbar.c:524
+#: components/html-editor/toolbar.c:522
 msgid "Makes the text italic"
 msgstr "Pochyla tekst"
 
-#: components/html-editor/toolbar.c:526
+#: components/html-editor/toolbar.c:524
 msgid "Underlines the text"
 msgstr "Podkreśla tekst"
 
-#: components/html-editor/toolbar.c:528
+#: components/html-editor/toolbar.c:526
 msgid "Strikes out the text"
 msgstr "Przekreśla tekst"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Unindent"
 msgstr "Zsuń"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Indents the paragraphs less"
 msgstr "Zmniejsza wsunięcie akapitów"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indent"
 msgstr "Wsuń"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indents the paragraphs more"
 msgstr "Zwiększa wcięcie akapitów"
 
@@ -1909,9 +1919,6 @@ msgstr "Podgląd wydruku"
 #: src/testgtkhtml.c:973
 msgid "GtkHTML Test Application"
 msgstr "Aplikacja testowa GtkHTML"
-
-#~ msgid "No misspelled word found"
-#~ msgstr "Nie odnaleziono niepoprawnie zapisanych słów"
 
 #~ msgid "The quick brown fox jumped over the lazy dog."
 #~ msgstr "Pchnąć w tę łódź jeża lub ośm skrzyń fig."

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
-"POT-Creation-Date: 2003-10-15 08:27+0200\n"
+"POT-Creation-Date: 2004-02-19 16:04-0500\n"
 "PO-Revision-Date: 2003-10-15 08:39+0200\n"
 "Last-Translator: Andras Timar <timar@gnome.hu>\n"
 "Language-Team: Hungarian <hu@gnome.hu>\n"
@@ -214,7 +214,7 @@ msgstr "Felsorolás"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:12
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:12
-#: components/html-editor/toolbar.c:511
+#: components/html-editor/toolbar.c:509
 msgid "Center justifies the paragraphs"
 msgstr "Középre igazítja a bekezdést"
 
@@ -434,7 +434,7 @@ msgstr "Szövegfájl beszúrása a dokumentumba..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:55
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:55
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left justifies the paragraphs"
 msgstr "Balra igazítja a bekezdést"
 
@@ -607,14 +607,13 @@ msgstr "A visszavont művelet ismételt végrehajtása"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:88
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:88
-#: components/html-editor/replace.c:79 components/html-editor/replace.c:153
-#: components/html-editor/replace.c:215
+#: components/html-editor/replace.c:153 components/html-editor/replace.c:215
 msgid "Replace"
 msgstr "Csere"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:89
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:89
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right justifies the paragraphs"
 msgstr "Jobbra igazítja a bekezdést"
 
@@ -644,7 +643,7 @@ msgstr "Kijelöli a dokumentum teljes tartalmát"
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:94
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:94
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
-#: components/html-editor/text.c:239 components/html-editor/toolbar.c:528
+#: components/html-editor/text.c:239 components/html-editor/toolbar.c:526
 msgid "Strikeout"
 msgstr "Áthúzott"
 
@@ -701,7 +700,7 @@ msgstr "Sablon"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:104
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:104
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Typewriter"
 msgstr "Írógép"
 
@@ -983,7 +982,9 @@ msgstr "Téglalapok"
 msgid ""
 "The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a href="
 "\"mailto:dog\">dog</a>."
-msgstr "Öt szép <a href=\"mailto:szuzlany\">szűzlány</a> őrült <a href=\"mailto:iro\">írót</a> nyúz."
+msgstr ""
+"Öt szép <a href=\"mailto:szuzlany\">szűzlány</a> őrült <a href=\"mailto:iro"
+"\">írót</a> nyúz."
 
 #: components/html-editor/body.c:276 src/gtkhtml.c:2555
 msgid "Document Title"
@@ -1082,7 +1083,7 @@ msgid "Apply changes to:"
 msgstr "Változások alkalmazása:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
-#: components/html-editor/text.c:236 components/html-editor/toolbar.c:522
+#: components/html-editor/text.c:236 components/html-editor/toolbar.c:520
 msgid "Bold"
 msgstr "Félkövér"
 
@@ -1104,7 +1105,7 @@ msgid "Cell"
 msgstr "Cella"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
-#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:511
+#: components/html-editor/paragraph.c:165 components/html-editor/toolbar.c:509
 msgid "Center"
 msgstr "Középen"
 
@@ -1175,7 +1176,7 @@ msgid "Horizontal:"
 msgstr "Vízszintes:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:40
-#: components/html-editor/text.c:237 components/html-editor/toolbar.c:524
+#: components/html-editor/text.c:237 components/html-editor/toolbar.c:522
 msgid "Italic"
 msgstr "Dőlt"
 
@@ -1300,7 +1301,7 @@ msgid "Top"
 msgstr "Fent"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:79
-#: components/html-editor/text.c:238 components/html-editor/toolbar.c:526
+#: components/html-editor/text.c:238 components/html-editor/toolbar.c:524
 msgid "Underline"
 msgstr "Aláhúzott"
 
@@ -1597,12 +1598,19 @@ msgid "Replace confirmation"
 msgstr "Megerősítés csere előtt"
 
 #: components/html-editor/replace.c:76
-msgid "Replace all"
+#, fuzzy
+msgid "Replace _All"
 msgstr "Mindet cseréli"
 
 #: components/html-editor/replace.c:77
-msgid "Next"
+#, fuzzy
+msgid "_Next"
 msgstr "Következő"
+
+#: components/html-editor/replace.c:79
+#, fuzzy
+msgid "_Replace"
+msgstr "Csere"
 
 #: components/html-editor/replace.c:161
 msgid "Search _backward"
@@ -1644,11 +1652,16 @@ msgstr "_Hátrafelé"
 msgid "Find Regular Expression"
 msgstr "Reguláris kifejezés keresése"
 
-#: components/html-editor/spell.c:277
+#: components/html-editor/spell.c:278
+#, fuzzy
+msgid "No misspelled word found"
+msgstr "Rosszul írt szó figyelmen kívül hagyása"
+
+#: components/html-editor/spell.c:285
 msgid "Spell checker"
 msgstr "Helyesírás-ellenőrző"
 
-#: components/html-editor/spell.c:366
+#: components/html-editor/spell.c:378
 msgid "Current _Languages"
 msgstr "Jelenlegi _nyelvek"
 
@@ -1713,47 +1726,47 @@ msgstr ""
 msgid "Roman List"
 msgstr "Római számos lista"
 
-#: components/html-editor/toolbar.c:509
+#: components/html-editor/toolbar.c:507
 msgid "Left align"
 msgstr "Balra igazítás"
 
-#: components/html-editor/toolbar.c:513
+#: components/html-editor/toolbar.c:511
 msgid "Right align"
 msgstr "Jobbra igazítás"
 
-#: components/html-editor/toolbar.c:520
+#: components/html-editor/toolbar.c:518
 msgid "Toggle typewriter font style"
 msgstr "Ki-be kapcsolja az írógépbetűt"
 
-#: components/html-editor/toolbar.c:522
+#: components/html-editor/toolbar.c:520
 msgid "Makes the text bold"
 msgstr "Félkövérré teszi a szöveget"
 
-#: components/html-editor/toolbar.c:524
+#: components/html-editor/toolbar.c:522
 msgid "Makes the text italic"
 msgstr "Dőltté teszi a szöveget"
 
-#: components/html-editor/toolbar.c:526
+#: components/html-editor/toolbar.c:524
 msgid "Underlines the text"
 msgstr "Aláhúzza a szöveget"
 
-#: components/html-editor/toolbar.c:528
+#: components/html-editor/toolbar.c:526
 msgid "Strikes out the text"
 msgstr "Áthúzza a szöveget"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Unindent"
 msgstr "Behúzás csökkentése"
 
-#: components/html-editor/toolbar.c:537
+#: components/html-editor/toolbar.c:535
 msgid "Indents the paragraphs less"
 msgstr "A bekezdés behúzásának csökkentése"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indent"
 msgstr "Behúzás"
 
-#: components/html-editor/toolbar.c:539
+#: components/html-editor/toolbar.c:537
 msgid "Indents the paragraphs more"
 msgstr "A bekezdés behúzásának növelése"
 
@@ -1888,7 +1901,8 @@ msgstr "Visszaállítás"
 #. TODO2 dialog instead of warning
 #: src/htmlengine-print.c:193
 msgid "Cannot allocate default font for printing\n"
-msgstr "Nem sikerült betölteni az alapértelmezett betűkészletet a nyomtatáshoz.\n"
+msgstr ""
+"Nem sikerült betölteni az alapértelmezett betűkészletet a nyomtatáshoz.\n"
 
 #: src/test.c:191
 msgid "GtkHTML Test"
@@ -1905,4 +1919,3 @@ msgstr "Nyomtatási kép"
 #: src/testgtkhtml.c:973
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML tesztalkalmazás"
-
