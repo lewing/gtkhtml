@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtkhtml\n"
-"POT-Creation-Date: 2002-05-28 07:06+0400\n"
-"PO-Revision-Date: 2002-05-28 07:09+0400\n"
+"POT-Creation-Date: 2002-06-05 13:29+0400\n"
+"PO-Revision-Date: 2002-06-05 13:24+0400\n"
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team:  <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1207,7 +1207,7 @@ msgid ""
 "cellspacing=0 width=\"100%\"><tr><td valign=top><img src=\"file://"
 msgstr ""
 "<table cellspacing=0 cellpadding=1 bgcolor=\"#ccccc0\"\n"
-"@width@@align@><tr><td><table bgcolor=\"#fffff0\" cellpadding=3 \n"
+"@width@@align@><tr><td><table bgcolor=\"#fffff0\" cellpadding=3 "
 "cellspacing=0 width=\"100%\"><tr><td valign=top><img src=\"file://"
 
 #: components/html-editor/template.c:85
@@ -1226,8 +1226,8 @@ msgid ""
 "bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%"
 "\"><tr><td align=\"center\"><img src=\"file://"
 msgstr ""
-"<table bgcolor=\"#c0c0c0\" cellspacing=\"0\" @width@@align@><tr><td><table\n"
-"bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%\"\n"
+"<table bgcolor=\"#c0c0c0\" cellspacing=\"0\" @width@@align@><tr><td><table "
+"bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%"
 "\"><tr><td align=\"center\"><img src=\"file://"
 
 #: components/html-editor/template.c:97
@@ -1310,7 +1310,7 @@ msgstr "Образец"
 
 #: src/htmlbutton.c:149
 msgid "Submit Query"
-msgstr ""
+msgstr "Выполнить запрос"
 
 #: src/htmlbutton.c:152
 msgid "Reset"
@@ -1322,7 +1322,7 @@ msgstr "Невозможно распределить шрифт по умолч
 
 #: src/htmlprinter.c:69
 msgid "US-Letter"
-msgstr ""
+msgstr "US-Letter"
 
 #: src/htmlgdkpainter.c:228
 msgid "Can't load fixed font."
@@ -1330,8 +1330,8 @@ msgstr "Не удалось загрузить фиксированный шри
 
 #: src/testgtkhtml.c:112
 msgid "Print pre_view"
-msgstr "Пред_варительный просмотр"
+msgstr "Посмотреть образе_ц печати"
 
 #: src/testgtkhtml.c:112
 msgid "Print preview"
-msgstr "Просмотр печати"
+msgstr "Образец печати"
