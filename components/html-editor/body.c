@@ -238,7 +238,9 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 
 	data->option_template = gtk_option_menu_new ();
 	fill_templates (data);
-	editor_hig_attach_row (t1, _("T_emplate:"), data->option_template, 0);
+	hbox = gtk_hbox_new (FALSE, 1);
+	gtk_box_pack_start (GTK_BOX (hbox), data->option_template, FALSE, FALSE, 0);
+	editor_hig_attach_row (t1, _("T_emplate:"), hbox, 0);
 	
 	/* data->entry_title = gtk_entry_new ();
 	if (gtk_html_get_title (data->cd->html)) {

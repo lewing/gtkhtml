@@ -107,7 +107,7 @@ paragraph_properties (GtkHTMLControlData *cd, gpointer *set_data)
 
 	hbox = gtk_hbox_new (FALSE, 6);
 	gtk_box_pack_start (GTK_BOX (hbox), gtk_label_new_with_mnemonic (_("_Style:")), FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), data->style_option, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), data->style_option, FALSE, FALSE, 0);
 
 	gtk_table_attach (GTK_TABLE (table), editor_hig_vbox (_("General"), hbox), 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
 
