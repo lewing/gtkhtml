@@ -1,47 +1,22 @@
-2005-01-24  Mengjie Yu  <meng-jie.yu@sun.com>
+2005-01-25  Radek Doulik  <rodo@ximian.com>
 
-	Fixes #70134
+	* htmltextslave.c: fixed cursor movement, implemented new
+	functions for cursor movement, removed old code
 
-	* gtkhtml.c: (command):
-	make Home/End navigation work properly when Caret Mode is enabled
+	* htmltext.c: updated direction handling, fixed cursor movement,
+	fixed cursor base, implemented new functions for cursor movement
 
+	* htmlobject.c: make cursor_[forward/backward] virtual, added new
+	virtual functions cursor_[left/right], added new virtual functions
+	to get left/right object edge offsets
 
-2005-01-22  Radek Doulik  <rodo@ximian.com>
+	* htmlgdkpainter.c: fixed spell errors drawing
 
-	* test-suite.c: added test for outer quotes inside div block
+	* htmlengine-edit-movement.c: use html_cursor_[right/left]
+	functions
 
-	* added test-suite.c from RTL branch
-
-	* htmlengine.c (html_engine_ensure_editable): just make sure head
-	of top level clue is non null. head now can be cluev as well when
-	for example <div> is at the beggining of html document
-	(push_clue_style): do not push list stack so that we don't lose
-	quotes and lists in the inner block. Fixes broken quotes in
-	replies in evolution.
-
-	* htmltextslave.c (html_text_slave_init): make sure glyph_items is
-	initalized to NULL
-
-2005-01-21  Radek Doulik  <rodo@ximian.com>
-
-	* htmlobject.c (html_object_real_get_direction): do not traverse
-	to top parent, our parent will do that if necessary
-
-	Fixes #69594
-
-2005-01-20  Radek Doulik  <rodo@ximian.com>
-
-	* htmlengine.c (html_engine_begin): check environment variable
-	GTK_HTML_LOG_INPUT_STREAM for enabling logging, enable LOG_INPUT
-	define
-
-	* gtkhtml-stream.c (gtk_html_stream_log_new): add .html extension
-	to log files
-
-2005-01-05  Mengjie Yu  <meng-jie.yu@sun.com>
-
-	fixes #70931
-	* gtkhtml.c: (button_press_event):check for caret_mode
+	* htmlcursor.c: added html_cursor_[left/right] for ltr/rtl cursor
+	movement
 
 2005-01-04  Radek Doulik  <rodo@ximian.com>
 
@@ -78,51 +53,6 @@
 	* gtkhtmldebug.c: print out more information regarding pango info
 	structure
 
-2004-12-27  Radek Doulik  <rodo@ximian.com>
-
-	* htmlengine.c (html_engine_get_cursor): check for cursor object,
-	fixes crash when double clicking outside a body clue
-
-	Fixes #69748
-
-2004-12-15  Mengjie Yu  <meng-jie.yu@sun.com>
-
-	* gtkhtml.c: (key_press_event):
-	fix #70085 the focus object may be a frame or an iframe, if so, 
-		   we must check its focus object recursively.
-
-2004-12-14  Mengjie Yu  <meng-jie.yu@sun.com>
-
-	* gtkhtml.c: (focus), (gtk_html_class_init), (cursor_move):
-	fix #70078 Add new signals when for insert/delete
-		   change gtk_html_a11y_cursor_move_cb to cursor_changed_cb
-	* gtkhtml.h:
-	fix #70078 add signal field
-
-	* htmlengine-edit-cut-and-paste.c: (insert_object_for_undo),
-	(html_engine_delete):
-	fix #70078 emit signal when insert/delete objects
-
-2004-09-29  Radek Doulik  <rodo@ximian.com>
-
-	* gtkhtml.c (drag_data_received): call gdk_window_get_pointer so
-	that we get window coordinates
-
-	Fixes #53368
-
-2004-10-15  Radek Doulik  <rodo@ximian.com>
-
-	* htmlengine.c (html_engine_replace_do): return true if replacing
-	is finished
-
-	Fixes #50646
-
-2004-11-29  Radek Doulik  <rodo@ximian.com>
-
-	* htmlengine.c: make sure we free whole array from g_strsplit
-
-	* htmltext.c (html_text_pango_info_destroy): free entries as well
-
 2004-11-23  Radek Doulik  <rodo@ximian.com>
 
 	* htmlimage.c (html_image_real_calc_size): use
@@ -134,10 +64,6 @@
 	returns object's flow parent
 
 	Fixes #67763
-
-2004-11-19  Radek Doulik  <rodo@ximian.com>
-
-	* htmlstyle.c (parse_border): quiet compiler
 
 2004-11-11  Radek Doulik  <rodo@ximian.com>
 

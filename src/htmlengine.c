@@ -289,12 +289,18 @@ html_element_new (HTMLEngine *e, const char *str) {
 
 			if (!g_hash_table_lookup (element->attributes, lower)) {
 				DE (g_print ("attrs (%s, %s)", attr[0], attr[1]));
-				g_hash_table_insert (element->attributes, lower, g_strdup (attr[1]));
-			} else
+				g_hash_table_insert (element->attributes, lower, attr[1]);
+
+				/* just free the array */
+				g_free (attr[0]);
+				g_free (attr);				
+			} else {
+				/* free the whole vector */
+				g_strfreev (attr);
 				g_free (lower);
+			}
 		}
 
-		g_strfreev (attr);
 	}
 	
 	return element;
@@ -1203,10 +1209,14 @@ block_end_textarea (HTMLEngine *e, HTMLObject *clue, HTMLElement *elem)
 static void
 push_clue_style (HTMLEngine *e)
 {
+	//html_stack_push (e->body_stack, e->span_stack);
 	html_stack_push (e->body_stack, e->clueflow_style_stack);
+	html_stack_push (e->body_stack, e->listStack);
 	/* CLUECHECK */
 
+	//e->span_stack = html_stack_new (free_elementggs);
 	e->clueflow_style_stack = html_stack_new (NULL);
+	e->listStack = html_stack_new ((HTMLStackFreeFunc)html_list_destroy);
 
 	html_stack_push (e->body_stack, GINT_TO_POINTER (e->avoid_para));
 	e->avoid_para = TRUE;
@@ -1236,9 +1246,12 @@ pop_clue_style (HTMLEngine *e)
 	e->avoid_para = GPOINTER_TO_INT (html_stack_pop (e->body_stack));
 	
 	html_stack_destroy (e->clueflow_style_stack);
+	//html_stack_destroy (e->span_stack);
 
 	/* CLUECHECK */
+	e->listStack = html_stack_pop (e->body_stack);
 	e->clueflow_style_stack = html_stack_pop (e->body_stack);
+	//e->span_stack = html_stack_pop (e->body_stack);
 }
 
 static void
@@ -4221,7 +4234,7 @@ html_engine_ensure_editable (HTMLEngine *engine)
 		engine->clue = engine->parser_clue = cluev = html_cluev_new (0, 0, 100);
 
 	head = HTML_CLUE (cluev)->head;
-	if (head == NULL) {
+	if (head == NULL || HTML_OBJECT_TYPE (head) != HTML_TYPE_CLUEFLOW) {
 		HTMLObject *clueflow;
 
 		clueflow = flow_new (engine, HTML_CLUEFLOW_STYLE_NORMAL, HTML_LIST_TYPE_BLOCKQUOTE, 0, HTML_CLEAR_NONE);
@@ -4330,7 +4343,7 @@ html_engine_class_data_clear (HTMLEngine *e)
 	}
 }
 
-#define LOG_INPUT 1
+/* #define LOG_INPUT */
 
 GtkHTMLStream *
 html_engine_begin (HTMLEngine *e, char *content_type)
@@ -4356,8 +4369,7 @@ html_engine_begin (HTMLEngine *e, char *content_type)
 					  html_engine_stream_end,
 					  e);
 #ifdef LOG_INPUT
-	if (getenv("GTK_HTML_LOG_INPUT_STREAM") != NULL)
-		new_stream = gtk_html_stream_log_new (GTK_HTML (e->widget), new_stream);
+	new_stream = gtk_html_stream_log_new (GTK_HTML (e->widget), new_stream);
 #endif
 	html_engine_opened_streams_set (e, 1);
 	e->stopped = FALSE;
@@ -5640,11 +5652,9 @@ replace (HTMLEngine *e)
 	html_search_push (e->search_info, e->cursor->object->parent);
 }
 
-gboolean
+void
 html_engine_replace_do (HTMLEngine *e, HTMLReplaceQueryAnswer answer)
 {
-	gboolean finished;
-
 	g_assert (e->replace_info);
 
 	switch (answer) {
@@ -5658,7 +5668,6 @@ html_engine_replace_do (HTMLEngine *e, HTMLReplaceQueryAnswer answer)
 		html_replace_destroy (e->replace_info);
 		e->replace_info = NULL;
 		html_engine_disable_selection (e);
-		finished = TRUE;
 		break;
 
 	case RQA_Replace:
@@ -5666,13 +5675,12 @@ html_engine_replace_do (HTMLEngine *e, HTMLReplaceQueryAnswer answer)
 		replace (e);
 		html_undo_level_end (e->undo);
 	case RQA_Next:
-		finished = !html_engine_search_next (e);
-		if (finished)
+		if (html_engine_search_next (e))
+			e->replace_info->ask (e, e->replace_info->ask_data);
+		else
 			html_engine_disable_selection (e);
 		break;
 	}
-
-	return finished;
 }
 
 /* spell checking */
