@@ -3,7 +3,6 @@
 # translation of el.po to Greek
 # Greek gtkhtml translation
 # Copyright (C) 2001, 2004 Free Software Foundation, Inc.
-# Nikos Charonitakis <frolix68@yahoo.gr> 2004.
 # Nikos 27Jan2004 convertion to utf8 and  fixes, 424 messages.
 # Simos Xenitellis <simos@hellug.gr>, 2001.
 # Kostas Papadimas <pkst@gnome.org>, 2004.
@@ -12,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-03 16:33-0300\n"
-"PO-Revision-Date: 2004-09-03 17:10-0300\n"
+"POT-Creation-Date: 2004-09-06 12:02-0300\n"
+"PO-Revision-Date: 2004-09-06 12:03-0300\n"
 "Last-Translator: Nikos Charonitakis <charosn@her.forthnet.gr>\n"
 "Language-Team:  <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
@@ -1133,7 +1132,7 @@ msgstr "μαύρο"
 
 #: components/html-editor/gi-color-palette.c:579
 msgid "light brown"
-msgstr "ανοχτό καφέ"
+msgstr "ανοιχτό καφέ"
 
 #: components/html-editor/gi-color-palette.c:580
 msgid "brown gold"
@@ -2102,4 +2101,3 @@ msgstr "Προεπισκόπηση εκτύπωσης"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "Εφαρμογή Δοκιμής GtkHTML"
-
