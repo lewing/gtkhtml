@@ -49,17 +49,8 @@ typedef struct
 
 	HTMLTable *table;
 
-	gboolean   has_bg_color;
-	gboolean   changed_bg_color;
-	GdkColor   bg_color;
 	GtkWidget *combo_bg_color;
-	GtkWidget *check_bg_color;
-
-	gboolean   has_bg_pixmap;
-	gboolean   changed_bg_pixmap;
-	const gchar *bg_pixmap;
 	GtkWidget *entry_bg_pixmap;
-	GtkWidget *check_bg_pixmap;
 
 	gboolean   changed_spacing;
 	gint       spacing;
@@ -202,10 +193,6 @@ data_new (GtkHTMLControlData *cd)
 	/* fill data */
 	data->cd                = cd;
 	data->table             = NULL;
-
-	data->bg_color          = html_colorset_get_color (data->cd->html->engine->settings->color_set,
-							   HTMLBgColor)->color;
-	data->bg_pixmap         = "";
 	data->border            = 1;
 	data->spacing           = 2;
 	data->padding           = 1;
@@ -220,51 +207,31 @@ data_new (GtkHTMLControlData *cd)
 }
 
 static void
-set_has_bg_color (GtkWidget *check, GtkHTMLEditTableProperties *d)
-{
-	d->has_bg_color = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_bg_color));
-	if (!d->disable_change)
-		d->changed_bg_color = TRUE;
-}
-
-static void
-set_has_bg_pixmap (GtkWidget *check, GtkHTMLEditTableProperties *d)
-{
-	d->has_bg_pixmap = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap));
-	if (!d->disable_change)
-		d->changed_bg_pixmap = TRUE;
-}
-
-static void
 changed_bg_color (GtkWidget *w, GdkColor *color, gboolean custom, gboolean by_user, gboolean is_default, GtkHTMLEditTableProperties *d)
 {
 	/* If the color was changed programatically there's not need to set things */
 	if (!by_user)
 		return;
-		
-	d->bg_color = color
-		? *color
-		: html_colorset_get_color (d->cd->html->engine->defaultSettings->color_set, HTMLBgColor)->color;
-	if (!d->disable_change)
-		d->changed_bg_color = TRUE;
-	if (!d->has_bg_color)
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_color), TRUE);
-	else {
-	}
+
+	html_engine_table_set_bg_color (d->cd->html->engine, d->table, color);		
 }
 
 static void
 changed_bg_pixmap (GtkWidget *w, GtkHTMLEditTableProperties *d)
 {
-	d->bg_pixmap = gtk_entry_get_text (GTK_ENTRY (w));
-	if (!d->disable_change)
-		d->changed_bg_pixmap = TRUE;
-	if (!d->has_bg_pixmap && d->bg_pixmap && *d->bg_pixmap)
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap), TRUE);
-	else {
-		if (!d->bg_pixmap || !*d->bg_pixmap)
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap), FALSE);
-	}
+	char *url;
+	const char *file;
+
+	if (d->disable_change || !editor_has_html_object (d->cd, HTML_OBJECT (d->table)))
+		return;
+
+	file = gtk_entry_get_text (GTK_ENTRY (w));
+	if (file && *file)
+		url = g_strconcat ("file://", file, NULL);
+	else
+		url = NULL;
+	html_engine_table_set_bg_pixmap (d->cd->html->engine, d->table, url);
+	g_free (url);
 }
 
 static void
@@ -388,20 +355,13 @@ table_widget (GtkHTMLEditTableProperties *d)
 
         color = html_colorset_get_color (d->cd->html->engine->defaultSettings->color_set, HTMLBgColor);
 	html_color_alloc (color, d->cd->html->engine->painter);
-	d->combo_bg_color = color_combo_new (NULL, _("Automatic"), &color->color,
+	d->combo_bg_color = color_combo_new (NULL, _("Transparent"), &color->color,
 					     color_group_fetch ("table_bg_color", d->cd));
         color_combo_box_set_preview_relief (COLOR_COMBO (d->combo_bg_color), GTK_RELIEF_NORMAL); \
         g_signal_connect (d->combo_bg_color, "color_changed", G_CALLBACK (changed_bg_color), d);
-	gtk_table_attach (GTK_TABLE (glade_xml_get_widget (xml, "bg_table")),
-			  d->combo_bg_color,
-			  1, 2, 0, 1, 0, 0, 0, 0);
+	gtk_box_pack_start (GTK_BOX (glade_xml_get_widget (xml, "bg_color_hbox")), d->combo_bg_color, FALSE, FALSE, 0);
 
-	d->check_bg_color  = glade_xml_get_widget (xml, "check_table_bg_color");
-	g_signal_connect (d->check_bg_color, "toggled", G_CALLBACK (set_has_bg_color), d);
-	d->check_bg_pixmap = glade_xml_get_widget (xml, "check_table_bg_pixmap");
-	g_signal_connect (d->check_bg_pixmap, "toggled", G_CALLBACK (set_has_bg_pixmap), d);
 	d->entry_bg_pixmap = glade_xml_get_widget (xml, "entry_table_bg_pixmap");
-
 	g_signal_connect (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (d->entry_bg_pixmap)),
 			  "changed", G_CALLBACK (changed_bg_pixmap), d);
 
@@ -507,30 +467,38 @@ table_insert_widget (GtkHTMLEditTableProperties *d)
 static void
 set_ui (GtkHTMLEditTableProperties *d)
 {
-	d->disable_change = TRUE;
+	if (editor_has_html_object (d->cd, HTML_OBJECT (d->table))) {
+		d->disable_change = TRUE;
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_color), d->has_bg_color);
-	/* RM2 gdk_color_alloc (gdk_window_get_colormap (GTK_WIDGET (d->cd->html)->window), &d->bg_color); */
-	color_combo_set_color (COLOR_COMBO (d->combo_bg_color), &d->bg_color);
+		color_combo_set_color (COLOR_COMBO (d->combo_bg_color), d->table->bgColor);
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap), d->has_bg_pixmap);
-	gtk_entry_set_text (GTK_ENTRY (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (d->entry_bg_pixmap))),
-			    d->bg_pixmap);
+		if (d->table->bgPixmap) {
+			int off = 0;
 
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_spacing), d->spacing);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_padding), d->padding);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_border),  d->border);
+			if (!strncasecmp ("file://", d->table->bgPixmap->url, 7))
+				off = 7;
+			else if (!strncasecmp ("file:", d->table->bgPixmap->url, 5))
+				off = 5;
 
-	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_align), d->align - HTML_HALIGN_LEFT);
+			gtk_entry_set_text (GTK_ENTRY (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (d->entry_bg_pixmap))),
+					    d->table->bgPixmap->url + off);
+		}
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), d->has_width);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width),  d->width);
-	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width), d->width_percent ? 1 : 0);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_spacing), d->spacing);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_padding), d->padding);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_border),  d->border);
 
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_cols),  d->cols);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_rows),  d->rows);
+		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_align), d->align - HTML_HALIGN_LEFT);
 
-	d->disable_change = FALSE;
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), d->has_width);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width),  d->width);
+		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width), d->width_percent ? 1 : 0);
+
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_cols),  d->cols);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_rows),  d->rows);
+
+		d->disable_change = FALSE;
+	}
 }
 
 static void
@@ -559,19 +527,6 @@ get_data (GtkHTMLEditTableProperties *d)
 {
 	d->table = html_engine_get_table (d->cd->html->engine);
 	g_return_if_fail (d->table);
-
-	if (d->table->bgColor) {
-		d->has_bg_color = TRUE;
-		d->bg_color     = *d->table->bgColor;
-	}
-	if (d->table->bgPixmap) {
-		d->has_bg_pixmap = TRUE;
-		d->bg_pixmap = strncasecmp ("file://", d->table->bgPixmap->url, 7)
-			? (strncasecmp ("file://", d->table->bgPixmap->url, 5)
-			   ? d->table->bgPixmap->url
-			   : d->table->bgPixmap->url + 5)
-			: d->table->bgPixmap->url + 7;
-	}
 
 	d->spacing = d->table->spacing;
 	d->padding = d->table->padding;
@@ -662,17 +617,6 @@ table_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
 		}
 	}
 
-	if (d->changed_bg_color) {
-		html_engine_table_set_bg_color (d->cd->html->engine, d->table, d->has_bg_color ? &d->bg_color : NULL);
-		d->changed_bg_color = FALSE;
-	}
-	if (d->changed_bg_pixmap) {
-		gchar *url = d->has_bg_pixmap ? g_strconcat ("file://", d->bg_pixmap, NULL) : NULL;
-
-		html_engine_table_set_bg_pixmap (d->cd->html->engine, d->table, url);
-		g_free (url);
-		d->changed_bg_pixmap = FALSE;
-	}
 	if (d->changed_spacing) {
 		html_engine_table_set_spacing (d->cd->html->engine, d->table, d->spacing, FALSE);
 		d->changed_spacing = FALSE;

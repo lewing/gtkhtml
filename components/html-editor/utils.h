@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include <libgnomeui/gnome-pixmap-entry.h>
 #include "gtkhtml.h"
+#include "control-data.h"
 
 #define GTKHTML_STOCK_TEST_URL "gtkhtml-stock-test-url"
 
@@ -49,5 +50,7 @@ void       editor_hig_attach_row  (GtkWidget *table,
 				   gchar     *text,
 				   GtkWidget *control,
 				   int        row);
+gboolean   editor_has_html_object (GtkHTMLControlData *cd,
+				   HTMLObject *o);
 
 #endif

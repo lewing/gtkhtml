@@ -24,12 +24,16 @@
 #include <libgnome/gnome-i18n.h>
 #include <string.h>
 #include "gtkhtml-compat.h"
+#include "htmlcursor.h"
+#include "htmlengine.h"
+#include "htmlobject.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <gnome.h>
 #include "utils.h"
+#include "properties.h"
 
 GtkWidget *
 color_table_new (GtkSignalFunc f, gpointer data)
@@ -211,4 +215,27 @@ editor_check_stock ()
 		}
 		stock_test_url_added = TRUE;
 	}
+}
+
+gboolean
+editor_has_html_object (GtkHTMLControlData *cd, HTMLObject *o)
+{
+	HTMLEngine *e = cd->html->engine;
+	guint position = e->cursor->position;
+
+	if (e->cursor->object != o)
+		if (!html_cursor_jump_to (e->cursor, e, HTML_OBJECT (o), 1)) {
+			GtkWidget *dialog;
+			printf ("d: %p\n", cd->properties_dialog);
+			dialog = gtk_message_dialog_new (GTK_WINDOW (cd->properties_dialog->dialog),
+							 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+							 _("The editted image was removed from the document.\nCannot apply your changes."));
+			gtk_dialog_run (GTK_DIALOG (dialog));
+			gtk_widget_destroy (dialog);
+			html_cursor_jump_to_position (e->cursor, e, position);
+			return FALSE;
+		}
+
+	html_cursor_jump_to_position (e->cursor, e, position);
+	return TRUE;
 }

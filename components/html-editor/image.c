@@ -114,28 +114,6 @@ static ImageInsertTemplate image_templates [TEMPLATES] = {
 	},
 };
 
-gboolean
-ensure_image (GtkHTMLEditImageProperties *d)
-{
-	HTMLEngine *e = d->cd->html->engine;
-	guint position = e->cursor->position;
-
-	if (e->cursor->object != HTML_OBJECT (d->image))
-		if (!html_cursor_jump_to (e->cursor, e, HTML_OBJECT (d->image), 1)) {
-			GtkWidget *dialog;
-			printf ("d: %p\n", d->cd->properties_dialog);
-			dialog = gtk_message_dialog_new (GTK_WINDOW (d->cd->properties_dialog->dialog),
-							 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-							 _("The editted image was removed from the document.\nCannot apply your changes."));
-			gtk_dialog_run (GTK_DIALOG (dialog));
-			gtk_widget_destroy (dialog);
-			html_cursor_jump_to_position (e->cursor, e, position);
-			return FALSE;
-		}
-
-	return TRUE;
-}
-
 static GtkHTMLEditImageProperties *
 data_new (GtkHTMLControlData *cd, HTMLImage *image)
 {
@@ -194,7 +172,7 @@ pentry_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 {
 	char *location;
 
-	if (d->disable_change || !ensure_image (d))
+	if (d->disable_change || !editor_has_html_object (d->cd, HTML_OBJECT (d->image)))
 		return;
 
 	location = get_location (d);
@@ -208,7 +186,7 @@ url_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 {
 	char *url, *target;
 
-	if (d->disable_change || !ensure_image (d))
+	if (d->disable_change || !editor_has_html_object (d->cd, HTML_OBJECT (d->image)))
 		return;
 
 	url = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
@@ -233,14 +211,14 @@ url_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 static void
 alt_changed (GtkWidget *entry, GtkHTMLEditImageProperties *d)
 {
-	if (!d->disable_change && ensure_image (d))
+	if (!d->disable_change && editor_has_html_object (d->cd, HTML_OBJECT (d->image)))
 		html_image_set_alt (d->image, (char *) gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
 static void
 changed_align (GtkWidget *w, GtkHTMLEditImageProperties *d)
 {
-	if (!d->disable_change && ensure_image (d))
+	if (!d->disable_change && editor_has_html_object (d->cd, HTML_OBJECT (d->image)))
 		html_image_set_valign (d->image, g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))));
 }
 
@@ -250,7 +228,7 @@ changed_size (GtkWidget *widget, GtkHTMLEditImageProperties *d)
 	GtkWidget *menu_width_p, *menu_height_p;
 	gint width, height, width_percent, height_percent;
 
-	if (d->disable_change || !ensure_image (d))
+	if (d->disable_change || !editor_has_html_object (d->cd, HTML_OBJECT (d->image)))
 		return;
 
 	width = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width));
@@ -282,14 +260,14 @@ test_url_clicked (GtkWidget *w, GtkHTMLEditImageProperties *d)
 static void
 changed_border (GtkWidget *check, GtkHTMLEditImageProperties *d)
 {
-	if (!d->disable_change && ensure_image (d))
+	if (!d->disable_change && editor_has_html_object (d->cd, HTML_OBJECT (d->image)))
 		html_image_set_border (d->image, gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_border)));
 }
 
 static void
 changed_padding (GtkWidget *check, GtkHTMLEditImageProperties *d)
 {
-	if (!d->disable_change && ensure_image (d))
+	if (!d->disable_change && editor_has_html_object (d->cd, HTML_OBJECT (d->image)))
 		html_image_set_spacing  (d->image,
 					 gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_padh)),
 					 gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_padv)));
