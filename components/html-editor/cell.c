@@ -424,6 +424,7 @@ cell_widget (GtkHTMLEditCellProperties *d)
 	html_color_alloc (color, d->cd->html->engine->painter);
 	d->combo_bg_color = color_combo_new (NULL, _("Automatic"), &color->color,
 					     color_group_fetch ("cell_bg_color", d->cd));
+        color_combo_box_set_preview_relief (COLOR_COMBO (d->combo_bg_color), GTK_RELIEF_NORMAL); \
         g_signal_connect (d->combo_bg_color, "color_changed", G_CALLBACK (changed_bg_color), d);
 	gtk_table_attach (GTK_TABLE (glade_xml_get_widget (xml, "table_cell_bg")),
 			  d->combo_bg_color,

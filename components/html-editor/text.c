@@ -277,6 +277,7 @@ text_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	data->color_combo = color_combo_new (NULL, _("Automatic"),
 					     &data->color->color,
 					     color_group_fetch ("text", data->cd));
+        color_combo_box_set_preview_relief (COLOR_COMBO (data->color_combo), GTK_RELIEF_NORMAL); \
         g_signal_connect (data->color_combo, "color_changed", G_CALLBACK (color_changed), data);
 	gtk_widget_show (data->color_combo);
 
