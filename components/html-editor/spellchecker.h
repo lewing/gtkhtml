@@ -27,7 +27,7 @@
 #include <gtkhtml.h>
 #include "control-data.h"
 
-void spell_suggestion_request_cb (GtkHTML *html,  PspellManager *spell_checker, gchar *word, GtkHTMLControlData *cd);
+void spell_suggestion_request_cb (GtkHTML *html,  gpointer checker, gchar *word, GtkHTMLControlData *cd);
 
 #endif
 #endif

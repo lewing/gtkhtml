@@ -88,8 +88,9 @@ select_row (GtkCList *clist, gint row, gint column, GdkEvent *event, SpellPopup 
 }
 
 void
-spell_suggestion_request_cb (GtkHTML *html,  PspellManager *spell_checker, gchar *word, GtkHTMLControlData *cd)
+spell_suggestion_request_cb (GtkHTML *html, gpointer checker, gchar *word, GtkHTMLControlData *cd)
 {
+	PspellManager *spell_checker = (PspellManager *) checker;
 	SpellPopup *sp;
 	HTMLEngine *e = html->engine;
 	const PspellWordList   *suggestions;
