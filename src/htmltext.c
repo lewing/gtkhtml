@@ -476,7 +476,7 @@ static void
 merge_links (HTMLText *t1, HTMLText *t2)
 {
 	Link *tail, *head;
-	GSList *l, *t;
+	GSList *l;
 
 	if (t2->links) {
 		for (l = t2->links; l; l = l->next) {
@@ -486,18 +486,18 @@ merge_links (HTMLText *t1, HTMLText *t2)
 			link->end_offset += t1->text_len;
 		}
 
-		t = g_slist_last (t1->links);
-		if (t) {
-			head = (Link *) t2->links->data;
-			tail = (Link *) t->data;
+		if (t1->links) {
+			head = (Link *) t1->links->data;
+			tail = (Link *) g_slist_last (t2->links)->data;
 
-			if (head->start_offset == tail->end_offset && html_link_equal (head, tail)) {
-				tail->end_offset = head->end_offset;
+			if (tail->start_offset == head->end_offset && html_link_equal (head, tail)) {
+				tail->start_offset = head->start_offset;
 				html_link_free (head);
-				t2->links = g_slist_delete_link (t2->links, t2->links);
+				t1->links = g_slist_delete_link (t1->links, t1->links);
 			}
 		}
-		t1->links = g_slist_concat (t1->links, t2->links);
+
+		t1->links = g_slist_concat (t2->links, t1->links);
 		t2->links = NULL;
 	}
 }
@@ -592,23 +592,46 @@ split_attrs (HTMLText *t1, HTMLText *t2, gint index)
 static void
 split_links (HTMLText *t1, HTMLText *t2, gint offset)
 {
-	GSList *l, *prev;
+	GSList *l, *prev = NULL;
 
 	for (l = t1->links; l; l = l->next) {
 		Link *link = (Link *) l->data;
 
-		if (link->end_offset > offset) {
-			if (link->start_offset < offset) {
+		if (link->start_offset < offset) {
+			if (link->end_offset > offset)
 				link->end_offset = offset;
+
+			if (prev) {
+				prev->next = NULL;
+				free_links (t1->links);
+			}
+			t1->links = l;
+			break;
+		}
+		prev = l;
+
+		if (!l->next) {
+			free_links (t1->links);
+			t1->links = NULL;
+		}
+	}
+
+	prev = NULL;
+	for (l = t2->links; l; l = l->next) {
+		Link *link = (Link *) l->data;
+
+		if (link->start_offset < offset) {
+			if (link->end_offset > offset) {
+				link->start_offset = offset;
 				prev = l;
 				l = l->next;
 			}
-			if (l) {
-				if (prev)
-					prev->next = NULL;
-				else
-					t1->links = NULL;
+			if (prev) {
+				prev->next = NULL;
 				free_links (l);
+			} else {
+				free_links (t2->links);
+				t2->links = NULL;
 			}
 			break;
 		}
@@ -618,21 +641,8 @@ split_links (HTMLText *t1, HTMLText *t2, gint offset)
 	for (l = t2->links; l; l = l->next) {
 		Link *link = (Link *) l->data;
 
-		if (link->start_offset < offset) {
-			if (link->end_offset > offset)
-				link->start_offset = offset;
-			else {
-				prev = l;
-				l = l->next;
-			}
-			if (prev) {
-				prev->next = NULL;
-				free_links (t1->links);
-			}
-			t1->links = l;
-			break;
-		}
-		prev = l;
+		link->start_offset -= offset;
+		link->end_offset -= offset;
 	}
 }
 
