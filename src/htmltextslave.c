@@ -566,12 +566,72 @@ get_glyphs (HTMLTextSlave *slave, HTMLPainter *painter)
 	return slave->glyphs;
 }
 
-static GList *
+/*
+ * NB: This implement the exact same algorithm as
+ *     reorder-items.c:pango_reorder_items().
+ */
+
+static GSList *
+reorder_glyph_items (GSList *glyph_items, int n_items)
+{
+	GSList *tmp_list, *level_start_node;
+	int i, level_start_i;
+	int min_level = G_MAXINT;
+	GSList *result = NULL;
+
+	if (n_items == 0)
+		return NULL;
+
+	tmp_list = glyph_items;
+	for (i = 0; i < n_items; i ++) {
+		HTMLTextSlaveGlyphItem *gi = tmp_list->data;
+
+		min_level = MIN (min_level, gi->glyph_item.item->analysis.level);
+
+		tmp_list = tmp_list->next;
+	}
+
+	level_start_i = 0;
+	level_start_node = glyph_items;
+	tmp_list = glyph_items;
+	for (i = 0; i < n_items; i ++) {
+		HTMLTextSlaveGlyphItem *gi= tmp_list->data;
+
+		if (gi->glyph_item.item->analysis.level == min_level) {
+			if (min_level % 2) {
+				if (i > level_start_i)
+					result = g_slist_concat (reorder_glyph_items (level_start_node, i - level_start_i), result);
+				result = g_slist_prepend (result, gi);
+			} else {
+				if (i > level_start_i)
+					result = g_slist_concat (result, reorder_glyph_items (level_start_node, i - level_start_i));
+				result = g_slist_append (result, gi);
+			}
+
+			level_start_i = i + 1;
+			level_start_node = tmp_list->next;
+		}
+
+		tmp_list = tmp_list->next;
+	}
+  
+	if (min_level % 2) {
+		if (i > level_start_i)
+			result = g_slist_concat (reorder_glyph_items (level_start_node, i - level_start_i), result);
+	} else {
+		if (i > level_start_i)
+			result = g_slist_concat (result, reorder_glyph_items (level_start_node, i - level_start_i));
+	}
+
+	return result;
+}
+
+static GSList *
 get_glyph_items_in_range (HTMLTextSlave *slave, HTMLPainter *painter, int start_offset, int len)
 {
 	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, painter);
-	int i, offset, end_offset;
-	GList *glyph_items = NULL;
+	int i, offset, end_offset, n_items = 0;
+	GSList *glyph_items = NULL;
 
 	start_offset += slave->posStart;
 	end_offset = start_offset + len;
@@ -632,7 +692,8 @@ get_glyph_items_in_range (HTMLTextSlave *slave, HTMLPainter *painter, int start_
 				glyph_item->type = HTML_TEXT_SLAVE_GLYPH_ITEM_CREATED;
 			}
 
-			glyph_items = g_list_prepend (glyph_items, glyph_item);
+			glyph_items = g_slist_prepend (glyph_items, glyph_item);
+			n_items ++;
 		}
 
 		if (offset + item->num_chars >= end_offset)
@@ -641,7 +702,7 @@ get_glyph_items_in_range (HTMLTextSlave *slave, HTMLPainter *painter, int start_
 	}
 
 	if (glyph_items)
-		glyph_items = g_list_reverse (glyph_items);
+		glyph_items = reorder_glyph_items (g_slist_reverse (glyph_items), n_items);
 
 	return glyph_items;
 }

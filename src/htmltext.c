@@ -1319,8 +1319,6 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 		if (text->pi && text->pi->attrs)
 			html_text_remove_unwanted_line_breaks (text->text, text->text_len, text->pi->attrs);
 
-		items = pango_reorder_items (items);
-
 		for (i = 0, cur = items; i < text->pi->n; i ++, cur = cur->next)
 			text->pi->entries [i].glyph_item.item = (PangoItem *) cur->data;
 
