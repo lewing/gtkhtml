@@ -1,27 +1,26 @@
+# translation of gtkhtml.evolution-1-4-branch.po to Spanish
 # translation of gtkhtml.evolution-1-4-branch.es.po to Spanish
-# translation of gtkhtml.HEAD.es.po to Spanish
 # Translations of gtkhtml into spanish.
 # Copyright © 2000-2003 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtkhtml package.
 # QA by Carlos Perelló Marín <carlos@gnome-db.org>
 # Héctor García Álvarez <hector@scouts-es.org>, 2000-2001.
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2002.
-# Germán Poo Caamaño <gpoo@ubiobio.cl>, 2003
-# Francisco Javier Fernandez <serrador@arrakis.es>, 2003
-# Francisco Javier F. Serrador <serrador@arrakis.es>, 2003
+# Germán Poo Caamaño <gpoo@ubiobio.cl>, 2003.
+# Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml.evolution-1-4-branch.es\n"
+"Project-Id-Version: gtkhtml.evolution-1-4-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-08-10 04:37+0200\n"
-"PO-Revision-Date: 2003-08-11 02:32+0200\n"
+"POT-Creation-Date: 2003-09-10 12:42+0200\n"
+"PO-Revision-Date: 2003-09-10 19:28+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@arrakis.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.1\n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -62,7 +61,7 @@ msgstr "Rectángulos"
 msgid "Template"
 msgstr "Plantilla"
 
-#: components/html-editor/body.c:275 src/gtkhtml.c:2558
+#: components/html-editor/body.c:275 src/gtkhtml.c:2555
 msgid "Document Title"
 msgstr "Título del documento"
 
@@ -81,7 +80,7 @@ msgid "Automatic"
 msgstr "Automático"
 
 #: components/html-editor/body.c:326
-#: components/html-editor/editor-control-factory.c:207
+#: components/html-editor/editor-control-factory.c:193
 #: components/html-editor/menubar.c:338 components/html-editor/popup.c:194
 msgid "Text"
 msgstr "Texto"
@@ -99,7 +98,7 @@ msgstr "Fondo"
 #: components/html-editor/cell.c:173 components/html-editor/cell.c:175
 #: components/html-editor/text.c:108
 msgid "The quick brown fox jumps over the lazy dog."
-msgstr "La vida es sueño y los sueños, sueños son."
+msgstr "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja."
 
 #: components/html-editor/cell.c:178
 msgid "Other"
@@ -113,29 +112,29 @@ msgstr ""
 "La celda editada ha sido eliminada del documento.\n"
 "No se pueden aplicar los cambios."
 
-#: components/html-editor/editor-control-factory.c:187
+#: components/html-editor/editor-control-factory.c:173
 #: components/html-editor/menubar.c:317 components/html-editor/menubar.c:335
 #: components/html-editor/menubar.c:353 components/html-editor/popup.c:186
 #: components/html-editor/popup.c:271
 msgid "Properties"
 msgstr "Propiedades"
 
-#: components/html-editor/editor-control-factory.c:198
+#: components/html-editor/editor-control-factory.c:184
 #: components/html-editor/menubar.c:91 components/html-editor/popup.c:208
 msgid "Image"
 msgstr "Imagen"
 
-#: components/html-editor/editor-control-factory.c:218
+#: components/html-editor/editor-control-factory.c:204
 #: components/html-editor/menubar.c:125 components/html-editor/popup.c:229
 msgid "Rule"
 msgstr "Regla"
 
-#: components/html-editor/editor-control-factory.c:228
+#: components/html-editor/editor-control-factory.c:214
 #: components/html-editor/menubar.c:356 components/html-editor/popup.c:215
 msgid "Paragraph"
 msgstr "Párrafo"
 
-#: components/html-editor/editor-control-factory.c:233
+#: components/html-editor/editor-control-factory.c:219
 #: components/html-editor/menubar.c:320 components/html-editor/popup.c:222
 msgid "Page"
 msgstr "Página"
@@ -457,9 +456,10 @@ msgstr "_Sensible a capitalización"
 msgid "Replace:"
 msgstr "Reemplazar:"
 
+# En español se dice sustituir por
 #: components/html-editor/replace.c:175
 msgid "With:"
-msgstr "Con:"
+msgstr "Por:"
 
 #: components/html-editor/rule.c:98
 msgid "Blue 3D"
@@ -489,11 +489,11 @@ msgstr "Hacia _atrás"
 msgid "Find Regular Expression"
 msgstr "Buscar una expresión regular"
 
-#: components/html-editor/spell.c:274
+#: components/html-editor/spell.c:277
 msgid "Spell checker"
 msgstr "Corrector ortográfico"
 
-#: components/html-editor/spell.c:361
+#: components/html-editor/spell.c:366
 msgid "Current _Languages"
 msgstr "_Idiomas actuales"
 
@@ -592,7 +592,7 @@ msgstr "Lista alfabética"
 
 #: components/html-editor/toolbar.c:509
 msgid "Left align"
-msgstr "Alineación izquierda"
+msgstr "Alinear a la izquierda"
 
 #: components/html-editor/toolbar.c:509
 msgid "Left justifies the paragraphs"
@@ -600,15 +600,15 @@ msgstr "Justifica los párrafos a la izquierda"
 
 #: components/html-editor/toolbar.c:511
 msgid "Center justifies the paragraphs"
-msgstr "Centrar justifica los párrafos"
+msgstr "Justifica los párrafos al centro"
 
 #: components/html-editor/toolbar.c:513
 msgid "Right align"
-msgstr "Alineación derecha"
+msgstr "Alinear a la derecha"
 
 #: components/html-editor/toolbar.c:513
 msgid "Right justifies the paragraphs"
-msgstr "Justificar los párrafos a la derecha"
+msgstr "Justifica los párrafos a la derecha"
 
 #: components/html-editor/toolbar.c:520
 msgid "Typewriter"
@@ -654,71 +654,71 @@ msgstr "Sangra los párrafos más"
 msgid "Sample"
 msgstr "Ejemplo"
 
-#: src/gtkhtml.c:2551
+#: src/gtkhtml.c:2548
 msgid "Editable"
 msgstr "Editable"
 
-#: src/gtkhtml.c:2552
+#: src/gtkhtml.c:2549
 msgid "Whether the html can be edited"
 msgstr "Indica si el html puede ser editado"
 
-#: src/gtkhtml.c:2559
+#: src/gtkhtml.c:2556
 msgid "The title of the current document"
 msgstr "El título del documento actual"
 
-#: src/gtkhtml.c:2565
+#: src/gtkhtml.c:2562
 msgid "Document Base"
 msgstr "Base del documento"
 
-#: src/gtkhtml.c:2566
+#: src/gtkhtml.c:2563
 msgid "The base URL for relative references"
 msgstr "La URL de base para referencias relativas"
 
-#: src/gtkhtml.c:2572
+#: src/gtkhtml.c:2569
 msgid "Target Base"
 msgstr "Base del destino"
 
-#: src/gtkhtml.c:2573
+#: src/gtkhtml.c:2570
 msgid "The base URL of the targe frame"
 msgstr "La URL base del marco destino"
 
-#: src/gtkhtml.c:2582
+#: src/gtkhtml.c:2579
 msgid "Fixed Width Font"
 msgstr "Tipografía de anchura fija"
 
-#: src/gtkhtml.c:2583
+#: src/gtkhtml.c:2580
 msgid "The Monospace font to use for typewriter text"
-msgstr "La tipografía monoespaciada a usar para el texto de máquina de escribir"
+msgstr "La tipografía monoespaciada que se usará para el texto de máquina de escribir"
 
-#: src/gtkhtml.c:2589
+#: src/gtkhtml.c:2586
 msgid "New Link Color"
 msgstr "Color de enlaces nuevos"
 
-#: src/gtkhtml.c:2590
+#: src/gtkhtml.c:2587
 msgid "The color of new link elements"
 msgstr "El color de los elementos de enlace nuevos"
 
-#: src/gtkhtml.c:2595
+#: src/gtkhtml.c:2592
 msgid "Visited Link Color"
 msgstr "Color de enlaces visitados"
 
-#: src/gtkhtml.c:2596
+#: src/gtkhtml.c:2593
 msgid "The color of visited link elements"
 msgstr "El color de los elementos de enlace visitados"
 
-#: src/gtkhtml.c:2601
+#: src/gtkhtml.c:2598
 msgid "Active Link Color"
 msgstr "Color del enlace activo"
 
-#: src/gtkhtml.c:2602
+#: src/gtkhtml.c:2599
 msgid "The color of active link elements"
 msgstr "El color de los elementos de enlace activos"
 
-#: src/gtkhtml.c:2607
+#: src/gtkhtml.c:2604
 msgid "Spelling Error Color"
 msgstr "Color del error ortográfico"
 
-#: src/gtkhtml.c:2608
+#: src/gtkhtml.c:2605
 msgid "The color of the spelling error markers"
 msgstr "El color de los marcadores de error ortográfico"
 
