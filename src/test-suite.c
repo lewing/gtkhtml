@@ -3,6 +3,9 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtkwindow.h>
 #include "gtkhtml.h"
+#include "htmlclue.h"
+#include "htmlclueflow.h"
+#include "htmlcluev.h"
 #include "htmlengine.h"
 #include "htmlengine-edit-movement.h"
 
@@ -12,9 +15,13 @@ typedef struct {
 } Test;
 
 static int test_cursor_beol (GtkHTML *html);
+static int test_cursor_beol_rtl (GtkHTML *html);
+static int test_quotes_in_div_block (GtkHTML *html);
 
 static Test tests[] = {
 	{ "cursor begin/end of line", test_cursor_beol },
+	{ "cursor begin/end of line (RTL)", test_cursor_beol_rtl },
+	//	{ "outer quotes inside div block", test_quotes_in_div_block },
 	{ NULL, NULL }
 };
 
@@ -60,6 +67,75 @@ static int test_cursor_beol (GtkHTML *html)
 		return FALSE;
 
 	printf ("test_cursor_beol: passed\n");
+
+	return TRUE;
+}
+
+static int test_cursor_beol_rtl (GtkHTML *html)
+{
+	//load_editable (html, "<pre>أوروبا, برمجيات الحاسوب + انترنيت :");
+	load_editable (html, "<pre>أوروبا, برمجيات الحاسوب + انترنيت :\nتصبح عالميا مع يونيكود\n");
+
+	/* first test it on 1st line */
+	printf ("test_cursor_beol_rtl: testing 1st line eol\n");
+	if (!html_engine_end_of_line (html->engine)
+	    || html->engine->cursor->offset != html->engine->cursor->position
+	    || html->engine->cursor->offset != 35)
+		return FALSE;
+
+	printf ("test_cursor_beol_rtl: testing 1st line bol\n");
+	if (!html_engine_beginning_of_line (html->engine)
+	    || html->engine->cursor->offset != html->engine->cursor->position
+	    || html->engine->cursor->offset != 0)
+		return FALSE;
+
+	gtk_main ();
+	/* move to 2nd and test again */
+	printf ("test_cursor_beol_rtl: testing 2nd line\n");
+	if (!html_engine_move_cursor (html->engine, HTML_ENGINE_CURSOR_DOWN, 1))
+		return FALSE;
+
+	printf ("test_cursor_beol_rtl: testing 2nd line eol\n");
+	if (!html_engine_end_of_line (html->engine)
+	    || html->engine->cursor->offset != 22
+	    || html->engine->cursor->position != 58)
+		return FALSE;
+
+	printf ("test_cursor_beol_rtl: testing 2nd line bol\n");
+	if (!html_engine_beginning_of_line (html->engine)
+	    || html->engine->cursor->offset != 0
+	    || html->engine->cursor->position != 36)
+		return FALSE;
+
+	printf ("test_cursor_beol_rtl: passed\n");
+
+	return TRUE;
+}
+
+static int
+test_quotes_in_div_block (GtkHTML *html)
+{
+	GByteArray *flow_levels;
+	HTMLEngine *e = html->engine;
+
+	load_editable (html,
+		       "<blockquote type=cite>"
+		       "<div style=\"border: solid lightgray 5px;\">"
+		       "quoted text with border"
+		       "</div>"
+		       "quoted text"
+		       "</blockquote>");
+
+	/* test for right object hierarhy */
+	if (!e->clue || !HTML_CLUE (e->clue)->head || !HTML_IS_CLUEV (HTML_CLUE (e->clue)->head)
+	    || !HTML_CLUE (HTML_CLUE (e->clue)->head)->head || !HTML_IS_CLUEFLOW (HTML_CLUE (HTML_CLUE (e->clue)->head)->head))
+		return FALSE;
+
+	flow_levels = HTML_CLUEFLOW (HTML_CLUE (HTML_CLUE (e->clue)->head)->head)->levels;
+
+	/* test if levels are OK */
+	if (!flow_levels || !flow_levels->len == 1 || flow_levels->data [0] != HTML_LIST_TYPE_BLOCKQUOTE_CITE)
+		return FALSE;
 
 	return TRUE;
 }

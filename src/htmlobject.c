@@ -718,6 +718,18 @@ html_object_real_cursor_left (HTMLObject *self, HTMLCursor *cursor)
 	return FALSE;
 }
 
+static int
+html_object_real_get_right_edge_offset (HTMLObject *o, int offset)
+{
+	return html_object_get_length (o);
+}
+
+static int
+html_object_real_get_left_edge_offset (HTMLObject *o, int offset)
+{
+	return 0;
+}
+
 /* Class initialization.  */
 
 void
@@ -793,6 +805,8 @@ html_object_class_init (HTMLObjectClass *klass,
 	klass->cursor_backward = html_object_real_cursor_backward;
 	klass->cursor_left = html_object_real_cursor_left;
 	klass->cursor_right = html_object_real_cursor_right;
+	klass->get_right_edge_offset = html_object_real_get_right_edge_offset;
+	klass->get_left_edge_offset = html_object_real_get_left_edge_offset;
 }
 
 void
@@ -2203,4 +2217,16 @@ html_object_get_flow (HTMLObject *o)
 		o = o->parent;
 
 	return HTML_CLUEFLOW (o);
+}
+
+int
+html_object_get_right_edge_offset (HTMLObject *o, int offset)
+{
+	return (* HO_CLASS (o)->get_right_edge_offset) (o, offset);
+}
+
+int
+html_object_get_left_edge_offset (HTMLObject *o, int offset)
+{
+	return (* HO_CLASS (o)->get_left_edge_offset) (o, offset);
 }

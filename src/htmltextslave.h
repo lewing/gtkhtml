@@ -99,4 +99,6 @@ void        html_text_slave_get_cursor_base       (HTMLTextSlave      *slave,
 						   guint               offset,
 						   gint               *x,
 						   gint               *y);
+int         html_text_slave_get_left_edge_offset  (HTMLTextSlave      *slave);
+int         html_text_slave_get_right_edge_offset (HTMLTextSlave      *slave);
 #endif /* _HTMLTEXTSLAVE_H_ */

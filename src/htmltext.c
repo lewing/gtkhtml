@@ -2427,6 +2427,38 @@ html_text_get_slave_at_offset (HTMLText *text, HTMLTextSlave *start, int offset)
 }
 
 static gboolean
+html_text_cursor_prev_slave (HTMLObject *slave, HTMLCursor *cursor)
+{
+	HTMLObject *prev = HTML_OBJECT (slave)->prev;
+	int offset = cursor->offset;
+
+	if (prev && HTML_IS_TEXT_SLAVE (prev)) {
+		if (html_text_slave_cursor_tail (HTML_TEXT_SLAVE (prev), cursor)) {
+			cursor->position += cursor->offset - offset;
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+static gboolean
+html_text_cursor_next_slave (HTMLObject *slave, HTMLCursor *cursor)
+{
+	HTMLObject *next = slave->next;
+	int offset = cursor->offset;
+
+	if (next && HTML_IS_TEXT_SLAVE (next)) {
+		if (html_text_slave_cursor_head (HTML_TEXT_SLAVE (next), cursor)) {
+			cursor->position += cursor->offset - offset;
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+static gboolean
 html_text_cursor_right (HTMLObject *self, HTMLCursor *cursor)
 {
 	HTMLTextSlave *slave;
@@ -2442,14 +2474,11 @@ html_text_cursor_right (HTMLObject *self, HTMLCursor *cursor)
 		if (html_text_slave_cursor_right (slave, cursor))
 			return TRUE;
 		else {
-			HTMLObject *next = HTML_OBJECT (slave)->next;
-			int offset = cursor->offset;
-
-			if (next && HTML_IS_TEXT_SLAVE (next)) {
-				if (html_text_slave_cursor_head (HTML_TEXT_SLAVE (next), cursor)) {
-					cursor->position += cursor->offset - offset;
-					return TRUE;
-				}
+			if (self->parent) {
+				if (html_object_get_direction (self->parent) == HTML_DIRECTION_RTL)
+					return html_text_cursor_prev_slave (HTML_OBJECT (slave), cursor);
+				else
+					return html_text_cursor_next_slave (HTML_OBJECT (slave), cursor);
 			}
 		}
 	}
@@ -2471,18 +2500,44 @@ html_text_cursor_left (HTMLObject *self, HTMLCursor *cursor)
 		if (html_text_slave_cursor_left (slave, cursor))
 			return TRUE;
 		else {
-			HTMLObject *prev = HTML_OBJECT (slave)->prev;
-			int offset = cursor->offset;
-
-			if (prev && HTML_IS_TEXT_SLAVE (prev)) {
-				if (html_text_slave_cursor_tail (HTML_TEXT_SLAVE (prev), cursor)) {
-					cursor->position += cursor->offset - offset;
-				}
+			if (self->parent) {
+				if (html_object_get_direction (self->parent) == HTML_DIRECTION_RTL)
+					return html_text_cursor_next_slave (HTML_OBJECT (slave), cursor);
+				else
+					return html_text_cursor_prev_slave (HTML_OBJECT (slave), cursor);
 			}
 		}
 	}
 
 	return FALSE;
+}
+
+static int
+html_text_get_right_edge_offset (HTMLObject *o, int offset)
+{
+	HTMLTextSlave *slave = html_text_get_slave_at_offset (HTML_TEXT (o), NULL, offset);
+
+	if (slave) {
+		return html_text_slave_get_right_edge_offset (slave);
+	} else {
+		g_warning ("getting right edge offset from text object without slave(s)");
+
+		return HTML_TEXT (o)->text_len;
+	}
+}
+
+static int
+html_text_get_left_edge_offset (HTMLObject *o, int offset)
+{
+	HTMLTextSlave *slave = html_text_get_slave_at_offset (HTML_TEXT (o), NULL, offset);
+
+	if (slave) {
+		return html_text_slave_get_left_edge_offset (slave);
+	} else {
+		g_warning ("getting left edge offset from text object without slave(s)");
+
+		return 0;
+	}
 }
 
 void
@@ -2528,6 +2583,8 @@ html_text_class_init (HTMLTextClass *klass,
 	object_class->get_target = get_target;
 	object_class->cursor_right = html_text_cursor_right;
 	object_class->cursor_left = html_text_cursor_left;
+ 	object_class->get_right_edge_offset = html_text_get_right_edge_offset;
+	object_class->get_left_edge_offset = html_text_get_left_edge_offset;
 
 	/* HTMLText methods.  */
 
