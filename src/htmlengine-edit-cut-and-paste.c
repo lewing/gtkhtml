@@ -501,12 +501,13 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check)
 	gint level;
 
 	html_engine_freeze (e);
-	orig = html_cursor_dup (e->cursor);
-
 	/* FIXME for tables */
-	if (obj->klass->type == HTML_TYPE_TABLE)
+	if (obj->klass->type == HTML_TYPE_TABLE) {
 		level = 1;
-	else {
+		html_engine_insert_empty_paragraph (e);
+		html_engine_insert_empty_paragraph (e);
+		html_cursor_backward (e->cursor, e);
+	} else {
 		level = 0;
 		cur   = html_object_get_head_leaf (obj);
 		while (cur) {
@@ -514,7 +515,9 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check)
 			cur = cur->parent;
 		}
 	}
+	orig = html_cursor_dup (e->cursor);
 
+	html_object_change_set_down (obj, HTML_CHANGE_ALL);
 	split_and_add_empty_texts (e, level, &left, &right);
         get_tree_bounds_for_merge (obj, &first, &last);
 
