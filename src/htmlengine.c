@@ -165,12 +165,16 @@ static guint signals [LAST_SIGNAL] = { 0 };
 
 #define TIMER_INTERVAL 300
 
-enum ID {
-	ID_A, ID_ADDRESS, ID_B, ID_BIG, ID_BLOCKQUOTE, ID_BODY, ID_CAPTION, ID_CENTER, ID_CITE, ID_CODE,
-	ID_DIR, ID_DIV, ID_DL, ID_EM, ID_FONT, ID_HEADER, ID_I, ID_KBD, ID_OL, ID_P, ID_PRE,
-	ID_SMALL, ID_SPAN, ID_STRONG, ID_U, ID_UL, ID_TEXTAREA, ID_TABLE, ID_TD, ID_TH, ID_TR, ID_TT, ID_VAR,
-	ID_S, ID_SUB, ID_SUP, ID_STRIKE
-};
+typedef enum {
+	ID_A,       ID_ADDRESS,  ID_B,      ID_BIG,    ID_BLOCKQUOTE, 
+	ID_BODY,    ID_CAPTION,  ID_CENTER, ID_CITE,   ID_CODE,
+	ID_DIR,     ID_DIV,      ID_DL,     ID_EM,     ID_FONT,
+	ID_HEADER,  ID_I,        ID_KBD,    ID_OL,     ID_P,
+	ID_PRE,     ID_SMALL,    ID_SPAN,   ID_STRONG, ID_U,
+	ID_UL,      ID_TEXTAREA, ID_TABLE,  ID_TD,     ID_TH, 
+	ID_TR,      ID_TT,       ID_VAR,    ID_S,      ID_SUB, 
+	ID_SUP,     ID_STRIKE
+} HTMLElementID;
 
 
 
@@ -181,9 +185,9 @@ enum ID {
 /* Font styles */
 typedef struct _HTMLElement HTMLElement;
 struct _HTMLElement {
-	guint       id;
-	char       *class;
-	HTMLStyle  *style;
+	HTMLElementID    id;
+	char            *class;
+	HTMLStyle       *style;
 };
 
 static void
@@ -315,8 +319,7 @@ current_row_bg_image (HTMLEngine *e)
 		
 	for (item = e->span_stack->list; item; item = item->next) {
 		span = item->data;
-		if (span->id == ID_TR && 
-span->style)
+		if (span->id == ID_TR && span->style)
 			return span->style->bg_image;
 
 		if (span->id == ID_TABLE)
@@ -336,6 +339,8 @@ current_row_valign (HTMLEngine *e)
 	for (item = e->span_stack->list; item; item = item->next) {
 		span = item->data;
 		if (span->id == ID_TR) {
+			g_warning ("found row");
+
 			if (span->style)
 				rv = span->style->text_valign;
 
@@ -344,9 +349,12 @@ current_row_valign (HTMLEngine *e)
 
 		if (span->id == ID_TABLE) {
 			g_warning ("found table before row");
-			break;
+			//break;
 		}
 	}
+
+	if (span->id != ID_TR)
+		g_warning ("no row");
 
 	if (rv == HTML_VALIGN_BOTTOM)
 		g_warning ("found bottom");
@@ -2831,7 +2839,7 @@ parse_i (HTMLEngine *e, HTMLObject *_clue, const gchar *str)
 			
 			style = html_style_set_decoration (style, GTK_HTML_FONT_STYLE_ITALIC);
 			
-			html_string_tokenizer_tokenize (e->st, str + 4, " >");
+			html_string_tokenizer_tokenize (e->st, str + 1, " >");
 			while (html_string_tokenizer_has_more_tokens (e->st)) {
 				token = html_string_tokenizer_next_token (e->st);
 				if (strncasecmp (token, "style=", 6) == 0) {
@@ -3105,7 +3113,7 @@ static void
 parse_p (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 {
 	if ( strncmp( str, "pre", 3 ) == 0 ) {
-		close_flow (e, clue);
+		finish_flow (e, clue);
 		push_clueflow_style (e, HTML_CLUEFLOW_STYLE_PRE);
 		e->inPre = TRUE;
 		push_block (e, ID_PRE, 2, block_end_pre, 0, 0);
@@ -3345,17 +3353,28 @@ block_ensure_row (HTMLEngine *e)
 {
 	HTMLElement *span;
 	HTMLTable *table;
-	
+	GList *item;
+
 	table = html_stack_top (e->table_stack);
 	if (!table)
 		return;
 	
-	span = html_stack_top (e->span_stack);
-	
-	if (!span || span->id != ID_TR) {
-		html_table_start_row (table);
-		push_block (e, ID_TR, 3, block_end_row, 0, 0);
+	for (item = e->span_stack->list; item; item = item->next) {
+		span = item->data;
+
+		printf ("%d:", span->id);
+		if (span->id == ID_TR) {
+			printf ("no ensure row\n");
+			return;
+		}
+
+		if (span->id == ID_TABLE)
+			break;
+		    
 	}
+	
+	html_table_start_row (table);
+	push_block_element (e, ID_TR, NULL, 3, block_end_row, 0, 0);
 }
 
 static void
@@ -3429,7 +3448,7 @@ parse_t (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 		e->listStack = html_stack_new ((HTMLStackFreeFunc)html_list_destroy);
 		//parse_table (e, clue, clue->max_width, str + 6);
 		html_stack_push (e->table_stack, table);
-		push_block (e, ID_TABLE, 6, block_end_table, align, 0);
+		push_block_element (e, ID_TABLE, style, 6, block_end_table, align, 0);
 		
 		e->avoid_para = FALSE;
 	} else if (strncmp (str, "/table", 6) == 0) {
@@ -4711,7 +4730,7 @@ html_engine_update_event (HTMLEngine *e)
 
 	html_image_factory_deactivate_animations (e->image_factory);
 	gtk_container_forall (GTK_CONTAINER (e->widget), update_embedded, e->widget);
-	html_engine_draw (e, 0, 0, e->width, e->height);
+	html_engine_draw (e, e->x_offset, e->y_offset, e->width, e->height);
 
 	if (html_engine_get_editable (e))
 		html_engine_show_cursor (e);
@@ -5006,7 +5025,7 @@ static gint
 redraw_idle (HTMLEngine *e)
 {
 	e->redraw_idle_id = 0;
-	html_engine_draw (e, 0, 0, e->width, e->height);
+	html_engine_draw (e, e->x_offset, e->y_offset, e->width, e->height);
 
 	return FALSE;
 }
@@ -5035,7 +5054,7 @@ html_engine_unblock_redraw (HTMLEngine *e)
 
 	e->block_redraw --;
 	if (!e->block_redraw && e->need_redraw) {
-		html_engine_draw (e, 0, 0, e->width, e->height);
+		html_engine_draw (e, e->x_offset, e->y_offset, e->width, e->height);
 		e->need_redraw = FALSE;
 	}
 }
@@ -5297,7 +5316,7 @@ html_engine_set_editable (HTMLEngine *e,
 		html_engine_spell_check (e);
 	html_engine_disable_selection (e);
 
-	html_engine_draw (e, 0, 0, e->width, e->height);
+	html_engine_draw (e, e->x_offset, e->y_offset, e->width, e->height);
 
 	e->editable = editable;
 
@@ -5693,7 +5712,7 @@ thaw_idle (gpointer data)
 	if (redraw_whole) {
 		g_slist_foreach (e->pending_expose, free_expose_data, NULL);
 		html_draw_queue_clear (e->draw_queue);
-		html_engine_draw (e, 0, 0, e->width, e->height);
+		html_engine_draw (e, e->x_offset, e->y_offset, e->width, e->height);
 	} else {
 		GtkAdjustment *vadj, *hadj;
 		gint nw, nh;
@@ -5886,7 +5905,7 @@ html_engine_clear_spell_check (HTMLEngine *e)
 	e->need_spell_check = FALSE;
 
 	html_object_forall (e->clue, NULL, (HTMLObjectForallFunc) clear_spell_check, e);
-	html_engine_draw (e, 0, 0, e->width, e->height);
+	html_engine_draw (e, e->x_offset, e->y_offset, e->width, e->height);
 }
 
 gchar *

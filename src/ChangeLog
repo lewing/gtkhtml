@@ -1,3 +1,8 @@
+2003-02-26  Larry Ewing  <lewing@ximian.com>
+
+	* htmlengine.c: fix the problems with the table parser not always
+	pickinging the style for the row.
+
 2003-01-29  Radek Doulik  <rodo@ximian.com>
 
 	* htmlengine-edit-cursor.c (html_engine_draw_cursor_in_area):
