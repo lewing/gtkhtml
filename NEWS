@@ -1,3 +1,13 @@
+gtkhtml-3.2.3 "Frond" 2004-09-23
+------------------------------------------------
+
+New in this release
+
+   * fixed crash occuring in autosave after paste
+   * expose api version in pkgconfig file
+   * more line breaking touches
+   * fixed embedded widgets not shown problem
+
 gtkhtml-3.2.2 "Sporophyte" 2004-09-23
 ------------------------------------------------
 
