@@ -243,7 +243,7 @@ struct _GtkHTMLClass {
 	void (* scroll)               (GtkHTML *html, GtkOrientation orientation, GtkScrollType scroll_type, gfloat position);
 	void (* cursor_move)          (GtkHTML *html, GtkDirectionType dir_type, GtkHTMLCursorSkipType skip);
 	void (* command)              (GtkHTML *html, GtkHTMLCommandType com_type);
-	void (* spell_suggestion_request) (GtkHTML *html, PspellManager *spell_checker, gchar *word);
+	void (* spell_suggestion_request) (GtkHTML *html, gpointer *spell_checker, gchar *word);
 
 	/* properties */
 	GtkHTMLClassProperties *properties;

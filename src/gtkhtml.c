@@ -81,10 +81,8 @@ enum {
 	SCROLL,
 	CURSOR_MOVE,
 	INSERT_PARAGRAPH,
-#ifdef GTKHTML_HAVE_PSPELL
 	/* spell checking */
 	SPELL_SUGGESTION_REQUEST,
-#endif
 	/* now only last signal */
 	LAST_SIGNAL
 };

@@ -1,3 +1,10 @@
+2000-10-11  Radek Doulik  <rodo@helixcode.com>
+
+	* gtkhtml.c: include always SPELL_SUGGESTION_REQUEST
+
+	* gtkhtml.h: don't use pspell structures in
+	spell_suggestion_request declaration
+
 2000-10-11  Larry Ewing  <lewing@helixcode.com>
 
 	* htmlengine-edit-selection-updater.c (extend_selection): handle
