@@ -878,6 +878,7 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 {
 	PangoAttribute *attr;
 
+	/* style */
 	if (style & GTK_HTML_FONT_STYLE_BOLD) {
 		attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
 		attr->start_index = last_pos;
@@ -906,12 +907,16 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 		pango_attr_list_change (text->attr_list, attr);
 	}
 
+	/* color */
 	if (link || color != html_colorset_get_color (e->settings->color_set, HTMLTextColor)) {
 		attr = pango_attr_foreground_new (color->color.red, color->color.green, color->color.blue);
 		attr->start_index = last_pos;
 		attr->end_index = text->text_len;
 		pango_attr_list_change (text->attr_list, attr);
 	}
+
+	/* size */
+	/* face */
 }
 
 static void
@@ -958,16 +963,17 @@ insert_text (HTMLEngine *e,
 
 	if (!prev || !HTML_IS_TEXT (prev)) {
 		prev = text_new (e, text, font_style, color);
-		html_text_set_font_face (HTML_TEXT (prev), current_font_face (e));
-
 		append_element (e, clue, prev);
 	} else {
 		last_pos = HTML_TEXT (prev)->text_len;
 		html_text_append (HTML_TEXT (prev), text, -1);
 	}
 
-	if (prev && HTML_IS_TEXT (prev))
+	if (prev && HTML_IS_TEXT (prev)) {
 		apply_attributes (HTML_TEXT (prev), e, font_style, color, last_pos, create_link);
+		if (create_link)
+			html_text_add_link (HTML_TEXT (prev), e->url, e->target, last_pos, HTML_TEXT (prev)->text_len);
+	}
 }
 
 
@@ -4465,7 +4471,7 @@ html_engine_begin (HTMLEngine *e, char *content_type)
 	html_engine_stop_parser (e);
 	e->writing = TRUE;
 	e->begin = TRUE;
-	html_engine_set_focus_object (e, NULL);
+	html_engine_set_focus_object (e, NULL, 0);
 
 	html_engine_id_table_clear (e);
 	html_engine_class_data_clear (e);
@@ -5145,14 +5151,15 @@ const gchar *
 html_engine_get_link_at (HTMLEngine *e, gint x, gint y)
 {
 	HTMLObject *obj;
+	gint offset;
 
 	if (e->clue == NULL)
 		return NULL;
 
-	obj = html_engine_get_object_at (e, x, y, NULL, FALSE);
+	obj = html_engine_get_object_at (e, x, y, &offset, FALSE);
 
 	if (obj != NULL)
-		return html_object_get_url (obj);
+		return html_object_get_url (obj, offset);
 
 	return NULL;
 }
@@ -6244,7 +6251,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 			/* printf ("try child %p\n", cur); */
 			if (HTML_IS_LINK_TEXT (cur)
 			    || (HTML_IS_IMAGE (cur) && HTML_IMAGE (cur)->url && *HTML_IMAGE (cur)->url)) {
-				html_engine_set_focus_object (e, cur);
+				html_engine_set_focus_object (e, cur, offset);
 
 				return TRUE;
 			} else if (html_object_is_embedded (cur) && !html_object_is_frame (cur)
@@ -6258,7 +6265,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 				}
 
 				if (gtk_widget_child_focus (HTML_EMBEDDED (cur)->widget, dir)) {
-					html_engine_set_focus_object (e, cur);
+					html_engine_set_focus_object (e, cur, offset);
 					return TRUE;
 				}
 			}
@@ -6267,7 +6274,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 				: html_object_prev_cursor_object (cur, e, &offset);
 		}
 		/* printf ("no focus\n"); */
-		html_engine_set_focus_object (e, NULL);
+		html_engine_set_focus_object (e, NULL, 0);
 	}
 
 	return FALSE;
@@ -6333,7 +6340,7 @@ set_frame_parents_focus_object (HTMLEngine *e)
 }
 
 void
-html_engine_set_focus_object (HTMLEngine *e, HTMLObject *o)
+html_engine_set_focus_object (HTMLEngine *e, HTMLObject *o, gint offset)
 {
 	/* printf ("set focus object to: %p\n", o); */
 
@@ -6342,6 +6349,7 @@ html_engine_set_focus_object (HTMLEngine *e, HTMLObject *o)
 	if (o) {
 		e = html_object_engine (o, e);
 		e->focus_object = o;
+		e->focus_object_offset = offset;
 
 		if (!html_object_is_frame (e->focus_object)) {
 			o->draw_focused = TRUE;

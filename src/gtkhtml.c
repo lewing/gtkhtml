@@ -866,7 +866,7 @@ key_press_event (GtkWidget *widget, GdkEventKey *event)
 		case GDK_KP_Enter:
 			if (html->engine->focus_object) {
 				gchar *url;
-				url = html_object_get_complete_url (html->engine->focus_object);
+				url = html_object_get_complete_url (html->engine->focus_object, html->engine->focus_object_offset);
 				if (url) {
 					/* printf ("link clicked: %s\n", url); */
 					g_signal_emit (html, signals [LINK_CLICKED], 0, url);
@@ -1061,7 +1061,7 @@ set_pointer_url (GtkHTML *html, const char *url)
 }
 
 static void
-dnd_link_set (GtkWidget *widget, HTMLObject *o)
+dnd_link_set (GtkWidget *widget, HTMLObject *o, gint offset)
 {
 	if (!html_engine_get_editable (GTK_HTML (widget)->engine)) {
 		/* printf ("dnd_link_set %p\n", o); */
@@ -1070,6 +1070,7 @@ dnd_link_set (GtkWidget *widget, HTMLObject *o)
 				     dnd_link_sources, DND_LINK_SOURCES,
 				     GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK);
 		GTK_HTML (widget)->priv->dnd_object = o;
+		GTK_HTML (widget)->priv->dnd_object_offset = offset;
 	}
 }
 
@@ -1085,7 +1086,7 @@ dnd_link_unset (GtkWidget *widget)
 }
 
 static void
-on_object (GtkWidget *widget, GdkWindow *window, HTMLObject *obj, gint x, gint y)
+on_object (GtkWidget *widget, GdkWindow *window, HTMLObject *obj, gint offset, gint x, gint y)
 {
 	GtkHTML *html = GTK_HTML (widget);
 
@@ -1106,10 +1107,10 @@ on_object (GtkWidget *widget, GdkWindow *window, HTMLObject *obj, gint x, gint y
 		}
 
 		url = gtk_html_get_url_object_relative (html, obj, 
-							html_object_get_url (obj));
+							html_object_get_url (obj, offset));
 		if (url != NULL) {
 			set_pointer_url (html, url);
-			dnd_link_set (widget, obj);
+			dnd_link_set (widget, obj, offset);
 			
 			if (html->engine->editable)
 				gdk_window_set_cursor (window, html->ibeam_cursor);
@@ -1144,13 +1145,14 @@ mouse_change_pos (GtkWidget *widget, GdkWindow *window, gint x, gint y, gint sta
 	HTMLEngine *engine;
 	HTMLObject *obj;
 	HTMLType type;
+	gint offset;
 
 	if (!GTK_WIDGET_REALIZED (widget))
 		return FALSE;
 
 	html   = GTK_HTML (widget);
 	engine = html->engine;
-	obj    = html_engine_get_object_at (engine, x, y, NULL, FALSE);
+	obj    = html_engine_get_object_at (engine, x, y, &offset, FALSE);
 
 	if ((html->in_selection || html->in_selection_drag) && html->allow_selection) {
 		gboolean need_scroll;
@@ -1225,7 +1227,7 @@ mouse_change_pos (GtkWidget *widget, GdkWindow *window, gint x, gint y, gint sta
 			html_image_set_size (HTML_IMAGE (o), w, h, FALSE, FALSE);
 		}
 	} else
-		on_object (widget, window, obj, x, y);
+		on_object (widget, window, obj, offset, x, y);
 
 	return TRUE;
 }
@@ -1560,15 +1562,15 @@ button_press_event (GtkWidget *widget,
 			} else {
 				HTMLObject *obj;
 				HTMLEngine *orig_e;
+				gint offset;
 
 				orig_e = GTK_HTML (orig_widget)->engine;
-				obj = html_engine_get_object_at (engine, x, y,
-								 NULL, FALSE);
+				obj = html_engine_get_object_at (engine, x, y, &offset, FALSE);
 				if (obj && ((HTML_IS_IMAGE (obj) && HTML_IMAGE (obj)->url && *HTML_IMAGE (obj)->url)
 					    || HTML_IS_LINK_TEXT (obj)))
-					html_engine_set_focus_object (orig_e, obj);
+					html_engine_set_focus_object (orig_e, obj, offset);
 				else {
-					html_engine_set_focus_object (orig_e, NULL);
+					html_engine_set_focus_object (orig_e, NULL, 0);
 					if (orig_e->caret_mode)
 						html_engine_jump_at (engine, x, y);
 				}
@@ -2102,7 +2104,7 @@ set_focus_child (GtkContainer *containter, GtkWidget *w)
 		w = w->parent;
 
 	if (o && !html_object_is_frame (o))
-		html_engine_set_focus_object (GTK_HTML (containter)->engine, o);
+		html_engine_set_focus_object (GTK_HTML (containter)->engine, o, 0);
 
 	(*GTK_CONTAINER_CLASS (parent_class)->set_focus_child) (containter, w);
 }
@@ -2196,6 +2198,7 @@ drag_begin (GtkWidget *widget, GdkDragContext *context)
 
 	/* printf ("drag_begin\n"); */
 	GTK_HTML (widget)->priv->dnd_real_object = o = GTK_HTML (widget)->priv->dnd_object;
+	GTK_HTML (widget)->priv->dnd_real_object_offset = GTK_HTML (widget)->priv->dnd_object_offset;
 	GTK_HTML (widget)->priv->dnd_in_progress = TRUE;
 
 	i = html_interval_new (o, o, 0, html_object_get_length (o));
@@ -2221,14 +2224,15 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context, GtkSelectionData *sel
 	case DND_TARGET_TYPE_UTF8_STRING:
 	case DND_TARGET_TYPE_STRING: {
 		HTMLObject *obj = GTK_HTML (widget)->priv->dnd_real_object;
+		gint offset = GTK_HTML (widget)->priv->dnd_real_object_offset;
 		const gchar *url, *target;
 		gchar *complete_url;
 
 		/* printf ("\ttext/plain\n"); */
 		if (obj) {
 			/* printf ("obj %p\n", obj); */
-			url = html_object_get_url (obj);
-			target = html_object_get_target (obj);
+			url = html_object_get_url (obj, offset);
+			target = html_object_get_target (obj, offset);
 			if (url && *url) {
 
 				complete_url = g_strconcat (url, target && *target ? "#" : NULL, target, NULL);

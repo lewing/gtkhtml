@@ -131,6 +131,7 @@ typedef struct _HTMLUndo HTMLUndo;
 typedef struct _HTMLUndoData HTMLUndoData;
 typedef struct _HTMLUndoAction HTMLUndoAction;
 typedef struct _SpellError SpellError;
+typedef struct _Link Link;
 
 typedef void     (* HTMLObjectForallFunc)       (HTMLObject        *self,
 						 HTMLEngine        *e,

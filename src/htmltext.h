@@ -34,6 +34,13 @@ struct _SpellError {
 	guint len;
 };
 
+struct _Link {
+	gint start_index;
+	gint end_index;
+	gchar *url;
+	gchar *target;
+};
+
 struct _HTMLTextPangoInfoEntry {
 	PangoItem *item;
 	PangoLogAttr *attrs;
@@ -62,6 +69,8 @@ struct _HTMLText {
 	GList *spell_errors;
 
 	HTMLTextPangoInfo *pi;
+
+	GSList *links;
 };
 
 struct _HTMLTextClass {
@@ -172,6 +181,11 @@ gint              html_text_tail_white_space             (HTMLText          *tex
 							  gint              *white_len,
 							  gint               line_offset,
 							  gchar             *s);
+void              html_text_add_link                     (HTMLText          *text,
+							  gchar             *url,
+							  gchar             *target,
+							  gint               start_index,
+							  gint               end_index);
 
 /*
  * protected

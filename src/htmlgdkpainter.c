@@ -1109,35 +1109,6 @@ draw_text (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, HT
 		}
 	}
 
-	if (pi && pi->n && glyphs && painter->font_style & (GTK_HTML_FONT_STYLE_UNDERLINE | GTK_HTML_FONT_STYLE_STRIKEOUT)) {
-		GList *gl;
-		PangoRectangle log_rect;
-		gint dsc, asc;
-
-		c_text = text;
-		for (gl = glyphs; gl; gl = gl->next) {
-			str = (PangoGlyphString *) gl->data;
-			gl = gl->next;
-			ii = GPOINTER_TO_INT (gl->data);
-			pango_glyph_string_extents (str, pi->entries [ii].item->analysis.font, NULL, &log_rect);
-			c_text = g_utf8_offset_to_pointer (c_text, str->num_glyphs);
-		}
-
-		width = PANGO_PIXELS (log_rect.width);
-		dsc = PANGO_PIXELS (PANGO_DESCENT (log_rect));
-		asc = PANGO_PIXELS (PANGO_ASCENT (log_rect));
-
-		if (painter->font_style & GTK_HTML_FONT_STYLE_UNDERLINE)
-			gdk_draw_line (gdk_painter->pixmap, gdk_painter->gc, 
-				       x, y + dsc - 2, 
-				       x + width, y + dsc - 2);
-
-		if (painter->font_style & GTK_HTML_FONT_STYLE_STRIKEOUT)
-			gdk_draw_line (gdk_painter->pixmap, gdk_painter->gc, 
-				       x, y - asc + (asc + dsc)/2, 
-				       x + width, y - asc + (asc + dsc)/2);
-	}
-
 	if (temp_pi) {
 		if (glyphs)
 			glyphs_destroy (glyphs);

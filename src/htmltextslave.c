@@ -840,12 +840,12 @@ calc_preferred_width (HTMLObject *o,
 }
 
 static const gchar *
-get_url (HTMLObject *o)
+get_url (HTMLObject *o, gint offset)
 {
 	HTMLTextSlave *slave;
 
 	slave = HTML_TEXT_SLAVE (o);
-	return html_object_get_url (HTML_OBJECT (slave->owner));
+	return html_object_get_url (HTML_OBJECT (slave->owner), offset);
 }
 
 static gint

@@ -1572,6 +1572,37 @@ get_cursor_base (HTMLObject *self,
 	html_object_calc_abs_position (self, x, y);
 }
 
+static Link *
+get_link (HTMLObject *o, gint offset)
+{
+	GSList *l;
+
+	for (l = HTML_TEXT (o)->links; l; l = l->next) {
+		Link *link = (Link *) l->data;
+
+		if (link->start_index <= offset && offset <= link->end_index)
+			return link;
+	}
+
+	return NULL;
+}
+
+static const gchar *
+get_url (HTMLObject *object, gint offset)
+{
+	Link *link = get_link (object, offset);
+
+	return link ? link->url : NULL;
+}
+
+static const gchar *
+get_target (HTMLObject *object, gint offset)
+{
+	Link *link = get_link (object, offset);
+
+	return link ? link->target : NULL;
+}
+
 void
 html_text_type_init (void)
 {
@@ -1611,6 +1642,8 @@ html_text_class_init (HTMLTextClass *klass,
 	object_class->get_line_length = get_line_length;
 	object_class->set_link = set_link;
 	object_class->append_selection_string = append_selection_string;
+	object_class->get_url = get_url;
+	object_class->get_target = get_target;
 
 	/* HTMLText methods.  */
 
@@ -1656,6 +1689,7 @@ html_text_init (HTMLText *text,
 	text->select_length = 0;
 	text->pi            = NULL;
 	text->attr_list     = pango_attr_list_new ();
+	text->links         = NULL;
 
 	html_color_ref (color);
 }
@@ -2019,4 +2053,17 @@ html_text_append (HTMLText *text, const gchar *str, gint len)
 	g_free (to_delete);
 
 	html_object_change_set (HTML_OBJECT (text), HTML_CHANGE_ALL);
+}
+
+void
+html_text_add_link (HTMLText *text, gchar *url, gchar *target, gint start_index, gint end_index)
+{
+	Link *link = g_new0 (Link, 1);
+
+	link->url = g_strdup (url);
+	link->target = g_strdup (target);
+	link->start_index = start_index;
+	link->end_index = end_index;
+
+	text->links = g_slist_prepend (text->links, link);
 }

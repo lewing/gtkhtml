@@ -35,7 +35,7 @@
 #include "htmlundo.h"
 
 /* #define PARANOID_DEBUG */
-static HTMLObject * html_engine_text_style_object (HTMLEngine *e);
+static HTMLObject * html_engine_text_style_object (HTMLEngine *e, gint *offset);
 
 
 static GtkHTMLFontStyle
@@ -132,7 +132,7 @@ html_engine_get_document_font_style (HTMLEngine *engine)
 		else {
 			HTMLObject *obj;
 
-			obj = html_engine_text_style_object (engine);
+			obj = html_engine_text_style_object (engine, NULL);
 			return obj
 				? HTML_TEXT (obj)->font_style
 				: GTK_HTML_FONT_STYLE_DEFAULT;
@@ -159,7 +159,7 @@ html_engine_get_document_color (HTMLEngine *engine)
 		else {
 			HTMLObject *obj;
 
-			obj = html_engine_text_style_object (engine);
+			obj = html_engine_text_style_object (engine, NULL);
 			return obj
 				? HTML_TEXT (obj)->color
 				: html_colorset_get_color (engine->settings->color_set, HTMLTextColor);
@@ -534,7 +534,7 @@ get_url_or_target_from_selection (HTMLEngine *e, gboolean get_url)
 
 	p = e->selection->from;
 	while (1) {
-		str = get_url ? html_object_get_url (p.object) : html_object_get_target (p.object);
+		str = get_url ? html_object_get_url (p.object, p.offset) : html_object_get_target (p.object, p.offset);
 		if (str || html_point_cursor_object_eq (&p, &e->selection->to))
 			break;
 		html_point_next_cursor (&p);
@@ -549,24 +549,33 @@ get_url_or_target_from_selection (HTMLEngine *e, gboolean get_url)
 }
 
 static HTMLObject *
-html_engine_text_style_object (HTMLEngine *e)
+html_engine_text_style_object (HTMLEngine *e, gint *offset)
 {
 	if (HTML_IS_TEXT (e->cursor->object)
-	    || (e->cursor->offset && e->cursor->offset != html_object_get_length (e->cursor->object)))
+	    || (e->cursor->offset && e->cursor->offset != html_object_get_length (e->cursor->object))) {
+		if (offset)
+			*offset = e->cursor->offset;
 		return e->cursor->object;
+	}
 
 	if (e->cursor->offset) {
 		HTMLObject *next;
 
 		next = html_object_next_not_slave (e->cursor->object);
-		if (next && HTML_IS_TEXT (next))
+		if (next && HTML_IS_TEXT (next)) {
+			if (offset)
+				*offset = 0;
 			return next;
+		}
 	} else {
 		HTMLObject *prev;
 
 		prev = html_object_prev_not_slave (e->cursor->object);
-		if (prev && HTML_IS_TEXT (prev))
+		if (prev && HTML_IS_TEXT (prev)) {
+			if (offset)
+				*offset = html_object_get_length (prev);
 			return prev;
+		}
 	}
 
 	return NULL;
@@ -579,9 +588,10 @@ html_engine_get_document_url (HTMLEngine *e)
 		return get_url_or_target_from_selection (e, TRUE);
 	else {
 		HTMLObject *obj;
+		gint offset;
 
-		obj = html_engine_text_style_object (e);
-		return obj ? html_object_get_url (obj) : NULL;
+		obj = html_engine_text_style_object (e, &offset);
+		return obj ? html_object_get_url (obj, offset) : NULL;
 	}
 }
 
@@ -592,9 +602,10 @@ html_engine_get_document_target (HTMLEngine *e)
 		return get_url_or_target_from_selection (e, FALSE);
 	else {
 		HTMLObject *obj;
+		gint offset;
 
-		obj = html_engine_text_style_object (e);
-		return obj ? html_object_get_target (obj) : NULL;
+		obj = html_engine_text_style_object (e, &offset);
+		return obj ? html_object_get_target (obj, offset) : NULL;
 	}
 }
 

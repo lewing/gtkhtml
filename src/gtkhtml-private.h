@@ -55,7 +55,9 @@ struct _GtkHTMLPrivate {
 	gboolean need_im_reset;
 
 	HTMLObject *dnd_object;
+	gint        dnd_object_offset;
 	HTMLObject *dnd_real_object;
+	gint        dnd_real_object_offset;
 	gboolean    dnd_in_progress;
 	gchar      *dnd_url;
 
