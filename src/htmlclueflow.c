@@ -752,7 +752,7 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 
 		left = MAX (0, *rmargin - start_lmargin - x);
 
-		switch (HTML_CLUE (o)->halign) {
+		switch (html_clueflow_get_halignment (HTML_CLUEFLOW (o))) {
 		case HTML_HALIGN_NONE:
 		case HTML_HALIGN_LEFT:
 			xinc = 0;
