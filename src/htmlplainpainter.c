@@ -232,12 +232,14 @@ html_plain_painter_get_type (void)
 }
 
 HTMLPainter *
-html_plain_painter_new (gboolean double_buffer)
+html_plain_painter_new (GtkWidget *widget, gboolean double_buffer)
 {
 	HTMLPlainPainter *new;
 
 	new = g_object_new (HTML_TYPE_PLAIN_PAINTER, NULL);
 	HTML_GDK_PAINTER (new)->double_buffer = double_buffer;
+	HTML_GDK_PAINTER (new)->pc = gtk_widget_get_pango_context (widget);
+	g_object_ref (HTML_GDK_PAINTER (new)->pc);
 
 	return HTML_PAINTER (new);
 }

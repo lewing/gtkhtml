@@ -1,5 +1,8 @@
 2002-03-25  Radek Doulik  <rodo@ximian.com>
 
+	* htmlplainpainter.c (html_plain_painter_new): create and ref
+	pango context
+
 	* htmlimage.c (html_image_factory_end_pixbuf): unref loader once
 	not needed
 	(free_image_ptr_data): close loader before unrefing
