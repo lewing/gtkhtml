@@ -321,6 +321,7 @@ void               html_text_change_attrs          (PangoAttrList         *attr_
 						    gint                   start_index,
 						    gint                   end_index,
 						    gboolean               avoid_default_size);
+PangoDirection     html_text_get_pango_direction   (HTMLText              *text);
 
 gboolean  html_text_is_line_break                (PangoLogAttr  attr);
 void      html_text_remove_unwanted_line_breaks  (char         *s,

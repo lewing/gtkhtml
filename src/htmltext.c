@@ -1231,29 +1231,29 @@ prepare_attrs (HTMLText *text, HTMLPainter *painter)
 		}
 	}
 
-	if (e && text->select_length) {
-		gchar *end;
-		gchar *start;
-		GdkColor fg = html_colorset_get_color_allocated
-			(e->settings->color_set, painter,
-			 painter->focus ? HTMLHighlightTextColor : HTMLHighlightTextNFColor)->color;
-		GdkColor bg = html_colorset_get_color_allocated
-			(e->settings->color_set, painter,
-			 painter->focus ? HTMLHighlightColor : HTMLHighlightNFColor)->color;
+/* 	if (e && text->select_length) { */
+/* 		gchar *end; */
+/* 		gchar *start; */
+/* 		GdkColor fg = html_colorset_get_color_allocated */
+/* 			(e->settings->color_set, painter, */
+/* 			 painter->focus ? HTMLHighlightTextColor : HTMLHighlightTextNFColor)->color; */
+/* 		GdkColor bg = html_colorset_get_color_allocated */
+/* 			(e->settings->color_set, painter, */
+/* 			 painter->focus ? HTMLHighlightColor : HTMLHighlightNFColor)->color; */
 			
-		start = html_text_get_text (text,  text->select_start);
-		end = g_utf8_offset_to_pointer (start, text->select_length);
+/* 		start = html_text_get_text (text,  text->select_start); */
+/* 		end = g_utf8_offset_to_pointer (start, text->select_length); */
 			
-		attr = pango_attr_background_new (bg.red, bg.green, bg.blue);
-		attr->start_index = start - text->text;
-		attr->end_index = end - text->text;
-		pango_attr_list_change (attrs, attr);
+/* 		attr = pango_attr_background_new (bg.red, bg.green, bg.blue); */
+/* 		attr->start_index = start - text->text; */
+/* 		attr->end_index = end - text->text; */
+/* 		pango_attr_list_change (attrs, attr); */
 			
-		attr = pango_attr_foreground_new (fg.red, fg.green, fg.blue);
-		attr->start_index = start - text->text;
-		attr->end_index = end - text->text;
-		pango_attr_list_change (attrs, attr);
-	}
+/* 		attr = pango_attr_foreground_new (fg.red, fg.green, fg.blue); */
+/* 		attr->start_index = start - text->text; */
+/* 		attr->end_index = end - text->text; */
+/* 		pango_attr_list_change (attrs, attr); */
+/* 	} */
 
 	return attrs;
 }

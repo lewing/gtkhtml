@@ -757,32 +757,97 @@ draw_normal (HTMLTextSlave *self,
 {
 	HTMLObject *obj;
 	HTMLText *text = self->owner;
-/* 	gchar *str; */
 	GSList *cur;
 	int run_width;
+	int selection_start_index, selection_end_index;
+	int isect_start, isect_end;
+	gboolean selection;
+	GdkColor selection_fg, selection_bg;
 
 	obj = HTML_OBJECT (self);
 
-/* 	str = html_text_slave_get_text (self); */
-/* 	if (*str) { */
-/* 		GList *glyphs; */
+	isect_start = MAX (text->select_start, self->posStart);
+	isect_end = MIN (text->select_start + text->select_length, self->posStart + self->posLen);
+	selection = isect_start < isect_end;
 
-/* 		glyphs = get_glyphs (self, p); */
+	if (selection) {
+		HTMLEngine *e = NULL;
+		gchar *end;
+		gchar *start;
 
-/* 		html_painter_draw_entries (p, obj->x + tx, obj->y + ty + get_ys (text, p), */
-/* 					   str, self->posLen, */
-/* 					   html_text_get_pango_info (text, p), glyphs, */
-/* 					   html_text_slave_get_line_offset (self, 0, p)); */
+		start = html_text_get_text (text, isect_start);
+		end = g_utf8_offset_to_pointer (start, isect_end - isect_start);
 
-/* 		if (self->posStart > 0) */
-/* 			glyphs_destroy (glyphs); */
-/* 	} */
+		selection_start_index = start - text->text;
+		selection_end_index = end - text->text;
+
+		if (p->widget && GTK_IS_HTML (p->widget))
+			e = GTK_HTML (p->widget)->engine;
+
+		if (e) {
+			selection_fg = html_colorset_get_color_allocated
+				(e->settings->color_set, p,
+				 p->focus ? HTMLHighlightTextColor : HTMLHighlightTextNFColor)->color;
+			selection_bg = html_colorset_get_color_allocated
+				(e->settings->color_set, p,
+				 p->focus ? HTMLHighlightColor : HTMLHighlightNFColor)->color;
+		}
+	}
 
 	run_width = 0;
 	for (cur = html_text_slave_get_glyph_items (self, p); cur; cur = cur->next) {
 		HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) cur->data;
+		int cur_width;
 
-		run_width += html_painter_draw_glyphs (p, obj->x + tx + run_width, obj->y + ty + get_ys (text, p), gi->glyph_item.item, gi->glyph_item.glyphs);
+		cur_width = html_painter_draw_glyphs (p, obj->x + tx + run_width, obj->y + ty + get_ys (text, p), gi->glyph_item.item, gi->glyph_item.glyphs);
+
+		if (selection) {
+			isect_start = MAX (gi->glyph_item.item->offset, selection_start_index);
+			isect_end = MIN (gi->glyph_item.item->offset + gi->glyph_item.item->length, selection_end_index);
+
+			isect_start -= gi->glyph_item.item->offset;
+			isect_end -= gi->glyph_item.item->offset;
+
+			if (isect_start < isect_end) {
+				PangoRectangle log_rect;
+				int start_x, end_x;
+		
+				pango_glyph_string_index_to_x (gi->glyph_item.glyphs,
+							       text->text + gi->glyph_item.item->offset,
+							       gi->glyph_item.item->length,
+							       &gi->glyph_item.item->analysis,
+							       isect_start,
+							       FALSE, &start_x);
+
+				pango_glyph_string_index_to_x (gi->glyph_item.glyphs,
+							       text->text + gi->glyph_item.item->offset,
+							       gi->glyph_item.item->length,
+							       &gi->glyph_item.item->analysis,
+							       isect_end,
+							       FALSE, &end_x);
+
+				/* this call is used only to get ascent and height */
+				pango_glyph_string_extents (gi->glyph_item.glyphs, gi->glyph_item.item->analysis.font, NULL, &log_rect);
+
+				printf ("selection_start_index %d selection_end_index %d isect_start %d isect_end %d start_x %d end_x %d cwidth %d width %d\n",
+					selection_start_index, selection_end_index, isect_start, isect_end,
+					html_painter_pango_to_engine (p, start_x), html_painter_pango_to_engine (p, end_x),
+					html_painter_pango_to_engine (p, start_x < end_x ? (end_x - start_x) : (start_x - end_x)),
+					html_painter_pango_to_engine (p, log_rect.width));
+
+				html_painter_set_pen (p, &selection_bg);
+				html_painter_fill_rect (p,
+							obj->x + tx + run_width + html_painter_pango_to_engine (p, MIN (start_x, end_x)),
+							obj->y + ty + get_ys (text, p) - html_painter_pango_to_engine (p, PANGO_ASCENT (log_rect)),
+							html_painter_pango_to_engine (p, start_x < end_x ? (end_x - start_x) : (start_x - end_x)),
+							html_painter_pango_to_engine (p, log_rect.height));
+
+				html_painter_set_pen (p, &selection_fg);
+				html_painter_draw_glyphs (p, obj->x + tx + run_width, obj->y + ty + get_ys (text, p), gi->glyph_item.item, gi->glyph_item.glyphs);
+			}
+		}
+
+		run_width += cur_width;
 	}
 }
 
