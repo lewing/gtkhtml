@@ -53,15 +53,24 @@ finalize (GObject *object)
 
 	painter = HTML_GDK_PAINTER (object);
 
-	if (painter->gc != NULL)
-		gdk_gc_destroy (painter->gc);
+	if (painter->gc != NULL) {
+		gdk_gc_unref (painter->gc);
+		painter->gc = NULL;
+	}
 
-	if (painter->pixmap != NULL)
+	if (painter->pixmap != NULL) {
 		gdk_pixmap_unref (painter->pixmap);
+		painter->pixmap = NULL;
+	}
 
-	g_object_unref (painter->pc);
+	if (painter->pc) {
+		g_object_unref (painter->pc);
+		painter->pc = NULL;
+	}
 
-	(* G_OBJECT_CLASS (parent_class)->finalize) (object);
+	if (G_OBJECT_CLASS (parent_class)->finalize) {
+		(* G_OBJECT_CLASS (parent_class)->finalize) (object);
+	}
 }
 
 static gint text_width (PangoContext *pc, PangoFontDescription *desc, gchar *text, gint bytes)
@@ -98,13 +107,12 @@ alloc_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, Gt
 static void
 ref_font (HTMLPainter *painter, HTMLFont *font)
 {
-	g_object_ref (G_OBJECT (font->data));
 }
 
 static void
 unref_font (HTMLPainter *painter, HTMLFont *font)
 {
-	g_object_unref (G_OBJECT (font->data));
+	/* FIX2 stop leaking font description */
 }
 
 
