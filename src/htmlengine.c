@@ -4788,17 +4788,20 @@ html_engine_spell_check (HTMLEngine *e)
 		html_object_forall (e->clue, NULL, (HTMLObjectForallFunc) check_paragraph, e);
 }
 
+
 gchar *
-html_engine_get_word (HTMLEngine *e)
+html_engine_get_spell_word (HTMLEngine *e)
 {
 	GString *text;
 	HTMLCursor *cursor;
 	gchar *word;
 	gint pos;
 	gunichar uc;
+	gboolean cited, cited2;
 
-	if (!html_is_in_word (html_cursor_get_current_char (e->cursor))
-	    && !html_is_in_word (html_cursor_get_prev_char (e->cursor)))
+	cited = FALSE;
+	if (!html_selection_spell_word (html_cursor_get_current_char (e->cursor), &cited) && !cited
+	    && !html_selection_spell_word (html_cursor_get_prev_char (e->cursor), &cited) && !cited)
 		return NULL;
 
 	cursor = html_cursor_dup (e->cursor);
@@ -4806,11 +4809,13 @@ html_engine_get_word (HTMLEngine *e)
 	text   = g_string_new (NULL);
 
 	/* move to the beginning of word */
-	while (html_is_in_word (html_cursor_get_prev_char (cursor)))
+	cited = FALSE;
+	while (html_selection_spell_word (html_cursor_get_prev_char (cursor), &cited))
 		html_cursor_backward (cursor, e);
 
 	/* move to the end of word */
-	while (html_is_in_word (uc = html_cursor_get_current_char (cursor))) {
+	cited2 = FALSE;
+	while (html_selection_spell_word (uc = html_cursor_get_current_char (cursor), &cited2) || (!cited && cited2)) {
 		gchar out [7];
 		gint size;
 
@@ -4819,6 +4824,7 @@ html_engine_get_word (HTMLEngine *e)
 		out [size] = 0;
 		text = g_string_append (text, out);
 		html_cursor_forward (cursor, e);
+		cited2 = FALSE;
 	}
 
 	word = text->str;
@@ -4829,7 +4835,7 @@ html_engine_get_word (HTMLEngine *e)
 }
 
 gboolean
-html_engine_word_is_valid (HTMLEngine *e)
+html_engine_spell_word_is_valid (HTMLEngine *e)
 {
 	HTMLObject *obj;
 	HTMLText   *text;
@@ -4837,15 +4843,17 @@ html_engine_word_is_valid (HTMLEngine *e)
 	gboolean valid = TRUE;
 	gint offset;
 	gchar prev, curr;
+	gboolean cited;
 
+	cited = FALSE;
 	prev = html_cursor_get_prev_char (e->cursor);
 	curr = html_cursor_get_current_char (e->cursor);
 
 	/* if we are not in word always return TRUE so we care only about invalid words */
-	if (!html_is_in_word (prev) && !html_is_in_word (curr))
+	if (!html_selection_spell_word (prev, &cited) && !cited && !html_selection_spell_word (curr, &cited) && !cited)
 		return TRUE;
 
-	if (html_is_in_word (curr)) {
+	if (html_selection_spell_word (curr, &cited)) {
 		gboolean end;
 
 		end    = (e->cursor->offset == html_object_get_length (e->cursor->object));
@@ -4878,26 +4886,12 @@ html_engine_word_is_valid (HTMLEngine *e)
 }
 
 void
-html_engine_replace_word_with (HTMLEngine *e, const gchar *word)
+html_engine_replace_spell_word_with (HTMLEngine *e, const gchar *word)
 {
 	HTMLObject *replace = NULL;
 	HTMLText   *orig;
 
-	if (!html_is_in_word (html_cursor_get_current_char (e->cursor))
-	    && !html_is_in_word (html_cursor_get_prev_char (e->cursor)))
-		return;
-
-	html_engine_disable_selection (e);
-	html_engine_edit_selection_updater_update_now (e->selection_updater);
-
-	/* move to the beginning of word */
-	while (html_is_in_word (html_cursor_get_prev_char (e->cursor)))
-		html_cursor_backward (e->cursor, e);
-	html_engine_set_mark (e);
-
-	/* move to the end of word */
-	while (html_is_in_word (html_cursor_get_current_char (e->cursor)))
-		html_cursor_forward (e->cursor, e);
+	html_engine_select_spell_word_editable (e);
 
 	orig = HTML_TEXT (e->mark->object);
 	switch (HTML_OBJECT_TYPE (e->mark->object)) {
