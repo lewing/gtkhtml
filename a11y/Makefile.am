@@ -16,6 +16,8 @@ libgtkhtml_a11y_la_SOURCES =				\
 	object.c					\
 	paragraph.h					\
 	paragraph.c					\
+	text.h						\
+	text.c						\
 	utils.h						\
 	utils.c						\
 	$(END)

@@ -1,7 +1,6 @@
 SUBDIRS =					\
 	a11y					\
 	src					\
-	capplet					\
 	components				\
 	art					\
 	po

@@ -23,6 +23,7 @@
 
 #include "htmlobject.h"
 
+#include "text.h"
 #include "paragraph.h"
 #include "utils.h"
 
@@ -34,6 +35,9 @@ create_accessible (HTMLObject *o, AtkObject *parent)
 	switch (HTML_OBJECT_TYPE (o)) {
 	case HTML_TYPE_CLUEFLOW:
 		accessible = html_a11y_paragraph_new (o);
+		break;
+	case HTML_TYPE_TEXT:
+		accessible = html_a11y_text_new (o);
 		break;
 	}
 

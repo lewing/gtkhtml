@@ -118,6 +118,8 @@ gtk_html_a11y_ref_child (AtkObject *accessible, gint index)
 		child = html_object_get_child (GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue, index);
 		if (child) {
 			accessible_child = html_utils_get_accessible (child, accessible);
+			if (accessible_child)
+				g_object_ref (accessible_child);
 		}
 	}
 

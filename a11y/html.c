@@ -103,7 +103,7 @@ html_a11y_finalize (GObject *obj)
 static void
 html_a11y_initialize (AtkObject *obj, gpointer data)
 {
-	printf ("html_a11y_initialize\n");
+	/* printf ("html_a11y_initialize\n"); */
 
 	g_object_set_data (G_OBJECT (obj), HTML_ID, data);
 
@@ -149,7 +149,6 @@ html_a11y_get_parent (AtkObject *accessible)
 {
 	AtkObject *parent;
 
-	printf ("html_a11y_get_parent\n");
 	parent = accessible->accessible_parent;
 
 	if (parent != NULL)
@@ -163,7 +162,7 @@ html_a11y_get_parent (AtkObject *accessible)
 		}
 	}
 
-	printf ("html_a11y_get_parent resolve to %p\n", parent);
+	/* printf ("html_a11y_get_parent resolve to %p\n", parent); */
 
 	return parent;
 }
@@ -179,7 +178,7 @@ html_a11y_get_index_in_parent (AtkObject *accessible)
 		index = html_object_get_child_index (obj->parent, obj);
 	}
 
-	printf ("html_a11y_get_index_in_parent resolve to %d\n", index);
+	/* printf ("html_a11y_get_index_in_parent resolve to %d\n", index); */
 
 	return index;  
 }
@@ -197,7 +196,7 @@ html_a11y_ref_state_set (AtkObject *accessible)
 	atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
 	atk_state_set_add_state (state_set, ATK_STATE_ENABLED);
 
-	printf ("html_a11y_ref_state_set resolves to %p\n", state_set);
+	/* printf ("html_a11y_ref_state_set resolves to %p\n", state_set); */
 
 	return state_set;
 }
@@ -205,14 +204,15 @@ html_a11y_ref_state_set (AtkObject *accessible)
 static gint
 html_a11y_get_n_children (AtkObject *accessible)
 {
-	HTMLObject *clue;
+	HTMLObject *parent;
 	gint n_children = 0;
 
-	/* clue = GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue;
-	if (clue)
-	n_children = html_object_get_n_children (GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue); */
+	parent = HTML_A11Y_HTML (accessible);
+	if (parent) {
+		n_children = html_object_get_n_children (parent);
+	}
 
-	printf ("html_a11y_get_n_children resolves to %d\n", n_children);
+	/* printf ("html_a11y_get_n_children resolves to %d\n", n_children); */
 
 	return n_children;
 }
@@ -220,17 +220,20 @@ html_a11y_get_n_children (AtkObject *accessible)
 static AtkObject *
 html_a11y_ref_child (AtkObject *accessible, gint index)
 {
-	HTMLObject *child;
+	HTMLObject *parent, *child;
 	AtkObject *accessible_child = NULL;
-	
-	/* if (GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue) {
-		child = html_object_get_child (GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue, index);
+
+	parent = HTML_A11Y_HTML (accessible);
+	if (parent) {
+		child = html_object_get_child (parent, index);
 		if (child) {
 			accessible_child = html_utils_get_accessible (child, accessible);
+			if (accessible_child)
+				g_object_ref (accessible_child);
 		}
-		} */
+	}		
 
-	printf ("html_a11y_ref_child %d resolves to %p\n", index, accessible_child);
+	/* printf ("html_a11y_ref_child %d resolves to %p\n", index, accessible_child); */
 
 	return accessible_child;
 }
