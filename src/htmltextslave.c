@@ -794,7 +794,7 @@ draw_normal (HTMLTextSlave *self,
 		}
 	}
 
-	printf ("draw_normal %d %d %d\n", selection_bg.red, selection_bg.green, selection_bg.blue);
+	//printf ("draw_normal %d %d %d\n", selection_bg.red, selection_bg.green, selection_bg.blue);
 
 	run_width = 0;
 	for (cur = html_text_slave_get_glyph_items (self, p); cur; cur = cur->next) {
@@ -851,7 +851,9 @@ draw_normal (HTMLTextSlave *self,
 							obj->y + ty + get_ys (text, p) - html_painter_pango_to_engine (p, PANGO_ASCENT (log_rect)),
 							html_painter_pango_to_engine (p, start_x < end_x ? (end_x - start_x) : (start_x - end_x)),
 							html_painter_pango_to_engine (p, log_rect.height));
-			
+
+				printf ("draw selection %d %d %d at %d, %d\n", selection_bg.red, selection_bg.green, selection_bg.blue,
+					obj->x + tx + run_width, obj->y + ty + get_ys (text, p));
 				html_painter_draw_glyphs (p, obj->x + tx + run_width, obj->y + ty + get_ys (text, p), gi->glyph_item.item, gi->glyph_item.glyphs,
 							  &selection_fg, &selection_bg);
 				html_painter_set_clip_rectangle (p, cx, cy, cw, ch);

@@ -290,6 +290,8 @@ html_painter_begin (HTMLPainter *painter,
 	g_return_if_fail (painter != NULL);
 	g_return_if_fail (HTML_IS_PAINTER (painter));
 
+	painter->clip_height = painter->clip_width = 0;
+
 	(* HP_CLASS (painter)->begin) (painter, x1, y1, x2, y2);
 }
 
