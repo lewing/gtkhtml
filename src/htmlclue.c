@@ -63,7 +63,7 @@ get_n_children (HTMLObject *o)
 
 	while (cur) {
 		n_children ++;
-		cur = cur->next;
+		cur = html_object_next_not_slave (cur);
 	}
 
 	return n_children;
@@ -81,7 +81,7 @@ get_child (HTMLObject *o, gint index)
 		if (!index)
 			break;
 		index --;
-		cur = cur->next;
+		cur = html_object_next_not_slave (cur);
 	}
 
 	return cur;
@@ -97,7 +97,7 @@ get_child_index (HTMLObject *self, HTMLObject *child)
 		if (cur == child)
 			return index;
 		index ++;
-		cur = cur->next;
+		cur = html_object_next_not_slave (cur);
 	}
 
 	return -1;

@@ -225,6 +225,67 @@ op_copy (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, guint *len)
 	return HTML_OBJECT (nt);
 }
 
+static gint
+get_n_children (HTMLObject *self)
+{
+	HTMLTable *t = HTML_TABLE (self);
+	guint r, c, n_children = 0;
+
+	for (r = 0; r < t->totalRows; r++)
+		for (c = 0; c < t->totalCols; c++)
+			if (t->cells [r][c] && t->cells [r][c]->row == r && t->cells [r][c]->col == c)
+				n_children ++;
+
+	/* printf ("table n_children %d\n", n_children); */
+
+	return n_children;
+}
+
+static HTMLObject *
+get_child (HTMLObject *self, gint index)
+{
+	HTMLTable *t = HTML_TABLE (self);
+	HTMLObject *child = NULL;
+	guint r, c, n = 0;
+
+	for (r = 0; r < t->totalRows && !child; r++)
+		for (c = 0; c < t->totalCols; c++)
+			if (t->cells [r][c] && t->cells [r][c]->row == r && t->cells [r][c]->col == c) {
+				if (n == index) {
+					child = HTML_OBJECT (t->cells [r][c]);
+					break;
+				}
+				n ++;
+			}
+
+	/* printf ("table ref %d child %p\n", index, child); */
+
+	return child;
+}
+
+static gint
+get_child_index (HTMLObject *self, HTMLObject *child)
+{
+	HTMLTable *t = HTML_TABLE (self);
+	guint r, c;
+	gint n = 0;
+
+	for (r = 0; r < t->totalRows; r++)
+		for (c = 0; c < t->totalCols; c++) {
+			if (t->cells [r][c] && t->cells [r][c]->row == r && t->cells [r][c]->col == c) {
+				if (HTML_OBJECT (t->cells [r][c]) == child) {
+					/* printf ("table child %p index %d\n", child, n); */
+					return n;
+				}
+				n ++;
+			}
+		}
+
+	/* printf ("table child %p index %d\n", child, -1); */
+
+	return -1;
+}
+
 static guint
 get_recursive_length (HTMLObject *self)
 {
@@ -2177,6 +2238,9 @@ html_table_class_init (HTMLTableClass *klass,
 	object_class->get_bg_color = get_bg_color;
 	object_class->get_recursive_length = get_recursive_length;
 	object_class->remove_child = remove_child;
+	object_class->get_n_children = get_n_children;
+	object_class->get_child = get_child;
+	object_class->get_child_index = get_child_index;
 
 	parent_class = &html_object_class;
 }
