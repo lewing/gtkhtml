@@ -49,14 +49,11 @@
 #include "htmltablecell.h"
 #include "htmltext.h"
 #include "htmltextslave.h"	/* FIXME */
-#include "htmlvspace.h"
 
-
 HTMLClueFlowClass html_clueflow_class;
 static HTMLClueClass *parent_class = NULL;
 
 #define HCF_CLASS(x) HTML_CLUEFLOW_CLASS (HTML_OBJECT (x)->klass)
-#define HTML_IS_PLAIN_PAINTER(obj)              (GTK_CHECK_TYPE ((obj), HTML_TYPE_PLAIN_PAINTER))
 
 inline HTMLHAlignType html_clueflow_get_halignment (HTMLClueFlow *flow);
 static gchar * get_item_number_str (HTMLClueFlow *flow);
@@ -486,7 +483,7 @@ calc_min_width (HTMLObject *o,
 	cur = HTML_CLUE (o)->head;
 	while (cur) {
 		w += add ? html_object_calc_preferred_width (cur, painter) : html_object_calc_min_width (cur, painter);
-		if (!add || cur->flags & HTML_OBJECT_FLAG_NEWLINE || !cur->next) {
+		if (!add || !cur->next) {
 			if (min_width < w) min_width = w;
 			w = 0;
 		}
@@ -612,16 +609,7 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 		    && HTML_OBJECT_TYPE (obj) != HTML_TYPE_TEXTSLAVE && !html_object_is_container (obj))
 			leaf_childs_changed_size = TRUE;
 
-		if (obj->flags & HTML_OBJECT_FLAG_NEWLINE) {
-			if (!a)
-				a = obj->ascent;
-			if (!a && (obj->descent > d))
-				d = obj->descent;
-			newLine = TRUE;
-			vspace = HTML_VSPACE (obj);
-			clear = vspace->clear;
-			obj = obj->next;
-		} else if (obj->flags & HTML_OBJECT_FLAG_SEPARATOR) {
+		if (obj->flags & HTML_OBJECT_FLAG_SEPARATOR) {
 			if (obj->x != w) {
 				obj->x = w;
 				changed = TRUE;
@@ -707,7 +695,6 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 
 			while ( run
 				&& ! (run->flags & HTML_OBJECT_FLAG_SEPARATOR)
-				&& ! (run->flags & HTML_OBJECT_FLAG_NEWLINE)
 				&& ! (run->flags & HTML_OBJECT_FLAG_ALIGNED)) {
 				HTMLFitType fit;
 				HTMLVAlignType valign;
@@ -989,16 +976,13 @@ calc_preferred_width (HTMLObject *o,
 	next = NULL;
 
 	for (obj = HTML_CLUE (o)->head; obj != 0; obj = obj->next) {
-		if (!(obj->flags & HTML_OBJECT_FLAG_NEWLINE)) {
-			w += html_object_calc_preferred_width (obj, painter);
-		}
+		w += html_object_calc_preferred_width (obj, painter);
 
-		if (obj->flags & HTML_OBJECT_FLAG_NEWLINE || !(next = html_object_next_not_slave (obj))) {
-			HTMLObject *eol = (obj->flags & HTML_OBJECT_FLAG_NEWLINE) ? html_object_prev_not_slave (obj) : obj;
+		if (!(next = html_object_next_not_slave (obj))) {
 
 			/* remove trailing space width on the end of line which is not on end of paragraph */
-			if (next && html_object_is_text (eol))
-				w -= html_text_trail_space_width (HTML_TEXT (eol), painter);
+			if (next && html_object_is_text (obj))
+				w -= html_text_trail_space_width (HTML_TEXT (obj), painter);
 
 			if (w > maxw)
 				maxw = w;

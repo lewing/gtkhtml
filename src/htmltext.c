@@ -579,9 +579,6 @@ ht_fit_line (HTMLObject *o,
 
 	text = HTML_TEXT (o);
 
-	if (o->flags & HTML_OBJECT_FLAG_NEWLINE)
-		return HTML_FIT_COMPLETE;
-
 	remove_text_slaves (o);
 
 	/* Turn all text over to our slaves */
