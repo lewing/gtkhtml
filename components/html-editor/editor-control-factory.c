@@ -339,7 +339,7 @@ editor_init_painters (GtkHTMLControlData *cd)
 	prop = GTK_HTML_CLASS (GTK_OBJECT_GET_CLASS (html))->properties;
 	
 	if (!cd->plain_painter) {
-		cd->plain_painter = HTML_GDK_PAINTER (html_plain_painter_new (TRUE));
+		cd->plain_painter = HTML_GDK_PAINTER (html_plain_painter_new (GTK_WIDGET (html), TRUE));
 		html_font_manager_set_default (&HTML_PAINTER (cd->plain_painter)->font_manager,
 					       prop->font_var,      prop->font_fix,
 					       prop->font_var_size, prop->font_var_points,
