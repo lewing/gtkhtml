@@ -354,6 +354,7 @@ prepare_properties_and_menu (GtkHTMLControlData *cd, guint *items)
 
 	obj  = cd->html->engine->cursor->object;
 	menu = gtk_menu_new ();
+	*items = 0;
 
 	if (cd->properties_types) {
 		g_list_free (cd->properties_types);
@@ -481,7 +482,11 @@ prepare_properties_and_menu (GtkHTMLControlData *cd, guint *items)
 		ADD_ITEM (_("Page..."), prop_dialog, BODY);
 	}
 
-	gtk_widget_show (menu);
+	if (*items == 0) {
+		gtk_object_sink (menu);
+		menu = NULL;
+	} else
+		gtk_widget_show (menu);
 
 	return menu;
 }
@@ -490,13 +495,13 @@ gint
 popup_show (GtkHTMLControlData *cd, GdkEventButton *event)
 {
 	GtkWidget *menu;
-	guint items = 0;
+	guint items;
 
 	menu = prepare_properties_and_menu (cd, &items);
+	printf ("items: %d\n", items);
 	if (items)
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
 				event ? event->button : 0, event ? event->time : 0);
-	gtk_widget_unref (menu);
 
 	return (items > 0);
 }
@@ -518,13 +523,12 @@ gint
 popup_show_at_cursor (GtkHTMLControlData *cd)
 {
 	GtkWidget *menu;
-	guint items = 0;
+	guint items;
 
 	menu = prepare_properties_and_menu (cd, &items);
 	gtk_widget_show (menu);
 	if (items)
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, set_position, cd, 0, 0);
-	gtk_widget_unref (menu);
 
 	return (items > 0);
 }
@@ -532,7 +536,7 @@ popup_show_at_cursor (GtkHTMLControlData *cd)
 void
 property_dialog_show (GtkHTMLControlData *cd)
 {
-	guint items = 0;
+	guint items;
 
 	prepare_properties_and_menu (cd, &items);
 	if (items)

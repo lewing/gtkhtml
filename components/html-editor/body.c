@@ -112,7 +112,8 @@ fill_sample (GtkHTMLEditBodyProperties *d)
 }
 
 static void
-color_changed (GtkWidget *w, GdkColor *color, gboolean by_user, GtkHTMLEditBodyProperties *data)
+color_changed (GtkWidget *w, GdkColor *color, gboolean custom, gboolean by_user, gboolean is_default,
+	       GtkHTMLEditBodyProperties *data)
 {
 	gint idx;
 
@@ -255,7 +256,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	frame = gtk_frame_new (_("Background Image"));
 	vbox = gtk_vbox_new (FALSE, 2);
 	gtk_container_border_width (GTK_CONTAINER (vbox), 3);
-	data->pixmap_entry = gnome_pixmap_entry_new ("background_image", _("Background Image"), TRUE);
+	data->pixmap_entry = gnome_pixmap_entry_new ("background_image", _("Background Image"), FALSE);
 
 	if (cd->html->engine->bgPixmapPtr) {
 		HTMLImagePointer *ip = (HTMLImagePointer *) cd->html->engine->bgPixmapPtr;
@@ -292,7 +293,7 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 				 color_group_fetch ("body_" g, cd)); \
         color_combo_set_color (COLOR_COMBO (combo), &data->color [ct]); \
         gtk_object_set_data (GTK_OBJECT (combo), "type", GINT_TO_POINTER (ct)); \
-        gtk_signal_connect (GTK_OBJECT (combo), "changed", GTK_SIGNAL_FUNC (color_changed), data); \
+        gtk_signal_connect (GTK_OBJECT (combo), "color_changed", GTK_SIGNAL_FUNC (color_changed), data); \
 	hbox = gtk_hbox_new (FALSE, 3); \
 	gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE, FALSE, 0); \
 	gtk_box_pack_start (GTK_BOX (hbox), gtk_label_new (x), FALSE, FALSE, 0); \
@@ -309,7 +310,6 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	/* gtk_idle_add (hide_preview, data); */
 
 	gtk_widget_show_all (table);
-	gnome_pixmap_entry_set_preview (GNOME_PIXMAP_ENTRY (data->pixmap_entry), FALSE);
 
 	return table;
 }
