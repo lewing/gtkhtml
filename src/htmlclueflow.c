@@ -1470,34 +1470,6 @@ write_indent (HTMLEngineSaveState *state, gint level)
 	return TRUE;
 }
 
-static const char *
-get_tag (HTMLClueFlow *flow)
-{
-	if (!flow)
-		return NULL;
-
-	switch (flow->style) {
-	case HTML_CLUEFLOW_STYLE_LIST_ITEM:
-		return NULL;
-	case HTML_CLUEFLOW_STYLE_NORMAL:
-	case HTML_CLUEFLOW_STYLE_H1:
-	case HTML_CLUEFLOW_STYLE_H2:
-	case HTML_CLUEFLOW_STYLE_H3:
-	case HTML_CLUEFLOW_STYLE_H4:
-	case HTML_CLUEFLOW_STYLE_H5:
-	case HTML_CLUEFLOW_STYLE_H6:
-	case HTML_CLUEFLOW_STYLE_ADDRESS:
-	case HTML_CLUEFLOW_STYLE_PRE:
-	default:
-		if (flow->levels->len) {
-			if (flow->levels->data[flow->levels->len -1] == HTML_LIST_TYPE_BLOCKQUOTE_CITE)
-				return "BLOCKQUOTE TYPE=CITE";
-		}
-
-		return "BLOCKQUOTE";
-	}
-}
-
 inline static gint
 get_level (HTMLClueFlow *cf)
 {

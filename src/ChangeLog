@@ -1,5 +1,10 @@
 2002-05-10  Larry Ewing  <lewing@ximian.com>
 
+	* htmlclueflow.c (get_tag): remove unused function.
+
+	* gtkhtml-propmanager.c (gtk_html_propmanager_class_init): small
+	cleanups.
+
 	* htmlengine-save.h: add prototype for html_engine_save_output_stringv.
 
 	* htmlengine-save.c (html_engine_save_output_stringv): add a
