@@ -898,7 +898,7 @@ static gint
 calc_offset (HTMLTextSlave *slave, HTMLPainter *painter, gint x)
 {
 	GSList *cur, *glyphs = html_text_slave_get_glyph_items (slave, painter);
-	int width = 0, offset = 0;
+	int width = 0, offset = html_object_get_direction (HTML_OBJECT (slave->owner)) == HTML_DIRECTION_RTL ? slave->posLen : 0;
 	PangoItem *item = NULL;
 
 	if (glyphs) {
@@ -926,8 +926,10 @@ calc_offset (HTMLTextSlave *slave, HTMLPainter *painter, gint x)
 			} else {
 				/* RTL */
 				for (i = item->num_chars - 1; i >= 0; i --) {
-					if (x < html_painter_pango_to_engine (painter, width + gi->widths [i] / 2))
+					if (x < html_painter_pango_to_engine (painter, width + gi->widths [i] / 2)) {
+						i ++;
 						goto done;
+					}
 					width += gi->widths [i];
 				}
 			}
@@ -937,8 +939,10 @@ calc_offset (HTMLTextSlave *slave, HTMLPainter *painter, gint x)
 
 		if (cur)
 			offset = g_utf8_pointer_to_offset (html_text_slave_get_text (slave), slave->owner->text + item->offset) + i;
-		else
-			offset = slave->posLen;
+		else {
+			printf ("owner dir %d\n", html_object_get_direction (HTML_OBJECT (slave->owner)));
+			offset = html_object_get_direction (HTML_OBJECT (slave->owner)) == HTML_DIRECTION_RTL ? 0 : slave->posLen;
+		}
 	}
 
 	printf ("offset %d\n", offset);

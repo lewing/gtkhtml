@@ -1244,14 +1244,16 @@ prepare_attrs (HTMLText *text, HTMLPainter *painter)
 		start = html_text_get_text (text,  text->select_start);
 		end = g_utf8_offset_to_pointer (start, text->select_length);
 			
-		attr = pango_attr_background_new (bg.red, bg.green, bg.blue);
-		attr->start_index = start - text->text;
-		attr->end_index = end - text->text;
-		pango_attr_list_change (attrs, attr);
+/* 		attr = pango_attr_background_new (bg.red, bg.green, bg.blue); */
+/* 		attr->start_index = start - text->text; */
+/* 		attr->end_index = end - text->text; */
+/* 		pango_attr_list_change (attrs, attr); */
 			
 		attr = pango_attr_foreground_new (fg.red, fg.green, fg.blue);
 		attr->start_index = start - text->text;
 		attr->end_index = end - text->text;
+/* 		attr->start_index = 0; */
+/* 		attr->end_index = 3; */
 		pango_attr_list_change (attrs, attr);
 	}
 
@@ -2171,7 +2173,7 @@ get_font_style (const HTMLText *text)
 
 	parent = HTML_OBJECT (text)->parent;
 
-	if (HTML_OBJECT_TYPE (parent) == HTML_TYPE_CLUEFLOW) {
+	if (parent && HTML_OBJECT_TYPE (parent) == HTML_TYPE_CLUEFLOW) {
 		GtkHTMLFontStyle parent_style;
 
 		parent_style = html_clueflow_get_default_font_style (HTML_CLUEFLOW (parent));
@@ -2232,12 +2234,24 @@ select_range (HTMLObject *self,
 {
 	HTMLText *text;
 	HTMLObject *p;
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (HTML_TEXT (self), engine->painter);
 	gboolean changed;
 
 	text = HTML_TEXT (self);
 
 	if (length < 0 || length + offset > HTML_TEXT (self)->text_len)
 		length = HTML_TEXT (self)->text_len - offset;
+
+	/* extend to cursor positions */
+/* 	while (offset > 0 && !pi->attrs [offset].is_cursor_position) { */
+/* 		offset --; */
+/* 		length ++; */
+/* 	} */
+
+/* 	while (offset + length < text->text_len && !pi->attrs [offset + length].is_cursor_position) */
+/* 		length ++; */
+
+/* 	printf ("updated offset: %d length: %d (end offset %d)\n", offset, length, offset + length); */
 
 	if (offset != text->select_start || length != text->select_length) {
 		HTMLObject *slave;
