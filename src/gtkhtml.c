@@ -50,6 +50,7 @@
 #include "htmlframe.h"
 #include "htmliframe.h"
 #include "htmlimage.h"
+#include "htmllinktext.h"
 #include "htmlmarshal.h"
 #include "htmlplainpainter.h"
 #include "htmlsettings.h"
@@ -768,6 +769,26 @@ key_press_event (GtkWidget *widget,
 
 	html->priv->event_time = 0;
 
+	printf ("editable: %d keyval %d\n", html_engine_get_editable (html->engine), event->keyval);
+	if (!html_engine_get_editable (html->engine)) {
+		switch (event->keyval) {
+		case GDK_Return:
+		case GDK_KP_Enter:
+			if (html->engine->focus_object) {
+				gchar *url;
+				url = html_object_get_complete_url (html->engine->focus_object);
+				if (url) {
+					printf ("link clicked: %s\n", url);
+					g_signal_emit (html, signals [LINK_CLICKED], 0, url);
+					g_free (url);
+				}
+			}
+			break;
+		default:
+			;
+		}
+	}
+
 	/* printf ("retval: %d\n", retval); */
 
 	return retval;
@@ -1392,6 +1413,14 @@ button_press_event (GtkWidget *widget,
 					    || (!engine->mark && event->state & GDK_SHIFT_MASK))
 						html_engine_set_mark (engine);
 				html_engine_jump_at (engine, x, y);
+			} else {
+				HTMLObject *obj;
+				gint offset;
+
+				obj = html_engine_get_object_at (engine, x, y, &offset, FALSE);
+				if (obj && ((HTML_IS_IMAGE (obj) && HTML_IMAGE (obj)->url && *HTML_IMAGE (obj)->url)
+					    || HTML_IS_LINK_TEXT (obj)))
+					html_engine_set_focus_object (engine, obj);
 			}
 			if (html->allow_selection) {
 				if (event->state & GDK_SHIFT_MASK)
@@ -1984,9 +2013,10 @@ init_properties (GtkHTMLClass *klass)
 static gboolean
 focus (GtkWidget *w, GtkDirectionType direction)
 {
-	if (html_engine_focus (GTK_HTML (w)->engine, direction)) {
-		if (GTK_HTML (w)->engine->focus_object) {
-			HTMLEngine *e = GTK_HTML (w)->engine;
+	HTMLEngine *e = GTK_HTML (w)->engine;
+
+	if (html_engine_focus (e, direction)) {
+		if (e->focus_object) {
 			HTMLObject *obj = e->focus_object;
 			gint x1, y1, x2, y2, xo, yo;
 
@@ -2016,6 +2046,10 @@ focus (GtkWidget *w, GtkDirectionType direction)
 			printf ("engine pos: %d,%d x %d,%d\n",
 				e->x_offset, e->y_offset, e->x_offset + e->width, e->y_offset + e->height);
 		}
+
+		if (!GTK_WIDGET_HAS_FOCUS (w) && e->focus_object && !html_object_is_embedded (e->focus_object))
+			gtk_widget_grab_focus (w);
+
 		return TRUE;
 	}
 
