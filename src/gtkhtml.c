@@ -4067,6 +4067,12 @@ command (GtkHTML *html, GtkHTMLCommandType com_type)
 	case GTK_HTML_COMMAND_SAVE_DATA_OFF:
 		html->engine->save_data = FALSE;
 		break;
+	case GTK_HTML_COMMAND_SAVED:
+		html_engine_saved (html->engine);
+		break;
+	case GTK_HTML_COMMAND_IS_SAVED:
+		rv = html_engine_is_saved (html->engine);
+		break;
 	default:
 		html->binding_handled = FALSE;
 	}

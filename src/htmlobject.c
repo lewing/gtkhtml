@@ -23,6 +23,8 @@
 
 #include <config.h>
 #include <string.h>
+#include <glib/gdataset.h>
+#include <glib/gquark.h>
 
 #include "htmlclue.h"
 #include "htmlclueflow.h"
@@ -38,6 +40,7 @@
 #include "htmlinterval.h"
 #include "htmlobject.h"
 #include "htmlpainter.h"
+#include "htmltable.h"
 #include "htmltext.h"
 #include "htmlrule.h"
 #include "htmltype.h"
@@ -1559,13 +1562,13 @@ html_object_get_index (HTMLObject *self, guint offset)
 void
 html_object_set_data (HTMLObject *object, const gchar *key, const gchar *value)
 {
-	g_datalist_set_data_full (&object->object_data, key, g_strdup (value), g_free);
+	g_datalist_set_data_full (&object->object_data, g_quark_from_string (key), g_strdup (value), g_free);
 }
 
 void
 html_object_set_data_full (HTMLObject *object, const gchar *key, const gpointer value, GDestroyNotify func)
 {
-	g_datalist_set_data_full (&object->object_data, key, value, func);
+	g_datalist_set_data_full (&object->object_data, g_quark_from_string (key), value, func);
 }
 
 gpointer
@@ -1580,8 +1583,8 @@ copy_data (GQuark key_id, gpointer data, gpointer user_data)
 	HTMLObject *o = HTML_OBJECT (user_data);
 
 	g_datalist_id_set_data_full (&o->object_data,
-				     g_strdup (g_quark_to_string (key_id)),
-				     g_strdup ((gchar *)data), g_free);
+				     key_id,
+				     g_strdup ((gchar *) data), g_free);
 }
 
 void
@@ -1967,4 +1970,54 @@ HTMLClearType
 html_object_get_clear (HTMLObject *self)
 {
 	return (* HO_CLASS (self)->get_clear) (self);
+}
+
+static HTMLObject *
+next_prev_cursor_object (HTMLObject *o, HTMLEngine *e, gint *offset, gboolean forward)
+{
+	HTMLCursor cursor;
+	gboolean result;
+
+	html_cursor_init (&cursor, o, HTML_IS_TABLE (o) ? *offset : (forward ? html_object_get_length (o) : 0));
+
+	result = forward ? html_cursor_forward (&cursor, e) : html_cursor_backward (&cursor, e);
+	*offset = cursor.offset;
+
+	return result ? cursor.object : NULL;
+}
+
+HTMLObject *
+html_object_next_cursor_object (HTMLObject *o, HTMLEngine *e, gint *offset)
+{
+	return next_prev_cursor_object (o, e, offset, TRUE);
+}
+
+HTMLObject *
+html_object_prev_cursor_object (HTMLObject *o, HTMLEngine *e, gint *offset)
+{
+	return next_prev_cursor_object (o, e, offset, FALSE);
+}
+
+HTMLObject *
+html_object_next_cursor_leaf (HTMLObject *o, HTMLEngine *e)
+{
+	gint offset = html_object_get_length (o);
+
+	o = html_object_next_cursor_object (o, e, &offset);
+	while (o && html_object_is_container (o))
+		o = html_object_next_cursor_object (o, e, &offset);
+
+	return o;
+}
+
+HTMLObject *
+html_object_prev_cursor_leaf (HTMLObject *o, HTMLEngine *e)
+{
+	gint offset = html_object_get_length (o);
+
+	o = html_object_prev_cursor_object (o, e, &offset);
+	while (o && html_object_is_container (o))
+		o = html_object_prev_cursor_object (o, e, &offset);
+
+	return o;
 }

@@ -569,4 +569,15 @@ HTMLObject * html_object_get_child (HTMLObject *self, gint index);
 gint html_object_get_child_index (HTMLObject *self, HTMLObject *child);
 
 HTMLClearType html_object_get_clear (HTMLObject *self);
+
+HTMLObject *html_object_next_cursor_object  (HTMLObject *o,
+					     HTMLEngine *e,
+					     gint       *offset);
+HTMLObject *html_object_prev_cursor_object  (HTMLObject *o,
+					     HTMLEngine *e,
+					     gint       *offset);
+HTMLObject *html_object_next_cursor_leaf    (HTMLObject *o,
+					     HTMLEngine *e);
+HTMLObject *html_object_prev_cursor_leaf    (HTMLObject *o,
+					     HTMLEngine *e);
 #endif /* _HTMLOBJECT_H_ */

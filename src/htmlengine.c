@@ -3453,6 +3453,7 @@ html_engine_init (HTMLEngine *engine)
 
 	engine->block = FALSE;
 	engine->save_data = FALSE;
+	engine->saved_step_count = -1;
 
 	engine->map_table = NULL;
 }
@@ -4174,7 +4175,7 @@ html_engine_get_max_height (HTMLEngine *e)
 gboolean
 html_engine_calc_size (HTMLEngine *e, GList **changed_objs)
 {
-	gint max_width, max_height;
+	gint max_width; /* , max_height; */
 	gboolean redraw_whole;
 
 	if (e->clue == 0)
@@ -4185,13 +4186,13 @@ html_engine_calc_size (HTMLEngine *e, GList **changed_objs)
 	max_width = MIN (html_engine_get_max_width (e),
 			 html_painter_get_pixel_size (e->painter)
 			 * (MAX_WIDGET_WIDTH - e->leftBorder - e->rightBorder));
-	max_height = MIN (html_engine_get_max_height (e),
+	/* max_height = MIN (html_engine_get_max_height (e),
 			 html_painter_get_pixel_size (e->painter)
-			 * (MAX_WIDGET_WIDTH - e->topBorder - e->bottomBorder));
+			 * (MAX_WIDGET_WIDTH - e->topBorder - e->bottomBorder)); */
 
 	redraw_whole = max_width != e->clue->max_width;
 	html_object_set_max_width (e->clue, e->painter, max_width);
-	html_object_set_max_height (e->clue, e->painter, max_height);
+	/* html_object_set_max_height (e->clue, e->painter, max_height); */
 	/* printf ("calc size %d\n", e->clue->max_width); */
 	if (changed_objs)
 		*changed_objs = NULL;
@@ -5307,20 +5308,6 @@ draw_link_text (HTMLLinkText *lt, HTMLEngine *e)
 	}
 }
 
-static HTMLObject *
-next_focus_object (HTMLObject *o, HTMLEngine *e, GtkDirectionType dir, gint *offset)
-{
-	HTMLCursor cursor;
-	gboolean result;
-
-	cursor.object = o;
-	cursor.offset = HTML_IS_TABLE (o) ? *offset : (dir == GTK_DIR_TAB_FORWARD ? html_object_get_length (o) : 0);
-	result = dir == GTK_DIR_TAB_FORWARD ? html_cursor_forward (&cursor, e) : html_cursor_backward (&cursor, e);
-	*offset = cursor.offset;
-
-	return result ? cursor.object : NULL;
-}
-
 HTMLObject *
 html_engine_get_focus_object (HTMLEngine *e)
 {
@@ -5348,7 +5335,9 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 			return TRUE;
 
 		if (focus_object) {
-			cur = next_focus_object (focus_object, e, dir, &offset);
+			cur = dir == GTK_DIR_TAB_FORWARD
+				? html_object_next_cursor_object (focus_object, e, &offset)
+				: html_object_prev_cursor_object (focus_object, e, &offset);
 		} else
 			cur = dir == GTK_DIR_TAB_FORWARD
 				? html_object_get_head_leaf (e->clue)
@@ -5376,7 +5365,9 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 					return TRUE;
 				}
 			}
-			cur = next_focus_object (cur, e, dir, &offset);
+			cur = dir == GTK_DIR_TAB_FORWARD
+				? html_object_next_cursor_object (cur, e, &offset)
+				: html_object_prev_cursor_object (cur, e, &offset);
 		}
 		/* printf ("no focus\n"); */
 		html_engine_set_focus_object (e, NULL);
@@ -5456,6 +5447,18 @@ html_engine_set_focus_object (HTMLEngine *e, HTMLObject *o)
 		}
 		set_frame_parents_focus_object (e);
 	}
+}
+
+gboolean
+html_engine_is_saved (HTMLEngine *e)
+{
+	return e->saved_step_count != -1 && e->saved_step_count == html_undo_get_step_count (e->undo);
+}
+
+void
+html_engine_saved (HTMLEngine *e)
+{
+	e->saved_step_count = html_undo_get_step_count (e->undo);
 }
 
 static void
