@@ -1,4 +1,17 @@
-gtkhtml-3.2.4 "Adiantum" 2004-09-23
+gtkhtml-3.2.5 "hispidulum" 2005-02-14
+------------------------------------------------
+
+New in this release
+
+   * Updated translations
+	fr (Christophe Merlet)
+	de (Hendrik Brandt)
+	pl (Artur Flinta)
+	nl (Vincent van Adrighem)
+	sv (Christian Rose)
+	ja (Takeshi AIHANA)
+
+gtkhtml-3.2.4 "Adiantum" 2004-12-06
 ------------------------------------------------
 
 New in this release
@@ -11,7 +24,7 @@ New in this release
    * fixed multiple replace dialogs appearing
    * fixed dnd position inside scrolled window
 
-gtkhtml-3.2.3 "Frond" 2004-09-23
+gtkhtml-3.2.3 "Frond" 2004-10-11
 ------------------------------------------------
 
 New in this release
