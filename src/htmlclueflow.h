@@ -38,7 +38,7 @@ struct _HTMLClueFlow {
 	HTMLClueFlowStyle style;
 
 	/* Indentation level for blockquote and lists.  */
-	guint8 level;
+	GByteArray *levels;
 
 	/* list item attributes - this will be ideally moved to list item type
 	   based on HTMLClueFlow once we have real types */
@@ -63,11 +63,11 @@ void               html_clueflow_class_init                   (HTMLClueFlowClass
 void               html_clueflow_init                         (HTMLClueFlow       *flow,
 							       HTMLClueFlowClass  *klass,
 							       HTMLClueFlowStyle   style,
-							       guint8              indentation,
+							       GByteArray         *levels,
 							       HTMLListType        item_type,
 							       gint                item_number);
 HTMLObject        *html_clueflow_new                          (HTMLClueFlowStyle   style,
-							       guint8              indentation,
+							       GByteArray         *leves,
 							       HTMLListType        item_type,
 							       gint                item_number);
 HTMLObject        *html_clueflow_new_from_flow                (HTMLClueFlow       *flow);

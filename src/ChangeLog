@@ -1,3 +1,21 @@
+2002-05-03  Larry Ewing  <lewing@ximian.com>
+
+	* htmlengine-edit-clueflowstyle.c (get_props): use indentation
+	(this still needs fixing later).
+	(get_props_and_set): update to use index->levels (FIXME too)
+
+	* htmlengine-edit.c (html_engine_get_indent): use get_indentation.
+
+	* htmlengine.c: lots of changes for the new indent logic.  Parse
+	type argument in clueflow.
+
+	* htmlclueflow.h: make the level value an array.
+
+	* htmlclueflow.c: lots of changes for making different levels of
+	citing.
+
+	* gtkhtmldebug.c (gtk_html_debug_dump_object): fix for levels.
+
 2002-05-02  Radek Doulik  <rodo@ximian.com>
 
 	* gtkhtml.c (load_bindings_from_file): use GTKHTML_RELASE when

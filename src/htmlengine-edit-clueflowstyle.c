@@ -114,14 +114,15 @@ get_props_and_set (HTMLEngine *engine,
 
 	props = get_props (clueflow);
 
+	/* FIXME levels TODO we lose indentation style here now */
 	if (mask & HTML_ENGINE_SET_CLUEFLOW_STYLE) {
 		if (style == HTML_CLUEFLOW_STYLE_LIST_ITEM && clueflow->style != HTML_CLUEFLOW_STYLE_LIST_ITEM
-		    && clueflow->level == 0
+		    && clueflow->levels->len == 0
 		    && !(mask & (HTML_ENGINE_SET_CLUEFLOW_INDENTATION | HTML_ENGINE_SET_CLUEFLOW_INDENTATION_DELTA))) {
 			mask |= HTML_ENGINE_SET_CLUEFLOW_INDENTATION;
 			indentation = 1;
 		} else if (clueflow->style == HTML_CLUEFLOW_STYLE_LIST_ITEM && style != HTML_CLUEFLOW_STYLE_LIST_ITEM
-			   && clueflow->level == 1 
+			   && clueflow->levels->len == 1 
 			   && !(mask & (HTML_ENGINE_SET_CLUEFLOW_INDENTATION | HTML_ENGINE_SET_CLUEFLOW_INDENTATION_DELTA))) {
 			mask |= HTML_ENGINE_SET_CLUEFLOW_INDENTATION;
 			indentation = 0;
@@ -439,8 +440,9 @@ html_engine_get_current_clueflow_indentation (HTMLEngine *engine)
 	para = get_current_para (engine);
 	if (para == NULL)
 		return 0;
-
-	return para->level;
+	
+	/* FIXME levels TODO levels */
+	return para->levels->len;
 }
 
 HTMLHAlignType
