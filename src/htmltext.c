@@ -55,7 +55,6 @@ static SpellError * spell_error_new         (guint off, guint len);
 static void         spell_error_destroy     (SpellError *se);
 static void         move_spell_errors       (GList *spell_errors, guint offset, gint delta);
 static GList *      remove_spell_errors     (GList *spell_errors, guint offset, guint len);
-static guint        get_words               (const gchar *s);
 static void         remove_text_slaves      (HTMLObject *self);
 
 /* static void
@@ -578,49 +577,6 @@ html_text_get_line_offset (HTMLText *text, HTMLPainter *painter)
 		: -1;
 }
 
-static guint
-get_words (const gchar *s)
-{
-	guint words = 1;
-
-	while ((s = strchr (s, ' '))) {
-		words ++;
-		s ++;
-	}
-
-	return words;
-}
-
-static gint
-word_size (gint cl, gint so, gint eo, GList **items, GList **glyphs, gint *width, gint *asc, gint *dsc)
-{
-	PangoItem *item;
-	PangoRectangle rect;
-	gint ceo;
-
-	*width = *asc = *dsc = 0;
-	while (so < eo) {
-		item = (PangoItem *) (*items)->data;
-		ceo = MIN (cl + item->num_chars, eo);
-		pango_glyph_string_extents_range ((PangoGlyphString *)(*glyphs)->data, so - cl, ceo - cl, item->analysis.font, NULL, &rect);
-
-		*width += PANGO_PIXELS (rect.width);
-		*asc = MAX (PANGO_PIXELS (PANGO_ASCENT (rect)), *asc);
-		*dsc = MAX (PANGO_PIXELS (PANGO_DESCENT (rect)), *dsc);
-
-		if (cl + item->num_chars <= eo) {
-			cl += item->num_chars;
-			*items = (*items)->next;
-			*glyphs = (*glyphs)->next;
-		}
-		so += ceo - so;
-	}
-
-	/* printf ("word width: %d\n", *width); */
-
-	return cl;
-}
-
 gint
 html_text_get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gint *item_offset)
 {
@@ -851,18 +807,6 @@ min_word_width_calc_tabs (HTMLText *text, HTMLPainter *p, gint idx, gint *len)
 	return rv;
 }
 
-static guint
-min_word_width (HTMLText *text, HTMLPainter *p, guint i)
-{
-	/* FIXME-words g_assert (i < text->words);
-
-	return text->word_width [i]
-		- (i > 0 ? text->word_width [i - 1]
-		   + html_painter_get_space_width (p, html_text_get_font_style (text), text->face) : 0)
-		   + min_word_width_calc_tabs (text, p, i, NULL)*html_painter_get_space_width (p, html_text_get_font_style (text), text->face); */
-	return 10;
-}
-
 /* return non-breakable text width on begin/end of this text */
 gint
 html_text_get_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
@@ -938,6 +882,54 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 	return text->pi;
 }
 
+gboolean
+html_text_pi_backward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
+{
+	if (*io <= 0) {
+		if (*ii <= 0)
+			return FALSE;
+		(*ii) --;
+		*io = pi->entries [*ii].item->num_chars - 1;
+	} else
+		(*io) --;
+
+	return TRUE;
+}
+
+gboolean
+html_text_pi_forward (HTMLTextPangoInfo *pi, gint *ii, gint *io)
+{
+	if (*io >= pi->entries [*ii].item->num_chars - 1) {
+		if (*ii >= pi->n -1)
+			return FALSE;
+		(*ii) ++;
+		*io = 0;
+	} else
+		(*io) ++;
+
+	return TRUE;
+}
+
+gint
+html_text_tail_white_space (HTMLTextPangoInfo *pi, gint ii, gint io, gint *white_len)
+{
+	gint ww = 0;
+
+	if (white_len)
+		*white_len = 0;
+
+	while (html_text_pi_backward (pi, &ii, &io)) {
+		if (pi->entries [ii].attrs [io].is_white) {
+			ww += pi->entries [ii].widths [io];
+			if (white_len)
+				(*white_len) ++;
+		} else
+			break;
+	}
+
+	return ww;
+}
+
 static gint
 calc_min_width (HTMLObject *self, HTMLPainter *painter)
 {
@@ -950,17 +942,15 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 	ii = io = 0;
 	while (offset < text->text_len) {
 		if (pi->entries [ii].attrs [io].is_line_break) {
+			mw -= html_text_tail_white_space (pi, ii, io, NULL);
 			if (ww > mw)
 				mw = ww;
 			ww = 0;
 		}
 		ww += pi->entries [ii].widths [io];
-		io ++;
 		offset ++;
-		if (io >= pi->entries [ii].item->num_chars) {
-			ii ++;
-			io = 0;
-		}
+
+		html_text_pi_forward (pi, &ii, &io);
 	}
 
 	if (ww > mw)
