@@ -79,7 +79,7 @@ ps_impl_load (BonoboPersistStream *ps,
 		CORBA_free (buffer);
 	} while (1);
 
-	bonobo_persist_stream_set_dirty (ps, TRUE);
+	/* FIX2 bonobo_persist_stream_set_dirty (ps, TRUE); */
 	gtk_html_end (html, handle, 
 		      (ev->_major == CORBA_NO_EXCEPTION) ? GTK_HTML_STREAM_OK : GTK_HTML_STREAM_ERROR);
 
@@ -147,14 +147,13 @@ ps_impl_save (BonoboPersistStream *ps,
 					     (char *)type, 
 					     (GtkHTMLSaveReceiverFn)save_receiver,
 					     &save_state))
-				bonobo_persist_stream_set_dirty (ps, TRUE);
+				/* FIX2 bonobo_persist_stream_set_dirty (ps, TRUE); */
 				
 		CORBA_Object_release (save_state.stream, ev);
 
 	} else {
 		CORBA_exception_set (ev, CORBA_USER_EXCEPTION,
 				     ex_Bonobo_Persist_WrongDataType, NULL);
-		
 	}
 	return;
 }

@@ -53,8 +53,6 @@ typedef struct {
 } EditorEngineClass;
 
 GtkType                               editor_engine_get_type   (void);
-EditorEngine                         *editor_engine_construct  (EditorEngine                *engine,
-								GNOME_GtkHTML_Editor_Engine  corba_engine);
 EditorEngine                         *editor_engine_new        (GtkHTMLControlData          *cd);
 POA_GNOME_GtkHTML_Editor_Engine__epv *editor_engine_get_epv    (void);
 

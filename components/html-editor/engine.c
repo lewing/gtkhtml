@@ -222,14 +222,6 @@ impl_drop_undo (PortableServer_Servant servant, CORBA_Environment * ev)
 }
 
 static void
-engine_init (GObject *object)
-{
-	EditorEngine *e = EDITOR_ENGINE (object);
-
-	e->listener = CORBA_OBJECT_NIL;
-}
-
-static void
 engine_object_finalize (GObject *object)
 {
 	EditorEngine *e = EDITOR_ENGINE (object);
@@ -240,7 +232,15 @@ engine_object_finalize (GObject *object)
 }
 
 static void
-engine_class_init (EditorEngineClass *klass)
+editor_engine_init (GObject *object)
+{
+	EditorEngine *e = EDITOR_ENGINE (object);
+
+	e->listener = CORBA_OBJECT_NIL;
+}
+
+static void
+editor_engine_class_init (EditorEngineClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	POA_GNOME_GtkHTML_Editor_Engine__epv *epv = &klass->epv;
@@ -271,22 +271,7 @@ BONOBO_TYPE_FUNC_FULL (
 	EditorEngine,                  /* Glib class name */
 	GNOME_GtkHTML_Editor_Engine,   /* CORBA interface name */
 	BONOBO_TYPE_OBJECT,            /* parent type */
-	engine);                       /* local prefix ie. 'echo'_class_init */
-
-EditorEngine *
-editor_engine_construct (EditorEngine *engine, GNOME_GtkHTML_Editor_Engine corba_engine)
-{
-	g_return_val_if_fail (engine != NULL, NULL);
-	g_return_val_if_fail (IS_EDITOR_ENGINE (engine), NULL);
-	g_return_val_if_fail (corba_engine != CORBA_OBJECT_NIL, NULL);
-
-	engine->listener = CORBA_OBJECT_NIL;
-
-	if (!bonobo_object_construct (BONOBO_OBJECT (engine), (CORBA_Object) corba_engine))
-		return NULL;
-
-	return engine;
-}
+	editor_engine);                       /* local prefix ie. 'echo'_class_init */
 
 EditorEngine *
 editor_engine_new (GtkHTMLControlData *cd)

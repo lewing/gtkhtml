@@ -257,10 +257,6 @@ body_properties (GtkHTMLControlData *cd, gpointer *set_data)
 	gtk_container_border_width (GTK_CONTAINER (vbox), 3);
 	data->pixmap_entry = gnome_pixmap_entry_new ("background_image", _("Background Image"), TRUE);
 
-	/* fix for broken gnome-libs, could be removed once gnome-libs are fixed */
-	gnome_entry_load_history (GNOME_ENTRY (gnome_pixmap_entry_gnome_entry (GNOME_PIXMAP_ENTRY (data->pixmap_entry))));
-	our_gnome_pixmap_entry_set_last_dir (GNOME_PIXMAP_ENTRY (data->pixmap_entry));
-
 	if (cd->html->engine->bgPixmapPtr) {
 		HTMLImagePointer *ip = (HTMLImagePointer *) cd->html->engine->bgPixmapPtr;
 		guint off = 0;

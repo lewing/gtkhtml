@@ -544,15 +544,8 @@ table_widget (GtkHTMLEditTableProperties *d)
 	gtk_signal_connect (GTK_OBJECT (d->check_bg_pixmap), "toggled", GTK_SIGNAL_FUNC (set_has_bg_pixmap), d);
 	d->entry_bg_pixmap = glade_xml_get_widget (xml, "entry_table_bg_pixmap");
 
-	d->disable_change = TRUE;
-	/* fix for broken gnome-libs, could be removed once gnome-libs are fixed */
-	gnome_entry_load_history (GNOME_ENTRY (gnome_pixmap_entry_gnome_entry (GNOME_PIXMAP_ENTRY (d->entry_bg_pixmap))));
-	our_gnome_pixmap_entry_set_last_dir (GNOME_PIXMAP_ENTRY (d->entry_bg_pixmap));
-	d->disable_change = FALSE;
-
 	gtk_signal_connect (GTK_OBJECT (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (d->entry_bg_pixmap))),
 			    "changed", GTK_SIGNAL_FUNC (changed_bg_pixmap), d);
-
 
 	d->spin_spacing = glade_xml_get_widget (xml, "spin_spacing");
 	gtk_signal_connect (GTK_OBJECT (d->spin_spacing), "changed", GTK_SIGNAL_FUNC (changed_spacing), d);

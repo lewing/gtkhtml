@@ -554,9 +554,6 @@ image_widget (GtkHTMLEditImageProperties *d, gboolean insert)
 	d->pentry = glade_xml_get_widget (xml, "pentry_image_location");
 	gtk_signal_connect (GTK_OBJECT (gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY (d->pentry))),
 			    "changed", GTK_SIGNAL_FUNC (pentry_changed), d);
-	/* fix for broken gnome-libs, could be removed once gnome-libs are fixed */
-	gnome_entry_load_history (GNOME_ENTRY (gnome_pixmap_entry_gnome_entry (GNOME_PIXMAP_ENTRY (d->pentry))));
-	our_gnome_pixmap_entry_set_last_pixmap (GNOME_PIXMAP_ENTRY (d->pentry));
 
 	gtk_widget_show_all (d->page);
 	if (!insert)

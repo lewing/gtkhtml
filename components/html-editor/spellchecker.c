@@ -179,7 +179,8 @@ spell_suggestion_request (GtkHTML *html, const gchar *word, gpointer data)
 	gtk_signal_connect (GTK_OBJECT (sp->window),   "destroy",         GTK_SIGNAL_FUNC (destroy), sp);
 	gtk_signal_connect (GTK_OBJECT (sp->clist),    "select_row",      GTK_SIGNAL_FUNC (select_row), sp);
 
-	gtk_widget_popup (sp->window, x, y);
+	gtk_widget_set_uposition (sp->window, x, y);
+	gtk_widget_show (sp->window);
 	gtk_grab_add (sp->window);
 	gtk_window_set_focus (GTK_WINDOW (sp->window), sp->clist);
 }
