@@ -1318,7 +1318,7 @@ msgstr "Перезагрузить"
 
 #: src/htmlengine-print.c:200
 msgid "Cannot allocate default font for printing\n"
-msgstr "Невозможно распределить шрифт по умолчанию для печати"
+msgstr "Невозможно распределить шрифт по умолчанию для печати\n"
 
 #: src/htmlprinter.c:69
 msgid "US-Letter"

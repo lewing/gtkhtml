@@ -1,3 +1,7 @@
+2002-05-28  Dan Winship  <danw@ximian.com>
+
+	* ru.po: Add a missing \n to make this compile.
+
 2002-05-28  Dmitry G. Mastrukov  <dmitry@taurussoft.org>
 
 	* ru.po: updated Russian translation from Leon Kanter
