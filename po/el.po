@@ -2,7 +2,7 @@
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Simos Xenitellis <simos@hellug.gr>, 2001.
 # Nikos Charonitakis <frolix68@yahoo.gr>, 2003
-.
+
 # Simos init translaion 49 translated messages.
 # Nikos 14Sep03 update translation 98 translated messages.
 msgid ""
