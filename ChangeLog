@@ -1,3 +1,8 @@
+2004-10-26  Mohammad DAMT  <mdamt@bisnisweb.com>
+
+	* configure.in: Added "id" (Indonesian) to ALL_LINGUAS
+	* po/id.po: Added Indonesian translation
+
 2004-10-11  Radek Doulik  <rodo@ximian.com>
 
 	* configure.in: prepare for release 3.2.3
