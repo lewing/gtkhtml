@@ -819,15 +819,15 @@ draw (HTMLObject *o,
 		GdkRectangle rect;
 		Link *link = html_text_get_link_at_offset (owner, owner->focused_link_offset);
 
-		if (link && MAX (link->start_index, textslave->posStart) < MIN (link->end_index, textslave->posStart + textslave->posLen)) {
+		if (link && MAX (link->start_offset, textslave->posStart) < MIN (link->end_offset, textslave->posStart + textslave->posLen)) {
 			gint bw = 0;
 			html_object_get_bounds (o, &rect);
-			if (textslave->posStart < link->start_index)
-				bw = html_text_calc_part_width (owner, p, textslave->posStart, link->start_index - textslave->posStart, NULL, NULL);
+			if (textslave->posStart < link->start_offset)
+				bw = html_text_calc_part_width (owner, p, textslave->posStart, link->start_offset - textslave->posStart, NULL, NULL);
 			rect.x += tx + bw;
 			rect.width -= bw;
-			if (textslave->posStart + textslave->posLen > link->end_index)
-				rect.width -= html_text_calc_part_width (owner, p, link->end_index,  textslave->posStart + textslave->posLen - link->end_index, NULL, NULL);
+			if (textslave->posStart + textslave->posLen > link->end_offset)
+				rect.width -= html_text_calc_part_width (owner, p, link->end_offset,  textslave->posStart + textslave->posLen - link->end_offset, NULL, NULL);
 			rect.y += ty;
 			draw_focus (p, &rect);
 		}

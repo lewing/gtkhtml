@@ -35,8 +35,8 @@ struct _SpellError {
 };
 
 struct _Link {
-	gint start_index;
-	gint end_index;
+	gint start_offset;
+	gint end_offset;
 	gchar *url;
 	gchar *target;
 };
@@ -211,6 +211,12 @@ gboolean          html_text_first_link_offset            (HTMLText           *te
 							  gint               *offset);
 gboolean          html_text_last_link_offset             (HTMLText           *text,
 							  gint               *offset);
+gchar            *html_text_get_link_text                (HTMLText           *text,
+							  gint                offset);
+
+void  html_link_set_url_and_target  (Link  *link,
+				     gchar *url,
+				     gchar *target);
 
 /*
  * protected

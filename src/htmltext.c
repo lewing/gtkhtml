@@ -237,6 +237,7 @@ copy (HTMLObject *s,
 	dest->color         = src->color;
 	dest->select_start  = src->select_start;
 	dest->select_length = src->select_length;
+	dest->attr_list     = pango_attr_list_copy (src->attr_list);
 
 	html_color_ref (dest->color);
 
@@ -397,9 +398,6 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, G
 
 	t1 = HTML_TEXT (self);
 	t2 = HTML_TEXT (with);
-
-	if (t1->font_style != t2->font_style || t1->color != t2->color)
-		return FALSE;
 
 	/* printf ("merge '%s' '%s'\n", t1->text, t2->text); */
 
@@ -1591,7 +1589,7 @@ html_text_get_link_at_offset (HTMLText *text, gint offset)
 	for (l = text->links; l; l = l->next) {
 		Link *link = (Link *) l->data;
 
-		if (link->start_index <= offset && offset <= link->end_index)
+		if (link->start_offset <= offset && offset <= link->end_offset)
 			return link;
 	}
 
@@ -2070,14 +2068,14 @@ html_text_append (HTMLText *text, const gchar *str, gint len)
 }
 
 void
-html_text_add_link (HTMLText *text, gchar *url, gchar *target, gint start_index, gint end_index)
+html_text_add_link (HTMLText *text, gchar *url, gchar *target, gint start_offset, gint end_offset)
 {
 	Link *link = g_new0 (Link, 1);
 
 	link->url = g_strdup (url);
 	link->target = g_strdup (target);
-	link->start_index = start_index;
-	link->end_index = end_index;
+	link->start_offset = start_offset;
+	link->end_offset = end_offset;
 
 	text->links = g_slist_prepend (text->links, link);
 }
@@ -2108,8 +2106,8 @@ html_text_get_link_slaves_at_offset (HTMLText *text, gint offset, HTMLTextSlave 
 	Link *link = html_text_get_link_at_offset (text, offset);
 
 	if (link) {
-		*start = html_text_get_slave_at_offset (HTML_OBJECT (text), link->start_index);
-		*end = html_text_get_slave_at_offset (HTML_OBJECT (*start), link->end_index);
+		*start = html_text_get_slave_at_offset (HTML_OBJECT (text), link->start_offset);
+		*end = html_text_get_slave_at_offset (HTML_OBJECT (*start), link->end_offset);
 
 		if (*start && *end)
 			return link;
@@ -2130,12 +2128,12 @@ html_text_get_link_rectangle (HTMLText *text, HTMLPainter *painter, gint offset,
 		gint xs, ys, xe, ye;
 
 		html_object_calc_abs_position (HTML_OBJECT (start), &xs, &ys);
-		xs += html_text_calc_part_width (text, painter, start->posStart, link->start_index - start->posStart, NULL, NULL);
+		xs += html_text_calc_part_width (text, painter, start->posStart, link->start_offset - start->posStart, NULL, NULL);
 		ys -= HTML_OBJECT (start)->ascent;
 
 		html_object_calc_abs_position (HTML_OBJECT (end), &xe, &ye);
 		xe += HTML_OBJECT (end)->width;
-		xe -= html_text_calc_part_width (text, painter, link->end_index, end->posStart + start->posLen - link->end_index, NULL, NULL);
+		xe -= html_text_calc_part_width (text, painter, link->end_offset, end->posStart + start->posLen - link->end_offset, NULL, NULL);
 		ye += HTML_OBJECT (end)->descent;
 
 		*x1 = MIN (xs, xe);
@@ -2157,9 +2155,9 @@ html_text_prev_link_offset (HTMLText *text, gint *offset)
 	for (l = text->links; l; l = l->next) {
 		Link *link = (Link *) l->data;
 
-		if (link->start_index <= *offset && *offset <= link->end_index) {
+		if (link->start_offset <= *offset && *offset <= link->end_offset) {
 			if (l->next) {
-				*offset = ((Link *) l->next->data)->end_index - 1;
+				*offset = ((Link *) l->next->data)->end_offset - 1;
 				return TRUE;
 			}
 			break;
@@ -2177,9 +2175,9 @@ html_text_next_link_offset (HTMLText *text, gint *offset)
 	for (l = text->links; l; l = l->next) {
 		Link *link = (Link *) l->data;
 
-		if (link->start_index <= *offset && *offset <= link->end_index) {
+		if (link->start_offset <= *offset && *offset <= link->end_offset) {
 			if (prev) {
-				*offset = ((Link *) prev->data)->start_index + 1;
+				*offset = ((Link *) prev->data)->start_offset + 1;
 				return TRUE;
 			}
 			break;
@@ -2194,7 +2192,7 @@ gboolean
 html_text_first_link_offset (HTMLText *text, gint *offset)
 {
 	if (text->links)
-		*offset = ((Link *) g_slist_last (text->links)->data)->start_index + 1;
+		*offset = ((Link *) g_slist_last (text->links)->data)->start_offset + 1;
 
 	return text->links != NULL;
 }
@@ -2203,7 +2201,31 @@ gboolean
 html_text_last_link_offset (HTMLText *text, gint *offset)
 {
 	if (text->links)
-		*offset = ((Link *) text->links->data)->end_index - 1;
+		*offset = ((Link *) text->links->data)->end_offset - 1;
 
 	return text->links != NULL;
+}
+
+gchar *
+html_text_get_link_text (HTMLText *text, gint offset)
+{
+	Link *link = html_text_get_link_at_offset (text, offset);
+	gchar *start;
+
+	start = html_text_get_text (text, link->start_offset);
+
+	return g_strndup (start, g_utf8_offset_to_pointer (start, link->end_offset - link->start_offset) - start);
+}
+
+void
+html_link_set_url_and_target (Link *link, gchar *url, gchar *target)
+{
+	if (!link)
+		return;
+
+	g_free (link->url);
+	g_free (link->target);
+
+	link->url = g_strdup (url);
+	link->target = g_strdup (target);
 }
