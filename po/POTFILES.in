@@ -4,7 +4,7 @@ capplet/gnome-bindings-prop.c
 capplet/gtkhtml-capplet.glade
 capplet/main.c
 components/ebrowser/GNOME_GtkHTML_EBrowser.oaf.in
-components/html-editor/GNOME_GtkHTML_Editor.oaf.in.in
+components/html-editor/GNOME_GtkHTML_Editor.server.in.in
 components/html-editor/GNOME_GtkHTML_Editor.xml.in
 components/html-editor/body.c
 components/html-editor/cell.c
@@ -27,7 +27,9 @@ components/html-editor/text.c
 components/html-editor/toolbar.c
 components/html-editor/utils.c
 src/gtkhtml.c
+src/gtkhtml-properties.c
 src/html-component.c
+src/htmlbutton.c
 src/htmlengine-print.c
 src/htmlgdkpainter.c
 src/htmlprinter.c
