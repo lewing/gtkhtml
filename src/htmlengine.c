@@ -3092,26 +3092,61 @@ html_engine_destroy (GtkObject *object)
 		engine->updateTimer = 0;
 	}
 	/* remove all the timers associated with image pointers also */
-	html_image_factory_stop_animations (engine->image_factory);
-       
+	if (engine->image_factory) {
+		html_image_factory_stop_animations (engine->image_factory);
+	}
+
 	/* timers live in the selection updater too. */
-	html_engine_edit_selection_updater_destroy (engine->selection_updater);
+	if (engine->selection_updater) {
+		html_engine_edit_selection_updater_destroy (engine->selection_updater);
+		engine->selection_updater = NULL;
+	}
 	
-	html_undo_destroy (engine->undo);
+	if (engine->undo) {
+		html_undo_destroy (engine->undo);
+		engine->undo = NULL;
+	}
 	html_engine_clipboard_clear (engine);
 
-	if (engine->invert_gc != NULL)
-		gdk_gc_destroy (engine->invert_gc);
+	if (engine->invert_gc != NULL) {
+		gdk_gc_unref (engine->invert_gc);
+		engine->invert_gc = NULL;
+	}
 
-	html_cursor_destroy (engine->cursor);
-	if (engine->mark != NULL)
+	if (engine->cursor) {
+		html_cursor_destroy (engine->cursor);
+		engine->cursor = NULL;
+	}
+	if (engine->mark) {
 		html_cursor_destroy (engine->mark);
+		engine->mark = NULL;
+	}
 
-	html_tokenizer_destroy (engine->ht);
-	html_string_tokenizer_destroy (engine->st);
-	html_settings_destroy (engine->settings);
-	html_settings_destroy (engine->defaultSettings);
-	html_color_unref (engine->insertion_color);
+	if (engine->ht) {
+		html_tokenizer_destroy (engine->ht);
+		engine->ht = NULL;
+	}
+
+	if (engine->st) {
+		html_string_tokenizer_destroy (engine->st);
+		engine->st = NULL;
+	}
+
+	if (engine->settings) {
+		html_settings_destroy (engine->settings);
+		engine->settings = NULL;
+	}
+
+	if (engine->defaultSettings) {
+		html_settings_destroy (engine->defaultSettings);
+		engine->defaultSettings = NULL;
+	}
+
+	if (engine->insertion_color) {
+		html_color_unref (engine->insertion_color);
+		engine->insertion_color = NULL;
+	}
+
 	if (engine->clue != NULL) {
 		HTMLObject *clue = engine->clue;
 		
@@ -3121,32 +3156,85 @@ html_engine_destroy (GtkObject *object)
 		engine->clue = NULL;
 		html_object_destroy (clue);
 	}
-	html_image_factory_free (engine->image_factory);
 
-	gtk_object_unref (GTK_OBJECT (engine->painter));
+	if (engine->image_factory) {
+		html_image_factory_free (engine->image_factory);
+		engine->image_factory = NULL;
+	}
 
-	html_stack_destroy (engine->color_stack);
-	html_stack_destroy (engine->font_face_stack);
-	html_stack_destroy (engine->font_style_stack);
-	html_stack_destroy (engine->clueflow_style_stack);
-	html_stack_destroy (engine->frame_stack);
+	if (engine->painter) {
+		g_object_unref (GTK_OBJECT (engine->painter));
+		engine->painter = NULL;
+	}
 
-	html_stack_destroy (engine->listStack);
-	html_stack_destroy (engine->glossaryStack);
-	html_stack_destroy (engine->embeddedStack);
+	if (engine->color_stack) {
+		html_stack_destroy (engine->color_stack);
+		engine->color_stack = NULL;
+	}
 
-	for (p = engine->tempStrings; p != NULL; p = p->next)
-		g_free (p->data);
-	g_list_free (engine->tempStrings);
+	if (engine->font_face_stack) {
+		html_stack_destroy (engine->font_face_stack);
+		engine->font_face_stack = NULL;
+	}
 
-	html_draw_queue_destroy (engine->draw_queue);
+	if (engine->font_style_stack) {
+		html_stack_destroy (engine->font_style_stack);
+		engine->font_style_stack = NULL;
+	}
 
-	if (engine->search_info)
+	if (engine->clueflow_style_stack) {
+		html_stack_destroy (engine->clueflow_style_stack);
+		engine->clueflow_style_stack = NULL;
+	}
+
+	if (engine->frame_stack) {
+		html_stack_destroy (engine->frame_stack);
+		engine->frame_stack = NULL;
+	}
+
+	if (engine->listStack) {
+		html_stack_destroy (engine->listStack);
+		engine->listStack = NULL;
+	}
+
+	if (engine->glossaryStack) {
+		html_stack_destroy (engine->glossaryStack);
+		engine->glossaryStack = NULL;
+	}
+
+	if (engine->embeddedStack) {
+		html_stack_destroy (engine->embeddedStack);
+		engine->embeddedStack = NULL;
+	}
+
+	if (engine->tempStrings) {
+		for (p = engine->tempStrings; p != NULL; p = p->next)
+			g_free (p->data);
+		g_list_free (engine->tempStrings);
+		engine->tempStrings = NULL;
+	}
+
+	if (engine->draw_queue) {
+		html_draw_queue_destroy (engine->draw_queue);
+		engine->draw_queue = NULL;
+	}
+
+	if (engine->search_info) {
 		html_search_destroy (engine->search_info);
+		engine->search_info = NULL;
+	}
+
 	clear_selection (engine);
 
-	if (engine->insertion_url) g_free (engine->insertion_url);
-	if (engine->insertion_target) g_free (engine->insertion_target);
+	if (engine->insertion_url) {
+		g_free (engine->insertion_url);
+		engine->insertion_url = NULL;
+	}
+
+	if (engine->insertion_target) {
+		g_free (engine->insertion_target);
+		engine->insertion_target = NULL;
+	}
 
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -3910,8 +3998,6 @@ html_engine_stream_end (GtkHTMLStream *stream,
 static void
 html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
 {
-	gint tx, ty;
-
 	if (e->block && e->opened_streams)
 		return;
 
