@@ -1,5 +1,7 @@
 2003-02-04  Larry Ewing  <lewing@ximian.com>
 
+	* configure.in (GTKHTML_RELEASE_STRING): bump for snapshots.
+
 	* Make gtkhtml-1.1.8 release.
 
 2002-12-05  Larry Ewing  <lewing@ximian.com>
