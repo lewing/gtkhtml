@@ -1,4 +1,4 @@
-gladedir = $(datadir)/gtkhtml
+gladedir = $(datadir)/gtkhtml-@GTKHTML_RELEASE@
 glade_DATA = gtkhtml-capplet.glade
 
 INCLUDES =					\

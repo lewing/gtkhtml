@@ -220,7 +220,7 @@ picker_clicked (GtkWidget *w, gpointer data)
 static void
 cfg_spell (GtkWidget *w, gpointer data)
 {
-	gchar *argv[2] = {"gnome-spell-properties-capplet", NULL};
+	gchar *argv[2] = {"gnome-spell-properties-capplet-1.0", NULL};
 
 	if (gnome_execute_async (NULL, 1, argv) < 0)
 		gnome_error_dialog (_("Cannot execute GNOME Spell control applet\n"
@@ -265,7 +265,7 @@ setup (void)
 	gtk_signal_connect (GTK_OBJECT (button_cfg_spell), "clicked", cfg_spell, NULL);
 
 #define LOAD(x) \
-	base = g_strconcat ("gtkhtml/keybindingsrc.", x, NULL); \
+	base = g_strconcat ("gtkhtml-" GTKHTML_RELEASE  "/keybindingsrc.", x, NULL); \
 	rcfile = gnome_unconditional_datadir_file (base); \
         gtk_rc_parse (rcfile); \
         g_free (base); \

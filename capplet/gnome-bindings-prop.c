@@ -224,7 +224,7 @@ init (GnomeBindingsProperties *prop)
 	gtk_tree_view_append_column (GTK_TREE_VIEW (prop->view_keymap),
 				     gtk_tree_view_column_new_with_attributes ("Command",
 									       gtk_cell_renderer_text_new (),
-									       "text", 0, NULL));
+									       "text", 1, NULL));
 
 	/* prop->button_add     = glade_xml_get_widget (xml, "button_shortcut_add");
 	   prop->button_delete  = glade_xml_get_widget (xml, "button_shortcut_delete");
