@@ -475,7 +475,7 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 			HTMLTextPangoInfo *ppi = html_text_get_pango_info (HTML_TEXT (prev), painter);
 
 			/* if (!pi->entries [0].attrs [0].is_line_break) */
-			/* FIXME: this suck for more complicated languages
+			/* FIXME: this sucks for more complicated languages.
 			   the solution is not easy though, we need to put text
 			   with different styles (even links) into one text object
 			   and keep style info with interval position
