@@ -7,6 +7,7 @@ INCLUDES =					\
 
 CFLAGS +=  					\
 	$(CAPPLET_CFLAGS)			\
+	-DGTK_DISABLE_DEPRECATED		\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
 	-DGLADE_DATADIR=\"$(gladedir)\"
 

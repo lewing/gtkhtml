@@ -26,7 +26,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkclist.h>
+#include <gtk/gtkcontainer.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkoptionmenu.h>
@@ -164,7 +164,7 @@ get_keymap (GnomeBindingsProperties *prop)
 
 	active = gtk_menu_get_active (GTK_MENU (gtk_option_menu_get_menu (GTK_OPTION_MENU (prop->option_keymap))));
 
-	return active ? (KeymapEntry *) gtk_object_get_data (GTK_OBJECT (active), "keymap") : NULL;
+	return active ? (KeymapEntry *) g_object_get_data (G_OBJECT (active), "keymap") : NULL;
 }
 
 static void
@@ -242,7 +242,7 @@ init (GnomeBindingsProperties *prop)
 static inline GList *
 get_menu_items (GnomeBindingsProperties *prop)
 {
-	return gtk_container_children
+	return gtk_container_get_children
 		(GTK_CONTAINER (gtk_option_menu_get_menu (GTK_OPTION_MENU (prop->option_keymap))));
 }
 
@@ -252,7 +252,7 @@ destroy (GtkObject *prop)
 	GList *item;
 
 	for (item = get_menu_items (GNOME_BINDINGS_PROPERTIES (prop)); item; item = item->next)
-		keymap_entry_destroy ((KeymapEntry *) gtk_object_get_data (GTK_OBJECT (item->data), "keymap"));
+		keymap_entry_destroy ((KeymapEntry *) g_object_get_data (item->data, "keymap"));
 }
 
 static void
@@ -265,38 +265,43 @@ class_init (GnomeBindingsPropertiesClass *klass)
 
 	gnome_bindings_properties_signals [CHANGED] =
 		gtk_signal_new ("changed",
-				GTK_RUN_FIRST,
 				G_TYPE_FROM_CLASS (object_class),
+				G_SIGNAL_RUN_FIRST,
 				G_STRUCT_OFFSET (GnomeBindingsPropertiesClass, changed),
-				gtk_marshal_NONE__NONE,
-				GTK_TYPE_NONE, 0);
+				NULL, NULL,
+				g_cclosure_marshal_VOID__VOID,
+				G_TYPE_NONE, 0);
 	gnome_bindings_properties_signals [KEYMAP_SELECTED] =
 		gtk_signal_new ("keymap_selected",
-				GTK_RUN_FIRST,
 				G_TYPE_FROM_CLASS (object_class),
+				G_SIGNAL_RUN_FIRST,
 				G_STRUCT_OFFSET (GnomeBindingsPropertiesClass, changed),
-				gtk_marshal_NONE__NONE,
-				GTK_TYPE_NONE, 0);
+				NULL, NULL,
+				g_cclosure_marshal_VOID__VOID,
+				G_TYPE_NONE, 0);
 }
 
-GtkType
+GType
 gnome_bindings_properties_get_type (void)
 {
-	static guint bindings_properties_type = 0;
+	static GType bindings_properties_type = 0;
 
 	if (!bindings_properties_type) {
-		static const GtkTypeInfo bindings_properties_info = {
-			"GnomeBindingsProperties",
-			sizeof (GnomeBindingsProperties),
+
+		static const GTypeInfo bindings_properties_info = {
 			sizeof (GnomeBindingsPropertiesClass),
-			(GtkClassInitFunc) class_init,
-			(GtkObjectInitFunc) init,
-			/* reserved_1 */ NULL,
-			/* reserved_2 */ NULL,
-			(GtkClassInitFunc) NULL,
+			NULL,           /* base_init */
+			NULL,           /* base_finalize */
+			(GClassInitFunc) class_init,
+			NULL,           /* class_finalize */
+			NULL,           /* class_data */
+			sizeof (GnomeBindingsProperties),
+			1,              /* n_preallocs */
+			(GInstanceInitFunc) init,
 		};
 		
-		bindings_properties_type = gtk_type_unique (GTK_TYPE_FRAME, &bindings_properties_info);
+		bindings_properties_type = g_type_register_static (GTK_TYPE_FRAME, "GnomeBindingsProperties",
+								   &bindings_properties_info, 0);
 	}
 
 	return bindings_properties_type;
@@ -305,7 +310,7 @@ gnome_bindings_properties_get_type (void)
 GtkWidget *
 gnome_bindings_properties_new ()
 {
-	return gtk_type_new (gnome_bindings_properties_get_type ());
+	return g_object_new (gnome_bindings_properties_get_type (), NULL);
 }
 
 void
@@ -321,8 +326,8 @@ gnome_bindings_properties_add_keymap (GnomeBindingsProperties *prop,
 	GtkWidget *item;
 
 	item = gtk_menu_item_new_with_label (name);
-	gtk_object_set_data (GTK_OBJECT (item), "keymap", ke);
-	gtk_menu_append (GTK_MENU (gtk_option_menu_get_menu (GTK_OPTION_MENU (prop->option_keymap))),
+	g_object_set_data (G_OBJECT (item), "keymap", ke);
+	gtk_menu_shell_append (GTK_MENU_SHELL (gtk_option_menu_get_menu (GTK_OPTION_MENU (prop->option_keymap))),
 			 item);
 
 	g_hash_table_insert (prop->bindingsets, name, ke);
@@ -339,7 +344,7 @@ gnome_bindings_properties_select_keymap (GnomeBindingsProperties *prop,
 	ke = g_hash_table_lookup (prop->bindingsets, name);
 
 	for (i = 0, item = get_menu_items (prop); item; item = item->next, i ++)
-		if (ke == gtk_object_get_data (GTK_OBJECT (item->data), "keymap")) {
+		if (ke == g_object_get_data (item->data, "keymap")) {
 			gtk_option_menu_set_history (GTK_OPTION_MENU (prop->option_keymap), i);
 			changed_option_keymap (gtk_option_menu_get_menu (GTK_OPTION_MENU (prop->option_keymap)), prop);
 			break;

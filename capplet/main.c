@@ -240,8 +240,8 @@ setup (void)
 	if (!xml)
 		g_error (_("Could not load glade file."));
 
-	glade_xml_signal_connect (xml, "changed", GTK_SIGNAL_FUNC (changed));
-	glade_xml_signal_connect (xml, "live_changed", GTK_SIGNAL_FUNC (live_changed));
+	glade_xml_signal_connect (xml, "changed", G_CALLBACK (changed));
+	glade_xml_signal_connect (xml, "live_changed", G_CALLBACK (live_changed));
 
         capplet = capplet_widget_new();
 	vbox    = glade_xml_get_widget (xml, "prefs_widget");
@@ -251,10 +251,10 @@ setup (void)
 	fixed            = glade_xml_get_widget (xml, "screen_fixed");
 	fixed_print      = glade_xml_get_widget (xml, "print_fixed");
 
-	gtk_signal_connect (GTK_OBJECT (variable),        "clicked", picker_clicked, GINT_TO_POINTER (TRUE));
-	gtk_signal_connect (GTK_OBJECT (variable_print),  "clicked", picker_clicked, GINT_TO_POINTER (TRUE));
-	gtk_signal_connect (GTK_OBJECT (fixed),           "clicked", picker_clicked, GINT_TO_POINTER (FALSE));
-	gtk_signal_connect (GTK_OBJECT (fixed_print),     "clicked", picker_clicked, GINT_TO_POINTER (FALSE));
+	g_signal_connect (variable,        "clicked", G_CALLBACK (picker_clicked), GINT_TO_POINTER (TRUE));
+	g_signal_connect (variable_print,  "clicked", G_CALLBACK (picker_clicked), GINT_TO_POINTER (TRUE));
+	g_signal_connect (fixed,           "clicked", G_CALLBACK (picker_clicked), GINT_TO_POINTER (FALSE));
+	g_signal_connect (fixed_print,     "clicked", G_CALLBACK (picker_clicked), GINT_TO_POINTER (FALSE));
 
 	anim_check       = glade_xml_get_widget (xml, "anim_check");
 	magic_check      = glade_xml_get_widget (xml, "magic_check");
@@ -262,7 +262,7 @@ setup (void)
 	live_spell_frame = glade_xml_get_widget (xml, "live_spell_frame");
 	button_cfg_spell = glade_xml_get_widget (xml, "button_configure_spell_checking");
 
-	gtk_signal_connect (GTK_OBJECT (button_cfg_spell), "clicked", cfg_spell, NULL);
+	g_signal_connect (button_cfg_spell, "clicked", G_CALLBACK (cfg_spell), NULL);
 
 #define LOAD(x) \
 	base = g_strconcat ("gtkhtml-" GTKHTML_RELEASE  "/keybindingsrc.", x, NULL); \
@@ -296,8 +296,8 @@ setup (void)
 						       (GNOME_BINDINGS_PROPERTIES (bi), CUSTOM_KEYMAP_NAME));
 	saved_bindings = gnome_binding_entry_list_copy (gnome_bindings_properties_get_keymap
 							(GNOME_BINDINGS_PROPERTIES (bi), CUSTOM_KEYMAP_NAME));
-							gtk_signal_connect (GTK_OBJECT (bi), "changed", changed, NULL); */
-	gtk_signal_connect (GTK_OBJECT (bi), "changed", changed, NULL);
+							g_signal_connect (bi, "changed", changed, NULL); */
+	g_signal_connect (bi, "changed", G_CALLBACK (changed), NULL);
 
 	ebox = glade_xml_get_widget (xml, "bindings_ebox");
 	gtk_container_add (GTK_CONTAINER (ebox), bi);
@@ -330,14 +330,14 @@ main (int argc, char **argv)
         setup ();
 
 	/* connect signals */
-        gtk_signal_connect (GTK_OBJECT (capplet), "try",
-                            GTK_SIGNAL_FUNC (apply), NULL);
-        gtk_signal_connect (GTK_OBJECT (capplet), "revert",
-                            GTK_SIGNAL_FUNC (revert), NULL);
-        gtk_signal_connect (GTK_OBJECT (capplet), "ok",
-                            GTK_SIGNAL_FUNC (apply), NULL);
-        gtk_signal_connect (GTK_OBJECT (capplet), "cancel",
-                            GTK_SIGNAL_FUNC (revert), NULL);
+        g_signal_connect (GTK_OBJECT (capplet), "try",
+                            G_CALLBACK (apply), NULL);
+        g_signal_connect (GTK_OBJECT (capplet), "revert",
+                            G_CALLBACK (revert), NULL);
+        g_signal_connect (GTK_OBJECT (capplet), "ok",
+                            G_CALLBACK (apply), NULL);
+        g_signal_connect (GTK_OBJECT (capplet), "cancel",
+                            G_CALLBACK (revert), NULL);
 
         capplet_gtk_main ();
 
