@@ -271,6 +271,9 @@ remove_font_style (HTMLEngine *e, GtkHTMLFontStyle old_attrs)
 		} else
 			g_warning ("unknown style");
 	}
+	if (!(e->font_style & GTK_HTML_FONT_STYLE_SIZE_MASK))
+		e->font_style |= GTK_HTML_FONT_STYLE_SIZE_3;
+
 	if (e->font_style == GTK_HTML_FONT_STYLE_SIZE_3)
 		e->font_style = GTK_HTML_FONT_STYLE_DEFAULT;
 
