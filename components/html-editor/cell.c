@@ -56,18 +56,10 @@ typedef struct
 {	
 	GtkHTMLControlData *cd;
 	HTMLTableCell *cell;
+	HTMLTable *table;
 
-	gboolean   has_bg_color;
-	gboolean   changed_bg_color;
-	GdkColor   bg_color;
 	GtkWidget *combo_bg_color;
-	GtkWidget *check_bg_color;
-
-	gboolean   has_bg_pixmap;
-	gboolean   changed_bg_pixmap;
-	const gchar *bg_pixmap;
 	GtkWidget *entry_bg_pixmap;
-	GtkWidget *check_bg_pixmap;
 
 	gboolean        changed_halign;
 	HTMLHAlignType  halign;
@@ -122,59 +114,48 @@ data_new (GtkHTMLControlData *cd)
 	data->cd                = cd;
 	data->cell              = NULL;
 
-	data->bg_color          = html_colorset_get_color (data->cd->html->engine->settings->color_set,
-							   HTMLBgColor)->color;
-	data->bg_pixmap         = "";
-
 	return data;
 }
 
 static void
-set_has_bg_color (GtkWidget *check, GtkHTMLEditCellProperties *d)
+cell_set_prop (GtkHTMLEditCellProperties *d, void (*set_fn)(HTMLTableCell *, GtkHTMLEditCellProperties *))
 {
-	d->has_bg_color = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_bg_color));
-	if (!d->disable_change)
-		d->changed_bg_color = TRUE;
+	if (d->disable_change || !editor_has_html_object (d->cd, HTML_OBJECT (d->table)))
+		return;
+
+	(*set_fn) (d->cell, d);
 }
 
 static void
-set_has_bg_pixmap (GtkWidget *check, GtkHTMLEditCellProperties *d)
+set_bg_color (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
 {
-	d->has_bg_pixmap = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap));
-	if (!d->disable_change)
-		d->changed_bg_pixmap = TRUE;
+	html_engine_table_cell_set_bg_color (d->cd->html->engine, cell, color_combo_get_color (COLOR_COMBO (d->combo_bg_color), NULL));
 }
 
 static void
 changed_bg_color (GtkWidget *w, GdkColor *color, gboolean custom, gboolean by_user, gboolean is_default, GtkHTMLEditCellProperties *d)
 {
-	/* If the color was changed programatically there's not need to set things */
-	if (!by_user)
-		return;
-		
-	d->bg_color = color
-		? *color
-		: html_colorset_get_color (d->cd->html->engine->defaultSettings->color_set, HTMLBgColor)->color;
-	if (!d->disable_change)
-		d->changed_bg_color = TRUE;
-	if (!d->has_bg_color)
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_color), TRUE);
-	else {
-	}
+	cell_set_prop (d, set_bg_color);
+}
+
+static void
+set_bg_pixmap (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
+{
+	const char *file;
+	char *url = NULL;
+
+	file = gtk_entry_get_text (GTK_ENTRY (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (d->entry_bg_pixmap))));
+	if (file && *file)
+		url = g_strconcat ("file://", file, NULL);
+
+	html_engine_table_cell_set_bg_pixmap (d->cd->html->engine, cell, url);
+	g_free (url);
 }
 
 static void
 changed_bg_pixmap (GtkWidget *w, GtkHTMLEditCellProperties *d)
 {
-	d->bg_pixmap = gtk_entry_get_text (GTK_ENTRY (w));
-	if (!d->disable_change)
-		d->changed_bg_pixmap = TRUE;
-	if (!d->has_bg_pixmap && d->bg_pixmap && *d->bg_pixmap)
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap), TRUE);
-	else {
-		if (!d->bg_pixmap || !*d->bg_pixmap)
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap), FALSE);
-	}
+	cell_set_prop (d, set_bg_pixmap);
 }
 
 static void
@@ -292,7 +273,6 @@ changed_scope (GtkWidget *w, GtkHTMLEditCellProperties *d)
 static GtkWidget *
 cell_widget (GtkHTMLEditCellProperties *d)
 {
-	HTMLColor *color;
 	GtkWidget *cell_page;
 	GladeXML *xml;
 
@@ -315,22 +295,13 @@ cell_widget (GtkHTMLEditCellProperties *d)
 			  gtk_image_new_from_file (ICONDIR "/table-column-16.png"),
 			  0, 1, 1, 2, 0, 0, 0, 0);
 
-        color = html_colorset_get_color (d->cd->html->engine->defaultSettings->color_set, HTMLBgColor);
-	html_color_alloc (color, d->cd->html->engine->painter);
-	d->combo_bg_color = color_combo_new (NULL, _("Automatic"), &color->color,
+	d->combo_bg_color = color_combo_new (NULL, _("Transparent"), NULL,
 					     color_group_fetch ("cell_bg_color", d->cd));
         color_combo_box_set_preview_relief (COLOR_COMBO (d->combo_bg_color), GTK_RELIEF_NORMAL); \
         g_signal_connect (d->combo_bg_color, "color_changed", G_CALLBACK (changed_bg_color), d);
-	gtk_table_attach (GTK_TABLE (glade_xml_get_widget (xml, "table_cell_bg")),
-			  d->combo_bg_color,
-			  1, 2, 0, 1, 0, 0, 0, 0);
+	gtk_box_pack_start (GTK_BOX (glade_xml_get_widget (xml, "bg_color_hbox")), d->combo_bg_color, FALSE, FALSE, 0);
 
-	d->check_bg_color  = glade_xml_get_widget (xml, "check_cell_bg_color");
-	g_signal_connect (d->check_bg_color, "toggled", G_CALLBACK (set_has_bg_color), d);
-	d->check_bg_pixmap = glade_xml_get_widget (xml, "check_cell_bg_pixmap");
-	g_signal_connect (d->check_bg_pixmap, "toggled", G_CALLBACK (set_has_bg_pixmap), d);
 	d->entry_bg_pixmap = glade_xml_get_widget (xml, "entry_cell_bg_pixmap");
-
 	g_signal_connect (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (d->entry_bg_pixmap)),
 			    "changed", G_CALLBACK (changed_bg_pixmap), d);
 
@@ -384,15 +355,24 @@ cell_widget (GtkHTMLEditCellProperties *d)
 static void
 set_ui (GtkHTMLEditCellProperties *d)
 {
+	if (!editor_has_html_object (d->cd, HTML_OBJECT (d->table)))
+		return;
+
 	d->disable_change = TRUE;
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_color), d->has_bg_color);
-	/* RM2 gdk_color_alloc (gdk_window_get_colormap (GTK_WIDGET (d->cd->html)->window), &d->bg_color); */
-	color_combo_set_color (COLOR_COMBO (d->combo_bg_color), &d->bg_color);
+	if (d->cell->have_bg)
+		color_combo_set_color (COLOR_COMBO (d->combo_bg_color), &d->cell->bg);
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_bg_pixmap), d->has_bg_pixmap);
-	gtk_entry_set_text (GTK_ENTRY (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (d->entry_bg_pixmap))),
-			    d->bg_pixmap);
+	if (d->cell->have_bgPixmap) {
+		int off = 0;
+
+		if (!strncasecmp ("file://", d->cell->bgPixmap->url, 7))
+			off = 7;
+		else if (!strncasecmp ("file:", d->cell->bgPixmap->url, 5))
+			off = 5;
+		gtk_entry_set_text (GTK_ENTRY (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (d->entry_bg_pixmap))),
+				    d->cell->bgPixmap->url + off);
+	}
 
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_halign), d->halign - HTML_HALIGN_LEFT);
 	gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_valign), d->valign - HTML_VALIGN_TOP);
@@ -419,19 +399,8 @@ get_data (GtkHTMLEditCellProperties *d)
 {
 	d->cell = html_engine_get_table_cell (d->cd->html->engine);
 	g_return_if_fail (d->cell);
-
-	if (d->cell->have_bg) {
-		d->has_bg_color = TRUE;
-		d->bg_color     = d->cell->bg;
-	}
-	if (d->cell->have_bgPixmap) {
-		d->has_bg_pixmap = TRUE;
-		d->bg_pixmap = strncasecmp ("file://", d->cell->bgPixmap->url, 7)
-			? (strncasecmp ("file://", d->cell->bgPixmap->url, 5)
-			   ? d->cell->bgPixmap->url
-			   : d->cell->bgPixmap->url + 5)
-			: d->cell->bgPixmap->url + 7;
-	}
+	d->table = HTML_TABLE (HTML_OBJECT (d->cell)->parent);
+	g_return_if_fail (d->table && HTML_IS_TABLE (d->table));
 
 	d->halign   = HTML_CLUE (d->cell)->halign;
 	d->valign   = HTML_CLUE (d->cell)->valign;
@@ -469,16 +438,6 @@ cell_properties (GtkHTMLControlData *cd, gpointer *set_data)
 static void
 cell_apply_1 (HTMLTableCell *cell, GtkHTMLEditCellProperties *d)
 {
-	if (d->changed_bg_color)
-		html_engine_table_cell_set_bg_color (d->cd->html->engine, cell, d->has_bg_color ? &d->bg_color : NULL);
-
-	if (d->changed_bg_pixmap) {
-		gchar *url = d->has_bg_pixmap ? g_strconcat ("file://", d->bg_pixmap, NULL) : NULL;
-
-		html_engine_table_cell_set_bg_pixmap (d->cd->html->engine, cell, url);
-		g_free (url);
-	}
-
 	if (d->changed_halign)
 		html_engine_table_cell_set_halign (d->cd->html->engine, cell, d->halign);
 

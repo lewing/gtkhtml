@@ -204,7 +204,6 @@ changed_rows (GtkWidget *w, GtkHTMLEditTableProperties *d)
 static GtkWidget *
 table_widget (GtkHTMLEditTableProperties *d)
 {
-	HTMLColor *color;
 	GtkWidget *table_page;
 	GladeXML *xml;
 
@@ -221,9 +220,7 @@ table_widget (GtkHTMLEditTableProperties *d)
 			    gtk_image_new_from_file (ICONDIR "/table-column-16.png"),
 			    FALSE, FALSE, 0);
 
-        color = html_colorset_get_color (d->cd->html->engine->defaultSettings->color_set, HTMLBgColor);
-	html_color_alloc (color, d->cd->html->engine->painter);
-	d->combo_bg_color = color_combo_new (NULL, _("Transparent"), &color->color,
+	d->combo_bg_color = color_combo_new (NULL, _("Transparent"), NULL,
 					     color_group_fetch ("table_bg_color", d->cd));
         color_combo_box_set_preview_relief (COLOR_COMBO (d->combo_bg_color), GTK_RELIEF_NORMAL); \
         g_signal_connect (d->combo_bg_color, "color_changed", G_CALLBACK (changed_bg_color), d);
