@@ -48,26 +48,29 @@ enum {
 	
 static guint signals [LAST_SIGNAL] = { 0 };
 
-guint
+GType
 gtk_html_embedded_get_type (void)
 {
-	static guint select_paper_type = 0;
-	
-	if (!select_paper_type) {
-		GtkTypeInfo html_embedded_info = {
-			"GtkHTMLEmbedded",
-			sizeof (GtkHTMLEmbedded),
-			sizeof (GtkHTMLEmbeddedClass),
-			(GtkClassInitFunc) gtk_html_embedded_class_init,
-			(GtkObjectInitFunc) gtk_html_embedded_init,
-			NULL,
-			NULL
-		};
-    
-		select_paper_type = gtk_type_unique (gtk_bin_get_type (), &html_embedded_info);
+	static GType embedded_type = 0;
+  
+	if (!embedded_type) {
+		static const GTypeInfo embedded_info =
+			{
+				sizeof (GtkHTMLEmbeddedClass),
+				NULL,           /* base_init */
+				NULL,           /* base_finalize */
+				(GClassInitFunc) gtk_html_embedded_class_init,
+				NULL,           /* class_finalize */
+				NULL,           /* class_data */
+				sizeof (GtkHTMLEmbedded),
+				4,              /* n_preallocs */
+				(GInstanceInitFunc) gtk_html_embedded_init,
+			};
+
+		embedded_type = g_type_register_static (GTK_TYPE_BIN, "GtkHTMLEmbedded", &embedded_info, 0);
 	}
   
-	return select_paper_type;
+	return embedded_type;
 }
 
 static void

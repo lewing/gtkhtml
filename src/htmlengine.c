@@ -3272,98 +3272,98 @@ html_engine_class_init (HTMLEngineClass *klass)
 	signals [SET_BASE] =
 		g_signal_new ("set_base",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_FIRST,
+			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, set_base),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__STRING,
-			      GTK_TYPE_NONE, 1,
-			      GTK_TYPE_STRING);
+			      G_TYPE_NONE, 1,
+			      G_TYPE_STRING);
 
 	signals [SET_BASE_TARGET] =
 		g_signal_new ("set_base_target",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_FIRST,
+			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, set_base_target),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__STRING,
-			      GTK_TYPE_NONE, 1,
-			      GTK_TYPE_STRING);
+			      G_TYPE_NONE, 1,
+			      G_TYPE_STRING);
 
 	signals [LOAD_DONE] = 
 		g_signal_new ("load_done",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_FIRST,
+			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, load_done),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
-			      GTK_TYPE_NONE, 0);
+			      G_TYPE_NONE, 0);
 
 	signals [TITLE_CHANGED] = 
 		g_signal_new ("title_changed",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_FIRST,
+			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, title_changed),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
-			      GTK_TYPE_NONE, 0);
+			      G_TYPE_NONE, 0);
 
 	signals [URL_REQUESTED] =
 		g_signal_new ("url_requested",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_FIRST,
+			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, url_requested),
 			      NULL, NULL,
 			      html_g_cclosure_marshal_VOID__STRING_POINTER,
-			      GTK_TYPE_NONE, 2,
-			      GTK_TYPE_STRING,
-			      GTK_TYPE_POINTER);
+			      G_TYPE_NONE, 2,
+			      G_TYPE_STRING,
+			      G_TYPE_POINTER);
 
 	signals [DRAW_PENDING] =
 		g_signal_new ("draw_pending",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_FIRST,
+			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, draw_pending),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
-			      GTK_TYPE_NONE, 0);
+			      G_TYPE_NONE, 0);
 
 	signals [REDIRECT] =
 		g_signal_new ("redirect",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_FIRST,
+			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, redirect),
 			      NULL, NULL,
 			      html_g_cclosure_marshal_VOID__POINTER_INT,
-			      GTK_TYPE_NONE, 2,
-			      GTK_TYPE_STRING,
-			      GTK_TYPE_INT);
+			      G_TYPE_NONE, 2,
+			      G_TYPE_STRING,
+			      G_TYPE_INT);
 
 	signals [SUBMIT] =
 		g_signal_new ("submit",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_FIRST,
+			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, submit),
 			      NULL, NULL,
 			      html_g_cclosure_marshal_VOID__POINTER_POINTER_POINTER,
-			      GTK_TYPE_NONE, 3,
-			      GTK_TYPE_STRING,
-			      GTK_TYPE_STRING,
-			      GTK_TYPE_STRING);
+			      G_TYPE_NONE, 3,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING);
 
 	signals [OBJECT_REQUESTED] =
 		g_signal_new ("object_requested",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_LAST,
+			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (HTMLEngineClass, object_requested),
 			      NULL, NULL,
 			      html_g_cclosure_marshal_BOOL__POINTER,
-			      GTK_TYPE_BOOL, 1,
-			      GTK_TYPE_POINTER);
+			      G_TYPE_BOOLEAN, 1,
+			      G_TYPE_POINTER);
 
 	object_class->finalize = html_engine_finalize;
 	object_class->set_property = html_engine_set_property;
 
-	pspec = g_param_spec_object ("html", NULL, NULL, GTK_TYPE_HTML, G_PARAM_WRITABLE | GTK_ARG_CONSTRUCT_ONLY);
+	pspec = g_param_spec_object ("html", NULL, NULL, GTK_TYPE_HTML, G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 	g_object_class_install_property (object_class, 1, pspec);
 
 	html_engine_init_magic_links ();
@@ -3719,7 +3719,7 @@ update_embedded (GtkWidget *widget, gpointer data)
 	 * enjoy having your objects out of the way :)
 	 */
 	
-	obj = gtk_object_get_data (GTK_OBJECT (widget), "embeddedelement");
+	obj = HTML_OBJECT (gtk_object_get_data (GTK_OBJECT (widget), "embeddedelement"));
 	if (obj) {
 		HTMLEngine *e;
 		HTMLObject *p;

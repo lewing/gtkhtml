@@ -170,21 +170,21 @@ html_tokenizer_class_init (HTMLTokenizerClass *klass)
 	html_tokenizer_signals[HTML_TOKENIZER_BEGIN_SIGNAL] =
 		g_signal_new ("begin",
 			      G_TYPE_FROM_CLASS (klass),
-			      GTK_RUN_LAST,
-			      GTK_SIGNAL_OFFSET (HTMLTokenizerClass, begin),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (HTMLTokenizerClass, begin),
 			      NULL, NULL,
-			      gtk_marshal_NONE__POINTER,
-			      GTK_TYPE_NONE,
-			      1, GTK_TYPE_POINTER);
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE,
+			      1, G_TYPE_POINTER);
 
 	html_tokenizer_signals [HTML_TOKENIZER_END_SIGNAL] =
 		g_signal_new ("end",
 			      G_TYPE_FROM_CLASS (klass),
-			      GTK_RUN_LAST,
-			      GTK_SIGNAL_OFFSET (HTMLTokenizerClass, end),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (HTMLTokenizerClass, end),
 			      NULL, NULL,
-			      gtk_marshal_NONE__NONE,
-			      GTK_TYPE_NONE,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
 			      0);
 
 	object_class->finalize = html_tokenizer_finalize;

@@ -188,9 +188,7 @@ html_text_input_init (HTMLTextInput *ti,
 
 	entry = gtk_entry_new ();
 	html_embedded_set_widget (element, entry);
-	gtk_signal_connect_after (GTK_OBJECT (entry), "key_press_event",
-				  GTK_SIGNAL_FUNC (html_text_input_key_pressed),
-				  element);
+	g_signal_connect_after (entry, "key_press_event", G_CALLBACK (html_text_input_key_pressed), element);
 
 	if (strlen (element->value))	
 		gtk_entry_set_text (GTK_ENTRY (element->widget), element->value);

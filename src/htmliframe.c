@@ -399,7 +399,7 @@ destroy (HTMLObject *o)
 	g_free (iframe->url);
 
 	if (iframe->html) {
-		gtk_signal_disconnect_by_data (GTK_OBJECT (iframe->html), o);
+		g_signal_handlers_disconnect_matched (iframe->html, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, o);
 		iframe->html = NULL;
 	}
 
@@ -467,9 +467,7 @@ html_iframe_init (HTMLIFrame *iframe,
 
 	new_html->engine->clue->parent = HTML_OBJECT (iframe);
 
-	gtk_signal_connect (GTK_OBJECT (new_html), "url_requested",
-			    GTK_SIGNAL_FUNC (iframe_url_requested),
-			    (gpointer)iframe);
+	g_signal_connect (new_html, "url_requested", G_CALLBACK (iframe_url_requested), iframe);
 #if 0
 	/* NOTE: because of peculiarities of the frame/gtkhtml relationship
 	 * on_url and link_clicked are emitted from the toplevel widget not
@@ -482,15 +480,9 @@ html_iframe_init (HTMLIFrame *iframe,
 			    GTK_SIGNAL_FUNC (iframe_link_clicked),
 			    (gpointer)iframe);	
 #endif 
-	gtk_signal_connect (GTK_OBJECT (new_html), "size_changed",
-			    GTK_SIGNAL_FUNC (iframe_size_changed),
-			    (gpointer)iframe);	
-	gtk_signal_connect (GTK_OBJECT (new_html), "set_base",
-			    GTK_SIGNAL_FUNC (iframe_set_base),
-			    (gpointer)iframe);	
-	gtk_signal_connect (GTK_OBJECT (new_html), "object_requested",
-			    GTK_SIGNAL_FUNC (iframe_object_requested),
-			    (gpointer)iframe);	
+	g_signal_connect (new_html, "size_changed", G_CALLBACK (iframe_size_changed), iframe);	
+	g_signal_connect (new_html, "set_base", G_CALLBACK (iframe_set_base), iframe);	
+	g_signal_connect (new_html, "object_requested", G_CALLBACK (iframe_object_requested), iframe);	
 
 	/*
 	  gtk_signal_connect (GTK_OBJECT (html), "button_press_event",
@@ -505,8 +497,7 @@ html_iframe_init (HTMLIFrame *iframe,
 
 	html_embedded_set_widget (em, scrolled_window);
 
-	gtk_signal_connect(GTK_OBJECT (scrolled_window), "button_press_event",
-			   GTK_SIGNAL_FUNC (html_iframe_grab_cursor), NULL);
+	g_signal_connect (scrolled_window, "button_press_event", G_CALLBACK (html_iframe_grab_cursor), NULL);
 
 	/* inherit the current colors from our parent */
 	html_colorset_set_unchanged (new_html->engine->defaultSettings->color_set,

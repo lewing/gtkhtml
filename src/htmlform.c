@@ -80,7 +80,7 @@ html_form_add_radio (HTMLForm *form, char *name, GtkRadioButton *button)
 		gtk_widget_ref (GTK_WIDGET (button));
 		g_hash_table_insert (form->radio_group, key, button);
 	} else {
-		group = gtk_radio_button_group (GTK_RADIO_BUTTON (master));
+		group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (master));
 		gtk_radio_button_set_group (button, group);
 	}
 }

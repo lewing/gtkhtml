@@ -388,7 +388,7 @@ destroy (HTMLObject *o)
 	frame_set_gdk_painter (frame, NULL);
 
 	if (frame->html) {
-		gtk_signal_disconnect_by_data (GTK_OBJECT (frame->html), o);
+		g_signal_handlers_disconnect_matched (frame->html, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, o);
 		frame->html = NULL;
 	}
 	g_free ((frame)->url);
@@ -504,9 +504,7 @@ html_frame_init (HTMLFrame *frame,
 	new_html->engine->clue->parent = HTML_OBJECT (frame);
 
 
-	gtk_signal_connect (GTK_OBJECT (new_html), "url_requested",
-			    GTK_SIGNAL_FUNC (frame_url_requested),
-			    (gpointer)frame);
+	g_signal_connect (new_html, "url_requested", G_CALLBACK (frame_url_requested), frame);
 #if 0
 	/* NOTE: because of peculiarities of the frame/gtkhtml relationship
 	 * on_url and link_clicked are emitted from the toplevel widget not
@@ -519,18 +517,10 @@ html_frame_init (HTMLFrame *frame,
 			    GTK_SIGNAL_FUNC (frame_link_clicked),
 			    (gpointer)frame);	
 #endif
-	gtk_signal_connect (GTK_OBJECT (new_html), "size_changed",
-			    GTK_SIGNAL_FUNC (frame_size_changed),
-			    (gpointer)frame);	
-	gtk_signal_connect (GTK_OBJECT (new_html), "object_requested",
-			    GTK_SIGNAL_FUNC (frame_object_requested),
-			    (gpointer)frame);	
-	gtk_signal_connect (GTK_OBJECT (new_html), "submit",
-			    GTK_SIGNAL_FUNC (frame_submit),
-			    (gpointer)frame);
-	gtk_signal_connect (GTK_OBJECT (new_html), "set_base",
-			    GTK_SIGNAL_FUNC (frame_set_base), 
-			    (gpointer)frame);
+	g_signal_connect (new_html, "size_changed", G_CALLBACK (frame_size_changed), frame);	
+	g_signal_connect (new_html, "object_requested", G_CALLBACK (frame_object_requested), frame);	
+	g_signal_connect (new_html, "submit", G_CALLBACK (frame_submit), frame);
+	g_signal_connect (new_html, "set_base", G_CALLBACK (frame_set_base), frame);
 
 	html_frame_set_margin_height (frame, 0);
 	html_frame_set_margin_width (frame, 0);
@@ -550,8 +540,7 @@ html_frame_init (HTMLFrame *frame,
 
 	html_embedded_set_widget (em, scrolled_window);
 
-	gtk_signal_connect(GTK_OBJECT (scrolled_window), "button_press_event",
-			   GTK_SIGNAL_FUNC (html_frame_grab_cursor), NULL);
+	g_signal_connect (scrolled_window, "button_press_event", G_CALLBACK (html_frame_grab_cursor), NULL);
 
 	/* inherit the current colors from our parent */
 	html_colorset_set_unchanged (new_html->engine->defaultSettings->color_set,
@@ -560,14 +549,10 @@ html_frame_init (HTMLFrame *frame,
 				     parent_html->engine->settings->color_set);
 	html_painter_set_focus (new_html->engine->painter, parent_html->engine->have_focus);
 	/*
-	gtk_signal_connect (GTK_OBJECT (html), "title_changed",
-			    GTK_SIGNAL_FUNC (title_changed_cb), (gpointer)app);
-	gtk_signal_connect (GTK_OBJECT (html), "button_press_event",
-			    GTK_SIGNAL_FUNC (on_button_press_event), popup_menu);
-	gtk_signal_connect (GTK_OBJECT (html), "redirect",
-			    GTK_SIGNAL_FUNC (on_redirect), NULL);
-	gtk_signal_connect (GTK_OBJECT (html), "object_requested",
-			    GTK_SIGNAL_FUNC (object_requested_cmd), NULL);
+	g_signal_connect (html, "title_changed", G_CALLBACK (title_changed_cb), app);
+	g_signal_connect (html, "button_press_event", G_CALLBACK (on_button_press_event), popup_menu);
+	g_signal_connect (html, "redirect", G_CALLBACK (on_redirect), NULL);
+	g_signal_connect (html, "object_requested", G_CALLBACK (object_requested_cmd), NULL);
 	*/
 }
 

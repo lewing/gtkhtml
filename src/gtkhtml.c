@@ -497,24 +497,20 @@ connect_adjustments (GtkHTML *html,
 	layout = GTK_LAYOUT (html);
 
 	if (html->hadj_connection != 0)
-		gtk_signal_disconnect (GTK_OBJECT(layout->hadjustment),
-				       html->hadj_connection);
+		g_signal_handler_disconnect (layout->hadjustment, html->hadj_connection);
 
 	if (html->vadj_connection != 0)
-		gtk_signal_disconnect (GTK_OBJECT(layout->vadjustment),
-				       html->vadj_connection);
+		g_signal_handler_disconnect (layout->vadjustment, html->vadj_connection);
 
 	if (vadj != NULL)
 		html->vadj_connection =
-			gtk_signal_connect (GTK_OBJECT (vadj), "value_changed",
-					    GTK_SIGNAL_FUNC (vertical_scroll_cb), (gpointer)html);
+			g_signal_connect (vadj, "value_changed", G_CALLBACK (vertical_scroll_cb), (gpointer) html);
 	else
 		html->vadj_connection = 0;
 	
 	if (hadj != NULL)
 		html->hadj_connection =
-			gtk_signal_connect (GTK_OBJECT (hadj), "value_changed",
-					    GTK_SIGNAL_FUNC (horizontal_scroll_cb), (gpointer)html);
+			g_signal_connect (hadj, "value_changed", G_CALLBACK (horizontal_scroll_cb), (gpointer) html);
 	else
 		html->hadj_connection = 0;
 }
@@ -2189,7 +2185,7 @@ drag_data_received (GtkWidget *widget, GdkDragContext *context,
 /* dnd end */
 
 static void
-class_init (GtkHTMLClass *klass)
+gtk_html_class_init (GtkHTMLClass *klass)
 {
 	GtkHTMLClass      *html_class;
 	GtkWidgetClass    *widget_class;
@@ -2298,7 +2294,7 @@ class_init (GtkHTMLClass *klass)
 	signals [OBJECT_REQUESTED] =
 		g_signal_new ("object_requested",
 			      G_TYPE_FROM_CLASS (object_class),
-			      GTK_RUN_LAST,
+			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GtkHTMLClass, object_requested),
 			      NULL, NULL,
 			      html_g_cclosure_marshal_BOOL__POINTER,
@@ -2467,7 +2463,7 @@ init_properties_widget (GtkHTML *html)
 }
 
 static void
-init (GtkHTML* html)
+gtk_html_init (GtkHTML* html)
 {
 	static const GtkTargetEntry targets[] = {
 		{ "UTF8_STRING", 0, TARGET_UTF8_STRING },
@@ -2529,25 +2525,25 @@ init (GtkHTML* html)
 				   targets, n_targets);
 }
 
-
-GtkType
+GType
 gtk_html_get_type (void)
 {
-	static guint html_type = 0;
+	static GType html_type = 0;
 
 	if (!html_type) {
-		static const GtkTypeInfo html_info = {
-			"GtkHTML",
-			sizeof (GtkHTML),
+		static const GTypeInfo html_info = {
 			sizeof (GtkHTMLClass),
-			(GtkClassInitFunc) class_init,
-			(GtkObjectInitFunc) init,
-			/* reserved_1 */ NULL,
-			/* reserved_2 */ NULL,
-			(GtkClassInitFunc) NULL,
+			NULL,           /* base_init */
+			NULL,           /* base_finalize */
+			(GClassInitFunc) gtk_html_class_init,
+			NULL,           /* class_finalize */
+			NULL,           /* class_data */
+			sizeof (GtkHTML),
+			1,              /* n_preallocs */
+			(GInstanceInitFunc) gtk_html_init,
 		};
 		
-		html_type = gtk_type_unique (GTK_TYPE_LAYOUT, &html_info);
+		html_type = g_type_register_static (GTK_TYPE_LAYOUT, "GtkHTML", &html_info, 0);
 	}
 
 	return html_type;
@@ -2567,7 +2563,7 @@ gtk_html_new (void)
 {
 	GtkWidget *html;
 
-	html = gtk_type_new (gtk_html_get_type ());
+	html = GTK_WIDGET (gtk_type_new (gtk_html_get_type ()));
 	gtk_html_construct (html);
 	return html;
 }
@@ -2589,7 +2585,7 @@ gtk_html_new_from_string (const gchar *str, gint len)
 {
 	GtkWidget *html;
 
-	html = gtk_type_new (gtk_html_get_type ());
+	html = GTK_WIDGET (gtk_type_new (gtk_html_get_type ()));
 	gtk_html_construct  (html);
 	gtk_html_load_from_string (GTK_HTML (html), str, len);
 
@@ -4025,7 +4021,7 @@ load_bindings_from_file (gboolean from_share, gchar *name)
 {
 	gchar *rcfile;
 
-	rcfile = g_strconcat ((from_share ? PREFIX "/share/gtkhtml-" GTK_HTML_RELEASE "/": gnome_util_user_home ()),
+	rcfile = g_strconcat ((from_share ? PREFIX "/share/gtkhtml-" GTKHTML_RELEASE "/": gnome_util_user_home ()),
 			      (from_share ? "" : "/.gnome/"), name, NULL);
 	/* FIX2 if (g_file_test (rcfile, G_FILE_TEST_ISFILE)) */
 		gtk_rc_parse (rcfile);
@@ -4061,7 +4057,7 @@ load_keybindings (GtkHTMLClass *klass)
 				      "scroll", 3, \
 				      GTK_TYPE_ORIENTATION, GTK_ORIENTATION_ ## orient, \
 				      GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_ ## sc, \
-				      GTK_TYPE_FLOAT, 0.0); \
+				      G_TYPE_FLOAT, 0.0); \
 
 	BSCROLL (0, Up, VERTICAL, STEP_BACKWARD);
 	BSCROLL (0, KP_Up, VERTICAL, STEP_BACKWARD);
@@ -4270,14 +4266,11 @@ gtk_html_set_editor_api (GtkHTML *html, GtkHTMLEditorAPI *api, gpointer data)
 static gchar *
 get_value_nick (GtkHTMLCommandType com_type)
 {
-	GtkEnumValue *val;
+	GEnumValue *val;
 
-	val = gtk_type_enum_get_values (GTK_TYPE_HTML_COMMAND);
-	while (val->value_name) {
-		if (val->value == com_type)
-			return val->value_nick;
-		val++;
-	}
+	val = g_enum_get_value (g_type_class_peek (GTK_TYPE_HTML_COMMAND), com_type);
+	if (val)
+		return val->value_nick;
 
 	g_warning ("Invalid GTK_TYPE_HTML_COMMAND enum value %d\n", com_type);
 
@@ -4307,9 +4300,9 @@ gtk_html_editor_event (GtkHTML *html, GtkHTMLEditorEventType event, GValue *args
 gboolean
 gtk_html_command (GtkHTML *html, const gchar *command_name)
 {
-	GtkEnumValue *val;
+	GEnumValue *val;
 
-	val = gtk_type_enum_find_value (GTK_TYPE_HTML_COMMAND, command_name);
+	val = g_enum_get_value_by_nick (g_type_class_peek (GTK_TYPE_HTML_COMMAND), command_name);
 	if (val) {
 		if (command (html, val->value)) {
 			if (html->priv->update_styles)

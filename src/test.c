@@ -169,7 +169,7 @@ main (int argc, char **argv)
 	swindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	html = gtk_html_new_from_string (encode_html (welcome), -1);
-	gtk_signal_connect (GTK_OBJECT (html), "url_requested", GTK_SIGNAL_FUNC (url_requested), NULL);
+	g_signal_connect (html, "url_requested", G_CALLBACK (url_requested), NULL);
 
 	for (; i < BUTTON_INDEX; i++)
 		button [i] = gtk_button_new_with_label (str [i]);
@@ -183,17 +183,17 @@ main (int argc, char **argv)
 
 	debug = gtk_button_new_with_label ("Dump");
 	gtk_box_pack_end (GTK_BOX (hbox), debug, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (debug), "clicked", GTK_SIGNAL_FUNC (dump_cb), NULL);
+	g_signal_connect (debug, "clicked", G_CALLBACK (dump_cb), NULL);
 	debug = gtk_button_new_with_label ("Dump simple");
 	gtk_box_pack_end (GTK_BOX (hbox), debug, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (debug), "clicked", GTK_SIGNAL_FUNC (dump_simple_cb), NULL);
+	g_signal_connect (debug, "clicked", G_CALLBACK (dump_simple_cb), NULL);
 
 	gtk_window_set_title (GTK_WINDOW (window), "GtkHTML Test");
 	gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
 
 	for (i = 0; i < BUTTON_INDEX -1; i++)
-		gtk_signal_connect (GTK_OBJECT (button [i]), "clicked", GTK_SIGNAL_FUNC (button_cb), GINT_TO_POINTER (i));
-	gtk_signal_connect (GTK_OBJECT (button [BUTTON_INDEX - 1]), "clicked", GTK_SIGNAL_FUNC (quit_cb), NULL);
+		g_signal_connect (button [i], "clicked", G_CALLBACK (button_cb), GINT_TO_POINTER (i));
+	g_signal_connect (button [BUTTON_INDEX - 1], "clicked", G_CALLBACK (quit_cb), NULL);
 	
 	gtk_widget_show_all (window);
 		

@@ -151,8 +151,7 @@ html_button_init (HTMLButton *button,
 
 	html_embedded_set_widget (element, widget);
 
-	gtk_signal_connect (GTK_OBJECT (widget), "clicked",
-                            GTK_SIGNAL_FUNC (clicked_event), button);
+	g_signal_connect (widget, "clicked", G_CALLBACK (clicked_event), button);
 
 	button->type = type;
 	button->successful = FALSE;

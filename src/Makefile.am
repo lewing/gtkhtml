@@ -5,7 +5,7 @@ INCLUDES = -I$(top_srcdir) -I$(srcdir) -I$(includedir) $(GTKHTML_CFLAGS) \
 	-DSRCDIR=\"$(srcdir)\" \
 	-DPREFIX=\"$(prefix)\"
 
-CFLAGS += -DICONDIR=\"$(datadir)/gtkhtml/icons\" -DGTK_ENABLE_BROKEN
+CFLAGS += -DICONDIR=\"$(datadir)/gtkhtml/icons\" -DGTK_DISABLE_DEPRECATED=1
 
 lib_LTLIBRARIES = libgtkhtml.la
 

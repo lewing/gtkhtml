@@ -477,7 +477,7 @@ html_image_resolve_image_url (GtkHTML *html, gchar *image_url)
 		arg = (* html->editor_api->event) (html, GTK_HTML_EDITOR_EVENT_IMAGE_URL, args, html->editor_data);
 
 		if (arg) {
-			if (G_VALUE_TYPE (arg) == GTK_TYPE_STRING)
+			if (G_VALUE_TYPE (arg) == G_TYPE_STRING)
 				url = (gchar *) g_value_get_string (arg);
 			g_free (arg);
 		}
