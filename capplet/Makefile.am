@@ -19,7 +19,8 @@ gtkhtml_properties_capplet_SOURCES = 		\
 
 LDADD = 					\
 	$(CAPPLET_LIBS)				\
-	$(top_builddir)/src/libgtkhtml.la
+	$(top_builddir)/src/libgtkhtml.la	\
+	$(top_builddir)/a11y/libgtkhtml-a11y.la
 
 @INTLTOOL_DESKTOP_RULE@
 
