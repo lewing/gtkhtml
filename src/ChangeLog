@@ -1,3 +1,8 @@
+2002-05-28  Radek Doulik  <rodo@ximian.com>
+
+	* gtkhtml.c (gtk_html_init): set default content type to
+	"html/text; charset=utf-8"
+
 2002-05-23  Radek Doulik  <rodo@ximian.com>
 
 	* gtkhtml.c: moved properties initialization to instance init,

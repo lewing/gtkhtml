@@ -2545,7 +2545,7 @@ gtk_html_init (GtkHTML* html)
 	html->priv->last_selection_type = -1;
 	html->priv->primary = NULL;
 	html->priv->primary_len = 0;
-	html->priv->content_type = NULL;
+	html->priv->content_type = g_strdup ("html/text; charset=utf-8");
 	html->priv->search_input_line = NULL;
 
 #ifdef GTKHTML_HAVE_GCONF
