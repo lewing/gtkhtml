@@ -1650,13 +1650,6 @@ get_font_style (const HTMLText *text)
 	return font_style;
 }
 
-static HTMLColor *
-get_color (HTMLText *text,
-	   HTMLPainter *painter)
-{
-	return text->color;
-}
-
 static void
 set_font_style (HTMLText *text,
 		HTMLEngine *engine,
@@ -1671,23 +1664,6 @@ set_font_style (HTMLText *text,
 
 	if (engine != NULL) {
 		html_object_relayout (HTML_OBJECT (text)->parent, engine, HTML_OBJECT (text));
-		html_engine_queue_draw (engine, HTML_OBJECT (text));
-	}
-}
-
-static void
-set_color (HTMLText *text,
-	   HTMLEngine *engine,
-	   HTMLColor *color)
-{
-	if (html_color_equal (text->color, color))
-		return;
-
-	html_color_unref (text->color);
-	html_color_ref (color);
-	text->color = color;
-
-	if (engine != NULL) {
 		html_engine_queue_draw (engine, HTML_OBJECT (text));
 	}
 }
@@ -1957,9 +1933,7 @@ html_text_class_init (HTMLTextClass *klass,
 
 	klass->queue_draw = queue_draw;
 	klass->get_font_style = get_font_style;
-	klass->get_color = get_color;
 	klass->set_font_style = set_font_style;
-	klass->set_color = set_color;
 
 	parent_class = &html_object_class;
 }
@@ -2044,16 +2018,6 @@ html_text_get_font_style (const HTMLText *text)
 	return (* HT_CLASS (text)->get_font_style) (text);
 }
 
-HTMLColor *
-html_text_get_color (HTMLText *text,
-		     HTMLPainter *painter)
-{
-	g_return_val_if_fail (text != NULL, NULL);
-	g_return_val_if_fail (painter != NULL, NULL);
-
-	return (* HT_CLASS (text)->get_color) (text, painter);
-}
-
 void
 html_text_set_font_style (HTMLText *text,
 			  HTMLEngine *engine,
@@ -2062,17 +2026,6 @@ html_text_set_font_style (HTMLText *text,
 	g_return_if_fail (text != NULL);
 
 	(* HT_CLASS (text)->set_font_style) (text, engine, style);
-}
-
-void
-html_text_set_color (HTMLText *text,
-		     HTMLEngine *engine,
-		     HTMLColor *color)
-{
-	g_return_if_fail (text != NULL);
-	g_return_if_fail (color != NULL);
-
-	(* HT_CLASS (text)->set_color) (text, engine, color);
 }
 
 void
@@ -2822,4 +2775,94 @@ void
 html_text_unset_style (HTMLText *text, GtkHTMLFontStyle style)
 {
 	pango_attr_list_filter (text->attr_list, unset_style_filter, GINT_TO_POINTER (style));
+}
+
+static HTMLColor *
+color_from_attrs (PangoAttrIterator *iter)
+{
+	HTMLColor *color = NULL;
+	GSList *list, *l;
+
+	list = pango_attr_iterator_get_attrs (iter);
+	for (l = list; l; l = l->next) {
+		PangoAttribute *attr = (PangoAttribute *) l->data;
+		PangoAttrColor *ca;
+
+		switch (attr->klass->type) {
+		case PANGO_ATTR_FOREGROUND:
+			ca = (PangoAttrColor *) attr;
+			color = html_color_new_from_rgb (ca->color.red, ca->color.green, ca->color.blue);
+			break;
+		}
+	}
+
+	free_attrs (list);
+
+	return color;
+}
+
+static HTMLColor *
+html_text_get_first_color_in_range (HTMLText *text, HTMLEngine *e, gint start_index, gint end_index)
+{
+	HTMLColor *color = NULL;
+	PangoAttrIterator *iter = pango_attr_list_get_iterator (text->attr_list);
+
+	if (iter) {
+		do {
+			gint iter_start_index, iter_end_index;
+
+			pango_attr_iterator_range (iter, &iter_start_index, &iter_end_index);
+			if (MAX (iter_start_index, start_index) <= MIN (iter_end_index, end_index)) {
+				color = color_from_attrs (iter);
+				if (html_color_equal (color, html_colorset_get_color (e->settings->color_set, HTMLLinkColor))) {
+					gint offset = g_utf8_pointer_to_offset (text->text, text->text + MAX (start_index, iter_start_index));
+
+					if (html_text_get_link_at_offset (text, offset)) {
+						html_color_unref (color);
+						color = NULL;
+						/* color = html_colorset_get_color (e->settings->color_set, HTMLLinkColor);
+						   html_color_ref (color); */
+					}
+				}
+				break;
+			}
+		} while (pango_attr_iterator_next (iter));
+
+		pango_attr_iterator_destroy (iter);
+	}
+
+	/* if (!color) {
+		color = html_colorset_get_color (e->settings->color_set, HTMLTextColor);
+		html_color_ref (color);
+		} */
+
+	return color;
+}
+
+HTMLColor *
+html_text_get_color_at_index (HTMLText *text, HTMLEngine *e, gint index)
+{
+	return html_text_get_first_color_in_range (text, e, index, index);
+}
+
+HTMLColor *
+html_text_get_color (HTMLText *text, HTMLEngine *e, gint start_index)
+{
+	return html_text_get_first_color_in_range (text, e, start_index, text->text_bytes);
+}
+
+void
+html_text_set_color_in_range (HTMLText *text, HTMLColor *color, gint start_index, gint end_index)
+{
+	PangoAttribute *attr = pango_attr_foreground_new (color->color.red, color->color.green, color->color.blue);
+
+	attr->start_index = start_index;
+	attr->end_index = end_index;
+	pango_attr_list_change (text->attr_list, attr);
+}
+
+void
+html_text_set_color (HTMLText *text, HTMLColor *color)
+{
+	html_text_set_color_in_range (text, color, 0, text->text_bytes);
 }

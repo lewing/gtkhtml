@@ -65,18 +65,15 @@ get_font_style_from_selection (HTMLEngine *engine)
 
 	while (1) {
 		if (html_object_is_text (p.object) && p.offset != html_object_get_length (p.object)) {
+			gint index = 0;
 			if (first) {
 				gint index = g_utf8_offset_to_pointer (HTML_TEXT (p.object)->text, offset) - HTML_TEXT (p.object)->text;
 				style = html_text_get_fontstyle_at_index (HTML_TEXT (p.object), index);
 				first = FALSE;
-				conflicts |= html_text_get_style_conflicts (HTML_TEXT (p.object), style, index,
-									    p.object == engine->selection->to.object
-									    ? engine->selection->to.offset : HTML_TEXT (p.object)->text_bytes);
-			} else
-				conflicts |= html_text_get_style_conflicts (HTML_TEXT (p.object), style, 0,
-									    p.object == engine->selection->to.object
-									    ? engine->selection->to.offset : HTML_TEXT (p.object)->text_bytes);
-				/* conflicts |= HTML_TEXT (p.object)->font_style ^ style; */
+			}
+			conflicts |= html_text_get_style_conflicts (HTML_TEXT (p.object), style, index,
+								    p.object == engine->selection->to.object
+								    ? engine->selection->to.offset : HTML_TEXT (p.object)->text_bytes);
 		}
 
 		if (html_point_cursor_object_eq (&p, &engine->selection->to))
@@ -106,7 +103,9 @@ get_color_from_selection (HTMLEngine *engine)
 	p = engine->selection->from;
 	while (1) {
 		if (html_object_is_text (p.object)  && p.offset != html_object_get_length (p.object)) {
-			color = HTML_TEXT (p.object)->color;
+			color = html_text_get_color (HTML_TEXT (p.object), engine,
+						     p.object == engine->selection->from.object
+						     ? g_utf8_offset_to_pointer (HTML_TEXT (p.object)->text, p.offset) - HTML_TEXT (p.object)->text : 0);
 			break;
 		}
 
@@ -169,10 +168,11 @@ html_engine_get_document_color (HTMLEngine *engine)
 			return NULL;
 		else {
 			HTMLObject *obj;
+			gint offset, index;
 
-			obj = html_engine_text_style_object (engine, NULL);
+			obj = html_engine_text_style_object (engine, &offset);
 			return obj
-				? HTML_TEXT (obj)->color
+				? html_text_get_color_at_index (HTML_TEXT (obj), engine, g_utf8_offset_to_pointer (HTML_TEXT (obj)->text, offset) - HTML_TEXT (obj)->text)
 				: html_colorset_get_color (engine->settings->color_set, HTMLTextColor);
 		}
 	}
@@ -409,7 +409,7 @@ set_color (HTMLObject *o, HTMLEngine *e, gpointer data)
 	if (html_object_is_text (o)) {
 		HTMLObject *prev;
 
-		html_text_set_color (HTML_TEXT (o), NULL, (HTMLColor *) data);
+		html_text_set_color (HTML_TEXT (o), (HTMLColor *) data);
 
 		if (o->parent) {
 			prev = html_object_prev_not_slave (o);
@@ -418,53 +418,6 @@ set_color (HTMLObject *o, HTMLEngine *e, gpointer data)
 			}
 		}
 	}
-}
-
-struct _HTMLEmptyParaSetColor {
-	HTMLUndoData data;
-
-	HTMLColor *color;
-};
-typedef struct _HTMLEmptyParaSetColor HTMLEmptyParaSetColor;
-
-static void set_empty_flow_color (HTMLEngine *e, HTMLColor *c, HTMLUndoDirection dir);
-
-static void
-set_empty_flow_color_undo_action (HTMLEngine *e, HTMLUndoData *undo_data, HTMLUndoDirection dir, guint position_after)
-{
-	HTMLEmptyParaSetColor *undo = (HTMLEmptyParaSetColor *) undo_data;
-
-	set_empty_flow_color (e, undo->color, html_undo_direction_reverse (dir));
-}
-
-static void
-set_empty_flow_color_destroy (HTMLUndoData *undo_data)
-{
-	HTMLEmptyParaSetColor *undo = (HTMLEmptyParaSetColor *) undo_data;
-
-	html_color_unref (undo->color);
-}
-
-static void
-set_empty_flow_color (HTMLEngine *e, HTMLColor *color, HTMLUndoDirection dir)
-{
-	HTMLColor *old_color;
-	HTMLEmptyParaSetColor *undo;
-
-	g_return_if_fail (html_object_is_text (e->cursor->object));
-
-	old_color = HTML_TEXT (e->cursor->object)->color;
-	html_color_ref (old_color);
-	html_text_set_color (HTML_TEXT (e->cursor->object), e, color);
-
-	undo = g_new (HTMLEmptyParaSetColor, 1);
-	html_undo_data_init (HTML_UNDO_DATA (undo));
-	undo->color = old_color;
-	undo->data.destroy = set_empty_flow_color_destroy;
-	html_undo_add_action (e->undo,
-			      html_undo_action_new ("Set empty paragraph color", set_empty_flow_color_undo_action,
-						    HTML_UNDO_DATA (undo), html_cursor_get_position (e->cursor),
-						    html_cursor_get_position (e->cursor)), dir);
 }
 
 gboolean
@@ -478,9 +431,6 @@ html_engine_set_color (HTMLEngine *e, HTMLColor *color)
 	if (html_engine_is_selection_active (e))
 		html_engine_cut_and_paste (e, "Set color", "Unset color", set_color, color);
 	else {
-		if (e->cursor->object->parent && html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
-			set_empty_flow_color (e, color, HTML_UNDO_UNDO);
-		}
 		if (gdk_color_equal (&e->insertion_color->color, &color->color))
 			rv = FALSE;
 	}

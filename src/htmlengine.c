@@ -869,18 +869,17 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 {
 	PangoAttribute *attr;
 
-	if (link)
+	if (link) {
 		style |= GTK_HTML_FONT_STYLE_UNDERLINE;
+		if (!color)
+			color = html_colorset_get_color (e->settings->color_set, HTMLTextColor);
+	}
 
 	html_text_set_style_in_range (text, style, e, last_pos, text->text_bytes);
 
 	/* color */
-	if (link || color != html_colorset_get_color (e->settings->color_set, HTMLTextColor)) {
-		attr = pango_attr_foreground_new (color->color.red, color->color.green, color->color.blue);
-		attr->start_index = last_pos;
-		attr->end_index = text->text_bytes;
-		pango_attr_list_change (text->attr_list, attr);
-	}
+	if (link || color != html_colorset_get_color (e->settings->color_set, HTMLTextColor))
+		html_text_set_color_in_range (text, color, last_pos, text->text_bytes);
 
 	if (bg_color) {
 		attr = pango_attr_background_new (bg_color->red, bg_color->green, bg_color->blue);

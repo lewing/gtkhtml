@@ -84,10 +84,7 @@ struct _HTMLTextClass {
 					       guint offset, guint len);
 
 	GtkHTMLFontStyle   (* get_font_style) (const HTMLText *text);
-	HTMLColor        * (* get_color)      (HTMLText *text, HTMLPainter *painter);
-
 	void               (* set_font_style) (HTMLText *text, HTMLEngine *engine, GtkHTMLFontStyle style);
-	void               (* set_color)      (HTMLText *text, HTMLEngine *engine, HTMLColor *color);
 };
 
 extern HTMLTextClass html_text_class;
@@ -114,14 +111,9 @@ void              html_text_queue_draw                   (HTMLText           *te
 							  guint               offset,
 							  guint               len);
 GtkHTMLFontStyle  html_text_get_font_style               (const HTMLText     *text);
-HTMLColor        *html_text_get_color                    (HTMLText           *text,
-							  HTMLPainter        *painter);
 void              html_text_set_font_style               (HTMLText           *text,
 							  HTMLEngine         *engine,
 							  GtkHTMLFontStyle    style);
-void              html_text_set_color                    (HTMLText           *text,
-							  HTMLEngine         *engine,
-							  HTMLColor          *color);
 void              html_text_append                       (HTMLText           *text,
 							  const gchar        *str,
 							  gint                len);
@@ -240,8 +232,18 @@ void              html_text_set_style                    (HTMLText           *te
 							  HTMLEngine         *e);
 void              html_text_unset_style                  (HTMLText           *text,
 							  GtkHTMLFontStyle    style);
-
-
+HTMLColor        *html_text_get_color_at_index           (HTMLText           *text,
+							  HTMLEngine         *e,
+							  gint                index);
+HTMLColor        *html_text_get_color                    (HTMLText           *text,
+							  HTMLEngine         *e,
+							  gint                start_index);
+void              html_text_set_color_in_range           (HTMLText           *text,
+							  HTMLColor          *color,
+							  gint                start_index,
+							  gint                end_index);
+void              html_text_set_color                    (HTMLText           *text,
+							  HTMLColor          *color);
 
 Link     *html_link_new                 (gchar *url,
 					 gchar *target,
