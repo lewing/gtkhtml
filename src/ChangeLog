@@ -1,3 +1,11 @@
+2003-08-24  Yuedong Du  <yuedong.du@sun.com>
+
+	* htmlobject.c: (destroy), (copy), (html_object_init),
+	(html_object_get_index), (html_object_set_data_nocp),
+	(html_object_set_data_full_nocp), (html_object_get_data_nocp): add
+	new data list just to avoid copy when duplicate html object.
+	* htmlobject.h: ditto
+
 2003-08-01  Radek Doulik  <rodo@ximian.com>
 
 	* introduced html_engine_get_{left|right|top|bottom}_border, use
