@@ -28,10 +28,8 @@
 #include <libgnome/gnome-i18n.h>
 
 #include "html.h"
+#include "object.h"
 #include "utils.h"
-
-#define HTML_ID "html-object"
-#define HTML_A11Y_HTML(o) HTML_OBJECT (g_object_get_data (G_OBJECT (o), HTML_ID))
 
 static void html_a11y_class_init (HTMLA11YClass *klass);
 static void html_a11y_init       (HTMLA11Y *a11y_paragraph);
@@ -81,6 +79,8 @@ static void
 atk_component_interface_init (AtkComponentIface *iface)
 {
 	g_return_if_fail (iface != NULL);
+
+	iface->get_extents = html_a11y_get_extents;
 
 	/* FIX2
 	   iface->add_focus_handler = gail_widget_add_focus_handler;
@@ -236,4 +236,32 @@ html_a11y_ref_child (AtkObject *accessible, gint index)
 	/* printf ("html_a11y_ref_child %d resolves to %p\n", index, accessible_child); */
 
 	return accessible_child;
+}
+
+void
+html_a11y_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type)
+{
+	AtkObject *cur = ATK_OBJECT (component);
+	HTMLObject *obj = HTML_A11Y_HTML (component);
+	GtkHTMLA11Y *a11y = NULL;
+	gint ax, ay;
+
+	g_return_if_fail (obj);
+
+	while (cur) {
+		cur = atk_object_get_parent (cur);
+		if (G_TYPE_FROM_INSTANCE (cur) == G_TYPE_GTK_HTML_A11Y) {
+			a11y = GTK_HTML_A11Y (cur);
+			break;
+		}
+	}
+
+	g_return_if_fail (a11y);
+
+	atk_component_get_extents (ATK_COMPONENT (a11y), x, y, width, height, coord_type);
+	html_object_calc_abs_position (obj, &ax, &ay);
+	*x += ax;
+	*y += ay - obj->ascent;
+	*width = obj->width;
+	*height = obj->ascent + obj->descent;
 }

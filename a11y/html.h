@@ -25,6 +25,7 @@
 #define __HTML_A11Y_H__
 
 #include <atk/atkobject.h>
+#include <atk/atkcomponent.h>
 #include "htmltypes.h"
 
 #define G_TYPE_HTML_A11Y            (html_a11y_get_type ())
@@ -33,6 +34,9 @@
 #define G_IS_HTML_A11Y(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), G_TYPE_HTML_A11Y))
 #define G_IS_HTML_A11Y_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  G_TYPE_HTML_A11Y))
 #define HTML_A11Y_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj),  G_TYPE_HTML_A11Y, HTMLA11YClass))
+
+#define HTML_ID "html-object"
+#define HTML_A11Y_HTML(o) HTML_OBJECT (g_object_get_data (G_OBJECT (o), HTML_ID))
 
 typedef struct _HTMLA11Y      HTMLA11Y;
 typedef struct _HTMLA11YClass HTMLA11YClass;
@@ -46,5 +50,8 @@ GType html_a11y_get_type (void);
 struct _HTMLA11YClass {
 	AtkObjectClass parent_class;
 };
+
+/* private for text */
+void  html_a11y_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type);
 
 #endif

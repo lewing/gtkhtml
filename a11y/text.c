@@ -21,11 +21,20 @@
  *  Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+#include <atk/atkcomponent.h>
+
 #include "htmltext.h"
+#include "htmltextslave.h"
+
+#include "html.h"
 #include "text.h"
 
-static void html_a11y_text_class_init (HTMLA11YTextClass *klass);
-static void html_a11y_text_init       (HTMLA11YText *a11y_text);
+static void html_a11y_text_class_init    (HTMLA11YTextClass *klass);
+static void html_a11y_text_init          (HTMLA11YText *a11y_text);
+static void atk_component_interface_init (AtkComponentIface *iface);
+static void html_a11y_text_get_extents   (AtkComponent *component,
+					  gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type);
 
 static AtkObjectClass *parent_class = NULL;
 
@@ -48,10 +57,25 @@ html_a11y_text_get_type (void)
 			NULL                                                       /* value table */
 		};
 
+		static const GInterfaceInfo atk_component_info = {
+			(GInterfaceInitFunc) atk_component_interface_init,
+			(GInterfaceFinalizeFunc) NULL,
+			NULL
+		};
+
 		type = g_type_register_static (G_TYPE_HTML_A11Y, "HTMLA11YText", &tinfo, 0);
+		g_type_add_interface_static (type, ATK_TYPE_COMPONENT, &atk_component_info);
 	}
 
 	return type;
+}
+
+static void 
+atk_component_interface_init (AtkComponentIface *iface)
+{
+	g_return_if_fail (iface != NULL);
+
+	iface->get_extents = html_a11y_text_get_extents;
 }
 
 static void
@@ -100,7 +124,29 @@ html_a11y_text_new (HTMLObject *html_obj)
 
 	accessible->role = ATK_ROLE_TEXT;
 
-	printf ("created new html accessible text object\n");
+	/* printf ("created new html accessible text object\n"); */
 
 	return accessible;
+}
+
+static void
+html_a11y_text_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type)
+{
+	HTMLObject *obj = HTML_A11Y_HTML (component);
+	HTMLObject *last;
+
+	html_a11y_text_get_extents (component, x, y, width, height, coord_type);
+
+	if (obj) {
+		last = obj;
+		while (last->next && HTML_IS_TEXT_SLAVE (last->next))
+			last = last->next;
+		if (HTML_IS_TEXT_SLAVE (last)) {
+			gint lx, ly;
+			html_object_calc_abs_position (last, &lx, &ly);
+
+			*width = lx + last->width - *x;
+			*height = ly + last->descent - *y;
+		}
+	}
 }
