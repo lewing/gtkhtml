@@ -1148,14 +1148,11 @@ calc_text_width (HTMLPainter *painter,
 	font = html_font_manager_get_font (&painter->font_manager, face, style);
 	e_font = font->data;
 
-	if (style & GTK_HTML_FONT_STYLE_FIXED) {
-		width = len * font->space_width;
-	} else {
-		width = e_font_utf8_text_width (e_font, e_style (style),
-						text, g_utf8_offset_to_pointer (text, len) - text);
-	}
+	width = e_font_utf8_text_width (e_font, e_style (style), text, g_utf8_offset_to_pointer (text, len) - text);
+
 	/* printf ("calc_text_width text: %s len: %d\n", text, len);
-	{ gint i; printf ("["); for (i=0;i<g_utf8_offset_to_pointer (text, len)-text; i++) printf ("%c", text [i]); printf ("] ");}
+	{ gint i; printf ("["); for (i=0;i<g_utf8_offset_to_pointer (text, len)-text; i++)
+	printf ("%c", text [i]); printf ("] ");}
 	printf ("%d (%p)\n", width, e_font); */
 	return width;
 }
