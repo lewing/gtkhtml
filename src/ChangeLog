@@ -1,3 +1,10 @@
+2003-10-14  Suresh Chandrasekharan <suresh.chandrasekharan@sun.com>
+	
+	* htmlclueflow.c (search_text): Fixes for supporting forward
+	multibyte search, backward search and backward multibyte search.
+
+	(search_set_info): -do-
+
 2003-10-13  Frederic Crozat  <fcrozat@mandrakesoft.com>
 
 	* htmlobject.c: (object_save_data):

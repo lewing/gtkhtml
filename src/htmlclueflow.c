@@ -1938,36 +1938,34 @@ get_default_font_style (const HTMLClueFlow *self)
 static void
 search_set_info (HTMLObject *cur, HTMLSearch *info, guchar *text, guint pos, guint len)
 {
-	guint text_len = 0;
+	guint text_len = (info->forward) ? 0 : strlen(text);
 	guint cur_len;
-
 	info->found_len = len;
 
 	if (info->found) {
 		g_list_free (info->found);
 		info->found = NULL;
 	}
-
 	while (cur) {
 		if (html_object_is_text (cur)) {
 			cur_len = strlen (HTML_TEXT (cur)->text);
-			if (text_len + cur_len > pos) {
+			if (info->forward ? text_len + cur_len > pos : text_len - cur_len <= pos ) {
 				if (!info->found) {
-					info->start_pos = g_utf8_pointer_to_offset (text + text_len,
+					info->start_pos = g_utf8_pointer_to_offset (text + text_len - (info->forward ? 0 : cur_len),
 										    text + pos);
 				}
 				info->found = g_list_append (info->found, cur);
-			}
-			text_len += cur_len;
-			if (text_len >= pos+info->found_len) {
-				info->stop_pos = info->start_pos + info->found_len;
+			} 
+			text_len += (info->forward ? cur_len : -cur_len);
+			if (info->forward ? (text_len >= pos + info->found_len ): text_len < pos + info->found_len) {
+				info->stop_pos = info->start_pos + info->text_len;
 				info->last     = HTML_OBJECT (cur);
 				return;
 			}
 		} else if (HTML_OBJECT_TYPE (cur) != HTML_TYPE_TEXTSLAVE) {
 			break;
 		}		
-		cur = cur->next;
+		cur = info->forward ? cur->next : cur->prev;
 	}
 
 	g_assert_not_reached ();
@@ -1984,10 +1982,10 @@ search_text (HTMLObject **beg, HTMLSearch *info)
 	guint text_len;
 	guint eq_len;
 	gint  pos;
+	guint utf8_len; 
 	gboolean retval = FALSE;
 
 	/* printf ("search flow look for \"text\" %s\n", info->text); */
-
 	/* first get flow text_len */
 	text_len = 0;
 	while (cur) {
@@ -1999,16 +1997,14 @@ search_text (HTMLObject **beg, HTMLSearch *info)
 		}
 		cur = (info->forward) ? cur->next : cur->prev;
 	}
-
+	
 	if (text_len > 0) {
-		par = g_new (gchar, text_len+1);
-		par [text_len] = 0;
+		par = g_new0 (gchar, text_len+1);
 
 		pp = (info->forward) ? par : par+text_len;
 
 		/* now fill par with text */
-		head = cur = (info->forward) ? *beg : end;
-		cur = *beg;
+		head = cur = *beg;
 		while (cur) {
 			if (html_object_is_text (cur)) {
 				if (!info->forward) {
@@ -2026,18 +2022,43 @@ search_text (HTMLObject **beg, HTMLSearch *info)
 
 		/* set eq_len and pos counters */
 		eq_len = 0;
+		utf8_len = g_utf8_strlen (par, -1);
 		if (info->found) {
-			pos = info->start_pos + ((info->forward) ? 1 : -1);
+			if (info->forward) {
+				pos = info->start_pos + 1 ;
+				/* convert pos into offset within par */
+				pos = (gint)g_utf8_offset_to_pointer (par, pos) - (gint)par;
+			} else {
+				gint head_len = g_utf8_strlen (((HTMLText*)head)->text, -1);
+				/* New starting pos for backward search */
+				/* within the (head)->text		*/
+
+				pos = info->stop_pos - 2;
+
+				/* Absolute position within par */
+				if (pos >= 0)
+					pos = utf8_len - (head_len - pos);
+				
+				/* Get the byte offset with par, skip if */
+				/* par and (head)->text are the same     */
+
+				if (utf8_len >= head_len + 1)
+					pos = (gint) g_utf8_offset_to_pointer (par, pos < 0 ? utf8_len - head_len - 1 : pos) - (gint) par;
+
+				/* We have now the starting byte of the char */
+				/* from which the backward search starts, get*/
+				/* the end byte like follows		     */		
+				pos = (gint) g_utf8_next_char (par + pos) - (gint) par - 1;
+			}
 		} else {
-			pos = (info->forward) ? 0 : text_len - 1;
+			/* Last char in par, from which a new backward */
+			/* search  starts 			       */
+
+			gint tot_len = strlen (par);
+			pos = (info->forward) ? 0 : tot_len - 1;
 		}
-
-		/* FIXME make shorter text instead */
-		if (!info->forward)
-			par [pos+1] = 0;
-
 		if ((info->forward && pos < text_len)
-		    || (!info->forward && pos>0)) {
+		    || (!info->forward && pos>=0)) {
 			if (info->reb) {
 				/* regex search */
 				gint rv;
@@ -2085,17 +2106,18 @@ search_text (HTMLObject **beg, HTMLSearch *info)
 				}
 #endif
 			} else {
+				gint info_len = strlen (info->text);
 				/* substring search - simple one - could be improved
 				   go thru par and look for info->text */
 				while (par [pos]) {
 					if (info->trans [(guchar) info->text
-							[(info->forward) ? eq_len : info->text_len - eq_len - 1]]
+							[(info->forward) ? eq_len : info_len - eq_len - 1]]
 					    == info->trans [par [pos]]) {
 						eq_len++;
-						if (eq_len == info->text_len) {
+						if (eq_len == info_len) {
 							search_set_info (head, info, par,
 									 pos - (info->forward ? eq_len-1 : 0),
-									 info->text_len);
+									 info_len);
 							retval=TRUE;
 							break;
 						}
