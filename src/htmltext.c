@@ -1571,6 +1571,8 @@ html_text_magic_link (HTMLText *text, HTMLEngine *engine, guint offset)
 		return FALSE;
 	offset--;
 
+	printf ("html_text_magic_link\n");
+
 	html_undo_level_begin (engine->undo, "Magic link", "Remove magic link");
 	saved_position = engine->cursor->position;
 

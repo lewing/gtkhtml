@@ -204,6 +204,7 @@ op_copy (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, guint *len)
 				html_table_cell_set_position (cell_copy, r, c);
 			} else
 				nt->cells [r][c] = nt->cells [cell->row - start->row][cell->col - start_col];
+			(*len) ++;
 		}
 	(*len) ++;
 	if (end->col - start_col < cols - 1)

@@ -471,7 +471,8 @@ gboolean    html_object_select_range             (HTMLObject *self,
 						  gboolean    queue_draw);
 void        html_object_append_selection_string  (HTMLObject *self,
 						  GString    *buffer);
-gchar      *html_object_get_selection_string     (HTMLObject *o);
+gchar      *html_object_get_selection_string     (HTMLObject *o,
+						  HTMLEngine *e);
 
 /* Saving.  */
 gboolean  html_object_save  (HTMLObject          *self,
@@ -521,5 +522,6 @@ void      html_object_merge_down                 (HTMLObject *o,
 						  HTMLEngine *e);
 gboolean  html_object_is_parent                  (HTMLObject *parent,
 						  HTMLObject *child);
+gint      html_object_get_insert_level           (HTMLObject *o);
 
 #endif /* _HTMLOBJECT_H_ */

@@ -50,6 +50,7 @@
 #include "htmlplainpainter.h"
 #include "htmlsettings.h"
 #include "htmltable.h"
+#include "htmltext.h"
 #include "htmlselection.h"
 #include "htmlundo.h"
 
@@ -1315,16 +1316,16 @@ selection_get (GtkWidget        *widget,
 	  {
 		if (html->priv->primary) {
 			selection_string =
-			   html_object_get_selection_string (html->priv->primary);
-			g_print("primary paste: `%s'\n", selection_string);
+			   html_object_get_selection_string (html->priv->primary, html->engine);
+			/* g_print("primary paste: `%s'\n", selection_string); */
 		}
 	  }
 	else	/* CLIPBOARD */
 	  {
 		if (html->engine->clipboard) {
 			selection_string =
-			   html_object_get_selection_string (html->engine->clipboard);
-			g_print("clipboard paste: `%s'\n", selection_string);
+			   html_object_get_selection_string (html->engine->clipboard, html->engine);
+			/* g_print("clipboard paste: `%s'\n", selection_string); */
 		}
 	  }
 
@@ -1338,13 +1339,13 @@ selection_get (GtkWidget        *widget,
 	
 	if (selection_string != NULL) {
 		if (info == TARGET_UTF8_STRING) {
-			printf ("UTF8_STRING\n");
+			/* printf ("UTF8_STRING\n"); */
 			gtk_selection_data_set (selection_data,
 						gdk_atom_intern ("UTF8_STRING", FALSE), 8,
 						(const guchar *) selection_string,
 						strlen (selection_string));
 		} else if (info == TARGET_UTF8) {
-			printf ("UTF-8\n");
+			/* printf ("UTF-8\n"); */
 			gtk_selection_data_set (selection_data,
 						gdk_atom_intern ("UTF-8", FALSE), 8,
 						(const guchar *) selection_string,
@@ -1398,7 +1399,7 @@ selection_received (GtkWidget *widget,
 	g_return_if_fail (GTK_IS_HTML (widget));
 	g_return_if_fail (selection_data != NULL);
 	
-	printf("got selection from system\n");
+	/* printf ("got selection from system\n"); */
 
 	/* If the Widget is editable,
 	** and we are the owner of the atom requested
@@ -1452,12 +1453,12 @@ selection_received (GtkWidget *widget,
 	    && (selection_data->type != gdk_atom_intern ("UTF-8", FALSE))) {
 		g_warning ("Selection \"STRING\" was not returned as strings!\n");
 	} else if (selection_data->length > 0) {
+		HTMLEngine *e = GTK_HTML (widget)->engine;
 		printf ("selection text \"%.*s\"\n",
 			selection_data->length, selection_data->data); 
 
 		if (selection_data->type != GDK_SELECTION_TYPE_STRING) {
-			html_engine_paste_text (GTK_HTML (widget)->engine, 
-						selection_data->data,
+			html_engine_paste_text (e, selection_data->data,
 						g_utf8_strlen (selection_data->data, 
 							       selection_data->length));
 		} else {
@@ -1467,8 +1468,7 @@ selection_received (GtkWidget *widget,
 						       selection_data->data,
 						       (guint) selection_data->length);
 
-			html_engine_paste_text (GTK_HTML (widget)->engine, 
-						utf8, g_utf8_strlen (utf8, -1));
+			html_engine_paste_text (e, utf8, g_utf8_strlen (utf8, -1));
 
 			g_free (utf8);
 		}
@@ -3816,7 +3816,9 @@ gtk_html_insert_html_generic (GtkHTML *html, const gchar *html_src, gboolean obj
 
 		o = tmp->engine->clue;
 		tmp->engine->clue = NULL;
-		html_engine_insert_object (html->engine, o, html_object_get_recursive_length (o));
+		html_engine_insert_object (html->engine, o,
+					   html_object_get_recursive_length (o),
+					   html_object_get_insert_level (o));
 	}
 	gtk_widget_destroy (window);
 }

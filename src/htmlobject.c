@@ -1617,7 +1617,7 @@ unselect_object (HTMLObject *o, HTMLEngine *e, gpointer data)
 }
 
 gchar *
-html_object_get_selection_string (HTMLObject *o)
+html_object_get_selection_string (HTMLObject *o, HTMLEngine *e)
 {
 	HTMLObject *tail;
 	tmpSelData data;
@@ -1630,9 +1630,9 @@ html_object_get_selection_string (HTMLObject *o)
 	data.in     = FALSE;
 	data.i      = html_interval_new (html_object_get_head_leaf (o), tail, 0, html_object_get_length (tail));
 
-	html_interval_forall (data.i, NULL, select_object, &data);
+	html_interval_forall (data.i, e, select_object, &data);
 	html_object_append_selection_string (o, data.buffer);
-	html_interval_forall (data.i, NULL, unselect_object, NULL);
+	html_interval_forall (data.i, e, unselect_object, NULL);
 
 	html_interval_destroy (data.i);
 	string = data.buffer->str;
@@ -1770,4 +1770,18 @@ html_object_is_parent (HTMLObject *parent, HTMLObject *child)
 	}
 
 	return FALSE;
+}
+
+gint
+html_object_get_insert_level (HTMLObject *o)
+{
+	switch (HTML_OBJECT_TYPE (o)) {
+	case HTML_TYPE_TABLECELL:
+	case HTML_TYPE_CLUEV:
+		return 3;
+	case HTML_TYPE_CLUEFLOW:
+		return 2;
+	default:
+		return 1;
+	}
 }
