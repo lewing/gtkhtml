@@ -7,5 +7,5 @@ Name: libgtkhtml
 Description: libgtkhtml
 Requires: @GTKHTML_MODULES@
 Version: @GTKHTML_RELEASE@
-Libs: -L${libdir} -lgtkhtml-@GTKHTML_RELEASE@
+Libs: -L${libdir} -lgtkhtml-@GTKHTML_RELEASE@ -lgtkhtml-a11y-@GTKHTML_RELEASE@
 Cflags: -I${includedir}/gtkhtml-@GTKHTML_RELEASE@

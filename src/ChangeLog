@@ -1,5 +1,9 @@
 2002-05-07  Radek Doulik  <rodo@ximian.com>
 
+	* Makefile.am: fixed .la versioning
+
+	* libgtkhtml.pc.in (Libs): added a11y lib
+
 	* gtkhtml.c (client_notify_widget): use /keybindings_theme in
 	widget and not class notify
 

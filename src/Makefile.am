@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir) -I$(srcdir) -I$(includedir) $(GTKHTML_CFLAGS) \
 
 CFLAGS += -DICONDIR=\"$(datadir)/gtkhtml/icons\" -DGTK_DISABLE_DEPRECATED=1
 
-lib_LTLIBRARIES = libgtkhtml.la
+lib_LTLIBRARIES = libgtkhtml-3.0.la
 
 libgtkhtmldir = $(includedir)/libgtkhtml-@GTKHTML_RELEASE@/gtkhtml
 
@@ -103,7 +103,7 @@ libgtkhtml_HEADERS =				\
 	htmlengine-edit-table.h			\
 	$(NULL)
 
-libgtkhtml_la_SOURCES =				\
+libgtkhtml_3_0_la_SOURCES =			\
 	gtkhtml-embedded.c			\
 	gtkhtml-im.c				\
 	gtkhtml-properties.c			\
@@ -183,8 +183,8 @@ libgtkhtml_la_SOURCES =				\
 	htmlframeset.c				\
 	$(NULL)
 
-libgtkhtml_la_LDFLAGS = -release $(GTKHTML_RELEASE) -version-info $(GTKHTML_CURRENT):$(GTKHTML_REVISION):$(GTKHTML_AGE)
-libgtkhtml_la_LIBADD = $(GTKHTML_LIBS)
+libgtkhtml_3_0_la_LDFLAGS = -version-info $(GTKHTML_CURRENT):$(GTKHTML_REVISION):$(GTKHTML_AGE)
+libgtkhtml_3_0_la_LIBADD = $(GTKHTML_LIBS)
 
 dist-hook:
 	mkdir $(distdir)/tests
@@ -203,7 +203,7 @@ gtest_SOURCES = \
 	test.c
 gtest_LDFLAGS = -static
 gtest_LDADD =	\
-	libgtkhtml.la ../a11y/libgtkhtml-a11y.la
+	libgtkhtml-@GTKHTML_RELEASE@.la ../a11y/libgtkhtml-a11y-@GTKHTML_RELEASE@.la
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libgtkhtml.pc
