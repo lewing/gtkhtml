@@ -1135,6 +1135,7 @@ html_text_slave_get_glyph_item_at_offset (HTMLTextSlave *slave, int offset, HTML
 {
 	HTMLTextSlaveGlyphItem *rv = NULL;
 	HTMLTextSlaveGlyphItem *prev_gi, *next_gi;
+	HTMLTextSlave *next_slave = HTML_OBJECT (slave)->next && HTML_IS_TEXT_SLAVE (HTML_OBJECT (slave)->next) ? HTML_TEXT_SLAVE (HTML_OBJECT (slave)->next) : NULL;
 	GSList *cur;
 	int index;
 
@@ -1151,7 +1152,10 @@ html_text_slave_get_glyph_item_at_offset (HTMLTextSlave *slave, int offset, HTML
 			HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) cur->data;
 
 			if (gi->glyph_item.item->offset <= index
-			    && index <= gi->glyph_item.item->offset + gi->glyph_item.item->length) {
+			    && (index < gi->glyph_item.item->offset + gi->glyph_item.item->length
+				|| (!cur->next && index == gi->glyph_item.item->offset + gi->glyph_item.item->length)
+				|| (!next_slave && slave->owner->text_bytes == gi->glyph_item.item->offset + gi->glyph_item.item->length)
+				|| (next_slave && html_text_slave_get_text (next_slave) - next_slave->owner->text == gi->glyph_item.item->offset + gi->glyph_item.item->length))) {
 				next_gi = cur->next ? (HTMLTextSlaveGlyphItem *) cur->next->data : NULL;
 				rv = gi;
 				break;
@@ -1239,7 +1243,7 @@ html_text_slave_cursor_right_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 		}
 	} else {
 		/* RTL */
-		if (index - gi->glyph_item.item->offset > 1 || (!next && index - gi->glyph_item.item->offset > 0)) {
+		if (index >= gi->glyph_item.item->offset && (index < gi->glyph_item.item->offset + gi->glyph_item.item->length)) {
 			cursor->offset --;
 			cursor->position --;
 
