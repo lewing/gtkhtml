@@ -1,3 +1,43 @@
+2005-03-14  Radek Doulik  <rodo@novell.com>
+
+	* test-suite.c (test_cursor_around_image): added new test for
+	cursor movement around images
+	put widget into scrolled window for convenience
+
+	* htmltextslave.c (html_text_slave_cursor_left_one): move to
+	boundary only if there's no prev object
+	(html_text_slave_cursor_right_one): remove unneeded braces
+
+	* htmlcursor.c (move_right): move offset one step forward when
+	moving between neighbor objects
+
+2005-03-10  Radek Doulik  <rodo@novell.com>
+
+	* test-suite.c (test_delete_around_table): added new test for
+	deleting around tables which was broken lately (on 2005-02-03)
+
+	* htmlengine-edit-cut-and-paste.c (check_for_simple_delete): use
+	check_for_simple_containers on object parents rather than on
+	objects. this fixes deletion when cursor is before/after table.
+	(check_for_simple_containers): add table cell to simple containers
+	as they are same sa cluev's
+
+	* htmlobject.c (html_object_real_cursor_right): test for RTL
+	rather than LTR so that DERIVED defaults to LTR
+	(html_object_real_cursor_left): ditto
+
+	* test-suite.c (test_table_cell_parsing): added test to check
+	correct cell parsing
+
+	* htmlengine.c (block_end_cell): call close_flow to avoid empty
+	clueflows
+
+2005-03-10  Mengjie Yu  <meng-jie.yu@sun.com>
+
+	* gtkhtml.c: (gtk_html_set_color):we should pass the insertion_color.
+
+	Fixes: #73216
+
 2005-03-07  Radek Doulik  <rodo@novell.com>
 
 	* htmltext.c (html_text_cursor_next_slave): make sure we handle

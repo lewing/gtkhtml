@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <glib/gstring.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkwindow.h>
 #include "gtkhtml.h"
 #include "htmlclue.h"
@@ -31,6 +32,7 @@ static int test_cursor_left_right_on_lines_boundaries (GtkHTML *html);
 static int test_cursor_left_right_on_lines_boundaries_rtl (GtkHTML *html);
 static int test_cursor_left_right_on_lines_boundaries_wo_white (GtkHTML *html);
 static int test_cursor_around_containers (GtkHTML *html);
+static int test_cursor_around_image (GtkHTML *html);
 
 static int test_quotes_in_div_block (GtkHTML *html);
 static int test_quotes_in_table (GtkHTML *html);
@@ -39,6 +41,8 @@ static int test_delete_nested_cluevs_and_undo (GtkHTML *html);
 static int test_insert_nested_cluevs (GtkHTML *html);
 static int test_indentation_plain_text (GtkHTML *html);
 static int test_indentation_plain_text_rtl (GtkHTML *html);
+static int test_table_cell_parsing (GtkHTML *html);
+static int test_delete_around_table (GtkHTML *html);
 
 static Test tests[] = {
 	{ "cursor movement", NULL },
@@ -49,6 +53,7 @@ static Test tests[] = {
 	{ "begin/end of line", test_cursor_beol },
 	{ "begin/end of line (RTL)", test_cursor_beol_rtl },
 	{ "around containers", test_cursor_around_containers },
+	{ "around image", test_cursor_around_image },
 	{ "various fixed bugs", NULL },
 	{ "outer quotes inside div block", test_quotes_in_div_block },
 	{ "outer quotes inside table", test_quotes_in_table },
@@ -57,6 +62,8 @@ static Test tests[] = {
 	{ "insert nested cluev's", test_insert_nested_cluevs },
 	{ "indentation in plain text", test_indentation_plain_text },
 	{ "indentation in plain text (RTL)", test_indentation_plain_text_rtl },
+	{ "table cell parsing", test_table_cell_parsing },
+	{ "delete around table", test_delete_around_table },
 	{ NULL, NULL }
 };
 
@@ -197,6 +204,37 @@ static int test_cursor_around_containers (GtkHTML *html)
 	    || !html_cursor_right (html->engine->cursor, html->engine)
 	    || html->engine->cursor->offset != 1
 	    || html->engine->cursor->position != 9)
+		return FALSE;
+
+	return TRUE;
+}
+
+static int test_cursor_around_image (GtkHTML *html)
+{
+	load_editable (html, "<pre>abc <img src=none> abc");
+
+	if (!html_cursor_right (html->engine->cursor, html->engine)
+	    || !html_cursor_right (html->engine->cursor, html->engine)
+	    || !html_cursor_right (html->engine->cursor, html->engine)
+	    || !html_cursor_right (html->engine->cursor, html->engine)
+	    || !html_cursor_right (html->engine->cursor, html->engine)
+	    || html->engine->cursor->offset != 1
+	    || html->engine->cursor->position != 5
+	    || !html_cursor_right (html->engine->cursor, html->engine)
+	    || html->engine->cursor->offset != 1
+	    || html->engine->cursor->position != 6
+	    || !html_cursor_left (html->engine->cursor, html->engine)
+	    || !html_cursor_left (html->engine->cursor, html->engine)
+	    || html->engine->cursor->offset != 4
+	    || html->engine->cursor->position != 4) {
+		fprintf (stderr, "\npos: %d off: %d\n", html->engine->cursor->position, html->engine->cursor->offset);
+		return FALSE;
+	}
+
+	while (html_cursor_left (html->engine->cursor, html->engine))
+		;
+
+	if (html->engine->cursor->position != 0 || html->engine->cursor->offset != 0)
 		return FALSE;
 
 	return TRUE;
@@ -544,9 +582,85 @@ test_capitalize_upcase_lowcase_word (GtkHTML *html)
 	return TRUE;
 }
 
+static int
+test_delete_around_table (GtkHTML *html)
+{
+	load_editable (html, "<table><tr><td></td></tr></table><br>abc");
+
+	html_cursor_jump_to_position (html->engine->cursor, html->engine, 3);
+
+	if (html->engine->cursor->offset != 0
+	    || html->engine->cursor->position != 3)
+		return FALSE;
+
+	gtk_html_command (html, "delete-back");
+
+	if (html->engine->cursor->offset != 1
+	    || html->engine->cursor->position != 2)
+		return FALSE;
+
+	html_engine_end_of_document (html->engine);
+
+	if (html->engine->cursor->offset != 3
+	    || html->engine->cursor->position != 7)
+		return FALSE;
+
+	return TRUE;
+}
+
+static int
+test_table_cell_parsing (GtkHTML *html)
+{
+	load_editable (html, "<table><tr><td></td></tr></table>");
+
+	html_cursor_jump_to_position (html->engine->cursor, html->engine, 1);
+
+	if (html->engine->cursor->offset != 0
+	    || html->engine->cursor->position != 1)
+		return FALSE;
+
+	/* test that there's flow with text created in the cell and that it's only one flow */
+	if (!HTML_IS_TEXT (html->engine->cursor->object) || !html->engine->cursor->object->parent ||
+	    !HTML_IS_CLUEFLOW (html->engine->cursor->object->parent) || html->engine->cursor->object->parent->next ||
+	    !html->engine->cursor->object->parent->parent || !HTML_IS_TABLE_CELL (html->engine->cursor->object->parent->parent))
+		return FALSE;
+
+	load_editable (html, "<table><tr><td><br></td></tr></table>");
+
+	html_cursor_jump_to_position (html->engine->cursor, html->engine, 1);
+
+	if (html->engine->cursor->offset != 0
+	    || html->engine->cursor->position != 1)
+		return FALSE;
+
+	/* test that there are two flows created in the cell and that they are both containing text */
+	if (!HTML_IS_TEXT (html->engine->cursor->object) || !html->engine->cursor->object->parent ||
+	    !HTML_IS_CLUEFLOW (html->engine->cursor->object->parent) || !html->engine->cursor->object->parent->next ||
+	    !html->engine->cursor->object->parent->parent || !HTML_IS_TABLE_CELL (html->engine->cursor->object->parent->parent) ||
+	    !HTML_IS_CLUEFLOW (html->engine->cursor->object->parent->next) || !HTML_CLUE (html->engine->cursor->object->parent->next)->head ||
+	    !HTML_IS_TEXT (HTML_CLUE (html->engine->cursor->object->parent->next)->head))
+		return FALSE;
+
+	load_editable (html, "<table><tr><td>abc</td></tr></table>");
+
+	html_cursor_jump_to_position (html->engine->cursor, html->engine, 1);
+
+	if (html->engine->cursor->offset != 0
+	    || html->engine->cursor->position != 1)
+		return FALSE;
+
+	/* test that there's flow with text created in the cell and that it's only one flow */
+	if (!HTML_IS_TEXT (html->engine->cursor->object) || !html->engine->cursor->object->parent ||
+	    !HTML_IS_CLUEFLOW (html->engine->cursor->object->parent) || html->engine->cursor->object->parent->next ||
+	    !html->engine->cursor->object->parent->parent || !HTML_IS_TABLE_CELL (html->engine->cursor->object->parent->parent))
+		return FALSE;
+
+	return TRUE;
+}
+
 int main (int argc, char *argv[])
 {
-	GtkWidget *win, *html_widget;
+	GtkWidget *win, *sw, *html_widget;
 	GtkHTML *html;
 	int i = 0, n_all, n_successful;
 
@@ -557,9 +671,13 @@ int main (int argc, char *argv[])
 	gtk_html_load_empty (html);
 	gtk_html_set_editable (html, TRUE);
 	win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_container_add (GTK_CONTAINER (win), html_widget);
+	sw = gtk_scrolled_window_new (NULL, NULL);
+	gtk_widget_set_size_request (win, 600, 400);
+	gtk_container_add (GTK_CONTAINER (sw), html_widget);
+	gtk_container_add (GTK_CONTAINER (win), sw);
 
-	/* gtk_widget_show_all (win); */
+/* 	gtk_widget_show_all (win); */
+/* 	gtk_widget_show_now (win); */
 
 	n_all = n_successful = 0;
 
