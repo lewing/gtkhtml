@@ -1,3 +1,9 @@
+2002-09-12  Radek Doulik  <rodo@ximian.com>
+
+	* htmlengine.c (parse_a): don't push color for links
+	(close_anchor): don't pop color
+	(insert_text): use right default color for links
+
 2002-09-05  Radek Doulik  <rodo@ximian.com>
 
 	* htmliframe.c (op_copy): set iframe's clue parent
