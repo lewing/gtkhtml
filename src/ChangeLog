@@ -1,3 +1,8 @@
+Thu Sep  2 14:00:08 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* htmltextslave.c: Fix HTMLObject->width to be in engine
+	coordinates not Pango units. (Patch from Radek Doulik, #64430)
+
 2004-08-16  Radek Doulik  <rodo@ximian.com>
 
 	* htmliframe.c (html_iframe_init): load empty iframe if depth > 10

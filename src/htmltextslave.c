@@ -355,11 +355,11 @@ hts_fit_line (HTMLObject *o, HTMLPainter *painter,
 	if (offset == slave->posStart + slave->posLen && (widthLeft >= w || force_fit)) {
 		rv = HTML_FIT_COMPLETE;
 		if (slave->posLen)
-			o->width = w;
+			o->width = html_painter_pango_to_engine (painter, w);
 	} else if (lbo > slave->posStart) {
 		split (slave, lbo - slave->posStart, lbsp);
 		rv = HTML_FIT_PARTIAL;
-		o->width = lbw;
+		o->width = html_painter_pango_to_engine (painter, lbw);
 		slave->posLen -= lwl;
 	}
 
