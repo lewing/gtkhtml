@@ -14,6 +14,7 @@ SUBDIRS =					\
 	intl					\
 	macros					\
 	src					\
+	components				\
 	art					\
 	po
 

@@ -5,7 +5,7 @@ AM_CONFIG_HEADER(config.h)
 
 PACKAGE=gtkhtml
 
-GTKHTML_RELEASE=1.3
+GTKHTML_RELEASE=3.0
 AC_SUBST(GTKHTML_RELEASE)
 AM_INIT_AUTOMAKE($PACKAGE, $GTKHTML_RELEASE.0.99)
 
@@ -37,6 +37,33 @@ GTKHTML_MODULES="libgnomeui-2.0 >= 1.112.1 libgnomeprint-2.0 >= 1.111.0"
 PKG_CHECK_MODULES(GTKHTML, $GTKHTML_MODULES)
 AC_SUBST(GTKHTML_CFLAGS)
 AC_SUBST(GTKHTML_LIBS)
+
+EDITOR_MODULES="${GTKHTML_MODULES} libbonoboui-2.0 >= 1.112.1"
+PKG_CHECK_MODULES(EDITOR, $EDITOR_MODULES)
+AC_SUBST(EDITOR_CFLAGS)
+AC_SUBST(EDITOR_LIBS)
+
+dnl **********************************
+dnl Editor component
+dnl **********************************
+
+EDITOR_API_VERSION=3.0
+AC_DEFINE_UNQUOTED(EDITOR_API_VERSION, "${EDITOR_API_VERSION}")
+AC_SUBST(EDITOR_API_VERSION)
+
+if test "x$shlib_factory" = "xyes"; then
+	GNOME_GTKHTML_EDITOR_SHLIB=1
+	GNOME_GTKHTML_EDITOR_TYPE="shlib"
+	GNOME_GTKHTML_EDITOR_LOCATION="libgnome-gtkhtml-editor-${EDITOR_API_VERSION}.so"
+	AC_DEFINE(GNOME_GTKHTML_EDITOR_SHLIB)
+else
+	GNOME_GTKHTML_EDITOR_LOCATION="gnome-gtkhtml-editor-${EDITOR_API_VERSION}"
+	GNOME_GTKHTML_EDITOR_TYPE="exe"
+fi
+
+AC_SUBST(GNOME_GTKHTML_EDITOR_TYPE)
+AC_SUBST(GNOME_GTKHTML_EDITOR_LOCATION)
+AM_CONDITIONAL(EDITOR_SHLIB, test x$shlib_factory = xyes)
 
 dnl **********************************
 dnl Library version information.
@@ -70,16 +97,14 @@ po/Makefile.in
 intl/Makefile
 macros/Makefile
 src/Makefile
+components/Makefile
+components/html-editor/Makefile
 art/Makefile
 ])
 
-echo -n "
+echo "
 
 Configuration:
 
-	GConf support:			"
-if test x${have_gconf} = xtrue; then echo "yes"; else echo "no"; fi
-echo "	XIM support:			$enable_xim
 	Editor component type:		${GNOME_GTKHTML_EDITOR_TYPE}
 "
-
