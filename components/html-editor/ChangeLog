@@ -1,3 +1,21 @@
+2002-05-13  Larry Ewing  <lewing@ximian.com>
+
+	* test-html-editor-control.c (view_source_cb): new verb to start
+	up the source view.
+	(init_corba): set the version to the editor api version.
+	(main): initialize gconf.
+
+	* htmlsourceview.c: added.  This is a simple widget that pulls the
+	persist information from a control.
+
+	* htmlsourceview.h: added.
+
+	* e-html-utils.c: added, for e-text-to-html.
+
+	* e-html-utils.h: added.
+
+	* Makefile.am: add the new source files to the test-editor build.
+
 2002-05-07  Larry Ewing  <lewing@ximian.com>
 
 	* test-html-editor-control.c (save_through_persist_stream): use a
