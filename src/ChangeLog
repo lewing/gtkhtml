@@ -1,3 +1,11 @@
+2002-06-06  Radek Doulik  <rodo@ximian.com>
+
+	* gtkhtml.c (gtk_html_insert_html_generic): added tmp parameter,
+	which when non-null is used as source of insertion, it's destroyed
+	afterwards
+	(gtk_html_insert_gtk_html): new method, takes to_be_destroyed
+	gtkhtml widget and inserts its content into html gthtml
+
 2002-05-30  Radek Doulik  <rodo@ximian.com>
 
 	* htmltable.c (draw): call get_body with table coordinates
