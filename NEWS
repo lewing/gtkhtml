@@ -1,3 +1,16 @@
+gtkhtml-3.2.4 "Adiantum" 2004-09-23
+------------------------------------------------
+
+New in this release
+
+   * fixed capitalizing, lowering, upping functions
+   * fixed crash with broken spell checking settings
+   * fixed crash when pasting multiline text
+   * fixed few memory leaks
+   * fixed crash related to aligned images
+   * fixed multiple replace dialogs appearing
+   * fixed dnd position inside scrolled window
+
 gtkhtml-3.2.3 "Frond" 2004-09-23
 ------------------------------------------------
 
