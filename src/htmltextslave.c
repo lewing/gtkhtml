@@ -661,7 +661,7 @@ calc_glyph_range_size (HTMLText *text, PangoGlyphItem *glyph_item, int start_ind
 	isect_start -= glyph_item->item->offset;
 	isect_end -= glyph_item->item->offset;
 
-	if (isect_start < isect_end) {
+	if (isect_start <= isect_end) {
 		PangoRectangle log_rect;
 		int start_x, end_x;
 		
@@ -672,15 +672,19 @@ calc_glyph_range_size (HTMLText *text, PangoGlyphItem *glyph_item, int start_ind
 					       isect_start,
 					       FALSE, &start_x);
 
-		pango_glyph_string_index_to_x (glyph_item->glyphs,
-					       text->text + glyph_item->item->offset,
-					       glyph_item->item->length,
-					       &glyph_item->item->analysis,
-					       isect_end,
-					       FALSE, &end_x);
+		if (isect_start < isect_end)
+			pango_glyph_string_index_to_x (glyph_item->glyphs,
+						       text->text + glyph_item->item->offset,
+						       glyph_item->item->length,
+						       &glyph_item->item->analysis,
+						       isect_end,
+						       FALSE, &end_x);
+		else
+			end_x = start_x;
 
-		/* this call is used only to get ascent and height */
-		pango_glyph_string_extents (glyph_item->glyphs, glyph_item->item->analysis.font, NULL, &log_rect);
+		if (asc || height)
+			/* this call is used only to get ascent and height */
+			pango_glyph_string_extents (glyph_item->glyphs, glyph_item->item->analysis.font, NULL, &log_rect);
 
 		/* printf ("selection_start_index %d selection_end_index %d isect_start %d isect_end %d start_x %d end_x %d cwidth %d width %d\n",
 		   selection_start_index, selection_end_index, isect_start, isect_end,
@@ -688,10 +692,14 @@ calc_glyph_range_size (HTMLText *text, PangoGlyphItem *glyph_item, int start_ind
 		   html_painter_pango_to_engine (p, start_x < end_x ? (end_x - start_x) : (start_x - end_x)),
 		   html_painter_pango_to_engine (p, log_rect.width)); */
 
-		*x_offset = MIN (start_x, end_x);
-		*width = start_x < end_x ? (end_x - start_x) : (start_x - end_x);
-		*asc = PANGO_ASCENT (log_rect);
-		*height = log_rect.height;
+		if (x_offset)
+			*x_offset = MIN (start_x, end_x);
+		if (width)
+			*width = start_x < end_x ? (end_x - start_x) : (start_x - end_x);
+		if (asc)
+			*asc = PANGO_ASCENT (log_rect);
+		if (height)
+			*height = log_rect.height;
 
 		return TRUE;
 	}
@@ -969,7 +977,7 @@ calc_offset (HTMLTextSlave *slave, HTMLPainter *painter, gint x)
 		}
 	}
 
-	/* printf ("offset %d\n", offset); */
+	printf ("offset %d\n", offset);
 
 	return offset;
 }
@@ -1115,4 +1123,210 @@ html_text_slave_new (HTMLText *owner, guint posStart, guint posLen)
 	html_text_slave_init (slave, &html_text_slave_class, owner, posStart, posLen);
 
 	return HTML_OBJECT (slave);
+}
+
+static HTMLTextSlaveGlyphItem *
+html_text_slave_get_glyph_item_at_offset (HTMLTextSlave *slave, int offset, HTMLTextSlaveGlyphItem **prev, HTMLTextSlaveGlyphItem **next,
+					  int *start_offset, int *start_width)
+{
+	HTMLTextSlaveGlyphItem *rv = NULL;
+	HTMLTextSlaveGlyphItem *prev_gi, *next_gi;
+	GSList *cur;
+	int gi_offset = 0;
+
+	if (start_width)
+		*start_width = 0;
+
+	cur = html_text_slave_get_glyph_items (slave, NULL);
+	if (cur) {
+		for (prev_gi = NULL; cur; cur = cur->next) {
+			HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) cur->data;
+
+			if (((prev_gi == NULL && offset == gi_offset) || gi_offset < offset) && offset <= gi_offset + gi->glyph_item.item->num_chars) {
+				next_gi = cur->next ? (HTMLTextSlaveGlyphItem *) cur->next->data : NULL;
+				if (start_offset)
+					*start_offset = gi_offset;
+				rv = gi;
+				break;
+			}
+
+			prev_gi = gi;
+			gi_offset += gi->glyph_item.item->num_chars;
+			if (start_width) {
+				PangoRectangle log_rect;
+
+				pango_glyph_string_extents (gi->glyph_item.glyphs, gi->glyph_item.item->analysis.font, NULL, &log_rect);
+				(*start_width) += log_rect.width;
+			}
+		}
+	} else {
+		prev_gi = next_gi = NULL;
+	}
+
+
+	if (prev)
+		*prev = prev_gi;
+
+	if (next)
+		*next = next_gi;
+
+	return rv;
+}
+
+static gboolean
+html_text_slave_cursor_forward_one (HTMLTextSlave *slave, HTMLCursor *cursor)
+{
+	HTMLTextSlaveGlyphItem *prev, *next;
+	int start_offset;
+	HTMLTextSlaveGlyphItem *gi = html_text_slave_get_glyph_item_at_offset (slave, cursor->offset - slave->posStart, &prev, &next, &start_offset, NULL);
+
+	if (!gi)
+		return FALSE;
+
+	if (gi->glyph_item.item->analysis.level % 2 == 0) {
+		/* LTR */
+		if (cursor->offset - start_offset < gi->glyph_item.item->num_chars) {
+			cursor->offset ++;
+			cursor->position ++;
+
+			return TRUE;
+		}
+	} else {
+		/* RTL */
+	}
+
+	return FALSE;
+}
+
+gboolean
+html_text_slave_cursor_forward (HTMLTextSlave *slave, HTMLCursor *cursor)
+{
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, NULL);
+	gboolean step_success;
+
+	do
+		step_success = html_text_slave_cursor_forward_one (slave, cursor);
+	while (step_success && !pi->attrs [cursor->offset].is_cursor_position);
+
+	return step_success;
+}
+
+static gboolean
+html_text_slave_cursor_backward_one (HTMLTextSlave *slave, HTMLCursor *cursor)
+{
+	HTMLTextSlaveGlyphItem *prev, *next;
+	int start_offset;
+	HTMLTextSlaveGlyphItem *gi = html_text_slave_get_glyph_item_at_offset (slave, cursor->offset - slave->posStart, &prev, &next, &start_offset, NULL);
+
+	printf ("gi: %p item num chars: %d\n", gi, gi->glyph_item.item->num_chars);
+
+	if (!gi)
+		return FALSE;
+
+	if (gi->glyph_item.item->analysis.level % 2 == 0) {
+		/* LTR */
+		if (cursor->offset - start_offset > 1 || (!prev && cursor->offset - start_offset > 0)) {
+			cursor->offset --;
+			cursor->position --;
+
+			return TRUE;
+		}
+	} else {
+		/* RTL */
+	}
+
+	return FALSE;
+}
+
+gboolean
+html_text_slave_cursor_backward (HTMLTextSlave *slave, HTMLCursor *cursor)
+{
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, NULL);
+	gboolean step_success;
+
+	do
+		step_success = html_text_slave_cursor_backward_one (slave, cursor);
+	while (step_success && !pi->attrs [cursor->offset].is_cursor_position);
+
+	return step_success;
+}
+
+gboolean
+html_text_slave_cursor_head (HTMLTextSlave *slave, HTMLCursor *cursor)
+{
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, NULL);
+	GSList *gis = html_text_slave_get_glyph_items (slave, NULL);
+
+	if (gis) {
+		HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) gis->data;
+
+		cursor->object = HTML_OBJECT (slave->owner);
+
+		if (gi->glyph_item.item->analysis.level % 2 == 0) {
+			/* LTR */
+			cursor->offset = 0;
+		} else {
+			/* RTL */
+			cursor->offset = gi->glyph_item.item->num_chars;
+		}
+
+		if (pi->attrs [cursor->offset].is_cursor_position)
+			return TRUE;
+		else
+			return html_text_slave_cursor_forward (slave, cursor);
+	} else
+		return FALSE;
+}
+
+gboolean
+html_text_slave_cursor_tail (HTMLTextSlave *slave, HTMLCursor *cursor)
+{
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (slave->owner, NULL);
+	GSList *gis = html_text_slave_get_glyph_items (slave, NULL);
+
+	if (gis) {
+		HTMLTextSlaveGlyphItem *gi = (HTMLTextSlaveGlyphItem *) g_slist_last (gis)->data;
+
+		cursor->object = HTML_OBJECT (slave->owner);
+
+		if (gi->glyph_item.item->analysis.level % 2 == 0) {
+			/* LTR */
+			cursor->offset = gi->glyph_item.item->num_chars;
+		} else {
+			/* RTL */
+			cursor->offset = 0;
+		}
+
+		if (pi->attrs [cursor->offset].is_cursor_position)
+			return TRUE;
+		else
+			return html_text_slave_cursor_backward (slave, cursor);
+	} else
+		return FALSE;
+}
+
+void
+html_text_slave_get_cursor_base (HTMLTextSlave *slave, HTMLPainter *painter, guint offset, gint *x, gint *y)
+{
+	HTMLTextSlaveGlyphItem *gi;
+	int start_offset, start_width;
+
+	html_object_calc_abs_position (HTML_OBJECT (slave), x, y);
+
+	gi = html_text_slave_get_glyph_item_at_offset (slave, (int) offset, NULL, NULL, &start_offset, &start_width);
+
+	printf ("gi: %p start_offset: %d start_width: %d\n", gi, start_offset, start_width);
+
+	if (gi) {
+		int start_x;
+		int index;
+
+		index = g_utf8_offset_to_pointer (slave->owner->text + gi->glyph_item.item->offset, offset - start_offset) - slave->owner->text;
+
+		printf ("gi: %p index: %d\n", gi, index);
+
+		if (calc_glyph_range_size (slave->owner, &gi->glyph_item, index, index, &start_x, NULL, NULL, NULL) && x) {
+			*x += html_painter_pango_to_engine (painter, start_width + start_x);
+		}
+	}
 }

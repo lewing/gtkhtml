@@ -86,4 +86,17 @@ GList      *html_get_glyphs_non_tab               (GList              *glyphs,
 						   gint                len);
 GSList     *html_text_slave_get_glyph_items       (HTMLTextSlave      *slave,
 						   HTMLPainter        *painter);
+gboolean    html_text_slave_cursor_forward        (HTMLTextSlave      *slave,
+						   HTMLCursor         *cursor);
+gboolean    html_text_slave_cursor_backward       (HTMLTextSlave      *slave,
+						   HTMLCursor         *cursor);
+gboolean    html_text_slave_cursor_head           (HTMLTextSlave      *slave,
+						   HTMLCursor         *cursor);
+gboolean    html_text_slave_cursor_tail           (HTMLTextSlave      *slave,
+						   HTMLCursor         *cursor);
+void        html_text_slave_get_cursor_base       (HTMLTextSlave      *slave,
+						   HTMLPainter        *painter,
+						   guint               offset,
+						   gint               *x,
+						   gint               *y);
 #endif /* _HTMLTEXTSLAVE_H_ */

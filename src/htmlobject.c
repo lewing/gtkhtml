@@ -608,6 +608,47 @@ html_object_real_get_direction (HTMLObject *o)
 	return HTML_DIRECTION_DERIVED;
 }
 
+static gboolean
+html_object_real_cursor_forward (HTMLObject *self, HTMLCursor *cursor)
+{
+	gint len;
+
+	g_assert (self);
+	g_assert (cursor->object == self);
+
+	if (html_object_is_container (self))
+		return FALSE;
+
+	len = html_object_get_length (self);
+	if (cursor->offset < len) {
+		cursor->offset ++;
+		cursor->position ++;
+		return TRUE;
+	} else
+		return FALSE;
+}
+
+static gboolean
+html_object_real_cursor_backward (HTMLObject *self, HTMLCursor *cursor)
+{
+	HTMLObject *prev;
+
+	g_assert (self);
+	g_assert (cursor->object == self);
+
+	if (html_object_is_container (self))
+		return FALSE;
+
+	if (cursor->offset > 1 || (cursor->offset > 0 && (! (prev = html_object_prev_not_slave (self))
+							  || HTML_IS_CLUEALIGNED (prev) || !html_object_accepts_cursor (prev)))) {
+		cursor->offset --;
+		cursor->position --;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 /* Class initialization.  */
 
 void
@@ -679,6 +720,8 @@ html_object_class_init (HTMLObjectClass *klass,
 	klass->get_engine = get_engine;
 	klass->get_clear = get_clear;
 	klass->get_direction = html_object_real_get_direction;
+	klass->cursor_forward = html_object_real_cursor_forward;
+	klass->cursor_backward = html_object_real_cursor_backward;
 }
 
 void
@@ -1392,42 +1435,13 @@ html_object_tail_not_slave (HTMLObject *self)
 gboolean
 html_object_cursor_forward (HTMLObject *self, HTMLCursor *cursor)
 {
-	gint len;
-
-	g_assert (self);
-	g_assert (cursor->object == self);
-
-	if (html_object_is_container (self))
-		return FALSE;
-
-	len = html_object_get_length (self);
-	if (cursor->offset < len) {
-		cursor->offset ++;
-		cursor->position ++;
-		return TRUE;
-	} else
-		return FALSE;
+	return (* HO_CLASS (self)->cursor_forward) (self, cursor);
 }
 
 gboolean
 html_object_cursor_backward (HTMLObject *self, HTMLCursor *cursor)
 {
-	HTMLObject *prev;
-
-	g_assert (self);
-	g_assert (cursor->object == self);
-
-	if (html_object_is_container (self))
-		return FALSE;
-
-	if (cursor->offset > 1 || (cursor->offset > 0 && (! (prev = html_object_prev_not_slave (self))
-							  || HTML_IS_CLUEALIGNED (prev) || !html_object_accepts_cursor (prev)))) {
-		cursor->offset --;
-		cursor->position --;
-		return TRUE;
-	}
-
-	return FALSE;
+	return (* HO_CLASS (self)->cursor_backward) (self, cursor);
 }
 
 /*********************
