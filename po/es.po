@@ -1,3 +1,4 @@
+# translation of gtkhtml.evolution-1-4-branch.es.po to Spanish
 # translation of gtkhtml.HEAD.es.po to Spanish
 # Translations of gtkhtml into spanish.
 # Copyright © 2000-2003 Free Software Foundation, Inc.
@@ -11,9 +12,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml.HEAD.es\n"
-"POT-Creation-Date: 2003-06-26 11:33-0500\n"
-"PO-Revision-Date: 2003-05-24 12:11+0000\n"
+"Project-Id-Version: gtkhtml.evolution-1-4-branch.es\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-07-11 05:01+0200\n"
+"PO-Revision-Date: 2003-07-11 13:39+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@arrakis.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -807,9 +809,8 @@ msgid "_Wink"
 msgstr "_Guiño de ojo"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:152
-#, fuzzy
 msgid "_Wrap Lines"
-msgstr "Recubrimiento:"
+msgstr "_Ajuste de líneas:"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:153
 msgid "etc..."
@@ -832,7 +833,7 @@ msgstr "Tinta azul"
 msgid "Rectangles"
 msgstr "Rectángulos"
 
-#: components/html-editor/body.c:275 src/gtkhtml.c:2555
+#: components/html-editor/body.c:275 src/gtkhtml.c:2558
 msgid "Document Title"
 msgstr "Título del documento"
 
@@ -1566,72 +1567,71 @@ msgstr "Sangra un párrafo más"
 msgid "Sample"
 msgstr "Ejemplo"
 
-#: src/gtkhtml.c:2548
+#: src/gtkhtml.c:2551
 msgid "Editable"
 msgstr "Editable"
 
-#: src/gtkhtml.c:2549
+#: src/gtkhtml.c:2552
 msgid "Whether the html can be edited"
 msgstr "Indica si el html puede ser editado"
 
-#: src/gtkhtml.c:2556
+#: src/gtkhtml.c:2559
 msgid "The title of the current document"
 msgstr "El título del documento actual"
 
-#: src/gtkhtml.c:2562
+#: src/gtkhtml.c:2565
 msgid "Document Base"
 msgstr "Base del documento"
 
-#: src/gtkhtml.c:2563
+#: src/gtkhtml.c:2566
 msgid "The base URL for relative references"
 msgstr "La URL de base para referencias relativas"
 
-#: src/gtkhtml.c:2569
+#: src/gtkhtml.c:2572
 msgid "Target Base"
 msgstr "Base del destino"
 
-#: src/gtkhtml.c:2570
+#: src/gtkhtml.c:2573
 msgid "The base URL of the targe frame"
 msgstr "La URL base del marco destino"
 
-#: src/gtkhtml.c:2579
+#: src/gtkhtml.c:2582
 msgid "Fixed Width Font"
 msgstr "Tipografía de anchura fija"
 
-#: src/gtkhtml.c:2580
+#: src/gtkhtml.c:2583
 msgid "The Monospace font to use for typewriter text"
-msgstr ""
-"La tipografía monoespaciada a usar para el texto de máquina de escribir"
+msgstr "La tipografía monoespaciada a usar para el texto de máquina de escribir"
 
-#: src/gtkhtml.c:2586
+#: src/gtkhtml.c:2589
 msgid "New Link Color"
 msgstr "Color de enlaces nuevos"
 
-#: src/gtkhtml.c:2587
+#: src/gtkhtml.c:2590
 msgid "The color of new link elements"
 msgstr "El color de los elementos de enlace nuevos"
 
-#: src/gtkhtml.c:2592
+#: src/gtkhtml.c:2595
 msgid "Visited Link Color"
 msgstr "Color de enlaces visitados"
 
-#: src/gtkhtml.c:2593
+#: src/gtkhtml.c:2596
 msgid "The color of visited link elements"
 msgstr "El color de los elementos de enlace visitados"
 
-#: src/gtkhtml.c:2598
+#: src/gtkhtml.c:2601
 msgid "Active Link Color"
 msgstr "Color del enlace activo"
 
-#: src/gtkhtml.c:2599
+#: src/gtkhtml.c:2602
 msgid "The color of active link elements"
 msgstr "El color de los elementos de enlace activos"
 
-#: src/gtkhtml.c:2604
+#: src/gtkhtml.c:2607
 msgid "Spelling Error Color"
 msgstr "Color del error ortográfico"
 
-#: src/gtkhtml.c:2605
+#: src/gtkhtml.c:2608
 msgid "The color of the spelling error markers"
 msgstr "El color de los marcadores de error ortográfico"
 
@@ -1740,3 +1740,4 @@ msgstr "Aplicación de prueba GtkHTML"
 
 #~ msgid "Monospace"
 #~ msgstr "Monospace"
+
