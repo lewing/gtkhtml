@@ -1239,6 +1239,8 @@ focus_out_event (GtkWidget *widget,
 {
 	GtkHTML *html = GTK_HTML (widget);
 
+	html_painter_set_focus (html->engine->painter, FALSE);
+	html_engine_redraw_selection (html->engine);
 	/* printf ("focus out\n"); */
 	if (!html->iframe_parent) {
 		GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
