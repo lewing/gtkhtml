@@ -1,5 +1,7 @@
 2001-12-18  Larry Ewing  <lewing@ximian.com>
-        
+
+	* configure.in (PACKAGE): bump version number for snapshots.
+
 	* Make 1.0.1 release.
 	
 2001-12-17  Larry Ewing  <lewing@ximian.com>
