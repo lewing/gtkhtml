@@ -2789,7 +2789,6 @@ gtk_html_im_preedit_changed_cb (GtkIMContext *context, GtkHTML *html)
 	} else
 		html->priv->im_orig_style = html_engine_get_font_style (html->engine);
 
-	/* FIXME: retrieve pango attributes list and set style approprietly */
 	gtk_im_context_get_preedit_string (html->priv->im_context, &preedit_string, &attrs, &cursor_pos);
 
 	printf ("IM preedit changed to %s\n", preedit_string);
