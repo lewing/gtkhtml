@@ -27,6 +27,8 @@
 #include <libgnomeui/gnome-pixmap-entry.h>
 #include "gtkhtml.h"
 
+#define GTKHTML_STOCK_TEST_URL "gtkhtml-stock-test-url"
+
 GtkWidget *color_table_new                         (GtkSignalFunc      f,
 						    gpointer           data);
 GtkWidget *sample_frame                            (GtkHTML          **html);

@@ -181,3 +181,34 @@ editor_hig_attach_row (GtkWidget *table, gchar *text, GtkWidget *control, int ro
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, 0, 0);
 	gtk_table_attach (GTK_TABLE (table), control, 1, 2, row, row + 1, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 }
+
+static gboolean stock_test_url_added = FALSE;
+static GtkStockItem test_url_items [] =
+{
+	{ GTKHTML_STOCK_TEST_URL, N_("_Visit..."), 0, 0, GETTEXT_PACKAGE }
+};
+
+void
+editor_check_stock ()
+{
+	if (!stock_test_url_added) {
+		GdkPixbuf *pixbuf;
+		GError *error = NULL;
+
+		pixbuf = gdk_pixbuf_new_from_file (ICONDIR "/insert-link-16.png", &error);
+		if (!pixbuf) {
+			g_error_free (error);
+		} else {
+			GtkIconSet *test_url_iconset = gtk_icon_set_new_from_pixbuf (pixbuf);
+
+			if (test_url_iconset) {
+				GtkIconFactory *factory = gtk_icon_factory_new ();
+
+				gtk_icon_factory_add (factory, GTKHTML_STOCK_TEST_URL, test_url_iconset);
+				gtk_icon_factory_add_default (factory);
+			}
+			gtk_stock_add_static (test_url_items, G_N_ELEMENTS (test_url_items));
+		}
+		stock_test_url_added = TRUE;
+	}
+}

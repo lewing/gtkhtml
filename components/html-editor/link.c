@@ -78,39 +78,11 @@ set_ui (GtkHTMLEditLinkProperties *data)
 	g_free (url);
 }
 
-static gboolean stock_test_url_added = FALSE;
-#define GTKHTML_STOCK_TEST_URL "gtkhtml-stock-test-url"
-static GtkStockItem test_url_items [] =
-{
-	{ GTKHTML_STOCK_TEST_URL, N_("Test URL..."), 0, 0, GETTEXT_PACKAGE }
-};
-
 static GtkWidget *
 link_widget (GtkHTMLEditLinkProperties *data, gboolean insert)
 {
 	GtkHTMLControlData *cd = data->cd;
 	GtkWidget *vbox, *hbox, *button, *frame, *f1;
-
-	if (!stock_test_url_added) {
-		GdkPixbuf *pixbuf;
-		GError *error = NULL;
-
-		pixbuf = gdk_pixbuf_new_from_file (ICONDIR "/insert-link-16.png", &error);
-		if (!pixbuf) {
-			g_error_free (error);
-		} else {
-			GtkIconSet *test_url_iconset = gtk_icon_set_new_from_pixbuf (pixbuf);
-
-			if (test_url_iconset) {
-				GtkIconFactory *factory = gtk_icon_factory_new ();
-
-				gtk_icon_factory_add (factory, GTKHTML_STOCK_TEST_URL, test_url_iconset);
-				gtk_icon_factory_add_default (factory);
-			}
-			gtk_stock_add_static (test_url_items, G_N_ELEMENTS (test_url_items));
-		}
-		stock_test_url_added = TRUE;
-	}
 
 	vbox = gtk_vbox_new (FALSE, 18);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
@@ -129,6 +101,7 @@ link_widget (GtkHTMLEditLinkProperties *data, gboolean insert)
 	}
 
 	hbox = gtk_hbox_new (FALSE, 5);
+	editor_check_stock ();
 	button = gtk_button_new_from_stock (GTKHTML_STOCK_TEST_URL);
 	gtk_box_pack_start (GTK_BOX (hbox), data->entry_url, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
