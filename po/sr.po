@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-09-17 07:22+0200\n"
+"POT-Creation-Date: 2003-09-25 18:00+0200\n"
 "PO-Revision-Date: 2003-09-13 02:03+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -1651,11 +1651,16 @@ msgstr "Уна_зад"
 msgid "Find Regular Expression"
 msgstr "Нађи према регулараном изразу"
 
-#: components/html-editor/spell.c:277
+#: components/html-editor/spell.c:278
+#, fuzzy
+msgid "No misspelled word found"
+msgstr "Занемари погрешну реч"
+
+#: components/html-editor/spell.c:285
 msgid "Spell checker"
 msgstr "Провера правописа"
 
-#: components/html-editor/spell.c:366
+#: components/html-editor/spell.c:378
 msgid "Current _Languages"
 msgstr "Текући _језици"
 

@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-09-17 07:22+0200\n"
+"POT-Creation-Date: 2003-09-25 18:00+0200\n"
 "PO-Revision-Date: 2003-09-13 02:03+0200\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -988,8 +988,8 @@ msgid ""
 "The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a href="
 "\"mailto:dog\">dog</a>."
 msgstr ""
-"Brza smeđa <a href=\"mailto:lija\">lisica</a> skače preko lenjog <a href=\"psa"
-"\">džukca</a>."
+"Brza smeđa <a href=\"mailto:lija\">lisica</a> skače preko lenjog <a href="
+"\"psa\">džukca</a>."
 
 #: components/html-editor/body.c:276 src/gtkhtml.c:2555
 msgid "Document Title"
@@ -1651,11 +1651,16 @@ msgstr "Una_zad"
 msgid "Find Regular Expression"
 msgstr "Nađi prema regularanom izrazu"
 
-#: components/html-editor/spell.c:277
+#: components/html-editor/spell.c:278
+#, fuzzy
+msgid "No misspelled word found"
+msgstr "Zanemari pogrešnu reč"
+
+#: components/html-editor/spell.c:285
 msgid "Spell checker"
 msgstr "Provera pravopisa"
 
-#: components/html-editor/spell.c:366
+#: components/html-editor/spell.c:378
 msgid "Current _Languages"
 msgstr "Tekući _jezici"
 
