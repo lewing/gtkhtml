@@ -2571,7 +2571,8 @@ end_of_word (gchar *ct, gboolean cited)
 	       && (uc = g_utf8_get_char (ct))
 	       && (cn = g_utf8_next_char (ct))
 	       && (html_selection_spell_word (uc, &cited2)
-		   || (!cited && cited2 && (cnn = e_unicode_get_utf8 (cn, &ucn)) && g_unichar_isalpha (ucn)))) {
+		   || (!cited && cited2
+		       && (cnn = g_utf8_next_char (cn)) && (ucn = g_utf8_get_char (cnn)) && g_unichar_isalpha (ucn)))) {
 		ct = cn;
 		cited2 = FALSE;
 	}
