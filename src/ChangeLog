@@ -1,3 +1,7 @@
+2003-09-04  Radek Doulik  <rodo@ximian.com>
+
+	* htmlengine.c (element_parse_font): parse style
+
 2003-08-15  Antonio Xu  <antonio.xu@sun.com>
 
 	* htmlengine-edit-movement.c (html_engine_jump_at): add

@@ -466,6 +466,24 @@ current_color (HTMLEngine *e) {
 	return html_colorset_get_color (e->settings->color_set, HTMLTextColor);
 }
 
+static GdkColor *
+current_bg_color (HTMLEngine *e) {
+	HTMLElement *span;
+	GList *item;
+
+	for (item = e->span_stack->list; item; item = item->next) {
+		span = item->data;
+		
+		if (ID_EQ (span->id,ID_TH) || ID_EQ (span->id, ID_TD))
+			break;
+
+		if (span->style && span->style->bg_color)
+			return span->style->bg_color;
+	}
+
+	return NULL;
+}
+
 /* 
  * FIXME these are 100% wrong (bg color doesn't inheirit, but it is how the current table code works
  * and I don't want to regress yet
@@ -847,7 +865,7 @@ append_element (HTMLEngine *e,
 }
 
 static void
-apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLColor *color, gint last_pos, gboolean link)
+apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLColor *color, GdkColor *bg_color, gint last_pos, gboolean link)
 {
 	PangoAttribute *attr;
 
@@ -883,6 +901,13 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 	/* color */
 	if (link || color != html_colorset_get_color (e->settings->color_set, HTMLTextColor)) {
 		attr = pango_attr_foreground_new (color->color.red, color->color.green, color->color.blue);
+		attr->start_index = last_pos;
+		attr->end_index = text->text_bytes;
+		pango_attr_list_change (text->attr_list, attr);
+	}
+
+	if (bg_color) {
+		attr = pango_attr_background_new (bg_color->red, bg_color->green, bg_color->blue);
 		attr->start_index = last_pos;
 		attr->end_index = text->text_bytes;
 		pango_attr_list_change (text->attr_list, attr);
@@ -945,7 +970,7 @@ insert_text (HTMLEngine *e,
 	}
 
 	if (prev && HTML_IS_TEXT (prev)) {
-		apply_attributes (HTML_TEXT (prev), e, font_style, color, last_bytes, create_link);
+		apply_attributes (HTML_TEXT (prev), e, font_style, color, current_bg_color (e), last_bytes, create_link);
 		if (create_link)
 			html_text_add_link (HTML_TEXT (prev), e->url, e->target, last_pos, HTML_TEXT (prev)->text_len);
 	}
@@ -3621,6 +3646,8 @@ element_parse_font (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 				style = html_style_add_color (style, html_color);
 				html_color_unref (html_color);
 			}
+		} else if (strncasecmp (token, "style=", 6 ) == 0 ) {
+			style = html_style_add_attribute (style, token + 6);
 		}
 	}
 	

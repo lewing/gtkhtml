@@ -179,6 +179,9 @@ html_style_add_background_color (HTMLStyle *style, GdkColor *color)
 	if (!style)
 		style = html_style_new ();
 
+	if (style->bg_color)
+		gdk_color_free (style->bg_color);
+
 	style->bg_color = gdk_color_copy (color);
 
 	return style;
@@ -220,6 +223,12 @@ html_style_add_attribute (HTMLStyle *style, const char *attr)
 					html_style_add_color (style, hc);
 				        html_color_unref (hc);
 				}
+			} else if (!strncasecmp ("background-color: ", text, 18)) {
+				GdkColor color;
+				
+				if (parse_color (g_strstrip (text + 18), &color))
+					html_style_add_background_color (style, &color);
+
 			} else if (!strncasecmp ("text-decoration: none", text, 21)) {
 				html_style_unset_decoration (style, ~GTK_HTML_FONT_STYLE_SIZE_MASK);
 			}
