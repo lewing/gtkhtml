@@ -188,7 +188,7 @@ main (int argc, char **argv)
 	gtk_signal_connect (GTK_OBJECT (debug), "clicked", GTK_SIGNAL_FUNC (dump_simple_cb), NULL);
 
 	gtk_window_set_title (GTK_WINDOW (window), "GtkHTML Test");
-	gtk_widget_set_usize (GTK_WIDGET (swindow), 500, 500);
+	gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
 
 	for (i = 0; i < BUTTON_INDEX -1; i++)
 		gtk_signal_connect (GTK_OBJECT (button [i]), "clicked", GTK_SIGNAL_FUNC (button_cb), GINT_TO_POINTER (i));

@@ -441,6 +441,12 @@ editor_set_prop (BonoboPropertyBag *bag,
 }
 
 static void
+control_destroy (BonoboObject *o, GtkHTMLControlData *cd)
+{
+	gtk_html_control_data_destroy (cd);
+}
+
+static void
 editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 {
 	GtkHTMLControlData *cd;
@@ -454,6 +460,7 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 	gtk_html_set_editable (GTK_HTML (html_widget), TRUE);
 
 	cd = gtk_html_control_data_new (GTK_HTML (html_widget), vbox);
+	g_signal_connect (control, "destroy", G_CALLBACK (control_destroy), cd);
 
 	/* HTMLEditor::Engine */
 	cd->editor_bonobo_engine = editor_engine_new (cd);

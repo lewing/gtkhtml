@@ -120,8 +120,11 @@ gtk_html_class_properties_load (GtkHTMLClassProperties *p, GConfClient *client)
 	GETSP (int, "/spell_error_color_red",   spell_error_color.red,,);
 	GETSP (int, "/spell_error_color_green", spell_error_color.green,,);
 	GETSP (int, "/spell_error_color_blue",  spell_error_color.blue,,);
+
+	printf ("language %s\n", p->language);
 	GETSP (string, "/language", language,
 	       g_free (p->language), g_strdup);
+	printf ("language %s\n", p->language);
 }
 
 #define SET(t,x,prop) \

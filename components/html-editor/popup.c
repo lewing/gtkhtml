@@ -483,7 +483,7 @@ prepare_properties_and_menu (GtkHTMLControlData *cd, guint *items)
 	}
 
 	if (*items == 0) {
-		gtk_object_sink (menu);
+		gtk_object_sink (GTK_OBJECT (menu));
 		menu = NULL;
 	} else
 		gtk_widget_show (menu);
@@ -498,7 +498,7 @@ popup_show (GtkHTMLControlData *cd, GdkEventButton *event)
 	guint items;
 
 	menu = prepare_properties_and_menu (cd, &items);
-	printf ("items: %d\n", items);
+
 	if (items)
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
 				event ? event->button : 0, event ? event->time : 0);

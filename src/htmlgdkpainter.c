@@ -73,7 +73,8 @@ finalize (GObject *object)
 	}
 }
 
-static gint text_width (PangoContext *pc, PangoFontDescription *desc, gchar *text, gint bytes)
+static gint
+text_width (PangoContext *pc, PangoFontDescription *desc, const gchar *text, gint bytes)
 {
 	PangoLayout *layout;
 	gint width;
@@ -754,7 +755,8 @@ fill_rect (HTMLPainter *painter,
 static gint
 draw_spell_error (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len)
 {
-	/* HTMLGdkPainter *gdk_painter;
+	PangoFontDescription *desc;
+	HTMLGdkPainter *gdk_painter;
 	GdkGCValues values;
 	guint width;
 	gchar dash [2];
@@ -764,9 +766,9 @@ draw_spell_error (HTMLPainter *painter, gint x, gint y, const gchar *text, gint 
 	x -= gdk_painter->x1;
 	y -= gdk_painter->y1;
 
-	e_font  = html_painter_get_font  (painter, painter->font_face, painter->font_style);
-	width   = e_font_utf8_text_width (e_font, e_style (painter->font_style), text,
-					  g_utf8_offset_to_pointer (text, len) - text);
+
+	desc  = html_painter_get_font  (painter, painter->font_face, painter->font_style);
+	width = text_width (gdk_painter->pc, desc, text, g_utf8_offset_to_pointer (text, len) - text);
 
 	gdk_gc_get_values (gdk_painter->gc, &values);
 	gdk_gc_set_fill (gdk_painter->gc, GDK_OPAQUE_STIPPLED);
@@ -780,8 +782,7 @@ draw_spell_error (HTMLPainter *painter, gint x, gint y, const gchar *text, gint 
 	gdk_gc_set_line_attributes (gdk_painter->gc, values.line_width,
 				    values.line_style, values.cap_style, values.join_style);
 
-				    return width; */
-	return 0;
+	return width;
 }
 
 static void

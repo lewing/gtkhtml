@@ -258,10 +258,11 @@ spell_set_language (GtkHTML *html, const gchar *language, gpointer data)
 	GtkHTMLControlData *cd = (GtkHTMLControlData *) data;
 	CORBA_Environment   ev;
 
+	printf ("spell_set_language\n");
 	if (!cd->dict)
 		return;
 
-	/* printf ("spell_set_language %s\n", language); */
+	printf ("spell_set_language '%s'\n", language);
 
 	CORBA_exception_init (&ev);
 	GNOME_Spell_Dictionary_setLanguage (cd->dict, language, &ev);
@@ -319,8 +320,6 @@ replace_cb (BonoboListener *listener, const char *event_name, const CORBA_any *a
 {
 	GtkHTMLControlData *cd = (GtkHTMLControlData *) user_data;
 
-	/* printf ("replace '%s'\n", BONOBO_ARG_GET_STRING (arg)); */
-
 	html_engine_replace_spell_word_with (cd->html->engine, BONOBO_ARG_GET_STRING (arg));
 	check_next_word (cd, FALSE);
 }
@@ -368,9 +367,9 @@ spell_has_control ()
 	control = bonobo_widget_new_control (CONTROL_IID, CORBA_OBJECT_NIL);
 	rv = control != NULL;
 
-	if (control)
-		gtk_widget_unref (control);
-
+	if (control) {
+		gtk_object_sink (GTK_OBJECT (control));
+	}
 	return rv;
 }
 
@@ -414,6 +413,7 @@ spell_check_dialog (GtkHTMLControlData *cd, gboolean whole_document)
 	bonobo_property_bag_client_set_value_string (cd->spell_control_pb, "language",
 						     GTK_HTML_CLASS (GTK_OBJECT_GET_CLASS (cd->html))->properties->language,
 						     NULL);
+
 	bonobo_event_source_client_add_listener (cd->spell_control_pb, replace_cb, "Bonobo/Property:change:replace", NULL, cd);
 	bonobo_event_source_client_add_listener (cd->spell_control_pb, add_cb, "Bonobo/Property:change:add", NULL, cd);
 	bonobo_event_source_client_add_listener (cd->spell_control_pb, ignore_cb, "Bonobo/Property:change:ignore",
@@ -423,7 +423,11 @@ spell_check_dialog (GtkHTMLControlData *cd, gboolean whole_document)
 
 	gtk_widget_show (control);
 	gtk_container_add (GTK_CONTAINER (GNOME_DIALOG (dialog)->vbox), control);
+	gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 	gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+	gtk_object_unref (GTK_OBJECT (dialog));
+	bonobo_object_release_unref (cd->spell_control_pb, NULL);
+	cd->spell_control_pb = CORBA_OBJECT_NIL;
 }
 
 static void

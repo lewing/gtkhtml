@@ -62,13 +62,14 @@ gtk_html_control_data_destroy (GtkHTMLControlData *cd)
 	if (cd->replace_dialog)
 		gtk_html_replace_dialog_destroy (cd->replace_dialog);
 
+	printf ("release dict\n");
 	bonobo_object_release_unref (cd->dict, NULL);
 
 	if (cd->plain_painter) 
-		gtk_object_unref (GTK_OBJECT (cd->plain_painter));
+		g_object_unref (cd->plain_painter);
 
 	if (cd->gdk_painter) 
-		gtk_object_unref (GTK_OBJECT (cd->gdk_painter));
+		g_object_unref (cd->gdk_painter);
 
 	g_free (cd);
 }
