@@ -12,7 +12,7 @@ msgstr ""
 "Last-Translator: Roy-Magne Mo <rmo@sunnmore.net>\n"
 "Language-Team: Norwegian/Nynorsk <no@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: capplet/gnome-bindings-prop.c:156
@@ -32,7 +32,7 @@ msgstr "*********************"
 
 #: capplet/gtkhtml-capplet.glade.h:2
 msgid "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
-msgstr "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzÆæØøÅå"
+msgstr "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzÃ†Ã¦Ã˜Ã¸Ã…Ã¥"
 
 #: capplet/gtkhtml-capplet.glade.h:3
 msgid "Add Keyboard Shortcuts"
@@ -44,7 +44,7 @@ msgstr "Automatisk gjenkjenning av lenkjer"
 
 #: capplet/gtkhtml-capplet.glade.h:5
 msgid "Behavior"
-msgstr "Åtferd"
+msgstr "Ã…tferd"
 
 #: capplet/gtkhtml-capplet.glade.h:6
 msgid "Command"
@@ -64,7 +64,7 @@ msgstr "Set opp stavekontroll"
 
 #: capplet/gtkhtml-capplet.glade.h:10
 msgid "Enable spell checking"
-msgstr "Slå på stavekontroll"
+msgstr "SlÃ¥ pÃ¥ stavekontroll"
 
 #: capplet/gtkhtml-capplet.glade.h:11
 msgid "Fixed width"
@@ -101,7 +101,7 @@ msgstr "Ny hurtigtastar:"
 
 #: capplet/gtkhtml-capplet.glade.h:19
 msgid "On screen"
-msgstr "På skjermen"
+msgstr "PÃ¥ skjermen"
 
 #: capplet/gtkhtml-capplet.glade.h:20
 msgid "Select HTML fixed width font"
@@ -152,8 +152,8 @@ msgid ""
 "Cannot execute GNOME Spell control applet\n"
 "Try to install GNOME Spell if you don't have it installed."
 msgstr ""
-"Klarar ikkje å køyrer GNOME stavekontrollappleten\n"
-"Prøv å installare GNOME stavekontroll om du ikkje har den installert."
+"Klarar ikkje Ã¥ kÃ¸yrer GNOME stavekontrollappleten\n"
+"PrÃ¸v Ã¥ installare GNOME stavekontroll om du ikkje har den installert."
 
 #: components/ebrowser/GNOME_GtkHTML_EBrowser.oaf.in.h:1
 msgid "EBrowser control"
@@ -228,7 +228,7 @@ msgstr "Bakgrunnsfarge"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:10
 msgid "Blue"
-msgstr "Blå"
+msgstr "BlÃ¥"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:11
 #: components/html-editor/toolbar.c:59
@@ -242,7 +242,7 @@ msgstr "Sentrerar avsnittet"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:13
 msgid "Check spelling of the document"
-msgstr "Køyr stavekontroll på sokumentet"
+msgstr "KÃ¸yr stavekontroll pÃ¥ sokumentet"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:14
 #: components/html-editor/popup.c:407
@@ -272,16 +272,16 @@ msgstr "Klipp utval til utklippstavla"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:20
 msgid "Cut the selection"
-msgstr "Klipp ut valde område"
+msgstr "Klipp ut valde omrÃ¥de"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:21
 #: components/html-editor/search.c:64 components/html-editor/search.c:105
 msgid "Find"
-msgstr "Søk etter"
+msgstr "SÃ¸k etter"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:22
 msgid "Find A Regular Expression"
-msgstr "Finn eit regulært uttrykk"
+msgstr "Finn eit regulÃ¦rt uttrykk"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:23
 msgid "Find And Replace"
@@ -289,7 +289,7 @@ msgstr "Finn og byt ut"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:24
 msgid "Find Regular E_xpression..."
-msgstr "Finn eit regulært _uttrykk ..."
+msgstr "Finn eit regulÃ¦rt _uttrykk ..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:25
 msgid "Find _Again"
@@ -309,7 +309,7 @@ msgstr "Form_at"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:29
 msgid "Green"
-msgstr "Grøn"
+msgstr "GrÃ¸n"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:30
 msgid "Header _1"
@@ -459,11 +459,11 @@ msgstr "Lim inn"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:64
 msgid "Paste from clipboard"
-msgstr "Lim inn frå utklippstavle"
+msgstr "Lim inn frÃ¥ utklippstavle"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:65
 msgid "Paste the clipboard"
-msgstr "Lim inn frå utklippstavla"
+msgstr "Lim inn frÃ¥ utklippstavla"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:66
 msgid "Pr_operties..."
@@ -492,7 +492,7 @@ msgstr "Gjer om att eit angra trekk"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:72
 msgid "Redo the undone action"
-msgstr "Gjer om handlinga som du har angra på"
+msgstr "Gjer om handlinga som du har angra pÃ¥"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:73
 #: components/html-editor/replace.c:84 components/html-editor/replace.c:146
@@ -503,7 +503,7 @@ msgstr "Byt ut"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:74
 #: components/html-editor/toolbar.c:520
 msgid "Right justifies the paragraphs"
-msgstr "Høgrejusterar avsnittet"
+msgstr "HÃ¸grejusterar avsnittet"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:75
 msgid "Roman Numeral List"
@@ -687,7 +687,7 @@ msgstr "_Erstatt ..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:117
 msgid "_Right"
-msgstr "Høg_re"
+msgstr "HÃ¸g_re"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:118
 msgid "_Roman Numeral List"
@@ -819,7 +819,7 @@ msgstr "Justering:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:12
 msgid "Apply changes to:"
-msgstr "Påfør endringar på:"
+msgstr "PÃ¥fÃ¸r endringar pÃ¥:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:15
 #: components/html-editor/text.c:219 components/html-editor/toolbar.c:529
@@ -851,7 +851,7 @@ msgstr "Midtstill"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
 #: components/html-editor/link.c:107 components/html-editor/text.c:230
 msgid "Click will follow this URL"
-msgstr "Klikk for å følgje denne URLen"
+msgstr "Klikk for Ã¥ fÃ¸lgje denne URLen"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:22
 msgid "Color:"
@@ -876,11 +876,11 @@ msgstr "Ikkje bryt"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:28
 msgid "Enable"
-msgstr "Skru på"
+msgstr "Skru pÃ¥"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:29
 msgid "Follow"
-msgstr "Følg"
+msgstr "FÃ¸lg"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:30
 msgid "Font size"
@@ -896,7 +896,7 @@ msgstr "Tittel"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:33
 msgid "Height:"
-msgstr "Høgd:"
+msgstr "HÃ¸gd:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:34
 msgid "Horizontal alignment:"
@@ -968,7 +968,7 @@ msgstr "Punkt"
 #: components/html-editor/gtkhtml-editor-properties.glade.h:56
 #: components/html-editor/paragraph.c:160
 msgid "Right"
-msgstr "Høgre"
+msgstr "HÃ¸gre"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:57
 #: components/html-editor/popup.c:472
@@ -985,7 +985,7 @@ msgstr "Rader:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:61
 msgid "Scope"
-msgstr "Område"
+msgstr "OmrÃ¥de"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:62
 msgid "Shaded"
@@ -1024,7 +1024,7 @@ msgstr "Tjukkleik:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:74
 msgid "Top"
-msgstr "Øverst"
+msgstr "Ã˜verst"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:75
 #: components/html-editor/text.c:221 components/html-editor/toolbar.c:533
@@ -1106,11 +1106,11 @@ msgstr ""
 
 #: components/html-editor/image.c:251
 msgid "The quick brown fox jumped over the lazy dog. "
-msgstr "The quick brown fox jumped over the lazy dog.  æøå"
+msgstr "The quick brown fox jumped over the lazy dog.  Ã¦Ã¸Ã¥"
 
 #: components/html-editor/image.c:253
 msgid "The quick brown fox jumped over the lazy dog."
-msgstr "The quick brown fox jumped over the lazy dog. æøå "
+msgstr "The quick brown fox jumped over the lazy dog. Ã¦Ã¸Ã¥ "
 
 #: components/html-editor/link.c:91
 msgid "Link text"
@@ -1130,7 +1130,7 @@ msgstr "Set inn"
 
 #: components/html-editor/menubar.c:194
 msgid "Cannot execute gtkhtml properties"
-msgstr "Kan ikkje køyre gtkhtml eigenskapar"
+msgstr "Kan ikkje kÃ¸yre gtkhtml eigenskapar"
 
 #: components/html-editor/paragraph.c:125
 msgid "Pre"
@@ -1166,19 +1166,19 @@ msgstr "Adresse"
 
 #: components/html-editor/paragraph.c:133
 msgid "Dot item"
-msgstr "Prikkoppføring"
+msgstr "PrikkoppfÃ¸ring"
 
 #: components/html-editor/paragraph.c:134
 msgid "Number item"
-msgstr "Taloppføring"
+msgstr "TaloppfÃ¸ring"
 
 #: components/html-editor/paragraph.c:135
 msgid "Roman item"
-msgstr "Romersk oppføring"
+msgstr "Romersk oppfÃ¸ring"
 
 #: components/html-editor/paragraph.c:136
 msgid "Alphabeta item"
-msgstr "Alfabetisk oppføring"
+msgstr "Alfabetisk oppfÃ¸ring"
 
 #: components/html-editor/paragraph.c:145
 msgid "Align"
@@ -1187,17 +1187,17 @@ msgstr "Juster"
 #: components/html-editor/popup.c:376
 #, c-format
 msgid "Check '%s' spelling..."
-msgstr "Sjekk «%s» staving ..."
+msgstr "Sjekk Â«%sÂ» staving ..."
 
 #: components/html-editor/popup.c:377
 #, c-format
 msgid "Add '%s' to dictionary"
-msgstr "Legg til «%s» til ordliste"
+msgstr "Legg til Â«%sÂ» til ordliste"
 
 #: components/html-editor/popup.c:378
 #, c-format
 msgid "Ignore '%s'"
-msgstr "Oversjå «%s»"
+msgstr "OversjÃ¥ Â«%sÂ»"
 
 #: components/html-editor/popup.c:379 components/html-editor/spell.c:401
 msgid "Spell checker"
@@ -1205,7 +1205,7 @@ msgstr "Stavekontroll"
 
 #: components/html-editor/popup.c:383
 msgid "Suggest word"
-msgstr "Foreslå ord"
+msgstr "ForeslÃ¥ ord"
 
 #: components/html-editor/popup.c:402
 msgid "Remove link"
@@ -1254,7 +1254,7 @@ msgstr "Rader under"
 
 #: components/html-editor/popup.c:467
 msgid "Column before"
-msgstr "Kolonner før"
+msgstr "Kolonner fÃ¸r"
 
 #: components/html-editor/popup.c:468
 msgid "Column after"
@@ -1286,11 +1286,11 @@ msgstr "Neste"
 
 #: components/html-editor/replace.c:152
 msgid "search backward"
-msgstr "søk bakover"
+msgstr "sÃ¸k bakover"
 
 #: components/html-editor/replace.c:153 components/html-editor/search.c:67
 msgid "case sensitive"
-msgstr "skil mellom små og store bokstavar"
+msgstr "skil mellom smÃ¥ og store bokstavar"
 
 #: components/html-editor/replace.c:161
 msgid "with"
@@ -1298,7 +1298,7 @@ msgstr "med"
 
 #: components/html-editor/rule.c:97
 msgid "Blue 3D"
-msgstr "Blå 3D"
+msgstr "BlÃ¥ 3D"
 
 #: components/html-editor/rule.c:109
 msgid "Yellow, flowers"
@@ -1310,7 +1310,7 @@ msgstr "baklengs"
 
 #: components/html-editor/search.c:105
 msgid "Find Regular Expression"
-msgstr "Finn regulært uttrykk"
+msgstr "Finn regulÃ¦rt uttrykk"
 
 #: components/html-editor/spell.c:396
 msgid "No misspelled word found"
@@ -1318,15 +1318,15 @@ msgstr "Ingen feilstava ord"
 
 #: components/html-editor/spell.c:481
 msgid "Spell Checking _Languages"
-msgstr "Språk for stavekontrol_l"
+msgstr "SprÃ¥k for stavekontrol_l"
 
 #: components/html-editor/table.c:198
 msgid "Flat gray"
-msgstr "Flat grå"
+msgstr "Flat grÃ¥"
 
 #: components/html-editor/table.c:207
 msgid "Dark header"
-msgstr "Mørk topptekst"
+msgstr "MÃ¸rk topptekst"
 
 #: components/html-editor/template.c:81
 msgid "Note"
@@ -1395,11 +1395,11 @@ msgstr "Venstrejustering"
 
 #: components/html-editor/toolbar.c:520
 msgid "Right align"
-msgstr "Høgrejustering"
+msgstr "HÃ¸grejustering"
 
 #: components/html-editor/toolbar.c:527
 msgid "Toggle typewriter font style"
-msgstr "Skru av/på skrivemaskin stil for skrifttype"
+msgstr "Skru av/pÃ¥ skrivemaskin stil for skrifttype"
 
 #: components/html-editor/toolbar.c:529
 msgid "Makes the text bold"
@@ -1435,7 +1435,7 @@ msgstr "Rykker inn avsnittet"
 
 #: components/html-editor/utils.c:104
 msgid "Sample"
-msgstr "Prøve"
+msgstr "PrÃ¸ve"
 
 #: src/html-component.c:219
 msgid "Html"
@@ -1487,18 +1487,18 @@ msgstr "Klarte ikkje initialisere Bonobo!"
 
 #: src/htmlengine-print.c:197
 msgid "Cannot allocate default font for printing\n"
-msgstr "Klarar ikkje å allokére standard skrifttype for utskrift\n"
+msgstr "Klarar ikkje Ã¥ allokÃ©re standard skrifttype for utskrift\n"
 
 #: src/testgtkhtml.c:113
 msgid "Print pre_view"
-msgstr "Førehands_vising av utskrift"
+msgstr "FÃ¸rehands_vising av utskrift"
 
 #: src/testgtkhtml.c:113
 msgid "Print preview"
-msgstr "Førehandsvising av utskrift"
+msgstr "FÃ¸rehandsvising av utskrift"
 
 #~ msgid "Could not initialize GNORBA"
-#~ msgstr "Klarte ikkje å initialisere GNORBA"
+#~ msgstr "Klarte ikkje Ã¥ initialisere GNORBA"
 
 #~ msgid "Can't load fixed font."
 #~ msgstr "Kan ikkje laste fast skrifttype"
@@ -1507,7 +1507,7 @@ msgstr "Førehandsvising av utskrift"
 #~ msgstr "US-Letter"
 
 #~ msgid "Language"
-#~ msgstr "Språk"
+#~ msgstr "SprÃ¥k"
 
 #~ msgid "Pick a color"
 #~ msgstr "Vel ein farge"
@@ -1519,10 +1519,10 @@ msgstr "Førehandsvising av utskrift"
 #~ msgstr "breidd"
 
 #~ msgid "height"
-#~ msgstr "høgd"
+#~ msgstr "hÃ¸gd"
 
 #~ msgid "Clear"
-#~ msgstr "Tøm"
+#~ msgstr "TÃ¸m"
 
 #~ msgid "URL"
 #~ msgstr "URL"
@@ -1544,7 +1544,7 @@ msgstr "Førehandsvising av utskrift"
 #~ msgstr "Deklarasjonsfil"
 
 #~ msgid "Key"
-#~ msgstr "Nøkkel"
+#~ msgstr "NÃ¸kkel"
 
 #~ msgid "Commands"
 #~ msgstr "Kommandoar"
@@ -1597,11 +1597,11 @@ msgstr "Førehandsvising av utskrift"
 
 #, fuzzy
 #~ msgid "Regex find"
-#~ msgstr "Endra storleik på indeks"
+#~ msgstr "Endra storleik pÃ¥ indeks"
 
 #, fuzzy
 #~ msgid "List item (unnumbered)"
-#~ msgstr "Siste stat-oppføring sletta"
+#~ msgstr "Siste stat-oppfÃ¸ring sletta"
 
 #, fuzzy
 #~ msgid "Cells"
