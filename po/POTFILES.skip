@@ -1,2 +1,2 @@
-components/ebrowser/GNOME_GtkHTML_EBrowser.oaf.in
-components/html-editor/GNOME_GtkHTML_Editor.oaf.in.in
+src/html-component.c
+capplet/gtkhtml-properties.desktop.in
