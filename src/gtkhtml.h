@@ -187,6 +187,7 @@ struct _GtkHTML {
 	GtkBindingSet        *editor_bindings;
 	GtkWidget            *iframe_parent;
 	GtkHTMLEditSpellAPI  *spell_api;
+	gpointer              spell_data;
 	GtkHTMLInputLine     *input_line;
 	HTMLEngine           *engine;
 
@@ -253,10 +254,10 @@ struct _GtkHTMLClass {
 struct _GtkHTMLEditSpellAPI
 {
 	/* spell checking methods */
-	gboolean  (* check_word)              (GtkHTML *html, gchar *word);
-	void      (* suggestion_request)      (GtkHTML *html, gchar *word);
-	void      (* add_to_session)          (GtkHTML *html, gchar *word);
-	void      (* add_to_personal)         (GtkHTML *html, gchar *word);
+	gboolean  (* check_word)              (GtkHTML *html, const gchar *word, gpointer data);
+	void      (* suggestion_request)      (GtkHTML *html, const gchar *word, gpointer data);
+	void      (* add_to_session)          (GtkHTML *html, const gchar *word, gpointer data);
+	void      (* add_to_personal)         (GtkHTML *html, const gchar *word, gpointer data);
 };
 
 
@@ -266,7 +267,8 @@ GtkType    gtk_html_get_type       (void);
 GtkWidget *gtk_html_new            (void);
 void       gtk_html_construct      (GtkWidget           *htmlw);
 void       gtk_html_set_spell_api  (GtkHTML             *html,
-				    GtkHTMLEditSpellAPI *api);
+				    GtkHTMLEditSpellAPI *api,
+				    gpointer             data);
 
 /* parent iframe setting */
 void       gtk_html_set_iframe_parent       (GtkHTML *html,

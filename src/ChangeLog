@@ -1,3 +1,8 @@
+2000-10-11  Radek Doulik  <rodo@helixcode.com>
+
+	* Makefile.am (CFLAGS): removed pspell flags
+	(testgtkhtml_LDADD): removed pspell libs
+
 2000-10-10  Radek Doulik  <rodo@helixcode.com>
 
 	* new spell checking API GtkHTMLEditSpellAPI, it's here as I don't

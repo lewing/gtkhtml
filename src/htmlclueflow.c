@@ -1920,7 +1920,7 @@ html_clueflow_spell_check (HTMLClueFlow *flow, HTMLEngine *e, HTMLInterval *i)
 				bak = *ct;
 				*ct = 0;
 				/* printf ("off %d going to test word: \"%s\"\n", off, word); */
-				result = (*e->widget->spell_api->check_word) (e->widget, word);
+				result = (*e->widget->spell_api->check_word) (e->widget, word, e->widget->spell_data);
 
 				if (result == 1) {
 					gboolean is_text = (obj) ? html_object_is_text (obj) : FALSE;
