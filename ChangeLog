@@ -1,3 +1,11 @@
+Thu Sep 16 18:12:05 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* Released 3.3.2
+
+	* NEWS: Update.
+
+	* configure.in: Increment package version.	
+
 2004-09-02 Owen Taylor  <otaylor@redhat.com>
 	
 	* Released 3.3.1
