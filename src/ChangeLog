@@ -1,3 +1,8 @@
+2003-08-01  Radek Doulik  <rodo@ximian.com>
+
+	* htmlobject.c (get_length): objects not accepting cursor have
+	zero length
+
 2003-07-28  Radek Doulik  <rodo@ximian.com>
 
 	* htmltext.c (get_tags): fix color check to save color attribute
