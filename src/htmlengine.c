@@ -5345,6 +5345,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 
 		focus_object = html_engine_get_focus_object (e);
 		if (focus_object && html_object_is_embedded (focus_object)
+		    && HTML_EMBEDDED (focus_object)->widget
 		    && gtk_widget_child_focus (HTML_EMBEDDED (focus_object)->widget, dir))
 			return TRUE;
 
@@ -5362,7 +5363,8 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 				html_engine_set_focus_object (e, cur);
 
 				return TRUE;
-			} else if (html_object_is_embedded (cur) && !html_object_is_frame (cur)) {
+			} else if (html_object_is_embedded (cur) && !html_object_is_frame (cur)
+				   && HTML_EMBEDDED (cur)->widget) {
 				if (!GTK_WIDGET_DRAWABLE (HTML_EMBEDDED (cur)->widget)) {
 					gint x, y;
 
