@@ -85,7 +85,7 @@ gtk_html_a11y_initialize (AtkObject *obj, gpointer data)
 {
 	GtkAccessible *accs = GTK_ACCESSIBLE (obj);
 
-	printf ("gtk_html_a11y_initialize\n");
+	/* printf ("gtk_html_a11y_initialize\n"); */
 
 	if (ATK_OBJECT_CLASS (parent_class)->initialize)
 		ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
@@ -103,7 +103,7 @@ gtk_html_a11y_get_n_children (AtkObject *accessible)
 	if (clue)
 		n_children = html_object_get_n_children (GTK_HTML_A11Y_GTKHTML (accessible)->engine->clue);
 
-	printf ("gtk_html_a11y_get_n_children resolves to %d\n", n_children);
+	/* printf ("gtk_html_a11y_get_n_children resolves to %d\n", n_children); */
 
 	return n_children;
 }
@@ -123,7 +123,7 @@ gtk_html_a11y_ref_child (AtkObject *accessible, gint index)
 		}
 	}
 
-	printf ("gtk_html_a11y_ref_child %d resolves to %p\n", index, accessible_child);
+	/* printf ("gtk_html_a11y_ref_child %d resolves to %p\n", index, accessible_child); */
 
 	return accessible_child;
 }
@@ -163,7 +163,7 @@ gtk_html_a11y_new (GtkWidget *widget)
 
 	accessible->role = ATK_ROLE_HTML_CONTAINER;
 
-	printf ("created new gtkhtml accessible object\n");
+	/* printf ("created new gtkhtml accessible object\n"); */
 
 	return accessible;
 }
