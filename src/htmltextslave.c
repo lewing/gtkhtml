@@ -1133,7 +1133,7 @@ html_text_slave_new (HTMLText *owner, guint posStart, guint posLen)
 static gboolean
 html_text_slave_is_index_in_glyph (HTMLTextSlave *slave, HTMLTextSlave *next_slave, GSList *cur, int index, PangoItem *item)
 {
-/* 	if (item->analysis.level % 2 == 0) { */
+	if (item->analysis.level % 2 == 0) {
 		/* LTR */
 		return item->offset <= index
 			&& (index < item->offset + item->length
@@ -1141,15 +1141,15 @@ html_text_slave_is_index_in_glyph (HTMLTextSlave *slave, HTMLTextSlave *next_sla
 				(!cur->next
 				 || (!next_slave && slave->owner->text_bytes == item->offset + item->length)
 				 || (next_slave && html_text_slave_get_text (next_slave) - next_slave->owner->text == item->offset + item->length))));
-/* 	} else { */
-/* 		/\* RTL *\/ */
-/* 		return index <= item->offset + item->length */
-/* 			&& (item->offset < index */
-/* 			    || (index == item->offset && */
-/* 				(!cur->next */
-/* 				 || (!next_slave && slave->owner->text_bytes == item->offset + item->length) */
-/* 				 || (next_slave && html_text_slave_get_text (next_slave) - next_slave->owner->text == item->offset)))); */
-/* 	} */
+	} else {
+		/* RTL */
+		return index <= item->offset + item->length
+			&& (item->offset < index
+			    || (index == item->offset &&
+				(!cur->next
+				 || (!next_slave && slave->owner->text_bytes == item->offset + item->length)
+				 || (next_slave && html_text_slave_get_text (next_slave) - next_slave->owner->text == item->offset))));
+	}
 }
 
 static HTMLTextSlaveGlyphItem *
@@ -1332,7 +1332,7 @@ html_text_slave_cursor_left_one (HTMLTextSlave *slave, HTMLCursor *cursor)
 
 	if (prev) {
 		if (html_text_slave_gi_right_edge (slave, cursor, prev)) {
-			if (next->glyph_item.item->analysis.level % 2 == 0) {
+			if (prev->glyph_item.item->analysis.level % 2 == 0) {
 				/* LTR */
 				cursor->offset --;
 				cursor->position --;
@@ -1465,7 +1465,8 @@ html_text_slave_get_left_edge_offset (HTMLTextSlave *slave)
 									   slave->owner->text + gi->glyph_item.item->offset + gi->glyph_item.item->length);
 		}
 	} else {
-		g_warning ("html_text_slave_get_left_edge_offset failed");
+		if (slave->owner->text_len > 0)
+			g_warning ("html_text_slave_get_left_edge_offset failed");
 
 		return 0;
 	}
@@ -1488,7 +1489,8 @@ html_text_slave_get_right_edge_offset (HTMLTextSlave *slave)
 			return slave->posStart + g_utf8_pointer_to_offset (html_text_slave_get_text (slave), slave->owner->text + gi->glyph_item.item->offset);
 		}
 	} else {
-		g_warning ("html_text_slave_get_left_edge_offset failed");
+		if (slave->owner->text_len > 0)
+			g_warning ("html_text_slave_get_left_edge_offset failed");
 
 		return 0;
 	}

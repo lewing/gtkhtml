@@ -89,7 +89,6 @@ static int test_cursor_beol_rtl (GtkHTML *html)
 	    || html->engine->cursor->offset != 0)
 		return FALSE;
 
-	gtk_main ();
 	/* move to 2nd and test again */
 	printf ("test_cursor_beol_rtl: testing 2nd line\n");
 	if (!html_engine_move_cursor (html->engine, HTML_ENGINE_CURSOR_DOWN, 1))
