@@ -3744,6 +3744,7 @@ html_engine_update_event (HTMLEngine *e)
 void
 html_engine_schedule_update (HTMLEngine *p)
 {
+	/* printf ("html_engine_schedule_update (may block)\n"); */
 	if (p->block && p->opened_streams)
 		return;
 	/* printf ("html_engine_schedule_update\n"); */
@@ -3920,47 +3921,13 @@ html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
 	if (e->block && e->opened_streams)
 		return;
 
-	/* don't draw in case we are longer than available space and scrollbar is going to be shown */
-	if (e->clue && e->clue->ascent + e->clue->descent > e->height) {
-		if (GTK_WIDGET (e->widget)->parent) {
-			if (GTK_IS_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)) {
-				if (GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar
-				    && !GTK_WIDGET_VISIBLE (GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar)
-				    && GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
-					return;
-			} /* FIX2 else if (E_IS_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)) {
-				GtkPolicyType policy;
-
-				e_scroll_frame_get_policy (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent), NULL, &policy);
-				if (policy == GTK_POLICY_AUTOMATIC
-				    && !e_scroll_frame_get_vscrollbar_visible (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)))
-					return;
-					} */
-		}
-	}
-
-	/* don't draw in case we are shorter than available space and scrollbar is going to be hidden */
-	if (e->clue && e->clue->ascent + e->clue->descent <= e->height) {
-		if (GTK_WIDGET (e->widget)->parent) {
-			if (GTK_IS_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)) {
-				if (GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar
-				    && GTK_WIDGET_VISIBLE (GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar)
-				    && GTK_SCROLLED_WINDOW (GTK_WIDGET (e->widget)->parent)->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
-					return;
-			} /* FIX2 else if (E_IS_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)) {
-				GtkPolicyType policy;
-
-				e_scroll_frame_get_policy (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent), NULL, &policy);
-				if (policy == GTK_POLICY_AUTOMATIC
-				    && e_scroll_frame_get_vscrollbar_visible (E_SCROLL_FRAME (GTK_WIDGET (e->widget)->parent)))
-					return;
-					} */
-		}
-	}
+	/* printf ("html_engine_draw_real\n"); */
 
 	/* This case happens when the widget has not been shown yet.  */
 	if (width == 0 || height == 0)
 		return;
+
+	/* printf ("html_engine_draw_real THRU\n"); */
 
 	/* printf ("html_engine_draw_real %d x %d, %d\n",
 	   e->width, e->height, e->clue ? e->clue->ascent + e->clue->descent : 0); */

@@ -293,43 +293,23 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 static guint
 calc_padding (HTMLPainter *painter)
 {
-	guint ascent, descent;
-
-	/* FIXME maybe this should depend on the style.  */
-	/* FIXME move this into the painter.             */
-	if (HTML_IS_PLAIN_PAINTER (painter)) {
-		ascent = 0;
-		descent = 0;
-	} else {
-		ascent = html_painter_calc_ascent (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
-		descent = html_painter_calc_descent (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
+	if (!HTML_IS_PLAIN_PAINTER (painter)) {
+		return html_painter_get_space_width (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
 	}
-	return ascent + descent;
+	return 0;
 }
 
 static guint
 calc_indent_unit (HTMLPainter *painter)
 {
-	guint ascent, descent;
-
-	ascent = html_painter_calc_ascent (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
-	descent = html_painter_calc_descent (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
-
-	return (ascent + descent) * 3;
+	return html_painter_get_space_width (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL) * 4;
 }
 
 static guint
 calc_bullet_size (HTMLPainter *painter)
 {
-	guint ascent, descent;
-
-	ascent = html_painter_calc_ascent (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
-	descent = html_painter_calc_descent (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
-
-	return (ascent + descent) / 3;
+	return html_painter_get_space_width (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL) / 2;
 }
-
-
 
 static gboolean
 is_header (HTMLClueFlow *flow)
@@ -1146,12 +1126,12 @@ draw_item (HTMLObject *self, HTMLPainter *painter, gint x, gint y, gint width, g
 
 		number = get_item_number_str (flow);
 		if (number) {
-			gint width, len, line_offset = 0;
+			gint width, len, line_offset = 0, asc, dsc;
 
 			len   = strlen (number);
-			width = html_painter_calc_text_width (painter, number, len, &line_offset,
-							      html_clueflow_get_default_font_style (flow), NULL)
-				+ html_painter_get_space_width (painter, html_clueflow_get_default_font_style (flow), NULL);
+			html_painter_calc_text_size (painter, number, len, &line_offset,
+						     html_clueflow_get_default_font_style (flow), NULL, &width, &asc, &dsc);
+			width += html_painter_get_space_width (painter, html_clueflow_get_default_font_style (flow), NULL);
 			html_painter_set_font_style (painter, html_clueflow_get_default_font_style (flow));
 			html_painter_set_font_face  (painter, NULL);
 			html_painter_draw_text (painter, self->x + first->x - width + tx,

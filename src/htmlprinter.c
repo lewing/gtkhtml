@@ -619,83 +619,46 @@ draw_shade_line (HTMLPainter *painter,
 	/* FIXME */
 }
 
-static guint
-calc_ascent (HTMLPainter *painter,
-	     GtkHTMLFontStyle style,
-	     HTMLFontFace *face)
+static void
+calc_text_size (HTMLPainter *painter,
+	const gchar *text,
+	guint len,
+		GtkHTMLFontStyle style,
+	HTMLFontFace *face,
+	gint *width, gint *asc, gint *dsc)
 {
 	HTMLPrinter *printer;
 	GnomeFont *font;
-	double ascender;
 
 	printer = HTML_PRINTER (painter);
-	g_return_val_if_fail (printer->print_context != NULL, 0);
+	g_return_if_fail (printer->print_context != NULL);
 
 	font = html_painter_get_font (painter, face, style);
-	g_return_val_if_fail (font != NULL, 0);
+	g_return_if_fail (font != NULL);
 
-	ascender = gnome_font_get_ascender (font) * SPACING_FACTOR;
-	return SCALE_GNOME_PRINT_TO_ENGINE (ascender);
+	*width = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_width_utf8_sized (font, text,
+									       g_utf8_offset_to_pointer (text, len) - text));
+	*asc = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_ascender (font) * SPACING_FACTOR);
+	*dsc = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_descender (font) * SPACING_FACTOR);
 }
 
-static guint
-calc_descent (HTMLPainter *painter,
-	      GtkHTMLFontStyle style,
-	      HTMLFontFace *face)
+static void
+calc_text_size_bytes (HTMLPainter *painter,
+		      const gchar *text,
+		      guint len,
+		      HTMLFont *font,
+		      GtkHTMLFontStyle style,
+		      gint *width, gint *asc, gint *dsc)
 {
 	HTMLPrinter *printer;
-	GnomeFont *font;
-	double descender;
 
 	printer = HTML_PRINTER (painter);
-	g_return_val_if_fail (printer->print_context != NULL, 0);
+	g_return_if_fail (printer->print_context != NULL);
+	g_return_if_fail (font != NULL);
 
-	font = html_painter_get_font (painter, face, style);
-	g_return_val_if_fail (font != NULL, 0);
-
-	descender = gnome_font_get_descender (font) * SPACING_FACTOR;
-	return SCALE_GNOME_PRINT_TO_ENGINE (descender);
-}
-
-static guint
-calc_text_width (HTMLPainter *painter,
-		 const gchar *text,
-		 guint len,
-		 GtkHTMLFontStyle style,
-		 HTMLFontFace *face)
-{
-	HTMLPrinter *printer;
-	GnomeFont *font;
-	double width;
-
-	printer = HTML_PRINTER (painter);
-	g_return_val_if_fail (printer->print_context != NULL, 0);
-
-	font = html_painter_get_font (painter, face, style);
-	g_return_val_if_fail (font != NULL, 0);
-
-	width = gnome_font_get_width_utf8_sized (font, text, g_utf8_offset_to_pointer (text, len) - text);
-
-	return SCALE_GNOME_PRINT_TO_ENGINE (width);
-}
-
-static guint
-calc_text_width_bytes (HTMLPainter *painter,
-		       const gchar *text,
-		       guint len,
-		       HTMLFont *font,
-		       GtkHTMLFontStyle style)
-{
-	HTMLPrinter *printer;
-	double width;
-
-	printer = HTML_PRINTER (painter);
-	g_return_val_if_fail (printer->print_context != NULL, 0);
-	g_return_val_if_fail (font != NULL, 0);
-
-	width = gnome_font_get_width_utf8_sized (font->data, text, len);
-
-	return SCALE_GNOME_PRINT_TO_ENGINE (width);
+	*width = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_width_utf8_sized (font->data, text, len));
+	*asc = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_ascender (font->data) * SPACING_FACTOR);
+	*dsc = SCALE_GNOME_PRINT_TO_ENGINE (gnome_font_get_descender (font->data) * SPACING_FACTOR);
 }
 
 static guint
@@ -811,10 +774,8 @@ class_init (GObjectClass *object_class)
 	painter_class->unref_font = unref_font;
 	painter_class->alloc_color = alloc_color;
 	painter_class->free_color = free_color;
-	painter_class->calc_ascent = calc_ascent;
-	painter_class->calc_descent = calc_descent;
-	painter_class->calc_text_width = calc_text_width;
-	painter_class->calc_text_width_bytes = calc_text_width_bytes;
+	painter_class->calc_text_size = calc_text_size;
+	painter_class->calc_text_size_bytes = calc_text_size_bytes;
 	painter_class->set_pen = set_pen;
 	painter_class->get_black = get_black;
 	painter_class->draw_line = draw_line;

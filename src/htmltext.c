@@ -424,12 +424,12 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 static gboolean
 calc_size (HTMLObject *self, HTMLPainter *painter, GList **changed_objs)
 {
-	HTMLText *text = HTML_TEXT (self);
-	GtkHTMLFontStyle style = html_text_get_font_style (text);
+	/* RM2 HTMLText *text = HTML_TEXT (self);
+	   GtkHTMLFontStyle style = html_text_get_font_style (text); */
 
 	self->width = 0;
-	self->ascent = html_painter_calc_ascent (painter, style, text->face);
-	self->descent = html_painter_calc_descent (painter, style, text->face);
+	/* self->ascent = 0; FIX2? */
+	/* self->descent = 0; FIX2? */
 
 	return FALSE;
 }
@@ -496,8 +496,9 @@ calc_word_width (HTMLText *text, HTMLPainter *painter, gint line_offset)
 {
 	GtkHTMLFontStyle style;
 	HTMLFont *font;
+	HTMLObject *obj = HTML_OBJECT (text);
 	gchar *begin, *end;
-	gint i;
+	gint i, width, asc, dsc;
 
 	text->words      = get_words (text->text);
 	if (text->word_width)
@@ -506,13 +507,20 @@ calc_word_width (HTMLText *text, HTMLPainter *painter, gint line_offset)
 	style = html_text_get_font_style (text);
 	font = html_font_manager_get_font (&painter->font_manager, text->face, style);
 
+	obj->ascent = obj->descent = 0;
+
 	begin            = text->text;
 	for (i = 0; i < text->words; i++) {
 		end   = strchr (begin + (i ? 1 : 0), ' ');
-		text->word_width [i] = (i ? text->word_width [i - 1] : 0)
-			+ html_painter_calc_text_width_bytes (painter,
-							      begin, end ? end - begin : strlen (begin),
-							      &line_offset, font, style);
+		html_painter_calc_text_size_bytes (painter,
+						   begin, end ? end - begin : strlen (begin),
+						   &line_offset, font, style, &width, &asc, &dsc);
+		text->word_width [i] = (i ? text->word_width [i - 1] : 0) + width;
+
+		if (obj->ascent < asc)
+			obj->ascent = asc;
+		if (obj->descent < dsc)
+			obj->descent = dsc;
 		begin = end;
 	}
 
@@ -1223,7 +1231,7 @@ get_cursor_base (HTMLObject *self,
 			if (offset != slave->posStart) {
 				HTMLText *text;
 				GtkHTMLFontStyle font_style;
-				gint line_offset;
+				gint line_offset, width, asc, dsc;
 
 				text = HTML_TEXT (self);
 
@@ -1232,10 +1240,12 @@ get_cursor_base (HTMLObject *self,
 									       html_text_get_line_offset (HTML_TEXT (self),
 													  painter),
 									       slave->posStart, painter);
-				*x += html_painter_calc_text_width (painter,
-								    html_text_get_text (text, slave->posStart),
-								    offset - slave->posStart, &line_offset,
-								    font_style, text->face);
+				html_painter_calc_text_size (painter,
+							     html_text_get_text (text, slave->posStart),
+							     offset - slave->posStart, &line_offset,
+							     font_style, text->face, &width, &asc, &dsc);
+
+				*x += width;
 			}
 
 			return;

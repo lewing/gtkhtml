@@ -87,19 +87,6 @@ read_html (GtkWidget *html, gint k)
 
 	stream = gtk_html_begin (GTK_HTML (html));
 	url_requested (GTK_HTML (html), html_files [k], stream, NULL);
-
-	/* int fd, n;
-	gchar *html_file = g_strconcat ("tests/", html_files [k], NULL);
-	char ostr [BUFSIZ];
-	fd = open (html_file, O_RDONLY);
-
-	if (fd != -1) {
-		n = read (fd, ostr, BUFSIZ);
-		gtk_html_load_from_string (GTK_HTML (html), ostr, n);
-
-		close (fd);
-	}
-	g_free (html_file); */
 }
 
 static void
@@ -166,7 +153,7 @@ main (int argc, char **argv)
 		
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 	gtk_container_add (GTK_CONTAINER (swindow), html);
-	gtk_box_pack_start (GTK_BOX (vbox), swindow, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), swindow, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 	for (i = 0; i < BUTTON_INDEX; i++)
 		gtk_box_pack_start (GTK_BOX (hbox), button [i], FALSE, FALSE, 0);

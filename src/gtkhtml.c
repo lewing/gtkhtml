@@ -839,10 +839,9 @@ expose (GtkWidget *widget, GdkEventExpose *event)
 
 	if (GTK_WIDGET_CLASS (parent_class)->expose_event)
 		(* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-
 	/* printf ("expose END\n"); */
 
-	return TRUE;
+	return FALSE;
 }
 
 /* RM2 static void

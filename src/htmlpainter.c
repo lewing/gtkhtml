@@ -80,10 +80,8 @@ DEFINE_UNIMPLEMENTED (unref_font)
 DEFINE_UNIMPLEMENTED (alloc_color)
 DEFINE_UNIMPLEMENTED (free_color)
 
-DEFINE_UNIMPLEMENTED (calc_ascent)
-DEFINE_UNIMPLEMENTED (calc_descent)
-DEFINE_UNIMPLEMENTED (calc_text_width)
-DEFINE_UNIMPLEMENTED (calc_text_width_bytes)
+DEFINE_UNIMPLEMENTED (calc_text_size)
+DEFINE_UNIMPLEMENTED (calc_text_size_bytes)
 
 DEFINE_UNIMPLEMENTED (set_pen)
 DEFINE_UNIMPLEMENTED (get_black)
@@ -140,10 +138,8 @@ class_init (GObjectClass *object_class)
 	class->alloc_color = (gpointer) alloc_color_unimplemented;
 	class->free_color = (gpointer) free_color_unimplemented;
 
-	class->calc_ascent = (gpointer) calc_ascent_unimplemented;
-	class->calc_descent = (gpointer) calc_descent_unimplemented;
-	class->calc_text_width = (gpointer) calc_text_width_unimplemented;
-	class->calc_text_width_bytes = (gpointer) calc_text_width_bytes_unimplemented;
+	class->calc_text_size = (gpointer) calc_text_size_unimplemented;
+	class->calc_text_size_bytes = (gpointer) calc_text_size_bytes_unimplemented;
 
 	class->set_pen = (gpointer) set_pen_unimplemented;
 	class->get_black = (gpointer) get_black_unimplemented;
@@ -292,53 +288,27 @@ html_painter_get_font (HTMLPainter *painter, HTMLFontFace *face, GtkHTMLFontStyl
 	return font ? font->data : NULL;
 }
 
-guint
-html_painter_calc_ascent (HTMLPainter *painter,
-			  GtkHTMLFontStyle font_style,
-			  HTMLFontFace *face)
+void
+html_painter_calc_text_size (HTMLPainter *painter,
+			     const gchar *text,
+			     guint len, gint *line_offset,
+			     GtkHTMLFontStyle font_style,
+			     HTMLFontFace *face,
+			     gint *width, gint *asc, gint *dsc)
 {
-	g_return_val_if_fail (painter != NULL, 0);
-	g_return_val_if_fail (HTML_IS_PAINTER (painter), 0);
-	g_return_val_if_fail (font_style != GTK_HTML_FONT_STYLE_DEFAULT, 0);
-
-	return (* HP_CLASS (painter)->calc_ascent) (painter, font_style, face);
-}
-
-guint
-html_painter_calc_descent (HTMLPainter *painter,
-			   GtkHTMLFontStyle font_style,
-			   HTMLFontFace *face)
-{
-	g_return_val_if_fail (painter != NULL, 0);
-	g_return_val_if_fail (HTML_IS_PAINTER (painter), 0);
-	g_return_val_if_fail (font_style != GTK_HTML_FONT_STYLE_DEFAULT, 0);
-
-	return (* HP_CLASS (painter)->calc_descent) (painter, font_style, face);
-}
-
-guint
-html_painter_calc_text_width (HTMLPainter *painter,
-			      const gchar *text,
-			      guint len, gint *line_offset,
-			      GtkHTMLFontStyle font_style,
-			      HTMLFontFace *face)
-{
-	guint width;
 	gchar *translated;
 	gint translated_len;
 
-	g_return_val_if_fail (painter != NULL, 0);
-	g_return_val_if_fail (HTML_IS_PAINTER (painter), 0);
-	g_return_val_if_fail (text != NULL, 0);
-	g_return_val_if_fail (font_style != GTK_HTML_FONT_STYLE_DEFAULT, 0);
+	g_return_if_fail (painter != NULL);
+	g_return_if_fail (HTML_IS_PAINTER (painter));
+	g_return_if_fail (text != NULL);
+	g_return_if_fail (font_style != GTK_HTML_FONT_STYLE_DEFAULT);
 
 	translated = alloca (strlen (text) + calc_text_bytes_delta (text, len, *line_offset, &translated_len,
 								    *line_offset != -1) + 1);
 	*line_offset = translate_text_special_chars (text, translated, len, *line_offset, *line_offset != -1);
 
-	width = (* HP_CLASS (painter)->calc_text_width) (painter, translated, translated_len, font_style, face);
-
-	return width;
+	(* HP_CLASS (painter)->calc_text_size) (painter, translated, translated_len, font_style, face, width, asc, dsc);
 }
 
 static gint
@@ -395,23 +365,20 @@ correct_width (const gchar *text, guint bytes_len, gint *lo, HTMLFont *font)
 	return delta;
 }
 
-guint
-html_painter_calc_text_width_bytes (HTMLPainter *painter,
+void
+html_painter_calc_text_size_bytes (HTMLPainter *painter,
 				    const gchar *text,
 				    guint bytes_len, gint *line_offset,
-				    HTMLFont *font, GtkHTMLFontStyle style)
+				    HTMLFont *font, GtkHTMLFontStyle style,
+				    gint *width, gint *asc, gint *dsc)
 {
-	guint width;
+	g_return_if_fail (painter != NULL);
+	g_return_if_fail (HTML_IS_PAINTER (painter));
+	g_return_if_fail (text != NULL);
+	g_return_if_fail (style != GTK_HTML_FONT_STYLE_DEFAULT);
 
-	g_return_val_if_fail (painter != NULL, 0);
-	g_return_val_if_fail (HTML_IS_PAINTER (painter), 0);
-	g_return_val_if_fail (text != NULL, 0);
-	g_return_val_if_fail (style != GTK_HTML_FONT_STYLE_DEFAULT, 0);
-
-	width = (* HP_CLASS (painter)->calc_text_width_bytes) (painter, text, bytes_len, font, style);
-	width += correct_width (text, bytes_len, line_offset, font);
-
-	return width;
+	(* HP_CLASS (painter)->calc_text_size_bytes) (painter, text, bytes_len, font, style, width, asc, dsc);
+	*width += correct_width (text, bytes_len, line_offset, font);
 }
 
 /* The actual paint operations.  */

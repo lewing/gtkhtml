@@ -102,7 +102,6 @@ html_types_init (void)
 	html_text_input_type_init ();
 	html_text_slave_type_init ();
 	html_text_type_init ();
-	html_vspace_type_init ();
 
 	html_frameset_type_init ();
 	html_frame_type_init ();

@@ -64,12 +64,10 @@ struct _HTMLPainterClass {
 	void (* alloc_color)      (HTMLPainter *painter, GdkColor *color);
 	void (* free_color)       (HTMLPainter *painter, GdkColor *color);
 
-	guint (* calc_ascent)     (HTMLPainter *p, GtkHTMLFontStyle f, HTMLFontFace *face);
-	guint (* calc_descent)    (HTMLPainter *p, GtkHTMLFontStyle f, HTMLFontFace *face);
-	guint (* calc_text_width) (HTMLPainter *p, const gchar *text, guint len,
-				   GtkHTMLFontStyle font_style, HTMLFontFace *face);
-	guint (* calc_text_width_bytes) (HTMLPainter *p, const gchar *text, guint len,
-					 HTMLFont *font, GtkHTMLFontStyle font_style);
+	void (* calc_text_size) (HTMLPainter *p, const gchar *text, guint len,
+				 GtkHTMLFontStyle font_style, HTMLFontFace *face, gint *width, gint *asc, gint *dsc);
+	void (* calc_text_size_bytes) (HTMLPainter *p, const gchar *text, guint len,
+				       HTMLFont *font, GtkHTMLFontStyle font_style, gint *width, gint *asc, gint *dsc);
 
 	void (* set_pen)          (HTMLPainter *painter, const GdkColor *color);
 	const GdkColor * (* get_black) (const HTMLPainter *painter);
@@ -141,24 +139,24 @@ void              html_painter_set_font_face                           (HTMLPain
 gpointer          html_painter_get_font                                (HTMLPainter       *painter,
 									HTMLFontFace      *face,
 									GtkHTMLFontStyle   style);
-guint             html_painter_calc_ascent                             (HTMLPainter       *p,
-									GtkHTMLFontStyle   f,
-									HTMLFontFace      *face);
-guint             html_painter_calc_descent                            (HTMLPainter       *p,
-									GtkHTMLFontStyle   f,
-									HTMLFontFace      *face);
-guint             html_painter_calc_text_width                         (HTMLPainter       *p,
+void              html_painter_calc_text_size                          (HTMLPainter       *p,
 									const gchar       *text,
 									guint              len,
 									gint              *line_offset,
 									GtkHTMLFontStyle   font_style,
-									HTMLFontFace      *face);
-guint             html_painter_calc_text_width_bytes                   (HTMLPainter       *p,
+									HTMLFontFace      *face,
+									gint              *width,
+									gint              *asc,
+									gint              *dsc);
+void              html_painter_calc_text_size_bytes                    (HTMLPainter       *p,
 									const gchar       *text,
 									guint              len,
 									gint              *line_offset,
 									HTMLFont          *font,
-									GtkHTMLFontStyle   font_style);
+									GtkHTMLFontStyle   font_style,
+									gint              *width,
+									gint              *asc,
+									gint              *dsc);
 
 /* The actual paint operations.  */
 void              html_painter_set_pen                                 (HTMLPainter       *painter,

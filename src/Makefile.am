@@ -96,13 +96,11 @@ libgtkhtml_HEADERS =				\
 	htmltypes.h				\
 	htmlundo.h				\
 	htmlundo-action.h			\
-	htmlvspace.h				\
 	gtkhtml-keybinding.h			\
 	htmliframe.h				\
 	htmlframe.h				\
 	htmlframeset.h				\
 	htmlengine-edit-table.h			\
-	htmlhspace.h				\
 	$(NULL)
 
 libgtkhtml_la_SOURCES =				\
@@ -180,15 +178,10 @@ libgtkhtml_la_SOURCES =				\
 	htmltype.c				\
 	htmlundo.c				\
 	htmlundo-action.c			\
-	htmlvspace.c				\
 	htmliframe.c				\
 	htmlframe.c				\
 	htmlframeset.c				\
 	$(NULL)
-#	htmlhspace.c				\
-#	htmlelement.c				\
-#	html-component.c			\
-#	htmlengine-edit-table.c			\
 
 libgtkhtml_la_LDFLAGS = -release $(GTKHTML_RELEASE) -version-info $(GTKHTML_CURRENT):$(GTKHTML_REVISION):$(GTKHTML_AGE)
 libgtkhtml_la_LIBADD = $(GTKHTML_LIBS)

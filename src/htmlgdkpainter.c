@@ -784,7 +784,6 @@ draw_text (HTMLPainter *painter,
 	HTMLGdkPainter *gdk_painter;
 	PangoFontDescription *desc;
 	PangoLayout *layout;
-	gint width;
 
 	gdk_painter = HTML_GDK_PAINTER (painter);
 	desc = html_painter_get_font (painter, painter->font_face, painter->font_style);
@@ -860,85 +859,36 @@ draw_shade_line (HTMLPainter *painter,
 	gdk_draw_line (gdk_painter->pixmap, gdk_painter->gc, x, y + 1, x + width, y + 1);
 }
 
-static guint
-calc_ascent (HTMLPainter *painter, GtkHTMLFontStyle style, HTMLFontFace *face)
+static void
+calc_text_size (HTMLPainter *painter,
+		const gchar *text,
+		guint len,
+		GtkHTMLFontStyle style,
+		HTMLFontFace *face,
+		gint *width, gint *asc, gint *dsc)
 {
-	/* HTMLGdkPainter *gdk_painter;
-	EFont *e_font;
-
-	gdk_painter = HTML_GDK_PAINTER (painter);
-
-	e_font = html_painter_get_font (painter, face, style);
-	if (e_font == NULL)
-		return 0;
-
-		return e_font_ascent (e_font); */
-
-	return 10;
-}
-
-static guint
-calc_descent (HTMLPainter *painter, GtkHTMLFontStyle style, HTMLFontFace *face)
-{
-	/* HTMLGdkPainter *gdk_painter;
-	EFont *e_font;
-
-	gdk_painter = HTML_GDK_PAINTER (painter);
-
-	e_font = html_painter_get_font (painter, face, style);
-	if (e_font == NULL)
-		return 0;
-
-		return e_font_descent (e_font); */
-	return 10;
-}
-
-static guint
-calc_text_width (HTMLPainter *painter,
-		 const gchar *text,
-		 guint len,
-		 GtkHTMLFontStyle style,
-		 HTMLFontFace *face)
-{
-	/* HTMLGdkPainter *gdk_painter;
-	HTMLFont *font;
-	EFont *e_font;
-	gint width;
-
-	gdk_painter = HTML_GDK_PAINTER (painter);
-	font = html_font_manager_get_font (&painter->font_manager, face, style);
-	e_font = font->data;
-
-	if (style & GTK_HTML_FONT_STYLE_FIXED) {
-		width = len * font->space_width;
-	} else {
-		width = e_font_utf8_text_width (e_font, e_style (style),
-						text, g_utf8_offset_to_pointer (text, len) - text);
-	} 
-
-	return width; */
-
 	HTMLFont *font;
 	HTMLGdkPainter *gdk_painter;
 	PangoLayout *layout;
-	gint width;
+	PangoRectangle logical_rect;
 
 	gdk_painter = HTML_GDK_PAINTER (painter);
 	font = html_font_manager_get_font (&painter->font_manager, face, style);
 	layout = pango_layout_new (gdk_painter->pc);
 	pango_layout_set_font_description (layout, (const PangoFontDescription *) font->data);
 	pango_layout_set_text (layout, text, g_utf8_offset_to_pointer (text, len) - text);
-	pango_layout_get_size (layout, &width, NULL);
+	pango_layout_get_extents (layout, NULL, &logical_rect);
 	g_object_unref (layout);
 
-	printf ("width1: %d\n", width / PANGO_SCALE);
-
-	return width / PANGO_SCALE;
+	*width = logical_rect.width / PANGO_SCALE;
+	*asc = ((3 * logical_rect.height) / 4) / PANGO_SCALE;
+	*dsc = (logical_rect.height / 4) / PANGO_SCALE;
 }
 
-static guint
-calc_text_width_bytes (HTMLPainter *painter, const gchar *text,
-		       guint bytes_len, HTMLFont *font, GtkHTMLFontStyle style)
+static void
+calc_text_size_bytes (HTMLPainter *painter, const gchar *text,
+		      guint bytes_len, HTMLFont *font, GtkHTMLFontStyle style,
+		      gint *width, gint *asc, gint *dsc)
 {
 	/* if (style & GTK_HTML_FONT_STYLE_FIXED) {
 		return g_utf8_pointer_to_offset (text, text + bytes_len) * font->space_width;
@@ -948,18 +898,18 @@ calc_text_width_bytes (HTMLPainter *painter, const gchar *text,
 					       } */
 	HTMLGdkPainter *gdk_painter;
 	PangoLayout *layout;
-	gint width;
+	PangoRectangle logical_rect;
 
 	gdk_painter = HTML_GDK_PAINTER (painter);
 	layout = pango_layout_new (gdk_painter->pc);
 	pango_layout_set_font_description (layout, (const PangoFontDescription *) font->data);
 	pango_layout_set_text (layout, text, bytes_len);
-	pango_layout_get_size (layout, &width, NULL);
+	pango_layout_get_extents (layout, NULL, &logical_rect);
 	g_object_unref (layout);
 
-	//printf ("width2: %d\n", width / PANGO_SCALE);
-
-	return width / PANGO_SCALE;
+	*width = logical_rect.width / PANGO_SCALE;
+	*asc = ((3 * logical_rect.height) / 4) / PANGO_SCALE;
+	*dsc = (logical_rect.height / 4) / PANGO_SCALE;
 }
 
 static guint
@@ -1029,10 +979,8 @@ class_init (GObjectClass *object_class)
 	painter_class->unref_font = unref_font;
 	painter_class->alloc_color = alloc_color;
 	painter_class->free_color = free_color;
-	painter_class->calc_ascent = calc_ascent;
-	painter_class->calc_descent = calc_descent;
-	painter_class->calc_text_width = calc_text_width;
-	painter_class->calc_text_width_bytes = calc_text_width_bytes;
+	painter_class->calc_text_size = calc_text_size;
+	painter_class->calc_text_size_bytes = calc_text_size_bytes;
 	painter_class->set_pen = set_pen;
 	painter_class->get_black = get_black;
 	painter_class->draw_line = draw_line;
