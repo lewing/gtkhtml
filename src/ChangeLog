@@ -1,3 +1,8 @@
+2003-07-07  Yuedong Du  <yuedong.du@sun.com>
+
+        * gtkhtml.c (add_bindings): remove keybinding for Control+Tab/
+        Shift+Control+Tab, fix bug #45825
+
 2003-06-13  Larry Ewing  <lewing@ximian.com>
 
 	* htmlengine.c (html_engine_finalize): clear some of the various
