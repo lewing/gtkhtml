@@ -646,7 +646,7 @@ find_free_area (HTMLClue *clue, HTMLPainter *painter, gint y, gint width, gint h
 		try_y = next_y;
 	}
 	
-	*y_pos = try_y;
+	*y_pos = MAX (y, try_y);
 
 	*_rmargin = rmargin;
 	*_lmargin = lmargin;
