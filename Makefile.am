@@ -1,6 +1,3 @@
-confexecdir = $(libdir)
-confexec_DATA = gtkhtmlConf.sh
-
 SUBDIRS =					\
 	src					\
 	components				\
