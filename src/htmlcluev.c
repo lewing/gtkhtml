@@ -564,7 +564,6 @@ get_right_margin (HTMLObject *self, HTMLPainter *painter, gint y, gboolean with_
 	gint margin;
 	
 	cluev = HTML_CLUEV (self);
-	//margin = MAX (self->max_width, self->width) - 2 * cluev->padding * html_painter_get_pixel_size (painter);
 	margin = self->max_width - 2 * cluev->padding * html_painter_get_pixel_size (painter);
 
 	if (with_aligned)
@@ -597,7 +596,6 @@ find_free_area (HTMLClue *clue, HTMLPainter *painter, gint y, gint width, gint h
 	next_y = 0;
 	while (1) {
 		lmargin = indent;
-		//rmargin = MAX (HTML_OBJECT (clue)->max_width, HTML_OBJECT (clue)->width)
 		rmargin = HTML_OBJECT (clue)->max_width - 2 * cluev->padding * html_painter_get_pixel_size (painter);
 		
 		for (aclue = cluev->align_left_list; aclue != 0; aclue = cluev_next_aligned (aclue)) {

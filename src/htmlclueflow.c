@@ -844,7 +844,6 @@ layout_line (HTMLObject *o, HTMLPainter *painter, HTMLObject *begin,
 
 	o->y += height;
 	o->ascent += height;
-	//o->descent -= MAX (0, o->descent - height);
 
 	calc_margins (o, painter, indent, lmargin, rmargin);
 
@@ -866,7 +865,6 @@ layout_aligned (HTMLObject *o, HTMLPainter *painter, HTMLObject *cur,
 			html_clue_append_right_aligned (HTML_CLUE (o->parent), painter,
 							HTML_CLUE (cur), lmargin, rmargin, indent);
 		*changed = TRUE;
-		//o->descent += cur->ascent + cur->descent;
 	}
 
 	return cur->next;
@@ -893,10 +891,6 @@ layout (HTMLObject *o, HTMLPainter *painter, GList **changed_objs, gboolean *lea
 					   &lmargin, &rmargin, indent);
 		cur = end;
 	}
-
-	//o->ascent += o->descent;
-	//o->y += o->descent;
-	//o->descent = 0;
 
 	return changed;
 }
