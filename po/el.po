@@ -1,3 +1,4 @@
+# translation of el.po to 
 # translation of el.po to Greek
 # Greek gtkhtml translation
 # Copyright (C) 2001, 2004 Free Software Foundation, Inc.
@@ -9,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-26 15:35+0200\n"
-"PO-Revision-Date: 2004-01-29 17:50+0200\n"
+"POT-Creation-Date: 2004-08-29 14:10+0300\n"
+"PO-Revision-Date: 2004-08-29 14:09+0300\n"
 "Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
-"Language-Team: Greek <nls@tux.hellug.gr>\n"
+"Language-Team:  <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.3.1\n"
 
 #: capplet/gnome-bindings-prop.c:157
 msgid "<None>"
@@ -1030,9 +1031,8 @@ msgid "Graph paper"
 msgstr "Χαρτί γραφήματος"
 
 #: components/html-editor/body.c:246
-#, fuzzy
 msgid "T_emplate:"
-msgstr "Πρότυπο"
+msgstr "Πρότ_υπο:"
 
 #. data->entry_title = gtk_entry_new ();
 #. if (gtk_html_get_title (data->cd->html)) {
@@ -1042,9 +1042,8 @@ msgstr "Πρότυπο"
 #. g_signal_connect (data->entry_title, "changed", G_CALLBACK (entry_changed), data);
 #. editor_hig_attach_row (t1, _("T_itle:"), data->entry_title, 1);
 #: components/html-editor/body.c:256 components/html-editor/paragraph.c:112
-#, fuzzy
 msgid "General"
-msgstr "Κέντρο"
+msgstr "Γενικά"
 
 #: components/html-editor/body.c:267 components/html-editor/text.c:162
 #: components/html-editor/toolbar.c:301
@@ -1053,20 +1052,17 @@ msgstr "Αυτόματο"
 
 #
 #: components/html-editor/body.c:279
-#, fuzzy
 msgid "_Text:"
-msgstr "Κείμενο"
+msgstr "Κεί_μενο:"
 
 #
 #: components/html-editor/body.c:280
-#, fuzzy
 msgid "_Link:"
-msgstr "Σύνδεσμος"
+msgstr "_Δεσμός"
 
 #: components/html-editor/body.c:281
-#, fuzzy
 msgid "_Background:"
-msgstr "Παρασκήνιο"
+msgstr "Παρα_σκήνιο"
 
 #
 #: components/html-editor/body.c:283
@@ -1082,11 +1078,11 @@ msgstr "Εικόνα Παρασκηνίου"
 #: components/html-editor/body.c:298
 #: components/html-editor/gtkhtml-editor-properties.glade.h:71
 msgid "_Source:"
-msgstr ""
+msgstr "_Πηγή:"
 
 #: components/html-editor/cell.c:350 components/html-editor/table.c:231
 msgid "Transparent"
-msgstr ""
+msgstr "Διάφανο"
 
 #
 #: components/html-editor/editor-control-factory.c:178
@@ -1323,12 +1319,12 @@ msgstr "Έλεγχος Επεξεργαστή GtkHTML"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "    "
-msgstr ""
+msgstr "    "
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:3
 #, no-c-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:8
 msgid "+4"
@@ -1336,48 +1332,47 @@ msgstr "+4"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:11
 msgid "<b>Alignment &amp; Behaviour</b>"
-msgstr ""
+msgstr "<b>Συμπεριφορά &amp; Στοίχισης</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:12
-#, fuzzy
 msgid "<b>Background</b>"
-msgstr "Παρασκήνιο"
+msgstr "<b>Παρασκήνιο</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:13
 msgid "<b>General</b>"
-msgstr ""
+msgstr "<b>Γενικά</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:14
 msgid "<b>Layout</b>"
-msgstr ""
+msgstr "<b>Διάταξη</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:15
 msgid "<b>Scope</b>"
-msgstr ""
+msgstr "<b>Σκοπός</b>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
 msgid "<span weight=\"bold\">General</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Γενικά</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:17
 msgid "<span weight=\"bold\">Layout</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Διάταξη</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:18
 msgid "<span weight=\"bold\">Link</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Δεσμός</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:19
 msgid "<span weight=\"bold\">Size</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Μέγεθος</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:20
 msgid "<span weight=\"bold\">Style</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Στυλ</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
 msgid "<span weight=\"bold\">Template</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Πρότυπο</span>"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:22
 #: components/html-editor/paragraph.c:131
@@ -1389,15 +1384,13 @@ msgid "Bottom"
 msgstr "Κάτω"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:25
-#, fuzzy
 msgid "C_ell"
-msgstr "Κελί"
+msgstr "Κ_ελί"
 
 #
 #: components/html-editor/gtkhtml-editor-properties.glade.h:26
-#, fuzzy
 msgid "C_olor:"
-msgstr "Χρώμα:"
+msgstr "Χ_ρώμα:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:27
 #: components/html-editor/popup.c:237
@@ -1411,9 +1404,8 @@ msgstr "Κέντρο"
 
 #
 #: components/html-editor/gtkhtml-editor-properties.glade.h:29
-#, fuzzy
 msgid "Col_umn"
-msgstr "Στήλη"
+msgstr "Στή_λη"
 
 #
 #: components/html-editor/gtkhtml-editor-properties.glade.h:31
@@ -1425,9 +1417,8 @@ msgid "Enable"
 msgstr "Ενεργοποίηση"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:33
-#, fuzzy
 msgid "Hea_der style"
-msgstr "Κεφαλίδα 6"
+msgstr "Στυλ Κε_φαλίδας "
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:34
 msgid "Horizontal alignment:"
@@ -1439,9 +1430,8 @@ msgstr "Οριζόντια:"
 
 #
 #: components/html-editor/gtkhtml-editor-properties.glade.h:36
-#, fuzzy
 msgid "I_mage:"
-msgstr "Εικόνα"
+msgstr "Ε_ικόνα:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:38
 #: components/html-editor/paragraph.c:127
@@ -1484,13 +1474,12 @@ msgstr "Σκιασμένο"
 
 #
 #: components/html-editor/gtkhtml-editor-properties.glade.h:50
-#, fuzzy
 msgid "Si_ze:"
-msgstr "Μέγεθος"
+msgstr "Μέγε_θος:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:51
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:55
 msgid "Thickness:"
@@ -1509,111 +1498,93 @@ msgid "Width:"
 msgstr "Πλάτος:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:59
-#, fuzzy
 msgid "_Alignment:"
-msgstr "Στοίχιση:"
+msgstr "Σ_τοίχιση:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:61
-#, fuzzy
 msgid "_Border:"
-msgstr "Πλαίσιο:"
+msgstr "Π_λαίσιο:"
 
 #
 #: components/html-editor/gtkhtml-editor-properties.glade.h:62
-#, fuzzy
 msgid "_Color:"
-msgstr "Χρώμα:"
+msgstr "_Χρώμα:"
 
 #
 #: components/html-editor/gtkhtml-editor-properties.glade.h:63
-#, fuzzy
 msgid "_Columns:"
-msgstr "Στήλες:"
+msgstr "_Στήλες:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:64
-#, fuzzy
 msgid "_Description:"
-msgstr "Περιγραφή:"
+msgstr "Περι_γραφή:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:65
-#, fuzzy
 msgid "_Height:"
-msgstr "Ύψος:"
+msgstr "Ύ_ψος:"
 
 #
 #: components/html-editor/gtkhtml-editor-properties.glade.h:66
-#, fuzzy
 msgid "_Image:"
-msgstr "Εικόνα"
+msgstr "Ε_ικόνα:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:68
-#, fuzzy
 msgid "_Padding:"
-msgstr "Γέμισμα:"
+msgstr "_Padding:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:69
-#, fuzzy
 msgid "_Row"
-msgstr "Γραμμή"
+msgstr "Γ_ραμμή"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:70
-#, fuzzy
 msgid "_Rows:"
-msgstr "Γραμμές:"
+msgstr "Γρα_μμές:"
 
 #
 # # NOTE: (see previous note)
 #: components/html-editor/gtkhtml-editor-properties.glade.h:72
-#, fuzzy
 msgid "_Spacing:"
-msgstr "Διάστιχο:"
+msgstr "Διάστι_χο:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:74
-#, fuzzy
 msgid "_Table"
-msgstr "Πίνακας"
+msgstr "_Πίνακας"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:75
 msgid "_URL:"
-msgstr ""
+msgstr "_URL:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:77
-#, fuzzy
 msgid "_Width:"
-msgstr "Πλάτος:"
+msgstr "_Πλάτος:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:78
-#, fuzzy
 msgid "_Wrap Text"
-msgstr "Ανα_δίπλωση Γραμμών"
+msgstr "Ανα_δίπλωση κειμένου"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:79
-#, fuzzy
 msgid "_X-Padding:"
-msgstr "Γέμισμα:"
+msgstr "_X-Padding:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:80
-#, fuzzy
 msgid "_Y-Padding:"
-msgstr "Γέμισμα:"
+msgstr "_Y-Padding:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:81
-#, fuzzy
 msgid "follow"
-msgstr "Ακολούθηση"
+msgstr "ακολούθηση"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:82
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:83
 msgid "xxxxxxxxxxxxxx"
 msgstr "xxxxxxxxxxxxxx"
 
 #: components/html-editor/menubar.c:96 components/html-editor/menubar.c:104
-#, fuzzy
 msgid "Insert image"
-msgstr "Εισαγωγή δεσμού"
+msgstr "Εισαγωγή εικόνας"
 
 #: components/html-editor/menubar.c:133 components/html-editor/menubar.c:152
 #: components/html-editor/menubar.c:173 components/html-editor/menubar.c:195
@@ -1679,23 +1650,20 @@ msgid "Address"
 msgstr "Διεύθυνση"
 
 #: components/html-editor/paragraph.c:109
-#, fuzzy
 msgid "_Style:"
-msgstr "_Στυλ"
+msgstr "_Στυλ:"
 
 #: components/html-editor/popup.c:438
 msgid "Paste Quotation"
 msgstr "Επικόλληση Παράθεσης"
 
 #: components/html-editor/popup.c:442
-#, fuzzy
 msgid "Insert Link"
 msgstr "Εισαγωγή δεσμού"
 
 #: components/html-editor/popup.c:449
-#, fuzzy
 msgid "Remove Link"
-msgstr "Διαγραφή συνδέσμου"
+msgstr "Απομάκρυνση δεσμού"
 
 #: components/html-editor/popup.c:456
 msgid "Style"
@@ -1837,9 +1805,8 @@ msgid "_Backward"
 msgstr "_Προς τα πίσω"
 
 #: components/html-editor/search.c:115
-#, fuzzy
 msgid "_Regular Expression"
-msgstr "Εύρεση Κανονικής Έκφρασης"
+msgstr "_Κανονική Έκφρασης"
 
 #: components/html-editor/spell.c:278
 msgid "No misspelled word found"
@@ -1954,10 +1921,9 @@ msgstr "Δείγμα"
 
 #: components/html-editor/utils.c:192
 msgid "_Visit..."
-msgstr ""
+msgstr "Επί_σκεψη..."
 
 #: components/html-editor/utils.c:232
-#, fuzzy
 msgid ""
 "The editted object was removed from the document.\n"
 "Cannot apply your changes."
@@ -1968,7 +1934,7 @@ msgstr ""
 #: src/gtkhtml.c:2531
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
-msgstr ""
+msgstr "Το url του Moziila έχει εσφαλμένη μορφή (%d) ή μάκρος (%d)\n"
 
 #: src/gtkhtml.c:2853
 msgid "Editable"
@@ -2043,14 +2009,12 @@ msgid "The color of the spelling error markers"
 msgstr "Το χρώμα σήμανσης ορθογραφικών λαθών"
 
 #: src/gtkhtml.c:2915
-#, fuzzy
 msgid "Cite Quotation Color"
-msgstr "Επικόλληση Παράθεσης"
+msgstr "Χρώμα Παράθεσης"
 
 #: src/gtkhtml.c:2916
-#, fuzzy
 msgid "The color of the cited text"
-msgstr "Το χρώμα για στοιχεία ενεργών δεσμών"
+msgstr "Το χρώμα για το κείμενο σε παράθεση"
 
 #: src/html-component.c:219
 msgid "Html"
@@ -2136,218 +2100,3 @@ msgstr "Προεπισκόπιση εκτύπωσης"
 #: src/testgtkhtml.c:987
 msgid "GtkHTML Test Application"
 msgstr "Εφαρμογή Δοκιμής GtkHTML"
-
-#~ msgid "Plain"
-#~ msgstr "Απλό"
-
-#~ msgid ""
-#~ "@link_begin@<img@alt@@width@@height@@align@ "
-#~ "border=@border@@padh@@padv@@src@>@link_end@"
-#~ msgstr ""
-#~ "@link_begin@<img@alt@@width@@height@@align@ "
-#~ "border=@border@@padh@@padv@@src@>@link_end@"
-
-#~ msgid "Frame"
-#~ msgstr "Πλαίσιο"
-
-#~ msgid ""
-#~ "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-#~ "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-#~ "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-#~ "@src@@alt@@width@@height@align=top border=0></td></tr></table></td></tr></"
-#~ "table></center>"
-#~ msgstr ""
-#~ "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-#~ "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-#~ "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-#~ "@src@@alt@@width@@height@align=top border=0></td></tr></table></td></tr></"
-#~ "table></center>"
-
-#~ msgid "Caption"
-#~ msgstr "Λεζάντα"
-
-#~ msgid ""
-#~ "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-#~ "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-#~ "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-#~ "@src@@alt@@width@@height@align=top border=0></td></tr><tr><td><b>[Place "
-#~ "your comment here]</td></tr></table></td></tr></table></center>"
-#~ msgstr ""
-#~ "<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-#~ "cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-#~ "cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-#~ "@src@@alt@@width@@height@align=top border=0></td></tr><tr><td><b>[Το "
-#~ "σχόλιο σας εδώ]</td></tr></table></td></tr></table></center>"
-
-#~ msgid "Find A Regular Expression"
-#~ msgstr "Εύρεση μιας Κανονικής Έκφρασης"
-
-#~ msgid "Find Regular E_xpression..."
-#~ msgstr "Εύρεση Κανονικής Έ_κφρασης"
-
-#~ msgid ""
-#~ "The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a "
-#~ "href=\"mailto:dog\">dog</a>."
-#~ msgstr ""
-#~ "Και ο νούς του σαν τον <a href=\"mailto:αχνό\">αχνό</a> του λιβανιού στης "
-#~ "Παναγιάς την <a href=\"mailto:όψη\">όψη</a>."
-
-#~ msgid "The quick brown fox jumps over the lazy dog."
-#~ msgstr "Και ο νους του σαν τον αχνό του λιβανιού στης Παναγιάς την όψη."
-
-#~ msgid "Other"
-#~ msgstr "Άλλο"
-
-#~ msgid ""
-#~ "The editted cell was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "Το επεξεργασμένο κελί αφαιρέθηκε από το έγγραφο.\n"
-#~ "Αδύνατη η εφαρμογή των αλλαγών."
-
-#~ msgid "************"
-#~ msgstr "************"
-
-#~ msgid "***text***"
-#~ msgstr "***κείμενο***"
-
-#~ msgid "Apply changes to:"
-#~ msgstr "Εφαρμογή αλλαγών σε:"
-
-#~ msgid "Border"
-#~ msgstr "Πλαίσιο"
-
-#~ msgid "Click will follow this URL"
-#~ msgstr "Με κλικ ακολούθηση συτού του URL"
-
-#~ msgid "Click will follow this URL:"
-#~ msgstr "Με κλικ ακολούθηση συτού του URL:"
-
-#~ msgid "Don't wrap"
-#~ msgstr "Να μη γίνει αναδίπλωση"
-
-#~ msgid "Font size"
-#~ msgstr "Μέγεθος γραμματοσειράς"
-
-#~ msgid "Foreground color"
-#~ msgstr "Χρώμα προσκηνίου"
-
-#~ msgid "Header"
-#~ msgstr "Κεφαλίδα"
-
-#~ msgid "Link insert"
-#~ msgstr "Εισαγωγή δεσμού"
-
-#~ msgid "Location"
-#~ msgstr "Τοποθεσία"
-
-#~ msgid "Padding"
-#~ msgstr "Γέμισμα"
-
-#~ msgid "Percent %"
-#~ msgstr "Ποσοστό %"
-
-#~ msgid "Pixmap:"
-#~ msgstr "Pixmap:"
-
-#~ msgid "Points"
-#~ msgstr "Στιγμές"
-
-#~ msgid "Scope"
-#~ msgstr "Σκοπός"
-
-#
-# # NOTE: (see previous note)
-#~ msgid "Spacing"
-#~ msgstr "Διάστιχο"
-
-#~ msgid "Style:"
-#~ msgstr "Στυλ:"
-
-#~ msgid "Table Insert"
-#~ msgstr "Εισαγωγή Πίνακα"
-
-#
-#~ msgid "Test URL..."
-#~ msgstr "Δοκιμή URL..."
-
-#~ msgid "Wrap"
-#~ msgstr "Αναδίπλωση"
-
-#~ msgid "Wrapping:"
-#~ msgstr "Αναδίπλωση:"
-
-#~ msgid "xxxxxxxxx"
-#~ msgstr "xxxxxxxxx"
-
-#~ msgid ""
-#~ "This is sample text, designed to show you how text would flow around this "
-#~ "image if you insert the image into your message."
-#~ msgstr ""
-#~ "Αυτό είναι ένα δείγμα κειμένου που σχεδιάστηκε για να σας δείξει το τρόπο "
-#~ "ροής του κειμένου γύρω από την εικόνα αν εισ'αγετε μια εικόνα στο μήνυμα "
-#~ "σας."
-
-#~ msgid "No image selected"
-#~ msgstr "Δεν επιλέχθηκε εικόνα"
-
-#~ msgid ""
-#~ "The editted image was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "Η επεξεργασμένη εικόνα αφαιρέθηκε από το έγγραφο.\n"
-#~ "Αδύνατη η εφαρμογή των αλλαγών."
-
-#~ msgid "Link text"
-#~ msgstr "Κείμενο δεσμού"
-
-#~ msgid ""
-#~ "The editted link was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "Ο επεξεργασμένος δεσμός αφαιρέθηκε από το έγγραφο.\n"
-#~ "Αδύνατη η εφαρμογή των αλλαγών."
-
-#~ msgid "Align"
-#~ msgstr "Στοίχιση"
-
-#~ msgid ""
-#~ "The editted paragraph was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "Η επεξεργασμένη παράγραφος αφαιρέθηκε από το έγγραφο.\n"
-#~ "Αδύνατη η εφαρμογή των αλλαγών."
-
-#~ msgid "Blue 3D"
-#~ msgstr "Μπλε 3Δ"
-
-#~ msgid "Yellow, flowers"
-#~ msgstr "Κίτρινο, λουλούδια"
-
-#~ msgid ""
-#~ "The editted rule was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "Ο επεξεργασμένος κανόνας αφαιρέθηκε από το έγγραφο.\n"
-#~ "Αδύνατη η εφαρμογή των αλλαγών."
-
-#~ msgid "Flat gray"
-#~ msgstr "Απαλό γκρι"
-
-#~ msgid "Dark header"
-#~ msgstr "Μαύρη κεφαλίδα"
-
-#~ msgid ""
-#~ "The editted table was removed from the document.\n"
-#~ "Cannot apply your changes."
-#~ msgstr ""
-#~ "Ο επεξεργασμένος πίνακας αφαιρέθηκε από το έγγραφο.\n"
-#~ "Αδύνατη η εφαρμογή των αλλαγών."
-
-#
-#~ msgid "Color"
-#~ msgstr "Χρώμα"
-
-#~ msgid "The quick brown fox jumps over the lazy dog.</div>"
-#~ msgstr ""
-#~ "Και ο νους του σαν τον αχνό του λιβανιού στης Παναγιάς την όψη.</div>"
