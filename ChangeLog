@@ -1,5 +1,8 @@
-2005-03-16  Pawan Chitrakar  <pawan@nplinux.org>
+2005-03-22  Roozbeh Pournader  <roozbeh@farsiweb.info>
 
+	* configure.in: Added "fa" (Persian) to ALL_LINGUAS.
+
+2005-03-16  Pawan Chitrakar  <pawan@nplinux.org>
 
 	* configure.in: Added "ne" to ALL_LINGUAS.
 	
