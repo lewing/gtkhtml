@@ -1999,15 +1999,15 @@ focus (GtkWidget *w, GtkDirectionType direction)
 			x2 = x1 + obj->width;
 			printf ("child pos: %d,%d x %d,%d\n", x1, y1, x2, y2);
 
-			if (x1 < e->x_offset)
-				e->x_offset = x1;
 			if (x2 > e->x_offset + e->width)
 				e->x_offset = MIN (x1, x2 - e->width);
+			if (x1 < e->x_offset)
+				e->x_offset = x1;
 
+			if (y2 >= e->y_offset + e->height)
+				e->y_offset = y2 - e->height + 1;
 			if (y1 < e->y_offset)
 				e->y_offset = y1;
-			if (y2 >= e->y_offset + e->height)
-				e->y_offset = MIN (y1, y2 - e->height + 1);
 
 			if (e->x_offset != xo)
 				gtk_adjustment_set_value (GTK_LAYOUT (w)->hadjustment, (gfloat) e->x_offset);

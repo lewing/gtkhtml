@@ -5278,12 +5278,20 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 				return TRUE;
 				break;
 			} else if (html_object_is_embedded (cur) && !html_object_is_frame (cur)) {
-				if (GTK_WIDGET_DRAWABLE (HTML_EMBEDDED (cur)->widget) &&
-				    gtk_widget_is_ancestor (HTML_EMBEDDED (cur)->widget, HTML_EMBEDDED (cur)->parent)) {
-					if (gtk_widget_child_focus (HTML_EMBEDDED (cur)->widget, dir)) {
-						e->focus_object = cur;
-						return TRUE;
-					}
+				printf ("try focus embedded: %d %d\n", GTK_WIDGET_DRAWABLE (HTML_EMBEDDED (cur)->widget) &&
+					gtk_widget_is_ancestor (HTML_EMBEDDED (cur)->widget, HTML_EMBEDDED (cur)->parent));
+				
+				if (!GTK_WIDGET_DRAWABLE (HTML_EMBEDDED (cur)->widget)) {
+					gint x, y;
+
+					html_object_calc_abs_position (cur, &x, &y);
+					gtk_layout_put (GTK_LAYOUT (HTML_EMBEDDED (cur)->parent),
+							HTML_EMBEDDED (cur)->widget, x, y);
+				}
+
+				if (gtk_widget_child_focus (HTML_EMBEDDED (cur)->widget, dir)) {
+					e->focus_object = cur;
+					return TRUE;
 				}
 			}
 			offset = dir == GTK_DIR_TAB_FORWARD ? html_object_get_length (cur) : 0;
