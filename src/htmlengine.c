@@ -1365,7 +1365,7 @@ parse_object (HTMLEngine *e, HTMLObject *clue, gint max_width,
 
 	/* create the object */
         object_found = FALSE;
-	gtk_signal_emit (GTK_OBJECT (e), signals [OBJECT_REQUESTED], eb, &object_found);
+	g_signal_emit (e, signals [OBJECT_REQUESTED], 0, eb, &object_found);
 	
 	/* show alt text on TRUE */ 
 	if (object_found) {
@@ -1780,9 +1780,9 @@ parse_b (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 		while ( html_string_tokenizer_has_more_tokens (e->st) ) {
 			const char* token = html_string_tokenizer_next_token(e->st);
 			if ( strncasecmp( token, "target=", 7 ) == 0 ) {
-				gtk_signal_emit (GTK_OBJECT (e), signals[SET_BASE_TARGET], token + 7);
+				g_signal_emit (e, signals [SET_BASE_TARGET], 0, token + 7);
 			} else if ( strncasecmp( token, "href=", 5 ) == 0 ) {
-				gtk_signal_emit (GTK_OBJECT (e), signals[SET_BASE], token + 5);
+				g_signal_emit (e, signals [SET_BASE], 0, token + 5);
 			}
 		}
 	} else if ( strncmp(str, "big", 3 ) == 0 ) {
@@ -2552,7 +2552,7 @@ parse_m (HTMLEngine *e, HTMLObject *_clue, const gchar *str )
 							refresh_url = g_strdup (token + 4);
 					}
 					
-					gtk_signal_emit (GTK_OBJECT (e), signals[REDIRECT], refresh_url, refresh_delay);
+					g_signal_emit (e, signals [REDIRECT], 0, refresh_url, refresh_delay);
 					if(refresh_url)
 						g_free(refresh_url);
 				}
@@ -2856,7 +2856,7 @@ parse_t (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 		 * valid title 
 		 */
 		if (e->inTitle && e->title) 
-			gtk_signal_emit (GTK_OBJECT (e), signals[TITLE_CHANGED]);
+			g_signal_emit (e, signals [TITLE_CHANGED], 0);
 		e->inTitle = FALSE;
 	}
 	else if ( strncmp( str, "tt", 2 ) == 0 ) {
@@ -3987,10 +3987,8 @@ html_engine_stream_end (GtkHTMLStream *stream,
 		html_cursor_home (e->cursor, e);
 	}
 
-	g_signal_emit (e, signals [LOAD_DONE], NULL);
+	g_signal_emit (e, signals [LOAD_DONE], 0);
 }
-
-
 
 static void
 html_engine_draw_real (HTMLEngine *e, gint x, gint y, gint width, gint height)
@@ -4506,8 +4504,7 @@ html_engine_form_submitted (HTMLEngine *e,
 			    const gchar *action,
 			    const gchar *encoding)
 {
-	gtk_signal_emit (GTK_OBJECT (e), signals[SUBMIT], method, action, encoding);
-
+	g_signal_emit (e, signals [SUBMIT], 0, method, action, encoding);
 }
 
 

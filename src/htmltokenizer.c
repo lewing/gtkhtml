@@ -1297,7 +1297,7 @@ html_tokenizer_begin (HTMLTokenizer *t, gchar *content_type)
 {
 	g_return_if_fail (t && HTML_IS_TOKENIZER (t));
 
-	g_signal_emit (G_OBJECT (t), html_tokenizer_signals [HTML_TOKENIZER_BEGIN_SIGNAL], 0, content_type);
+	g_signal_emit (t, html_tokenizer_signals [HTML_TOKENIZER_BEGIN_SIGNAL], 0, content_type);
 }
 
 void
@@ -1305,7 +1305,7 @@ html_tokenizer_end (HTMLTokenizer *t)
 {
 	g_return_if_fail (t && HTML_IS_TOKENIZER (t));
 
-	g_signal_emit (G_OBJECT (t), html_tokenizer_signals[HTML_TOKENIZER_END_SIGNAL], 0);
+	g_signal_emit (t, html_tokenizer_signals[HTML_TOKENIZER_END_SIGNAL], 0);
 }
 
 void

@@ -58,8 +58,7 @@ iframe_url_requested (GtkHTML *html, const char *url, GtkHTMLStream *handle, gpo
 	HTMLIFrame *iframe = HTML_IFRAME (data);
 	GtkHTML *parent = GTK_HTML (HTML_EMBEDDED(iframe)->parent);
 
-	gtk_signal_emit_by_name (GTK_OBJECT (parent->engine), "url_requested",
-				 url, handle);
+	g_signal_emit_by_name (parent->engine, "url_requested", url, handle);
 }
 
 static void
@@ -193,12 +192,12 @@ set_painter (HTMLObject *o, HTMLPainter *painter)
 	HTMLIFrame *iframe;
 
 	iframe = HTML_IFRAME (o);
-	if (GTK_OBJECT_TYPE (GTK_HTML (iframe->html)->engine->painter) != HTML_TYPE_PRINTER) {
+	if (G_OBJECT_TYPE (GTK_HTML (iframe->html)->engine->painter) != HTML_TYPE_PRINTER) {
 		iframe_set_gdk_painter (iframe, GTK_HTML (iframe->html)->engine->painter);
 	}
 	
 	html_engine_set_painter (GTK_HTML (iframe->html)->engine,
-				 GTK_OBJECT_TYPE (painter) != HTML_TYPE_PRINTER ? iframe->gdk_painter : painter);
+				 G_OBJECT_TYPE (painter) != HTML_TYPE_PRINTER ? iframe->gdk_painter : painter);
 }
 
 static void
@@ -498,8 +497,7 @@ html_iframe_init (HTMLIFrame *iframe,
 	  GTK_SIGNAL_FUNC (iframe_button_press_event), iframe);
 	*/
 
-	gtk_signal_emit_by_name (GTK_OBJECT (parent_html->engine), 
-				 "url_requested", src, handle);
+	g_signal_emit_by_name (parent_html->engine, "url_requested", src, handle);
 
 	gtk_widget_set_usize (scrolled_window, width, height);
 

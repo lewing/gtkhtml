@@ -358,7 +358,7 @@ html_engine_title_changed_cb (HTMLEngine *engine, gpointer data)
 	GtkHTML *gtk_html;
 
 	gtk_html = GTK_HTML (data);
-	gtk_signal_emit (GTK_OBJECT (gtk_html), signals[TITLE_CHANGED], engine->title->str);
+	gtk_signal_emit (GTK_OBJECT (gtk_html), signals [TITLE_CHANGED], engine->title->str);
 }
 
 static void
@@ -4147,7 +4147,7 @@ gtk_html_set_iframe_parent (GtkHTML *html, GtkWidget *parent, HTMLObject *frame)
 	html->iframe_parent = parent;
 	html->frame = frame;
 	gtk_signal_emit (GTK_OBJECT (html_engine_get_top_html_engine (html->engine)->widget),
-			 signals [IFRAME_CREATED], html);
+			 signals [IFRAME_CREATED], 0, html);
 }
 
 void

@@ -1393,7 +1393,7 @@ html_image_pointer_load (HTMLImagePointer *ip)
 	/* This is a bit evil, I think.  But it's a lot better here
 	   than in the HTMLImage object.  FIXME anyway -- ettore  */
 	/* printf ("url_requested(%p) %s\n", ip->factory->engine->widget, ip->url); */
-	gtk_signal_emit_by_name (GTK_OBJECT (ip->factory->engine), "url_requested", ip->url, handle);
+	g_signal_emit_by_name (ip->factory->engine, "url_requested", ip->url, handle);
 }
 
 HTMLImagePointer *

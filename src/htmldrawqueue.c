@@ -152,7 +152,7 @@ html_draw_queue_add (HTMLDrawQueue *queue, HTMLObject *object)
 
 	queue->last = g_list_append (queue->last, object);
 	if (queue->elems == NULL && queue->clear_elems == NULL)
-		gtk_signal_emit_by_name (GTK_OBJECT (queue->engine), "draw_pending");
+		g_signal_emit_by_name (queue->engine, "draw_pending");
 
 	if (queue->elems == NULL)
 		queue->elems = queue->last;
@@ -167,7 +167,7 @@ add_clear (HTMLDrawQueue *queue,
 {
 	queue->clear_last = g_list_append (queue->clear_last, elem);
 	if (queue->elems == NULL && queue->clear_elems == NULL)
-		gtk_signal_emit_by_name (GTK_OBJECT (queue->engine), "draw_pending");
+		g_signal_emit_by_name (queue->engine, "draw_pending");
 
 	if (queue->clear_elems == NULL)
 		queue->clear_elems = queue->clear_last;

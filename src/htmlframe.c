@@ -50,8 +50,7 @@ frame_url_requested (GtkHTML *html, const char *url, GtkHTMLStream *handle, gpoi
 	HTMLFrame *frame = HTML_FRAME (data);
 	GtkHTML *parent = GTK_HTML (HTML_EMBEDDED(frame)->parent);
 
-	gtk_signal_emit_by_name (GTK_OBJECT (parent->engine), "url_requested",
-				 url, handle);
+	g_signal_emit_by_name (parent->engine, "url_requested", url, handle);
 }
 
 static void
@@ -215,7 +214,7 @@ set_painter (HTMLObject *o, HTMLPainter *painter)
 	HTMLFrame *frame;
 
 	frame = HTML_FRAME (o);
-	if (GTK_OBJECT_TYPE (GTK_HTML (frame->html)->engine->painter) != HTML_TYPE_PRINTER) {
+	if (G_OBJECT_TYPE (GTK_HTML (frame->html)->engine->painter) != HTML_TYPE_PRINTER) {
 		frame_set_gdk_painter (frame, GTK_HTML (frame->html)->engine->painter);
 	}
 	
@@ -541,8 +540,7 @@ html_frame_init (HTMLFrame *frame,
 	  GTK_SIGNAL_FUNC (frame_button_press_event), frame);
 	*/
 
-	gtk_signal_emit_by_name (GTK_OBJECT (parent_html->engine), 
-				 "url_requested", src, handle);
+	g_signal_emit_by_name (parent_html->engine, "url_requested", src, handle);
 
 	gtk_widget_set_usize (scrolled_window, width, height);
 
