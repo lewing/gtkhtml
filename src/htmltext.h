@@ -147,6 +147,7 @@ gint              html_text_text_line_length             (const gchar      *text
 							  guint             len,
 							  gint             *tabs);
 gint              html_text_calc_part_width              (HTMLText         *text,
+							  HTMLPainter      *painter,
 							  gint              offset,
 							  gint              len);
 /*

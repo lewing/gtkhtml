@@ -112,7 +112,7 @@ calc_width (HTMLTextSlave *slave, HTMLPainter *painter, gint *asc, gint *dsc)
 	*asc = HTML_OBJECT (text)->ascent;
 	*dsc = HTML_OBJECT (text)->descent;
 
-	width += html_text_calc_part_width (text, slave->posStart, slave->posLen);
+	width += html_text_calc_part_width (text, painter, slave->posStart, slave->posLen);
 
 	return width;
 }

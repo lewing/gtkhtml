@@ -931,7 +931,7 @@ draw_spell_error (HTMLPainter *painter, gint x, gint y, const gchar *text, gint 
 		str = (PangoGlyphString *) gl->data;
 		pango_glyph_string_extents (str, pi->entries [ii].item->analysis.font, NULL, &log_rect);
 		c_text = g_utf8_offset_to_pointer (c_text, str->num_glyphs);
-		ii = shift_items (pi, start_byte_offset + (c_text - text), ii);
+		ii = html_text_pango_info_get_index (pi, start_byte_offset + (c_text - text), ii);
 	}
 
 	width = PANGO_PIXELS (log_rect.width);

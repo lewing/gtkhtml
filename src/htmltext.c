@@ -193,6 +193,8 @@ html_text_pango_info_new (gint n)
 	pi = g_new (HTMLTextPangoInfo, 1);
 	pi->n = n;
 	pi->entries = g_new0 (HTMLTextPangoInfoEntry, n);
+
+	return pi;
 }
 
 void
@@ -343,7 +345,7 @@ html_text_op_cut_helper (HTMLText *text, HTMLEngine *e, GList *from, GList *to, 
 		text->spell_errors = remove_spell_errors (text->spell_errors, begin, end - begin);
 		move_spell_errors (text->spell_errors, end, - (end - begin));
 		html_text_convert_nbsp (text, TRUE);
-		pi_destroy (text);
+		pango_info_destroy (text);
 	} else {
 		text->spell_errors = remove_spell_errors (text->spell_errors, 0, text->text_len);
 		html_object_move_cursor_before_remove (HTML_OBJECT (text), e);
@@ -414,8 +416,8 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, G
 	g_free (to_free);
 	html_text_convert_nbsp (t1, TRUE);
 	html_object_change_set (self, HTML_CHANGE_ALL_CALC);
-	pi_destroy (t1);
-	pi_destroy (t2);
+	pango_info_destroy (t1);
+	pango_info_destroy (t2);
 
 	/* html_text_request_word_width (t1, e->painter); */
 	/* printf ("merged '%s'\n", t1->text); */
@@ -484,7 +486,7 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	html_object_change_set (self, HTML_CHANGE_ALL_CALC);
 	html_object_change_set (dup,  HTML_CHANGE_ALL_CALC);
 
-	pi_destroy (HTML_TEXT (self));
+	pango_info_destroy (HTML_TEXT (self));
 
 	level--;
 	if (level)
@@ -620,12 +622,13 @@ word_size (gint cl, gint so, gint eo, GList **items, GList **glyphs, gint *width
 }
 
 static gint
-get_item_index (HTMLText *text, gint offset, gint *item_offset)
+get_item_index (HTMLText *text, HTMLPainter *painter, gint offset, gint *item_offset)
 {
+	HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 	gint idx = 0;
 
-	while (offset > text->pi->entries [idx].item->num_chars) {
-		offset -= text->pi->entries [idx].item->num_chars;
+	while (idx < pi->n && offset > pi->entries [idx].item->num_chars) {
+		offset -= pi->entries [idx].item->num_chars;
 		idx ++;
 	}
 
@@ -635,14 +638,14 @@ get_item_index (HTMLText *text, gint offset, gint *item_offset)
 }
 
 gint
-html_text_calc_part_width (HTMLText *text, gint offset, gint len)
+html_text_calc_part_width (HTMLText *text, HTMLPainter *painter, gint offset, gint len)
 {
 	gint idx, width = 0;
 
-	g_return_val_if_fail (offset < 0, 0);
+	g_return_val_if_fail (offset >= 0, 0);
 	g_return_val_if_fail (offset + len <= text->text_len, 0);
 
-	idx = get_item_index (text, offset, &offset);
+	idx = get_item_index (text, painter, offset, &offset);
 	while (len > 0) {
 		width += text->pi->entries [idx].widths [offset];
 		if (offset >= text->pi->entries [idx].item->num_chars - 1) {
@@ -665,7 +668,7 @@ calc_preferred_width (HTMLObject *self,
 
 	text = HTML_TEXT (self);
 
-	width = html_text_calc_part_width (text, 0, text->text_len);
+	width = html_text_calc_part_width (text, painter, 0, text->text_len);
 	if (html_clueflow_tabs (HTML_CLUEFLOW (self->parent), painter)) {
 		gint line_offset;
 		gint tabs;
@@ -913,7 +916,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 	HTMLObject *prev, *next, *obj;
 	guint i, w, mw;
 
-	pi_destroy (text);
+	pango_info_destroy (text);
 	html_text_get_pango_info (text, painter);
 	mw = 0;
 
@@ -1310,7 +1313,7 @@ destroy (HTMLObject *obj)
 	html_text_spell_errors_clear (text);
 	g_free (text->text);
 	g_free (text->face);
-	pi_destroy (text);
+	pango_info_destroy (text);
 
 	HTML_OBJECT_CLASS (parent_class)->destroy (obj);
 }
