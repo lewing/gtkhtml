@@ -1678,7 +1678,10 @@ write_flow_tag (HTMLClueFlow *self, HTMLEngineSaveState *state)
 		if (end) {
 			if (!html_engine_save_output_string (state, "</%s>\n", end))
 				return FALSE;
-		} else { 
+		} else if (html_clueflow_is_empty (self)) {
+			if (!html_engine_save_output_string (state, "<BR>\n"))
+				return FALSE;
+		} else {
 			if (!html_engine_save_output_string (state, "\n"))
 				return FALSE;
 		}
@@ -1688,8 +1691,8 @@ write_flow_tag (HTMLClueFlow *self, HTMLEngineSaveState *state)
 }
 
 static gboolean
-save2 (HTMLObject *s,
-       HTMLEngineSaveState *state)
+save (HTMLObject *s,
+      HTMLEngineSaveState *state)
 {
 	HTMLClueFlow *self = HTML_CLUEFLOW (s);
 	HTMLClueFlow *next = NULL;
@@ -2231,7 +2234,7 @@ html_clueflow_class_init (HTMLClueFlowClass *klass,
 	object_class->calc_preferred_width = calc_preferred_width;
 	object_class->draw = draw;
 	object_class->draw_background = draw_background;
-	object_class->save = save2;
+	object_class->save = save;
 	object_class->save_plain = save_plain;
 	object_class->check_point = check_point;
 	object_class->append_selection_string = append_selection_string;

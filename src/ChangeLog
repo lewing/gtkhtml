@@ -1,6 +1,8 @@
 2002-05-20  Larry Ewing  <lewing@ximian.com>
 
-	* htmlclueflow.c (get_level_indent): make the indent match the
+	* htmlclueflow.c (write_flow_tag): Fix handling for empty
+	paragraphs that where the type changes but there is no end tag.
+	(get_level_indent): make the indent match the
 	plain indent so that the wrap length is exact.
 	(plain_padding): rewrite this to be a little more sane and use the
 	new write_item_marker function.
