@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2001-12-20 09:58+0100\n"
-"PO-Revision-Date: 2001-12-20 10:19+0100\n"
+"POT-Creation-Date: 2001-12-30 20:41+0100\n"
+"PO-Revision-Date: 2001-12-30 20:42+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,9 +22,9 @@ msgid "<None>"
 msgstr "<Brak>"
 
 #: capplet/gnome-bindings-prop.c:1 capplet/main.c:1
-#: components/html-editor/cell.c:1 components/html-editor/image.c:1
-#: components/html-editor/rule.c:1 components/html-editor/table.c:1
-#: components/html-editor/table.c:1 components/html-editor/template.c:1
+#: components/html-editor/cell.c:1 components/html-editor/rule.c:1
+#: components/html-editor/table.c:1 components/html-editor/table.c:1
+#: components/html-editor/template.c:1
 msgid "Could not load glade file."
 msgstr "Nie mo¿na wczytaæ pliku glade."
 
@@ -187,32 +187,26 @@ msgid "GNOME HTML Editor Factory"
 msgstr "Generator edytora HTML-a dla GNOME"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "+0"
 msgstr "+0"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "+1"
 msgstr "+1"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "+2"
 msgstr "+2"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "+3"
 msgstr "+3"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "-1"
 msgstr "-1"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "-2"
 msgstr "-2"
 
@@ -340,7 +334,6 @@ msgstr "Nag³ówek _6"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 #: components/html-editor/editor-control-factory.c:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/menubar.c:1 components/html-editor/popup.c:1
 msgid "Image"
 msgstr "Obraz"
@@ -373,7 +366,8 @@ msgstr "Wyrównuje akapity do lewej"
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
 #: components/html-editor/body.c:1
 #: components/html-editor/editor-control-factory.c:1
-#: components/html-editor/menubar.c:1 components/html-editor/popup.c:1
+#: components/html-editor/menubar.c:1 components/html-editor/menubar.c:1
+#: components/html-editor/popup.c:1
 msgid "Link"
 msgstr "Odno¶nik"
 
@@ -525,7 +519,6 @@ msgid "Select the entire contents of the document"
 msgstr "Zaznacza ca³± tre¶æ dokumentu"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/text.c:1 components/html-editor/toolbar.c:1
 msgid "Strikeout"
 msgstr "Przekre¶lenie"
@@ -717,17 +710,14 @@ msgid "etc..."
 msgstr "itp..."
 
 #: components/html-editor/body.c:1 components/html-editor/body.c:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Background Image"
 msgstr "Obraz w tle"
 
 #: components/html-editor/body.c:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Enable"
 msgstr "Aktywny"
 
 #: components/html-editor/body.c:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Colors"
 msgstr "Kolory"
 
@@ -739,7 +729,6 @@ msgstr "Automatycznie"
 
 #: components/html-editor/body.c:1
 #: components/html-editor/editor-control-factory.c:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/menubar.c:1 components/html-editor/popup.c:1
 msgid "Text"
 msgstr "Tekst"
@@ -760,7 +749,6 @@ msgid "Paragraph"
 msgstr "Akapit"
 
 #: components/html-editor/editor-control-factory.c:1
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/popup.c:1
 msgid "Page"
 msgstr "Strona"
@@ -777,15 +765,10 @@ msgstr "Nie mo¿na zainicjowaæ Bonobo"
 msgid "************"
 msgstr "************"
 
+#. ADD_ITEM("Left",   GDK_F4);
+#. ADD_ITEM("Right",  GDK_F5);
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "***text***"
-msgstr "***tekst***"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "+4"
-msgstr "+4"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
+#: components/html-editor/image.c:1
 msgid "Alignment"
 msgstr "Wyrównanie"
 
@@ -798,19 +781,11 @@ msgid "Apply changes to:"
 msgstr "Zakres wprowadzanych zmian:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
-#: components/html-editor/text.c:1 components/html-editor/toolbar.c:1
-msgid "Bold"
-msgstr "Pogrubienie"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Border"
-msgstr "Krawêd¼"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Border:"
 msgstr "Krawêd¼:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
+#: components/html-editor/image.c:1
 msgid "Bottom"
 msgstr "Dó³"
 
@@ -823,10 +798,6 @@ msgstr "Komórka"
 #: components/html-editor/paragraph.c:1 components/html-editor/toolbar.c:1
 msgid "Center"
 msgstr "Wy¶rodkowanie"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Click will follow this URL"
-msgstr "Odno¶nik wy¶wietlany po klikniêciu"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Color:"
@@ -850,18 +821,6 @@ msgid "Don't wrap"
 msgstr "Bez zawijania"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Follow"
-msgstr "Proporcjonalnie"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Font size"
-msgstr "Rozmiar czcionki"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Foreground color"
-msgstr "Kolor tekstu"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Header"
 msgstr "Nag³ówek"
 
@@ -878,11 +837,6 @@ msgid "Horizontal:"
 msgstr "Poziome:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
-#: components/html-editor/text.c:1 components/html-editor/toolbar.c:1
-msgid "Italic"
-msgstr "Pochylenie"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
 #: components/html-editor/paragraph.c:1
 msgid "Left"
 msgstr "Do lewej"
@@ -892,28 +846,13 @@ msgid "Length:"
 msgstr "D³ugo¶æ:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Link insert"
-msgstr "Wstawienie odno¶nika"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Link properties"
-msgstr "W³a¶ciwo¶ci odno¶nika"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Location"
-msgstr "Po³o¿enie"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
+#: components/html-editor/image.c:1
 msgid "Middle"
 msgstr "¦rodek"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "None"
 msgstr "Brak"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Padding"
-msgstr "Wy¶ció³ka"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Padding:"
@@ -924,11 +863,13 @@ msgid "Percent"
 msgstr "Procenty"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
+#: components/html-editor/image.c:1 components/html-editor/image.c:1
 #, no-c-format
 msgid "Percent %"
 msgstr "Procenty"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
+#: components/html-editor/image.c:1 components/html-editor/image.c:1
 msgid "Pixels"
 msgstr "Piksele"
 
@@ -966,8 +907,9 @@ msgstr "Zasiêg"
 msgid "Shaded"
 msgstr "Cieniowana"
 
+#. size and spacing
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
-#: components/html-editor/text.c:1
+#: components/html-editor/image.c:1 components/html-editor/text.c:1
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -993,17 +935,9 @@ msgid "Table Insert"
 msgstr "Wstawienie tabeli"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "Thickness:"
-msgstr "Grubo¶æ:"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
+#: components/html-editor/image.c:1
 msgid "Top"
 msgstr "Góra"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-#: components/html-editor/text.c:1 components/html-editor/toolbar.c:1
-msgid "Underline"
-msgstr "Podkre¶lenie"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "Vertical:"
@@ -1021,70 +955,27 @@ msgstr "Zawijanie"
 msgid "Wrapping:"
 msgstr "Zawijanie:"
 
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "xxxxxxxxx"
-msgstr "xxxxxxxxx"
-
-#: components/html-editor/gtkhtml-editor-properties.glade.h:1
-msgid "xxxxxxxxxxxxxx"
-msgstr "xxxxxxxxxxxxxx"
-
-#: components/html-editor/image.c:1 components/html-editor/rule.c:1
-#: components/html-editor/table.c:1
-msgid "Plain"
-msgstr "Zwyk³y"
+#: components/html-editor/image.c:1
+msgid "Image selection"
+msgstr "Wybór obrazu"
 
 #: components/html-editor/image.c:1
-msgid ""
-"@link_begin@<img@width@@height@@align@ "
-"border=@border@@padh@@padv@@src@>@link_end@"
-msgstr ""
-"@link_begin@<img@width@@height@@align@ "
-"border=@border@@padh@@padv@@src@>@link_end@"
+msgid "Border"
+msgstr "Krawêd¼"
 
+#: components/html-editor/image.c:1 components/html-editor/image.c:1
 #: components/html-editor/image.c:1
-msgid "Frame"
-msgstr "Ramka"
+msgid "width"
+msgstr "szeroko¶æ"
 
+#. spacing
 #: components/html-editor/image.c:1
-msgid ""
-"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-"@src@@width@@height@align=top "
-"border=0></td></tr></table></td></tr></table></center>"
-msgstr ""
-"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-"@src@@width@@height@align=top "
-"border=0></td></tr></table></td></tr></table></center>"
+msgid "Padding"
+msgstr "Wy¶ció³ka"
 
-#: components/html-editor/image.c:1
-msgid "Caption"
-msgstr "Podpis"
-
-#: components/html-editor/image.c:1
-msgid ""
-"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-"@src@@width@@height@align=top border=0></td></tr><tr><td><b>[Place your "
-"comment here]</td></tr></table></td></tr></table></center>"
-msgstr ""
-"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
-"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
-"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
-"@src@@width@@height@align=top border=0></td></tr><tr><td><b>[Umie¶æ tutaj "
-"swój komentarz]</td></tr></table></td></tr></table></center>"
-
-#: components/html-editor/image.c:1
-msgid "The quick brown fox jumped over the lazy dog. "
-msgstr "The quick brown fox jumped over the lazy dog."
-
-#: components/html-editor/image.c:1
-msgid "The quick brown fox jumped over the lazy dog."
-msgstr "The quick brown fox jumped over the lazy dog."
+#: components/html-editor/image.c:1 components/html-editor/image.c:1
+msgid "height"
+msgstr "wysoko¶æ"
 
 #: components/html-editor/link.c:1
 msgid "Clear"
@@ -1270,6 +1161,10 @@ msgstr "Rozró¿nianie ma³ych i wielkich liter"
 msgid "with"
 msgstr "na"
 
+#: components/html-editor/rule.c:1 components/html-editor/table.c:1
+msgid "Plain"
+msgstr "Zwyk³y"
+
 #: components/html-editor/rule.c:1
 msgid "Blue 3D"
 msgstr "B³êkitny 3D"
@@ -1289,10 +1184,6 @@ msgstr "Wyszukiwanie wed³ug wyra¿enia regularnego"
 #: components/html-editor/spell.c:1
 msgid "No misspelled word found"
 msgstr "Nie odnaleziono niepoprawnie zapisanych s³ów"
-
-#: components/html-editor/spell.c:1
-msgid "_Languages"
-msgstr "_Jêzyki"
 
 #: components/html-editor/table.c:1
 msgid "Flat gray"
@@ -1357,6 +1248,18 @@ msgstr "Otwórz plik..."
 msgid "Save file as..."
 msgstr "Zapisz plik jako..."
 
+#: components/html-editor/text.c:1 components/html-editor/toolbar.c:1
+msgid "Bold"
+msgstr "Pogrubienie"
+
+#: components/html-editor/text.c:1 components/html-editor/toolbar.c:1
+msgid "Italic"
+msgstr "Pochylenie"
+
+#: components/html-editor/text.c:1 components/html-editor/toolbar.c:1
+msgid "Underline"
+msgstr "Podkre¶lenie"
+
 #: components/html-editor/toolbar.c:1
 msgid "Roman List"
 msgstr "Lista numerowana liczbami rzymskimi"
@@ -1412,14 +1315,6 @@ msgstr "Próbka"
 #: src/htmlgdkpainter.c:1
 msgid "Can't load fixed font."
 msgstr "Nie mo¿na wczytaæ czcionki fixed."
-
-#: src/htmlengine-print.c:1
-msgid "Cannot allocate default font for printing\n"
-msgstr "Nie mo¿na uzyskaæ domy¶lnej czcionki do drukowania\n"
-
-#: src/htmlprinter.c:1
-msgid "US-Letter"
-msgstr "Listowy-US"
 
 #: src/testgtkhtml.c:1
 msgid "Print pre_view"
