@@ -184,7 +184,7 @@ libgtkhtml_3_0_la_SOURCES =			\
 	$(NULL)
 
 libgtkhtml_3_0_la_LDFLAGS = -version-info $(GTKHTML_CURRENT):$(GTKHTML_REVISION):$(GTKHTML_AGE)
-libgtkhtml_3_0_la_LIBADD = $(GTKHTML_LIBS)
+libgtkhtml_3_0_la_LIBADD = $(GTKHTML_LIBS) ../a11y/libgtkhtml-a11y-3.0.la
 
 dist-hook:
 	mkdir $(distdir)/tests
