@@ -78,7 +78,7 @@ spell_check_word (GtkHTML *html, const gchar *word, gpointer data)
 	/* printf ("check word: %s\n", word); */
 	CORBA_exception_init (&ev);
 	rv = GNOME_Spell_Dictionary_checkWord (cd->dict, word, &ev);
-	if (ev._major != CORBA_NO_EXCEPTION)
+	if (ev._major == CORBA_SYSTEM_EXCEPTION)
 		rv = TRUE;
 	CORBA_exception_free (&ev);
 
