@@ -1,3 +1,29 @@
+2004-07-30  Christophe Merlet  <redfox@redfoxcenter.org>
+
+	* fr.po: Updated French translation from
+	Audrey Simons <asimons@redhat.com>.
+
+2004-07-29  Laurent Dhima  <laurenti@alblinux.net>
+
+	* sq.po: Updated Albanian translation.
+
+2004-07-28  Laurent Dhima  <laurenti@alblinux.net>
+
+	* sq.po: Updated Albanian translation.
+
+2004-07-26  Changwoo Ryu  <cwryu@debian.org>
+
+	* ko.po: Updated Korean translation.
+
+2004-07-16  Alexander Shopov  <ash@contact.bg>
+
+        * bg.po: Fixed small omissions
+
+2004-07-16  Alexander Shopov  <ash@contact.bg>
+
+	* bg.po: Added Bulgarian translation by
+	Vladimir "Kaladan" Petkov <vpetkov@i-space.org>
+
 2004-07-10  Tomasz Kłoczko <kloczek@pld.org.pl>
 
 	* gl.po it.po ms.po: converted to UTF-8.

@@ -1472,6 +1472,7 @@ save_open_attrs (HTMLEngineSaveState *state, GSList *attrs)
 
 	for (; attrs; attrs = attrs->next) {
 		PangoAttribute *attr = (PangoAttribute *) attrs->data;
+		HTMLEngine *e = state->engine;
 		gchar *tag = NULL;
 		gboolean free_tag = FALSE;
 
@@ -1497,9 +1498,15 @@ save_open_attrs (HTMLEngineSaveState *state, GSList *attrs)
 				}
 			}
 			break;
-		case PANGO_ATTR_FAMILY:
-			/* TODO */
-			break;
+		case PANGO_ATTR_FAMILY: {
+			PangoAttrString *family_attr = (PangoAttrString *) attr;
+
+			if (!strcasecmp (e->painter->font_manager.fixed.face
+					? e->painter->font_manager.fixed.face : "Monospace",
+					family_attr->value))
+				tag = "<TT>";
+		}
+		break;
 		case PANGO_ATTR_FOREGROUND: {
 			PangoAttrColor *color = (PangoAttrColor *) attr;
 			tag = g_strdup_printf ("<FONT COLOR=\"#%02x%02x%02x\">",
@@ -1529,6 +1536,7 @@ save_close_attrs (HTMLEngineSaveState *state, GSList *attrs)
 {
 	for (; attrs; attrs = attrs->next) {
 		PangoAttribute *attr = (PangoAttribute *) attrs->data;
+		HTMLEngine *e = state->engine;
 		gchar *tag = NULL;
 
 		switch (attr->klass->type) {
@@ -1554,8 +1562,15 @@ save_close_attrs (HTMLEngineSaveState *state, GSList *attrs)
 		case PANGO_ATTR_FOREGROUND:
 			tag = "</FONT>";
 			break;
-		case PANGO_ATTR_FAMILY:
-			break;
+		case PANGO_ATTR_FAMILY: {
+			PangoAttrString *family_attr = (PangoAttrString *) attr;
+
+			if (!strcasecmp (e->painter->font_manager.fixed.face
+					? e->painter->font_manager.fixed.face : "Monospace",
+					family_attr->value))
+				tag = "</TT>";
+		}
+		break;
 		default:
 			break;
 		}
