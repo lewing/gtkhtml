@@ -64,6 +64,20 @@ finalize (GObject *object)
 	(* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
+static gint text_width (PangoContext *pc, PangoFontDescription *desc, gchar *text, gint bytes)
+{
+	PangoLayout *layout;
+	gint width;
+
+	layout = pango_layout_new (pc);
+	pango_layout_set_font_description (layout, desc);
+	pango_layout_set_text (layout, text, bytes);
+	pango_layout_get_size (layout, &width, NULL);
+	g_object_unref (layout);
+
+	return width / PANGO_SCALE;
+}
+
 static HTMLFont *
 alloc_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, GtkHTMLFontStyle style)
 {
@@ -75,7 +89,10 @@ alloc_font (HTMLPainter *painter, gchar *face, gdouble size, gboolean points, Gt
 	pango_font_description_set_style (desc, style & GTK_HTML_FONT_STYLE_ITALIC ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
 	pango_font_description_set_weight (desc, style & GTK_HTML_FONT_STYLE_BOLD ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
 
-	return html_font_new (desc, 10, 10, 10); /* FIX2 */
+	return html_font_new (desc,
+			      text_width (HTML_GDK_PAINTER (painter)->pc, desc, " ", 1),
+			      text_width (HTML_GDK_PAINTER (painter)->pc, desc, "\xc2\xa0", 2),
+			      text_width (HTML_GDK_PAINTER (painter)->pc, desc, "\t", 1));
 }
 
 static void

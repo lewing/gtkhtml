@@ -474,7 +474,8 @@ vertical_scroll_cb (GtkAdjustment *adjustment, gpointer data)
 {
 	GtkHTML *html = GTK_HTML (data);
 
-	html->engine->y_offset = (gint)adjustment->value;
+	html->engine->y_offset = (gint) adjustment->value;
+	printf ("y_offset: %d\n", html->engine->y_offset);
 	scroll_update_mouse (GTK_WIDGET (data));
 }
 
@@ -483,7 +484,7 @@ horizontal_scroll_cb (GtkAdjustment *adjustment, gpointer data)
 {
 	GtkHTML *html = GTK_HTML (data);
 		
-	html->engine->x_offset = (gint)adjustment->value;
+	html->engine->x_offset = (gint) adjustment->value;
 	scroll_update_mouse (GTK_WIDGET (data));
 }
 
@@ -2898,7 +2899,7 @@ gtk_html_private_calc_scrollbars (GtkHTML *html, gboolean *changed_x, gboolean *
 
 	if ((width != layout->width) || (height != layout->height)) {
 		gtk_signal_emit (GTK_OBJECT (html), signals [SIZE_CHANGED]);
-		/* printf ("set size %d,%d (%d,%d)\n", width, height, GTK_LAYOUT (html)->width, GTK_LAYOUT (html)->height); */
+		printf ("set size %d,%d (%d,%d)\n", width, height, GTK_LAYOUT (html)->width, GTK_LAYOUT (html)->height);
 		gtk_layout_set_size (layout, width, height);
 	}
 
