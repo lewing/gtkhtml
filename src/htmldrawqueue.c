@@ -235,8 +235,8 @@ draw_link_focus (HTMLObject *o, HTMLEngine *e, gint x, gint y)
 	gdk_gc_set_line_attributes (p->gc, 1, GDK_LINE_ON_OFF_DASH, values.cap_style, values.join_style);
 	gdk_gc_set_dashes (p->gc, 2, dash, 2);
 	gdk_draw_line (p->pixmap, p->gc, x, y, x + o->width, y);
-	gdk_draw_line (p->pixmap, p->gc, x, y, x, y + o->ascent + o->descent);
-	gdk_draw_line (p->pixmap, p->gc, x + o->width - 1, y, x + o->width - 1, y + o->ascent + o->descent);
+	gdk_draw_line (p->pixmap, p->gc, x, y, x, y + o->ascent + 1);
+	gdk_draw_line (p->pixmap, p->gc, x + o->width - 1, y, x + o->width - 1, y + o->ascent + 1);
 	gdk_gc_set_line_attributes (p->gc, 1, values.line_style, values.cap_style, values.join_style);
 }
 
