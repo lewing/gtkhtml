@@ -217,19 +217,18 @@ file_selection_destroy_cb (GtkWidget *widget,
 }
 
 static void
-view_source_cb (GtkWidget *widget,
-		gpointer data)
+view_source_dialog (BonoboWindow *app, char *type)
 {
+	BonoboWidget *control;
 	GtkWidget *window;
 	GtkWidget *view;
-	BonoboWidget *control;
-
-	control = BONOBO_WIDGET (bonobo_window_get_contents (BONOBO_WINDOW (data)));
+	
+	control = BONOBO_WIDGET (bonobo_window_get_contents (app));
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	view = html_source_view_new ();
 	gtk_container_add (GTK_CONTAINER (window), view);
-	html_source_view_widget_set (HTML_SOURCE_VIEW (view), control);
+	html_source_view_set_source (HTML_SOURCE_VIEW (view), control, type);
 	
 	gtk_widget_show_all (window);
 
@@ -237,6 +236,21 @@ view_source_cb (GtkWidget *widget,
 				   "destroy", GTK_SIGNAL_FUNC (gtk_object_destroy),
 				   GTK_OBJECT (window));
 }    
+
+static void
+view_html_source_cb (GtkWidget *widget,
+		gpointer data)
+{
+	view_source_dialog (data, "text/html");
+}
+
+static void
+view_plain_source_cb (GtkWidget *widget,
+		gpointer data)
+{
+	view_source_dialog (data, "text/plain");
+}
+
 	
 static void
 file_selection_ok_cb (GtkWidget *widget,
@@ -387,7 +401,8 @@ static BonoboUIVerb verbs [] = {
 	BONOBO_UI_UNSAFE_VERB ("OpenStream", open_through_persist_stream_cb),
 	BONOBO_UI_UNSAFE_VERB ("SaveStream", save_through_persist_stream_cb),
 	BONOBO_UI_UNSAFE_VERB ("SavePlainStream", save_through_plain_persist_stream_cb),
-	BONOBO_UI_UNSAFE_VERB ("ViewSource", view_source_cb),
+	BONOBO_UI_UNSAFE_VERB ("ViewHTMLSource", view_html_source_cb),
+	BONOBO_UI_UNSAFE_VERB ("ViewPlainSource", view_plain_source_cb),
 	BONOBO_UI_UNSAFE_VERB ("FileExit", exit_cb),
 
 	BONOBO_UI_VERB_END
@@ -430,7 +445,8 @@ static char ui [] =
 "			<menuitem name=\"SavePlainStream\" verb=\"\" _label=\"Save _plain(PersistStream)\" _tip=\"Save using the PersistStream interface\""
 "			pixtype=\"stock\" pixname=\"Save\"/>"
 "			<separator/>"
-"                       <menuitem name=\"ViewSource\" verb=\"\" _label=\"View Source\" _tip=\"View the source of the current document\"/>"
+"                       <menuitem name=\"ViewHTMLSource\" verb=\"\" _label=\"View HTML Source\" _tip=\"View the html source of the current document\"/>"
+"                       <menuitem name=\"ViewPlainSource\" verb=\"\" _label=\"View PLAIN Source\" _tip=\"View the plain text source of the current document\"/>"
 "			<separator/>"
 "			<menuitem name=\"FileExit\" verb=\"\" _label=\"E_xit\"/>"
 "		</submenu>"

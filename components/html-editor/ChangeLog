@@ -1,3 +1,16 @@
+2002-05-15  Larry Ewing  <lewing@ximian.com>
+
+	* htmlsourceview.c: rename methods and add content type parameter
+	to set_source.
+	
+	* htmlsourceview.h: rename prototypes.
+
+	* test-html-editor-control.c (view_html_source_cb): specify html
+	output.
+	(view_plain_source_cb): specify plain output.
+	(view_source_dialog): pass the content type along to
+	html_view_source_set_source.
+
 2002-05-13  Larry Ewing  <lewing@ximian.com>
 
 	* test-html-editor-control.c (view_source_cb): new verb to start

@@ -41,6 +41,7 @@
 struct _HTMLSourceViewPrivate {
 	GtkHTML   *html;
 	CORBA_Object pstream;
+	char    *content_type;
 	gint     current_interval;
 	gint     timer_id;
 };
@@ -73,7 +74,7 @@ html_source_view_load (HTMLSourceView *view)
 
 	pstream = view->priv->pstream;
 	smem = bonobo_stream_mem_create (NULL, 1, FALSE, TRUE);
-	Bonobo_PersistStream_save (pstream, BONOBO_OBJREF (smem), "text/html", &ev);
+	Bonobo_PersistStream_save (pstream, BONOBO_OBJREF (smem), view->priv->content_type, &ev);
 	/* Terminate the buffer for e_text_to_html */
 	bonobo_stream_client_write (BONOBO_OBJREF (smem), "", 1, &ev);
 
@@ -108,7 +109,7 @@ html_source_view_timeout (gpointer *data)
 }
 
 void
-html_source_view_timeout_set (HTMLSourceView *view, guint timeout)
+html_source_view_set_timeout (HTMLSourceView *view, guint timeout)
 {
 	if (view->priv->timer_id)
 		gtk_timeout_remove (view->priv->timer_id);
@@ -118,7 +119,7 @@ html_source_view_timeout_set (HTMLSourceView *view, guint timeout)
 }
 
 void
-html_source_view_widget_set (HTMLSourceView *view, BonoboWidget *control)
+html_source_view_set_source (HTMLSourceView *view, BonoboWidget *control, char *content_type)
 {
 	BonoboObjectClient *object_client;
 
@@ -126,13 +127,16 @@ html_source_view_widget_set (HTMLSourceView *view, BonoboWidget *control)
 
 	object_client = bonobo_widget_get_server (control);
 	g_return_if_fail (object_client != NULL);
+	
+	g_free (view->priv->content_type);
+	view->priv->content_type = g_strdup (content_type);
 
 	view->priv->pstream = bonobo_object_client_query_interface (object_client, "IDL:Bonobo/PersistStream:1.0", NULL);
 
 	if (view->priv->pstream == CORBA_OBJECT_NIL) {
 		g_warning ("Couldn't find persist stream interface");
 	} else {
-		html_source_view_timeout_set (view, view->priv->current_interval);
+		html_source_view_set_timeout (view, view->priv->current_interval);
 	}
 }
 
@@ -153,6 +157,8 @@ html_source_view_init (HTMLSourceView *view)
 	GtkWidget *scroll;
 
 	view->priv = g_new0 (HTMLSourceViewPrivate, 1);
+
+	view->priv->content_type = NULL;
 	view->priv->html = GTK_HTML (html = gtk_html_new ());
 	view->priv->current_interval = 500;
 

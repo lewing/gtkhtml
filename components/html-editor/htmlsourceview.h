@@ -50,8 +50,8 @@ struct _HTMLSourceViewClass {
 GtkType        html_source_view_get_type        (void);
 GtkWidget *    html_source_view_new             (void);
 
-void           html_source_view_timeout_set     (HTMLSourceView *view, guint timeout);
-void           html_source_view_widget_set      (HTMLSourceView *view, BonoboWidget *control);
+void           html_source_view_set_timeout     (HTMLSourceView *view, guint timeout);
+void           html_source_view_set_source      (HTMLSourceView *view, BonoboWidget *control, char *content_type);
 
 #endif /* __HTML_SOURCE_VUEW__ */
 
