@@ -635,37 +635,65 @@ destroy (GtkObject *object)
 	html = GTK_HTML (object);
 
 	g_free (html->pointer_url);
-	gdk_cursor_destroy (html->hand_cursor);
-	gdk_cursor_destroy (html->arrow_cursor);
-	gdk_cursor_destroy (html->ibeam_cursor);
+	html->pointer_url = NULL;
+
+	if (html->hand_cursor) {
+		gdk_cursor_unref (html->hand_cursor);
+		html->hand_cursor = NULL;
+	}
+
+	if (html->arrow_cursor) {
+		gdk_cursor_unref (html->arrow_cursor);
+		html->arrow_cursor = NULL;
+	}
+
+	if (html->ibeam_cursor) {
+		gdk_cursor_unref (html->ibeam_cursor);
+		html->ibeam_cursor = NULL;
+	}
 
 	connect_adjustments (html, NULL, NULL);
 
-	if (html->priv->idle_handler_id != 0)
+	if (html->priv->idle_handler_id != 0) {
 		gtk_idle_remove (html->priv->idle_handler_id);
+		html->priv->idle_handler_id = 0;
+	}
 
-	if (html->priv->scroll_timeout_id != 0)
+	if (html->priv->scroll_timeout_id != 0) {
 		gtk_timeout_remove (html->priv->scroll_timeout_id);
-	
-	if (html->priv->set_font_id)
+		html->priv->scroll_timeout_id = 0;
+	}
+
+	if (html->priv->set_font_id) {
 		g_source_remove (html->priv->set_font_id);
+		html->priv->set_font_id = 0;
+	}
 
-	if (html->priv->notify_id)
+	if (html->priv->notify_id) {
 		gconf_client_notify_remove (gconf_client, html->priv->notify_id);
-	if (html->priv->notify_spell_id)
+		html->priv->notify_id = 0;
+	}
+
+	if (html->priv->notify_spell_id) {
 		gconf_client_notify_remove (gconf_client, html->priv->notify_spell_id);
+		html->priv->notify_spell_id = 0;
+	}
 
-	g_free (html->priv->content_type);
-	g_free (html->priv);
-	html->priv = NULL;
+	if (html->priv) {
+		g_free (html->priv->content_type);
+		g_free (html->priv);
+		html->priv = NULL;
+	}
 
-	gtk_object_unref (GTK_OBJECT (html->engine));
+	if (html->engine) {
+		gtk_object_unref (GTK_OBJECT (html->engine));
+		html->engine = NULL;
+	}
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy != NULL)
 		(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
-
 /* GtkWidget methods.  */
 static void
 style_set (GtkWidget *widget,
