@@ -1,3 +1,11 @@
+2003-02-07  Larry Ewing  <lewing@ximian.com>
+
+	* configure.in: Apply reworked patch form Akira TAGOH
+	<tagoh@redhat.com> to set GNOME_EXPLICIT_TRANSLATION_DOMAIN to
+	GTKHTML_RELEASE_STRING.
+
+	* acconfig.h: add GNOME_EXPLICIT_TRANSLATION_DOMAIN
+
 2003-02-04  Larry Ewing  <lewing@ximian.com>
 
 	* configure.in (GTKHTML_RELEASE_STRING): bump for snapshots.
