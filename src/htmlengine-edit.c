@@ -179,7 +179,7 @@ html_engine_cut_and_paste_end (HTMLEngine *e)
 	}
 	html_undo_level_end (e->undo);
 	html_engine_clipboard_pop (e);
-	//html_engine_selection_pop (e);
+	html_engine_selection_pop (e);
 	html_engine_show_cursor (e);
 }
 

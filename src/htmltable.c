@@ -731,11 +731,22 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **
 		e->cursor->offset = html_object_get_length (HTML_OBJECT (e->cursor->object));
 		e->cursor->position -= (t1->totalRows - t1_tail->row - 1)*t1->totalCols
 			+ (t1->totalCols - t1_tail->col);
+		printf ("1st dec: %d t1_tail %d,%d\n", (t1->totalRows - t1_tail->row - 1)*t1->totalCols
+			+ (t1->totalCols - t1_tail->col), t1_tail->row, t1_tail->col);
 	}
 
-	if (t2_head && cursor_in_t2) {
-		e->cursor->position -= t2_head->row * t1->totalCols + t2_head->col + 1;
+	if (cursor_in_t2 && cursor && cursor_cell_2) {
+		e->cursor->position -= cursor_cell_2->row * t1->totalCols + cursor_cell_2->col + 1;
+		printf ("2nd dec: %d cell_2  %d,%d\n", cursor_cell_2->row * t1->totalCols + cursor_cell_2->col + 1,
+			cursor_cell_2->row, cursor_cell_2->col);
 	}
+	/*if (t2_head && cursor_in_t2) {
+	   e->cursor->position -= t2_head->row * t1->totalCols + t2_head->col + 1;
+		printf ("2nd dec: %d t2_head %d,%d\n", t2_head->row * t1->totalCols + t2_head->col + 1,
+			t2_head->row, t2_head->col);
+		if (cursor && cursor_cell_2 && t1_tail && cursor_cell_2 != t1_tail)
+			e->cursor->position ++;
+			} */
 	/* cursor_cell_1 = HTML_TABLE_CELL (object_get_parent_cell (e->cursor->object, HTML_OBJECT (t2)));
 	if (cursor)
 		cursor_cell_2 = HTML_TABLE_CELL (object_get_parent_cell (cursor->object, HTML_OBJECT (t2)));

@@ -388,7 +388,7 @@ move_cursor_before_delete (HTMLEngine *e)
 				e->cursor->object = obj;
 				e->cursor->offset = off;
 			}
-		} else {
+		} /* else {
 			HTMLObject *obj;
 			gint off;
 
@@ -397,7 +397,7 @@ move_cursor_before_delete (HTMLEngine *e)
 				e->cursor->object = obj;
 				e->cursor->offset = 0;
 			}
-		}
+			} */
 	}
 }
 
@@ -562,7 +562,7 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check, HTM
 	HTMLCursor *orig;
 	GList *left = NULL, *right = NULL;
 	GList *first = NULL, *last = NULL;
-	gint level;
+	gint level, cursor_level;
 
 	html_engine_freeze (e);
 
@@ -590,10 +590,19 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check, HTM
 		level++;
 		cur = cur->parent;
 	}
+	cursor_level = 0;
+	cur   = e->cursor->object;
+	while (cur) {
+		cursor_level++;
+		cur = cur->parent;
+	}
 	orig = html_cursor_dup (e->cursor);
 
+	while (cursor_level < level)
+		level -= 3;
+
 	html_object_change_set_down (obj, HTML_CHANGE_ALL);
-	split_and_add_empty_texts (e, MIN (4, level), &left, &right);
+	split_and_add_empty_texts (e, level, &left, &right);
 	first = html_object_heads_list (obj);
 	last  = html_object_tails_list (obj);
 	set_cursor_at_end_of_object (e, obj, len);
@@ -613,6 +622,7 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check, HTM
 
 	//e->cursor->position += len;
 
+	printf ("position before merge %d\n", e->cursor->position);
 	remove_empty_and_merge (e, TRUE, last, right, orig);
 	remove_empty_and_merge (e, TRUE, left, first, orig);
 
