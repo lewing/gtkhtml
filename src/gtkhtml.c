@@ -53,7 +53,6 @@
 #include "htmliframe.h"
 #include "htmlimage.h"
 #include "htmlinterval.h"
-#include "htmllinktext.h"
 #include "htmlmarshal.h"
 #include "htmlplainpainter.h"
 #include "htmlsettings.h"
@@ -1567,7 +1566,7 @@ button_press_event (GtkWidget *widget,
 				orig_e = GTK_HTML (orig_widget)->engine;
 				obj = html_engine_get_object_at (engine, x, y, &offset, FALSE);
 				if (obj && ((HTML_IS_IMAGE (obj) && HTML_IMAGE (obj)->url && *HTML_IMAGE (obj)->url)
-					    || HTML_IS_LINK_TEXT (obj)))
+					    || (HTML_IS_TEXT (obj) && html_object_get_complete_url (obj, offset))))
 					html_engine_set_focus_object (orig_e, obj, offset);
 				else {
 					html_engine_set_focus_object (orig_e, NULL, 0);
@@ -2123,7 +2122,7 @@ focus (GtkWidget *w, GtkDirectionType direction)
 	}
 
 	if (html_engine_focus (e, direction) && e->focus_object) {
-		HTMLObject *cur, *obj = html_engine_get_focus_object (e);
+		HTMLObject *cur, *obj = html_engine_get_focus_object (e, NULL);
 		gint x1, y1, x2, y2, xo, yo;
 
 		xo = e->x_offset;

@@ -44,7 +44,6 @@
 #include "htmlengine-edit-selection-updater.h"
 #include "htmlimage.h"
 #include "htmlinterval.h"
-#include "htmllinktext.h"
 #include "htmlobject.h"
 #include "htmlplainpainter.h"
 #include "htmltable.h"
@@ -1144,7 +1143,7 @@ insert_empty_paragraph (HTMLEngine *e, HTMLUndoDirection dir, gboolean add_undo)
 	remove_empty_and_merge (e, FALSE, left, right, orig);
 
 	/* replace empty link in empty flow by text with the same style */
-	if (HTML_IS_LINK_TEXT (e->cursor->object) && html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
+	/* FIXME-link if (HTML_IS_LINK_TEXT (e->cursor->object) && html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {
 		HTMLObject *flow = e->cursor->object->parent;
 		HTMLObject *new_text;
 
@@ -1159,7 +1158,7 @@ insert_empty_paragraph (HTMLEngine *e, HTMLUndoDirection dir, gboolean add_undo)
 			orig->object = e->cursor->object;
 		}
 		html_clue_append (HTML_CLUE (flow), e->cursor->object);
-	}
+		} */
 
 	html_cursor_forward (e->cursor, e);
 

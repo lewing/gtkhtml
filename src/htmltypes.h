@@ -87,8 +87,6 @@ typedef struct _HTMLImageInput HTMLImageInput;
 typedef struct _HTMLImageInputClass HTMLImageInputClass;
 typedef struct _HTMLImagePointer HTMLImagePointer;
 typedef struct _HTMLInterval HTMLInterval;
-typedef struct _HTMLLinkText HTMLLinkText;
-typedef struct _HTMLLinkTextClass HTMLLinkTextClass;
 typedef struct _HTMLList HTMLList;
 typedef struct _HTMLMap HTMLMap;
 typedef struct _HTMLMapClass HTMLMapClass;

@@ -76,7 +76,6 @@
 #include "htmlcluev.h"
 #include "htmlcluealigned.h"
 #include "htmlimage.h"
-#include "htmllinktext.h"
 #include "htmllist.h"
 #include "htmltable.h"
 #include "htmltablecell.h"
@@ -845,32 +844,6 @@ append_element (HTMLEngine *e,
 		new_flow (e, clue, obj, HTML_CLEAR_NONE);
 	else
 		html_clue_append (HTML_CLUE (e->flow), obj);
-}
-
-
-static gboolean
-check_prev (const HTMLObject *p, HTMLType type, GtkHTMLFontStyle font_style, HTMLColor *color, gchar *face, gchar *url)
-{
-	if (p == NULL)
-		return FALSE;
-
-	if (HTML_OBJECT_TYPE (p) != type)
-		return FALSE;
-
-	if (HTML_TEXT (p)->font_style != font_style)
-		return FALSE;
-
-	if (! html_color_equal (HTML_TEXT (p)->color, color))
-		return FALSE;
-
-	if ((face && !HTML_TEXT (p)->face) || (!face && HTML_TEXT (p)->face)
-	    || (face && HTML_TEXT (p)->face && strcasecmp (face, HTML_TEXT (p)->face)))
-		return FALSE;
-
-	if (url && HTML_IS_LINK_TEXT (p))
-		return (strcasecmp (HTML_LINK_TEXT (p)->url, url) == 0);
-
-	return TRUE;
 }
 
 static void
@@ -5926,11 +5899,11 @@ html_engine_replace_spell_word_with (HTMLEngine *e, const gchar *word)
 	case HTML_TYPE_TEXT:
 		replace = text_new (e, word, orig->font_style, orig->color);
 		break;
-	case HTML_TYPE_LINKTEXT:
+		/* FIXME-link case HTML_TYPE_LINKTEXT:
 		replace = html_link_text_new (word, orig->font_style, orig->color,
 					      HTML_LINK_TEXT (orig)->url,
 					      HTML_LINK_TEXT (orig)->target);
-		break;
+					      break; */
 	default:
 		g_assert_not_reached ();
 	}
@@ -6200,9 +6173,11 @@ html_engine_get_language (HTMLEngine *e)
 }
 
 static void
-draw_link_text (HTMLLinkText *lt, HTMLEngine *e)
+draw_link_text (HTMLText *lt, HTMLEngine *e, gint offset)
 {
 	HTMLObject *cur = HTML_OBJECT (lt)->next;
+
+	/* FIXME-link, draw only link on offset */
 
 	/* printf ("draw link text\n"); */
 	while (cur && HTML_IS_TEXT_SLAVE (cur)) {
@@ -6213,13 +6188,16 @@ draw_link_text (HTMLLinkText *lt, HTMLEngine *e)
 }
 
 HTMLObject *
-html_engine_get_focus_object (HTMLEngine *e)
+html_engine_get_focus_object (HTMLEngine *e, gint *offset)
 {
 	HTMLObject *o = e->focus_object;
 
 	while (html_object_is_frame (o)) {
 		o = html_object_get_engine (o, e)->focus_object;
 	}
+
+	if (offset)
+		*offset = html_object_get_engine (o, e)->focus_object_offset;
 
 	return o;
 }
@@ -6232,7 +6210,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 		HTMLObject *focus_object;
 		gint offset;
 
-		focus_object = html_engine_get_focus_object (e);
+		focus_object = html_engine_get_focus_object (e, NULL);
 		if (focus_object && html_object_is_embedded (focus_object)
 		    && HTML_EMBEDDED (focus_object)->widget
 		    && gtk_widget_child_focus (HTML_EMBEDDED (focus_object)->widget, dir))
@@ -6249,7 +6227,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 
 		while (cur) {
 			/* printf ("try child %p\n", cur); */
-			if (HTML_IS_LINK_TEXT (cur)
+			if ((HTML_IS_TEXT (cur) && html_object_get_complete_url (cur, offset))
 			    || (HTML_IS_IMAGE (cur) && HTML_IMAGE (cur)->url && *HTML_IMAGE (cur)->url)) {
 				html_engine_set_focus_object (e, cur, offset);
 
@@ -6281,11 +6259,11 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 }
 
 static void
-draw_focus_object (HTMLEngine *e, HTMLObject *o)
+draw_focus_object (HTMLEngine *e, HTMLObject *o, gint offset)
 {
 	e = html_object_engine (o, e);
-	if (HTML_IS_LINK_TEXT (o))
-		draw_link_text (HTML_LINK_TEXT (o), e);
+	if (HTML_IS_TEXT (o) && html_object_get_url (o, offset))
+		draw_link_text (HTML_TEXT (o), e, offset);
 	else if (HTML_IS_IMAGE (o))
 		html_engine_queue_draw (e, o);
 }
@@ -6293,7 +6271,9 @@ draw_focus_object (HTMLEngine *e, HTMLObject *o)
 void
 html_engine_draw_focus_object (HTMLEngine *e)
 {
-	draw_focus_object (e, html_engine_get_focus_object (e));
+	gint offset;
+
+	draw_focus_object (e, html_engine_get_focus_object (e, &offset), offset);
 }
 
 static void
@@ -6303,7 +6283,7 @@ reset_focus_object_forall (HTMLObject *o, HTMLEngine *e)
 		/* printf ("reset focus object\n"); */
 		if (!html_object_is_frame (e->focus_object)) {
 			e->focus_object->draw_focused = FALSE;
-			draw_focus_object (e, e->focus_object);
+			draw_focus_object (e, e->focus_object, e->focus_object_offset);
 		}
 		e->focus_object = NULL;
 		html_engine_flush_draw_queue (e);
@@ -6353,7 +6333,7 @@ html_engine_set_focus_object (HTMLEngine *e, HTMLObject *o, gint offset)
 
 		if (!html_object_is_frame (e->focus_object)) {
 			o->draw_focused = TRUE;
-			draw_focus_object (e, o);
+			draw_focus_object (e, o, offset);
 			html_engine_flush_draw_queue (e);
 		}
 		set_frame_parents_focus_object (e);
@@ -6443,7 +6423,7 @@ html_engine_selection_contains_object_type (HTMLEngine *e, HTMLType obj_type)
 static void
 check_link_in_selection (HTMLObject *o, HTMLEngine *e, gboolean *has_link)
 {
-	if (HTML_IS_LINK_TEXT (o) ||
+	if ((HTML_IS_TEXT (o) && HTML_TEXT (o)->links) ||
 	    (HTML_IS_IMAGE (o) && (HTML_IMAGE (o)->url || HTML_IMAGE (o)->target)))
 		*has_link = TRUE;
 }

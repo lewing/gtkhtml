@@ -41,7 +41,6 @@
 #include "htmlengine-edit-cut-and-paste.h"
 #include "htmlengine-save.h"
 #include "htmlentity.h"
-#include "htmllinktext.h"
 #include "htmlsettings.h"
 #include "htmltextslave.h"
 #include "htmlundo.h"
@@ -102,10 +101,12 @@ get_tags (const HTMLText *text,
 		nt = HTML_TEXT (next);
 
 	/* font tag */
-	std_color = (HTML_IS_TEXT (text) && html_color_equal (text->color, html_colorset_get_color (state->engine->settings->color_set,
+	/* FIXME-link std_color = (HTML_IS_TEXT (text) && html_color_equal (text->color, html_colorset_get_color (state->engine->settings->color_set,
 												    HTMLTextColor)))
 		|| (HTML_IS_LINK_TEXT (text) && html_color_equal (text->color,
-								  html_colorset_get_color (state->engine->settings->color_set, HTMLLinkColor)));
+		html_colorset_get_color (state->engine->settings->color_set, HTMLLinkColor))); */
+	std_color = TRUE;
+
 	std_size = (font_style & GTK_HTML_FONT_STYLE_SIZE_MASK) == 0;
 
 
@@ -1460,7 +1461,8 @@ set_link (HTMLObject *self, HTMLColor *color, const gchar *url, const gchar *tar
 {
 	HTMLText *text = HTML_TEXT (self);
 
-	return url ? html_link_text_new_with_len (text->text, text->text_len, text->font_style, color, url, target) : NULL;
+	/* FIXME-link return url ? html_link_text_new_with_len (text->text, text->text_len, text->font_style, color, url, target) : NULL; */
+	return NULL;
 }
 
 static void
@@ -1949,12 +1951,12 @@ paste_link (HTMLEngine *engine, HTMLText *text, gint so, gint eo, gchar *prefix)
 	href = (prefix) ? g_strconcat (prefix, base, NULL) : g_strdup (base);
 	g_free (base);
 
-	new_obj = html_link_text_new_with_len
+	new_obj = html_text_new_with_len
 		(html_text_get_text (text, so),
 		 eo - so,
 		 text->font_style,
-		 html_colorset_get_color (engine->settings->color_set, HTMLLinkColor),
-		 href, NULL);
+		 html_colorset_get_color (engine->settings->color_set, HTMLLinkColor));
+	html_text_add_link (HTML_TEXT (new_obj), href, NULL, 0, HTML_TEXT (new_obj)->text_len);
 
 	offset   = HTML_OBJECT (text) == engine->cursor->object ? engine->cursor->offset : 0;
 	position = engine->cursor->position;

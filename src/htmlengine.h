@@ -459,7 +459,8 @@ void html_engine_redraw_selection (HTMLEngine *e);
 
 gboolean    html_engine_focus              (HTMLEngine       *e,
 					    GtkDirectionType  dir);
-HTMLObject *html_engine_get_focus_object   (HTMLEngine       *e);
+HTMLObject *html_engine_get_focus_object   (HTMLEngine       *e,
+					    gint             *offset);
 void        html_engine_set_focus_object   (HTMLEngine       *e,
 					    HTMLObject       *o,
 					    gint              offset);
