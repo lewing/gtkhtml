@@ -6196,8 +6196,29 @@ html_engine_get_focus_object (HTMLEngine *e, gint *offset)
 		o = html_object_get_engine (o, e)->focus_object;
 	}
 
-	if (offset)
+	if (o && offset)
 		*offset = html_object_get_engine (o, e)->focus_object_offset;
+
+	return o;
+}
+
+static HTMLObject *
+move_focus_object (HTMLObject *o, gint *offset, HTMLEngine *e, GtkDirectionType dir)
+{
+	if (HTML_IS_TEXT (o) && ((dir == GTK_DIR_TAB_FORWARD && html_text_next_link_offset (HTML_TEXT (o), offset))
+				 || (dir == GTK_DIR_TAB_BACKWARD && html_text_prev_link_offset (HTML_TEXT (o), offset))))
+		return o;
+
+	o = dir == GTK_DIR_TAB_FORWARD
+		? html_object_next_cursor_object (o, e, offset)
+		: html_object_prev_cursor_object (o, e, offset);
+
+	if (HTML_IS_TEXT (o)) {
+		if (dir == GTK_DIR_TAB_FORWARD)
+			html_text_first_link_offset (HTML_TEXT (o), offset);
+		else
+			html_text_last_link_offset (HTML_TEXT (o), offset);
+	}
 
 	return o;
 }
@@ -6210,17 +6231,15 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 		HTMLObject *focus_object;
 		gint offset;
 
-		focus_object = html_engine_get_focus_object (e, NULL);
+		focus_object = html_engine_get_focus_object (e, &offset);
 		if (focus_object && html_object_is_embedded (focus_object)
 		    && HTML_EMBEDDED (focus_object)->widget
 		    && gtk_widget_child_focus (HTML_EMBEDDED (focus_object)->widget, dir))
 			return TRUE;
 
-		if (focus_object) {
-			cur = dir == GTK_DIR_TAB_FORWARD
-				? html_object_next_cursor_object (focus_object, e, &offset)
-				: html_object_prev_cursor_object (focus_object, e, &offset);
-		} else
+		if (focus_object)
+			cur = move_focus_object (focus_object, &offset, e, dir);
+		else
 			cur = dir == GTK_DIR_TAB_FORWARD
 				? html_object_get_head_leaf (e->clue)
 				: html_object_get_tail_leaf (e->clue);
@@ -6247,9 +6266,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 					return TRUE;
 				}
 			}
-			cur = dir == GTK_DIR_TAB_FORWARD
-				? html_object_next_cursor_object (cur, e, &offset)
-				: html_object_prev_cursor_object (cur, e, &offset);
+			cur = move_focus_object (cur, &offset, e, dir);
 		}
 		/* printf ("no focus\n"); */
 		html_engine_set_focus_object (e, NULL, 0);

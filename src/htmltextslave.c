@@ -822,9 +822,9 @@ draw (HTMLObject *o,
 		if (link && MAX (link->start_index, textslave->posStart) < MIN (link->end_index, textslave->posStart + textslave->posLen)) {
 			gint bw = 0;
 			html_object_get_bounds (o, &rect);
-			if (textslave->posStart > link->start_index)
+			if (textslave->posStart < link->start_index)
 				bw = html_text_calc_part_width (owner, p, textslave->posStart, link->start_index - textslave->posStart, NULL, NULL);
-			rect.x += tx - bw;
+			rect.x += tx + bw;
 			rect.width -= bw;
 			if (textslave->posStart + textslave->posLen > link->end_index)
 				rect.width -= html_text_calc_part_width (owner, p, link->end_index,  textslave->posStart + textslave->posLen - link->end_index, NULL, NULL);

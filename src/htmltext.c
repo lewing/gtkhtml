@@ -2136,3 +2136,62 @@ html_text_get_link_rectangle (HTMLText *text, HTMLPainter *painter, gint offset,
 
 	return FALSE;
 }
+
+gboolean
+html_text_prev_link_offset (HTMLText *text, gint *offset)
+{
+	GSList *l;
+
+	for (l = text->links; l; l = l->next) {
+		Link *link = (Link *) l->data;
+
+		if (link->start_index <= *offset && *offset <= link->end_index) {
+			if (l->next) {
+				*offset = ((Link *) l->next->data)->end_index - 1;
+				return TRUE;
+			}
+			break;
+		}
+	}
+
+	return FALSE;
+}
+
+gboolean
+html_text_next_link_offset (HTMLText *text, gint *offset)
+{
+	GSList *l, *prev = NULL;
+
+	for (l = text->links; l; l = l->next) {
+		Link *link = (Link *) l->data;
+
+		if (link->start_index <= *offset && *offset <= link->end_index) {
+			if (prev) {
+				*offset = ((Link *) prev->data)->start_index + 1;
+				return TRUE;
+			}
+			break;
+		}
+		prev = l;
+	}
+
+	return FALSE;
+}
+
+gboolean
+html_text_first_link_offset (HTMLText *text, gint *offset)
+{
+	if (text->links)
+		*offset = ((Link *) g_slist_last (text->links)->data)->start_index + 1;
+
+	return text->links != NULL;
+}
+
+gboolean
+html_text_last_link_offset (HTMLText *text, gint *offset)
+{
+	if (text->links)
+		*offset = ((Link *) text->links->data)->end_index - 1;
+
+	return text->links != NULL;
+}

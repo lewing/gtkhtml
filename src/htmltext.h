@@ -202,7 +202,14 @@ Link             *html_text_get_link_slaves_at_offset    (HTMLText           *te
 							  gint                offset,
 							  HTMLTextSlave     **start,
 							  HTMLTextSlave     **end);
-
+gboolean          html_text_next_link_offset             (HTMLText           *text,
+							  gint               *offset);
+gboolean          html_text_prev_link_offset             (HTMLText           *text,
+							  gint               *offset);
+gboolean          html_text_first_link_offset            (HTMLText           *text,
+							  gint               *offset);
+gboolean          html_text_last_link_offset             (HTMLText           *text,
+							  gint               *offset);
 
 /*
  * protected
