@@ -1,3 +1,9 @@
+2003-10-14  Radek Doulik  <rodo@ximian.com>
+
+	* htmlobject.c (select_range): select containers
+
+	* htmlinterval.c (select_object): select range in containers
+
 2003-10-14  Suresh Chandrasekharan <suresh.chandrasekharan@sun.com>
 	
 	* htmlclueflow.c (search_text): Fixes for supporting forward
