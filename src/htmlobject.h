@@ -70,14 +70,6 @@ struct _HTMLObject {
 	GData *object_data;
 };
 
-struct _HTMLObjectClearRectangle {
-	HTMLObject *object;
-	gint x;
-	gint y;
-	gint width;
-	gint height;
-};
-
 struct _HTMLObjectClass {
 	HTMLType type;
 
@@ -106,8 +98,9 @@ struct _HTMLObjectClass {
 	gboolean     (* merge)           (HTMLObject *self,
 					  HTMLObject *o,
 					  HTMLEngine *e,
-					  GList      *left,
-					  GList      *right);
+					  GList      **left,
+					  GList      **right,
+					  HTMLCursor *cursor);
 	void         (* remove_child)    (HTMLObject *self,
 					  HTMLObject *child);
 	void         (* split)           (HTMLObject *self,
@@ -123,7 +116,7 @@ struct _HTMLObjectClass {
 	HTMLFitType (* fit_line) (HTMLObject *o, HTMLPainter *painter,
 				  gboolean start_of_line, gboolean first_run,
 				  gint width_left);
-	gboolean (* calc_size) (HTMLObject *o, HTMLPainter *painter, GList **changed_objs);
+	gboolean (* calc_size) (HTMLObject *o, HTMLPainter *painter);
 	gint (* calc_min_width) (HTMLObject *o, HTMLPainter *painter);
 	gint (* calc_preferred_width) (HTMLObject *o, HTMLPainter *painter);
 	void (* set_max_ascent) (HTMLObject *o, HTMLPainter *painter, gint a);
@@ -282,8 +275,9 @@ HTMLObject     *html_object_op_cut                (HTMLObject            *self,
 gboolean        html_object_merge                 (HTMLObject            *self,
 						   HTMLObject            *with,
 						   HTMLEngine            *e,
-						   GList                 *left,
-						   GList                 *right);
+						   GList                 **left,
+						   GList                 **right,
+						   HTMLCursor            *cursor);
 void            html_object_remove_child          (HTMLObject            *self,
 						   HTMLObject            *child);
 void            html_object_split                 (HTMLObject            *self,
@@ -362,8 +356,7 @@ HTMLFitType     html_object_fit_line              (HTMLObject            *o,
 						   gboolean               first_run,
 						   gint                   width_left);
 gboolean        html_object_calc_size             (HTMLObject            *o,
-						   HTMLPainter           *painter,
-						   GList                **changed_objs);
+						   HTMLPainter           *painter);
 void            html_object_set_max_ascent        (HTMLObject            *o,
 						   HTMLPainter           *painter,
 						   gint                   a);
@@ -478,7 +471,8 @@ gboolean    html_object_select_range             (HTMLObject *self,
 						  gboolean    queue_draw);
 void        html_object_append_selection_string  (HTMLObject *self,
 						  GString    *buffer);
-gchar      *html_object_get_selection_string     (HTMLObject *o);
+gchar      *html_object_get_selection_string     (HTMLObject *o,
+						  HTMLEngine *e);
 
 /* Saving.  */
 gboolean  html_object_save  (HTMLObject          *self,
@@ -526,18 +520,8 @@ GList    *html_object_tails_list                 (HTMLObject *o);
 void      html_object_merge_down                 (HTMLObject *o,
 						  HTMLObject *w,
 						  HTMLEngine *e);
-
-void      html_object_engine_translation   (HTMLObject *o,
-					    HTMLEngine *e,
-					    gint       *tx,
-					    gint       *ty);
-gboolean  html_object_engine_intersection  (HTMLObject *o,
-					    HTMLEngine *e,
-					    gint        tx,
-					    gint        ty,
-					    gint       *x1,
-					    gint       *y1,
-					    gint       *x2,
-					    gint       *y2);
+gboolean  html_object_is_parent                  (HTMLObject *parent,
+						  HTMLObject *child);
+gint      html_object_get_insert_level           (HTMLObject *o);
 
 #endif /* _HTMLOBJECT_H_ */

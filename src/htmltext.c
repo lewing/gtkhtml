@@ -94,33 +94,49 @@ get_tags (const HTMLText *text,
 	size = font_style & GTK_HTML_FONT_STYLE_SIZE_MASK;
 	if (size != 0) {
 		opening_p += sprintf (opening_p, "<FONT SIZE=\"%d\">", size);
-		ending_p += sprintf (ending_p, "</FONT>");
 	}
 
 	if (font_style & GTK_HTML_FONT_STYLE_BOLD) {
 		opening_p += sprintf (opening_p, "<B>");
-		ending_p += sprintf (ending_p, "</B>");
 	}
 
 	if (font_style & GTK_HTML_FONT_STYLE_ITALIC) {
 		opening_p += sprintf (opening_p, "<I>");
-		ending_p += sprintf (ending_p, "</I>");
 	}
 
 	if (font_style & GTK_HTML_FONT_STYLE_UNDERLINE) {
 		opening_p += sprintf (opening_p, "<U>");
-		ending_p += sprintf (ending_p, "</U>");
 	}
 
 	if (font_style & GTK_HTML_FONT_STYLE_STRIKEOUT) {
 		opening_p += sprintf (opening_p, "<S>");
-		ending_p += sprintf (ending_p, "</S>");
 	}
 
 	if (font_style & GTK_HTML_FONT_STYLE_FIXED) {
 		opening_p += sprintf (opening_p, "<TT>");
 		ending_p += sprintf (ending_p, "</TT>");
 	}
+
+	if (font_style & GTK_HTML_FONT_STYLE_STRIKEOUT) {
+		ending_p += sprintf (ending_p, "</S>");
+	}
+
+	if (font_style & GTK_HTML_FONT_STYLE_UNDERLINE) {
+		ending_p += sprintf (ending_p, "</U>");
+	}
+
+	if (font_style & GTK_HTML_FONT_STYLE_ITALIC) {
+		ending_p += sprintf (ending_p, "</I>");
+	}
+
+	if (font_style & GTK_HTML_FONT_STYLE_BOLD) {
+		ending_p += sprintf (ending_p, "</B>");
+	}
+
+	if (size != 0) {
+		ending_p += sprintf (ending_p, "</FONT SIZE=\"%d\">", size);
+	}
+
 
 	*opening_p = 0;
 	*ending_p = 0;
@@ -301,7 +317,7 @@ op_cut (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *left, GL
 }
 
 static gboolean
-object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *right)
+object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
 	HTMLText *t1, *t2;
 	gchar *to_free;
@@ -315,6 +331,11 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GL
 	/* printf ("merge '%s' '%s'\n", t1->text, t2->text); */
 
 	/* merge_word_width (t1, t2, e->painter); */
+
+	if (e->cursor->object == with) {
+		e->cursor->object  = self;
+		e->cursor->offset += t1->text_len;
+	}
 
 	move_spell_errors (t2->spell_errors, 0, t1->text_len);
 	t1->spell_errors = g_list_concat (t1->spell_errors, t2->spell_errors);
@@ -367,11 +388,11 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	html_clue_append_after (HTML_CLUE (self->parent), dup, self);
 
 	prev = self->prev;
-	if (t1->text_len == 0 && prev && html_object_merge (prev, self, e, NULL, NULL))
+	if (t1->text_len == 0 && prev && html_object_merge (prev, self, e, NULL, NULL, NULL))
 		self = prev;
 
 	if (t2->text_len == 0 && dup->next)
-		html_object_merge (dup, dup->next, e, NULL, NULL);
+		html_object_merge (dup, dup->next, e, NULL, NULL, NULL);
 
 	/* printf ("--- before split offset %d dup len %d\n", offset, HTML_TEXT (dup)->text_len);
 	   debug_spell_errors (HTML_TEXT (self)->spell_errors); */
@@ -404,7 +425,8 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 }
 
 static gboolean
-calc_size (HTMLObject *self, HTMLPainter *painter, GList **changed_objs)
+calc_size (HTMLObject *self,
+	   HTMLPainter *painter)
 {
 	HTMLText *text = HTML_TEXT (self);
 	GtkHTMLFontStyle style = html_text_get_font_style (text);
@@ -569,30 +591,9 @@ forward_get_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
 	g_assert (text->text_len == 0);
 
 	/* find prev/next object */
-	obj = begin
+	obj = (begin)
 		? html_object_prev_not_slave (HTML_OBJECT (text))
 		: html_object_next_not_slave (HTML_OBJECT (text));
-
-	/* if not found or not text return 0, otherwise forward get_nb_with there */
-	if (!obj || !html_object_is_text (obj))
-		return 0;
-	else
-		return html_text_get_nb_width (HTML_TEXT (obj), painter, begin);
-}
-
-static gint
-get_next_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
-{
-	HTMLObject *obj;
-
-	g_assert (text);
-	g_assert (html_object_is_text (HTML_OBJECT (text)));
-	g_assert (text->words == 1);
-
-	/* find prev/next object */
-	obj = begin
-		? html_object_next_not_slave (HTML_OBJECT (text))
-		: html_object_prev_not_slave (HTML_OBJECT (text));
 
 	/* if not found or not text return 0, otherwise forward get_nb_with there */
 	if (!obj || !html_object_is_text (obj))
@@ -626,8 +627,7 @@ html_text_get_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
 
 	html_text_request_word_width (text, painter);
 
-	return word_width (text, painter, begin ? 0 : text->words - 1)
-		+ (text->words == 1 ? get_next_nb_width (text, painter, begin) : 0);
+	return word_width (text, painter, begin ? 0 : text->words - 1);
 }
 
 static gint
@@ -750,7 +750,7 @@ check_prev_white (gboolean rv, gint white_space, gunichar last_white, gint *delt
 static gboolean
 is_convert_nbsp_needed (const gchar *s, gint *delta_out)
 {
-	gunichar uc, last_white = 0;
+	gunichar uc, last_white;
 	gboolean rv = FALSE;
 	gint white_space;
 	const gchar *p, *op;
@@ -1570,6 +1570,8 @@ html_text_magic_link (HTMLText *text, HTMLEngine *engine, guint offset)
 	if (!offset)
 		return FALSE;
 	offset--;
+
+	printf ("html_text_magic_link\n");
 
 	html_undo_level_begin (engine->undo, "Magic link", "Remove magic link");
 	saved_position = engine->cursor->position;

@@ -96,7 +96,7 @@ static TemplateInsertTemplate template_templates [TEMPLATES] = {
 		   "<tr><td align=\"center\">"
 		   "<img src=\"file://" ICONDIR "/empty_image.png\" align=\"top\" border=\"0\">"
 		   "</td></tr>"
-		   "<tr><td><font size=\"-1\">Image 1: <b>description</b></font></td>"
+		   "<tr><td>Image 1:&nbsp;<font size=\"3\"><b>description</b></font size=\"3\"></td>"
 		   "</tr></table></td></tr></table>")
 	},
 };
@@ -289,7 +289,7 @@ template_insert_cb (GtkHTMLControlData *cd, gpointer get_data)
 
 	position = e->cursor->position + template_templates [d->template].offset;
 	html = get_sample_html (d);
-	gtk_html_insert_html (d->cd->html, html);
+	gtk_html_append_html (d->cd->html, html);
 	g_free (html);
 	if (template_templates [d->template].offset >= 0)
 		html_cursor_jump_to_position (e->cursor, e, position);
@@ -300,4 +300,3 @@ template_close_cb (GtkHTMLControlData *cd, gpointer get_data)
 {
 	g_free (get_data);
 }
-

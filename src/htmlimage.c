@@ -52,7 +52,6 @@
 #include "htmlobject.h"
 #include "htmlmap.h"
 #include "htmlprinter.h"
-#include "htmlgdkpainter.h"
 
 /* HTMLImageFactory stuff.  */
 
@@ -312,7 +311,8 @@ calc_preferred_width (HTMLObject *o,
 }
 
 static gboolean
-calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
+calc_size (HTMLObject *o,
+	   HTMLPainter *painter)
 {
 	HTMLImage *image;
 	guint pixel_size;
@@ -614,7 +614,8 @@ select_range (HTMLObject *self,
 	      gboolean queue_draw)
 {
 	if ((*parent_class->select_range) (self, engine, offset, length, queue_draw)) {
-		html_engine_queue_draw (engine, self);
+		if (queue_draw)
+			html_engine_queue_draw (engine, self);
 		return TRUE;
 	} else
 		return FALSE;
@@ -764,7 +765,7 @@ html_image_set_spacing (HTMLImage *image, gint hspace, gint vspace)
 }
 
 void
-html_image_edit_set_url (HTMLImage *image, const gchar *url)
+html_image_set_url (HTMLImage *image, const gchar *url)
 {
 	if (url) {
 		HTMLImageFactory *imf = image->image_ptr->factory;
@@ -774,17 +775,6 @@ html_image_edit_set_url (HTMLImage *image, const gchar *url)
 		image->image_ptr = html_image_factory_register (imf, image, url, TRUE);
 		html_object_change_set (HTML_OBJECT (image), HTML_CHANGE_ALL_CALC);
 		html_engine_schedule_update (imf->engine);
-	}
-}
-
-void
-html_image_set_url (HTMLImage *image, const gchar *url)
-{
-	if (url && strcmp (image->image_ptr->url, url)) {
-		HTMLImageFactory *imf = image->image_ptr->factory;
-
-		html_image_factory_unregister (imf, image->image_ptr, HTML_IMAGE (image));
-		image->image_ptr = html_image_factory_register (imf, image, url, FALSE);
 	}
 }
 
@@ -924,16 +914,8 @@ html_image_factory_end_pixbuf (GtkHTMLStream *stream,
 {
 	HTMLImagePointer *ip = user_data;
 
-	gdk_pixbuf_loader_close (ip->loader);
-	if (!ip->animation && !ip->pixbuf) {
-		ip->pixbuf = gdk_pixbuf_loader_get_pixbuf (ip->loader);
-
-		if (ip->pixbuf)
-			gdk_pixbuf_ref (ip->pixbuf);
-	}
-
 	update_or_redraw (ip);
-	
+
 	html_image_pointer_unref (ip);
 }
 
@@ -976,24 +958,11 @@ render_cur_frame (HTMLImage *image, gint nx, gint ny, const GdkColor *highlight_
 	GdkPixbufAnimation *ganim = image->image_ptr->animation;
 	GList *cur = gdk_pixbuf_animation_get_frames (ganim);
 	gint w, h;
-	gboolean saved_alpha = TRUE;
 
 	painter = image->image_ptr->factory->engine->painter;
 
 	frame = (GdkPixbufFrame *) anim->cur_frame->data;
 	/* printf ("w: %d h: %d action: %d\n", w, h, frame->action); */
-
-	/* FIXME this is hack to turn off alpha blending while rending 
-	 * animations.  This breaks nothing since gdk-pixbuf doesn't support animations
-	 * for anything but gif and it makes a huge difference if there are lots of
-	 * frames.  We really should add a parameter to the html_painter_draw_pixmap
-	 * call and track wether each image has full alpha or bilevel alpha, but that
-	 * will wait for a bit.
-	 */  
-	if (HTML_IS_GDK_PAINTER (painter)) {
-		saved_alpha = HTML_GDK_PAINTER (painter)->alpha;
-		HTML_GDK_PAINTER (painter)->alpha = FALSE;
-	}
 
 	do {
 		frame = (GdkPixbufFrame *) cur->data;
@@ -1015,11 +984,6 @@ render_cur_frame (HTMLImage *image, gint nx, gint ny, const GdkColor *highlight_
 		} 
 		cur = cur->next;
 	} while (1);
-
-	if (HTML_IS_GDK_PAINTER (painter)) {
-		HTML_GDK_PAINTER (painter)->alpha = saved_alpha;
-	}
-
 }
 
 static gint
@@ -1266,24 +1230,6 @@ html_image_pointer_ref (HTMLImagePointer *ip)
 }
 
 static void
-free_image_ptr_data (HTMLImagePointer *ip)
-{
-	if (ip->loader) {
-		gtk_object_unref (GTK_OBJECT (ip->loader));
-		ip->loader = NULL;
-	}
-	if (ip->animation) {
-		gdk_pixbuf_animation_unref (ip->animation);
-		ip->animation = NULL;
-	}
-	if (ip->pixbuf) {
-		gdk_pixbuf_unref (ip->pixbuf);
-		ip->pixbuf = NULL;
-	}
-
-}
-
-static void
 html_image_pointer_unref (HTMLImagePointer *ip)
 {
 	g_return_if_fail (ip != NULL);
@@ -1295,7 +1241,15 @@ html_image_pointer_unref (HTMLImagePointer *ip)
 			ip->stall_timeout = 0;
 		}
 		g_free (ip->url);
-		free_image_ptr_data (ip);
+		if (ip->loader) {
+			gtk_object_unref (GTK_OBJECT (ip->loader));
+		}
+		if (ip->animation) {
+			gdk_pixbuf_animation_unref (ip->animation);
+		}
+		if (ip->pixbuf) {
+			gdk_pixbuf_unref (ip->pixbuf);
+		}
 		g_free (ip);
 	}
 }
@@ -1306,7 +1260,6 @@ html_image_pointer_load (HTMLImagePointer *ip)
 	GtkHTMLStream *handle;
 
 	html_image_pointer_ref (ip);
-
 	handle = gtk_html_stream_new (GTK_HTML (ip->factory->engine->widget),
 				      html_image_factory_types,
 				      html_image_factory_write_pixbuf,
@@ -1350,11 +1303,8 @@ html_image_factory_register (HTMLImageFactory *factory, HTMLImage *i, const char
 			g_hash_table_insert (factory->loaded_images, retval->url, retval);
 			html_image_pointer_load (retval);
 		}
-	} else if (reload) {
-		free_image_ptr_data (retval);
-		retval->loader = gdk_pixbuf_loader_new ();
+	} else if (reload)
 		html_image_pointer_load (retval);
-	}
 
 	html_image_pointer_ref (retval);
 

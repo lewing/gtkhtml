@@ -56,7 +56,6 @@
 #include "htmlselection.h"
 #include "htmlcolor.h"
 #include "htmlinterval.h"
-#include "htmlobject.h"
 #include "htmlsettings.h"
 #include "htmltext.h"
 #include "htmltokenizer.h"
@@ -2141,8 +2140,7 @@ parse_f (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 			e->pending_para = TRUE;
 		}
 	} else if (strncmp (str, "frameset", 8) == 0) {
-		if (e->allow_frameset)
-			parse_frameset (e, clue, clue->max_width, str + 8);
+		parse_frameset (e, clue, clue->max_width, str + 8);
 	} else if (strncasecmp (str, "/frameset", 9) == 0) {
 		if (!html_stack_is_empty (e->frame_stack))
 			html_stack_pop (e->frame_stack);
@@ -2152,9 +2150,6 @@ parse_f (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 		gint margin_height = -1;
 		gint margin_width = -1;
 		GtkPolicyType scroll = GTK_POLICY_AUTOMATIC;
-
-		if (!e->allow_frameset)
-			return;
 
 		src = NULL;
 		html_string_tokenizer_tokenize (e->st, str + 5, " >");
@@ -2180,7 +2175,7 @@ parse_f (HTMLEngine *e, HTMLObject *clue, const gchar *str)
 			}
 		}
 		
-		frame = html_frame_new (GTK_WIDGET (e->widget), src, -1 , -1, FALSE);
+		frame = html_frame_new (GTK_WIDGET (e->widget), src ? src : "", -1 , -1, FALSE);
 		if (!html_frameset_append (html_stack_top (e->frame_stack), frame))
 			html_object_destroy (frame);
 		
@@ -2449,7 +2444,6 @@ get_list_type (gchar c)
   <listing   unimplemented.
   <link      unimpemented.
   <li>
-  </li>
 */
 /* EP CHECK: OK */
 static void
@@ -2503,8 +2497,6 @@ parse_l (HTMLEngine *p, HTMLObject *clue, const gchar *str)
 			list = html_stack_top (p->listStack);
 			list->itemNumber = itemNumber + 1;
 		}
-	} else if (strncmp (str, "/li", 3) == 0) {
-		close_flow (p, clue);
 	}
 }
 
@@ -2583,9 +2575,7 @@ parse_n (HTMLEngine *e, HTMLObject *_clue, const gchar *str )
 {
 	if (strncasecmp (str, "noframe", 7) == 0) {
 		static const char *end[] = {"</noframe", NULL};
-
-		if (e->allow_frameset)
-			discard_body (e, end);
+		discard_body (e, end);
 	}
 }
 
@@ -2597,7 +2587,7 @@ html_object_changed(GtkHTMLEmbedded *eb, HTMLEngine *e)
 
 	object = gtk_object_get_data(GTK_OBJECT(eb), "embeddedelement");
 	if (object)
-		html_object_calc_size (object, e->painter, FALSE);
+		html_object_calc_size (object, e->painter);
 	
 	html_engine_schedule_update(e);
 }
@@ -3278,7 +3268,6 @@ html_engine_init (HTMLEngine *engine)
 	engine->painter = html_gdk_painter_new (TRUE);
 
 	engine->newPage = FALSE;
-	engine->allow_frameset = FALSE;
 
 	engine->editable = FALSE;
 	engine->clipboard = NULL;
@@ -3650,13 +3639,11 @@ update_embedded (GtkWidget *widget, gpointer data)
 static gboolean
 html_engine_update_event (HTMLEngine *e)
 {
-	/* printf ("html_engine_update_event\n"); */
-
 	e->updateTimer = 0;
 
 	if (html_engine_get_editable (e))
 		html_engine_hide_cursor (e);
-	html_engine_calc_size (e, FALSE);
+	html_engine_calc_size (e);
 
 	if (GTK_LAYOUT (e->widget)->vadjustment == NULL
 	    || ! html_gdk_painter_realized (HTML_GDK_PAINTER (e->painter)))
@@ -3704,7 +3691,6 @@ html_engine_update_event (HTMLEngine *e)
 void
 html_engine_schedule_update (HTMLEngine *p)
 {
-	/* printf ("html_engine_schedule_update\n"); */
 	if(p->updateTimer == 0)
 		p->updateTimer = gtk_idle_add ((GtkFunction) html_engine_update_event, p);
 }
@@ -3909,6 +3895,8 @@ redraw_idle (HTMLEngine *e)
 void
 html_engine_schedule_redraw (HTMLEngine *e)
 {
+	printf ("html_engine_schedule_redraw\n");
+
 	if (e->block_redraw)
 		e->need_redraw = TRUE;
 	else if (e->redraw_idle_id == 0)
@@ -3981,32 +3969,23 @@ html_engine_get_max_width (HTMLEngine *e)
 	return MAX (0, max_width);
 }
 
-gboolean
-html_engine_calc_size (HTMLEngine *e, GList **changed_objs)
+void
+html_engine_calc_size (HTMLEngine *e)
 {
-	gint max_width;
-	gboolean redraw_whole;
-
 	if (e->clue == 0)
-		return FALSE;
+		return;
 
 	html_object_reset (e->clue);
 
-	max_width = MIN (html_engine_get_max_width (e),
-			 html_painter_get_pixel_size (e->painter)
-			 * (MAX_WIDGET_WIDTH - e->leftBorder - e->rightBorder));
-
-	redraw_whole = max_width != e->clue->max_width;
-	html_object_set_max_width (e->clue, e->painter, max_width);
+	html_object_set_max_width (e->clue, e->painter,
+				   MIN (html_engine_get_max_width (e),
+					html_painter_get_pixel_size (e->painter)
+					* (MAX_WIDGET_WIDTH - e->leftBorder - e->rightBorder)));
 	/* printf ("calc size %d\n", e->clue->max_width); */
-	if (changed_objs)
-		*changed_objs = NULL;
-	html_object_calc_size (e->clue, e->painter, redraw_whole ? NULL : changed_objs);
+	html_object_calc_size (e->clue, e->painter);
 
 	e->clue->x = 0;
 	e->clue->y = e->clue->ascent;
-
-	return redraw_whole;
 }
 
 static void
@@ -4287,8 +4266,7 @@ html_engine_flush_draw_queue (HTMLEngine *e)
 	g_return_if_fail (e != NULL);
 	g_return_if_fail (HTML_IS_ENGINE (e));
 
-	if (e->freeze_count == 0)
-		html_draw_queue_flush (e->draw_queue);
+	html_draw_queue_flush (e->draw_queue);
 }
 
 void
@@ -4298,8 +4276,8 @@ html_engine_queue_draw (HTMLEngine *e, HTMLObject *o)
 	g_return_if_fail (HTML_IS_ENGINE (e));
 	g_return_if_fail (o != NULL);
 
-	html_draw_queue_add (e->draw_queue, o);
-	/* printf ("html_draw_queue_add %p\n", o); */
+	if (e->freeze_count == 0)
+		html_draw_queue_add (e->draw_queue, o);
 }
 
 void
@@ -4309,9 +4287,9 @@ html_engine_queue_clear (HTMLEngine *e,
 {
 	g_return_if_fail (e != NULL);
 
-	/* if (e->freeze_count == 0) */
-	html_draw_queue_add_clear (e->draw_queue, x, y, width, height,
-				   &html_colorset_get_color_allocated (e->painter, HTMLBgColor)->color);
+	if (e->freeze_count == 0)
+		html_draw_queue_add_clear (e->draw_queue, x, y, width, height,
+					   &html_colorset_get_color_allocated (e->painter, HTMLBgColor)->color);
 }
 
 
@@ -4384,127 +4362,24 @@ html_engine_freeze (HTMLEngine *engine)
 	engine->freeze_count++;
 }
 
-gboolean
-html_engine_intersection (HTMLEngine *e, gint *x1, gint *y1, gint *x2, gint *y2)
-{
-	if (*x2 < 0 || *y2 < 0 || *x1 > e->width || *y1 > e->height)
-		return FALSE;
-
-	if (*x1 < 0)
-		*x1 = 0;
-	if (*y1 < 0)
-		*y1 = 0;
-	if (*x2 > e->width)
-		*x2 = e->width;
-	if (*y2 > e->height)
-		*y2 = e->height;
-
-	return TRUE;
-}
-
-static void
-clear_changed_area (HTMLEngine *e, HTMLObjectClearRectangle *cr)
-{
-	HTMLObject *o;
-	gint tx, ty, x1, y1, x2, y2;
-
-	o = cr->object;
-
-	/* printf ("clear rectangle %d,%d\n", cr->x, cr->y); */
-	html_object_engine_translation (cr->object, e, &tx, &ty);
-
-	x1 = o->x + cr->x + tx;
-	y1 = o->y - o->ascent + cr->y + ty;
-	x2 = x1 + cr->width;
-	y2 = y1 + cr->height;
-
-	if (html_engine_intersection (e, &x1, &y1, &x2, &y2)) {
-		if (html_object_is_transparent (cr->object)) {
-			html_painter_begin (e->painter, x1, y1, x2, y2);
-			html_engine_draw_background (e, x1, y1, x2, y2);
-			html_object_draw_background (o, e->painter,
-						     o->x + cr->x, o->y - o->ascent + cr->y,
-						     cr->width, cr->height,
-						     tx, ty);
-#if 0
-	{
-		GdkColor c;
-
-		c.pixel = rand ();
-		html_painter_set_pen (e->painter, &c);
-		html_painter_draw_line (e->painter, x1, y1, x2 - 1, y2 - 1);
-		html_painter_draw_line (e->painter, x2 - 1, y1, x1, y2 - 1);
-	}
-#endif
-			html_painter_end (e->painter);
-		}
-	}
-}
-
-static void
-draw_changed_objects (HTMLEngine *e, GList *changed_objs)
-{
-	GList *cur;
-
-	for (cur = changed_objs; cur; cur = cur->next) {
-		if (cur->data) {
-			HTMLObject *o;
-
-			o = HTML_OBJECT (cur->data);
-			html_engine_queue_draw (e, o);
-		} else {
-			cur = cur->next;
-			if (e->window)
-				clear_changed_area (e, (HTMLObjectClearRectangle *) cur->data);
-			g_free (cur->data);
-		}
-	}
-	html_engine_flush_draw_queue (e);
-}
-
 static gint
 thaw_idle (gpointer data)
 {
 	HTMLEngine *e = HTML_ENGINE (data);
-	GList *changed_objs;
-	gboolean redraw_whole;
-	gint w, h;
 
 	e->thaw_idle_id = 0;
-	w = html_engine_get_doc_width (e) - e->rightBorder;
-	h = html_engine_get_doc_height (e) - e->bottomBorder;
 
-	redraw_whole = html_engine_calc_size (e, &changed_objs);
+	html_engine_calc_size (e);
 
 	gtk_html_private_calc_scrollbars (e->widget, NULL, NULL);
 	gtk_html_edit_make_cursor_visible (e->widget);
+	/* html_engine_make_cursor_visible (e);
 
-	if (redraw_whole) {
-		html_draw_queue_clear (e->draw_queue);
-		html_engine_schedule_redraw (e);
-	} else {
-		GtkAdjustment *vadj, *hadj;
-		gint nw, nh;
-
-		draw_changed_objects (e, changed_objs);
-
-		hadj = GTK_LAYOUT (e->widget)->hadjustment;
-		vadj = GTK_LAYOUT (e->widget)->vadjustment;
-		nw = html_engine_get_doc_width (e) - e->rightBorder;
-		nh = html_engine_get_doc_height (e) - e->bottomBorder;
-
-		if (nh < h && nh - vadj->value < e->height) {
-			html_painter_begin (e->painter, 0, nh - vadj->value, e->width, e->height);
-			html_engine_draw_background (e, 0, nh - vadj->value, e->width, e->height - (nh - vadj->value));
-			html_painter_end (e->painter);
-		}
-		if (nw < w && nw - hadj->value < e->width) {
-			html_painter_begin (e->painter, nw - hadj->value, 0, e->width, e->height);
-			html_engine_draw_background (e, nw - hadj->value, 0, e->width - (nw - hadj->value), e->height);
-			html_painter_end (e->painter);
-		}
-		g_list_free (changed_objs);
-	}
+	gtk_adjustment_set_value (GTK_LAYOUT (e->widget)->hadjustment, (gfloat) e->x_offset);
+	gtk_adjustment_set_value (GTK_LAYOUT (e->widget)->vadjustment, (gfloat) e->y_offset);
+	*/
+	html_draw_queue_clear (e->draw_queue);
+	html_engine_draw (e, 0, 0, e->width, e->height);
 	html_engine_show_cursor (e);
 
 
@@ -4650,9 +4525,8 @@ html_engine_get_word (HTMLEngine *e)
 {
 	GString *text;
 	HTMLCursor *cursor;
-	gchar *word;
+	gchar *word, c;
 	gint pos;
-	gunichar uc;
 
 	if (!html_is_in_word (html_cursor_get_current_char (e->cursor))
 	    && !html_is_in_word (html_cursor_get_prev_char (e->cursor)))
@@ -4667,14 +4541,8 @@ html_engine_get_word (HTMLEngine *e)
 		html_cursor_backward (cursor, e);
 
 	/* move to the end of word */
-	while (html_is_in_word (uc = html_cursor_get_current_char (cursor))) {
-		gchar out [7];
-		gint size;
-
-		size = g_unichar_to_utf8 (uc, out);
-		g_assert (size < 7);
-		out [size] = 0;
-		text = g_string_append (text, out);
+	while (html_is_in_word (c = html_cursor_get_current_char (cursor))) {
+		text = g_string_append_c (text, c);
 		html_cursor_forward (cursor, e);
 	}
 
@@ -4800,7 +4668,7 @@ html_engine_set_painter (HTMLEngine *e, HTMLPainter *painter)
 	html_object_set_painter (e->clue, painter);
 	html_object_change_set_down (e->clue, HTML_CHANGE_ALL);
 	html_object_reset (e->clue);
-	html_engine_calc_size (e, FALSE);
+	html_engine_calc_size (e);
 }
 
 gint
@@ -4874,7 +4742,7 @@ html_engine_set_class_data (HTMLEngine *e, const gchar *class_name, const gchar 
 	gpointer old_key;
 	gpointer old_val;
 
-	/* printf ("set (%s) %s to %s (%p)\n", class_name, key, value, e->class_data); */
+	printf ("set (%s) %s to %s (%p)\n", class_name, key, value, e->class_data);
 
 	t = get_class_table_sure (e, class_name);
 
@@ -4898,7 +4766,7 @@ html_engine_clear_class_data (HTMLEngine *e, const gchar *class_name, const gcha
 
 	t = get_class_table (e, class_name);
 
-	/* printf ("clear (%s) %s\n", class_name, key); */
+	printf ("clear (%s) %s\n", class_name, key);
 	if (t && g_hash_table_lookup_extended (t, key, &old_key, &old_val)) {
 		g_hash_table_remove (t, key);
 		g_free (old_key);
@@ -4915,7 +4783,7 @@ html_engine_get_class_data (HTMLEngine *e, const gchar *class_name, const gchar 
 static void
 set_object_data (gpointer key, gpointer value, gpointer data)
 {
-	/* printf ("set %s\n", (const gchar *) key); */
+	printf ("set %s\n", (const gchar *) key);
 	html_object_set_data (HTML_OBJECT (data), g_strdup ((const gchar *) key), g_strdup ((const gchar *) value));
 }
 

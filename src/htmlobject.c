@@ -93,7 +93,7 @@ copy (HTMLObject *self,
 	dest->pref_width = self->pref_width;
 	dest->percent = self->percent;
 	dest->flags = self->flags;
-	dest->redraw_pending = FALSE;
+	dest->redraw_pending = self->redraw_pending;
 	dest->selected = self->selected;
 	dest->free_pending = FALSE;
 	dest->change = self->change;
@@ -140,7 +140,7 @@ op_cut (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *left, GL
 }
 
 static gboolean
-merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *right)
+merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
 	return FALSE;
 }
@@ -163,17 +163,19 @@ split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, gint lev
 	}
 
 	if (offset) {
-		if (!self->next)
+		if (!self->next) {
 			html_clue_append (HTML_CLUE (self->parent), html_engine_new_text_empty (e));
+		}
 		*left  = g_list_prepend (*left,  self);
 		*right = g_list_prepend (*right, self->next);
 	} else {
-		if (!self->prev)
-			html_clue_prepend (HTML_CLUE (self->parent), html_engine_new_text_empty (e));
+		if (!self->prev) {
+			e->cursor->object = html_engine_new_text_empty (e);
+			e->cursor->offset = 0;
+			html_clue_prepend (HTML_CLUE (self->parent), e->cursor->object);
+		}
 		*left  = g_list_prepend (*left,  self->prev);
 		*right = g_list_prepend (*right, self);
-		e->cursor->object = self->prev;
-		e->cursor->offset = html_object_get_length (self->prev);
 	}
 	level--;
 
@@ -225,27 +227,30 @@ fit_line (HTMLObject *o,
 	  gboolean first_run,
 	  gint width_left)
 {
-	html_object_calc_size (o, painter, FALSE);
+	html_object_calc_size (o, painter);
 	return (o->width <= width_left || first_run) ? HTML_FIT_COMPLETE : HTML_FIT_NONE;
 }
 
 static gboolean
-calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
+calc_size (HTMLObject *o,
+	   HTMLPainter *painter)
 {
 	return FALSE;
 }
 
 static gint
-calc_min_width (HTMLObject *o, HTMLPainter *painter)
+calc_min_width (HTMLObject *o,
+		HTMLPainter *painter)
 {
-	html_object_calc_size (o, painter, FALSE);
+	html_object_calc_size (o, painter);
 	return o->width;
 }
 
 static gint
-calc_preferred_width (HTMLObject *o, HTMLPainter *painter)
+calc_preferred_width (HTMLObject *o,
+		      HTMLPainter *painter)
 {
-	html_object_calc_size (o, painter, FALSE);
+	html_object_calc_size (o, painter);
 	return o->width;
 }
 
@@ -285,9 +290,9 @@ set_painter (HTMLObject *o, HTMLPainter *painter)
 static void
 reset (HTMLObject *o)
 {
-	/* o->width = 0;
-	   o->ascent = 0;
-	   o->descent = 0; */
+	o->width = 0;
+	o->ascent = 0;
+	o->descent = 0;
 }
 
 static const gchar *
@@ -382,7 +387,7 @@ relayout (HTMLObject *self,
 		self->y -= prev_ascent + prev_descent;
 	}
 
-	changed = html_object_calc_size (self, engine->painter, FALSE);
+	changed = html_object_calc_size (self, engine->painter);
 
 	if (prev_width == self->width
 	    && prev_ascent == self->ascent
@@ -739,13 +744,13 @@ html_object_op_cut (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GLi
 }
 
 gboolean
-html_object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *right)
+html_object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
 	if ((HTML_OBJECT_TYPE (self) == HTML_OBJECT_TYPE (with)
 	     /* FIXME */
 	     || (HTML_OBJECT_TYPE (self) == HTML_TYPE_TABLECELL && HTML_OBJECT_TYPE (with) == HTML_TYPE_CLUEV)
 	     || (HTML_OBJECT_TYPE (with) == HTML_TYPE_TABLECELL && HTML_OBJECT_TYPE (self) == HTML_TYPE_CLUEV))
-	    && (* HO_CLASS (self)->merge) (self, with, e, left, right)) {
+	    && (* HO_CLASS (self)->merge) (self, with, e, left, right, cursor)) {
 		if (with->parent)
 			html_object_remove_child (with->parent, with);
 		html_object_destroy (with);
@@ -870,14 +875,10 @@ html_object_fit_line (HTMLObject *o,
 }
 
 gboolean
-html_object_calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
+html_object_calc_size (HTMLObject *o,
+		       HTMLPainter *painter)
 {
-	gboolean rv;
-
-	rv = (* HO_CLASS (o)->calc_size) (o, painter, changed_objs);
-	o->change &= ~HTML_CHANGE_SIZE;
-
-	return rv;
+	return (* HO_CLASS (o)->calc_size) (o, painter);
 }
 
 void
@@ -1616,7 +1617,7 @@ unselect_object (HTMLObject *o, HTMLEngine *e, gpointer data)
 }
 
 gchar *
-html_object_get_selection_string (HTMLObject *o)
+html_object_get_selection_string (HTMLObject *o, HTMLEngine *e)
 {
 	HTMLObject *tail;
 	tmpSelData data;
@@ -1629,9 +1630,9 @@ html_object_get_selection_string (HTMLObject *o)
 	data.in     = FALSE;
 	data.i      = html_interval_new (html_object_get_head_leaf (o), tail, 0, html_object_get_length (tail));
 
-	html_interval_forall (data.i, NULL, select_object, &data);
+	html_interval_forall (data.i, e, select_object, &data);
 	html_object_append_selection_string (o, data.buffer);
-	html_interval_forall (data.i, NULL, unselect_object, NULL);
+	html_interval_forall (data.i, e, unselect_object, NULL);
 
 	html_interval_destroy (data.i);
 	string = data.buffer->str;
@@ -1746,7 +1747,7 @@ merge_down (HTMLEngine *e, GList *left, GList *right)
 		ro    = HTML_OBJECT (right->data);
 		left  = left->next;
 		right = right->next;
-		if (!html_object_merge (lo, ro, e, left, right))
+		if (!html_object_merge (lo, ro, e, &left, &right, NULL))
 			break;
 	}
 }
@@ -1757,31 +1758,30 @@ html_object_merge_down (HTMLObject *o, HTMLObject *w, HTMLEngine *e)
 	merge_down (e, html_object_tails_list (o), html_object_heads_list (w));
 }
 
-void
-html_object_engine_translation (HTMLObject *o, HTMLEngine *e, gint *tx, gint *ty)
+gboolean
+html_object_is_parent (HTMLObject *parent, HTMLObject *child)
 {
-	HTMLObject *p;
+	g_assert (parent && child);
 
-	*tx = 0;
-	*ty = 0;
-
-	for (p = o->parent; p != NULL && HTML_OBJECT_TYPE (p) != HTML_TYPE_IFRAME; p = p->parent) {
-		*tx += p->x;
-		*ty += p->y - p->ascent;
+	while (child) {
+		if (child->parent == parent)
+			return TRUE;
+		child = child->parent;
 	}
 
-	*tx = *tx + e->leftBorder - e->x_offset;
-	*ty = *ty + e->topBorder - e->y_offset;
-
+	return FALSE;
 }
 
-gboolean
-html_object_engine_intersection (HTMLObject *o, HTMLEngine *e, gint tx, gint ty, gint *x1, gint *y1, gint *x2, gint *y2)
+gint
+html_object_get_insert_level (HTMLObject *o)
 {
-	*x1 = o->x + tx;
-	*y1 = o->y - o->ascent + ty;
-	*x2 = o->x + o->width + tx;
-	*y2 = o->y + o->descent + ty;
-
-	return html_engine_intersection (e, x1, y1, x2, y2);
+	switch (HTML_OBJECT_TYPE (o)) {
+	case HTML_TYPE_TABLECELL:
+	case HTML_TYPE_CLUEV:
+		return 3;
+	case HTML_TYPE_CLUEFLOW:
+		return 2;
+	default:
+		return 1;
+	}
 }

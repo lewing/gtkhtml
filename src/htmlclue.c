@@ -144,7 +144,7 @@ op_cut (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *left, GL
 }
 
 static gboolean
-merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *right)
+merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
 	HTMLClue   *clue1, *clue2;
 
@@ -186,9 +186,6 @@ split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, gint lev
 
 	if (self->parent && HTML_OBJECT_TYPE (self->parent) != HTML_TYPE_TABLE)
 		html_clue_append_after (HTML_CLUE (self->parent), dup, self);
-
-	self->x = 0;
-	self->y = 0;
 
 	*left  = g_list_prepend (*left, self);
 	*right = g_list_prepend (*right, dup);
@@ -282,7 +279,8 @@ reset (HTMLObject *clue)
 }
 
 static gboolean
-calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
+calc_size (HTMLObject *o,
+	   HTMLPainter *painter)
 {
 	gboolean changed;
 
@@ -296,7 +294,7 @@ calc_size (HTMLObject *o, HTMLPainter *painter, GList **changed_objs)
 	changed = FALSE;
 
 	while (HTML_CLUE (o)->curr != NULL) {
-		changed |= html_object_calc_size (HTML_CLUE (o)->curr, painter, changed_objs);
+		changed |= html_object_calc_size (HTML_CLUE (o)->curr, painter);
 		HTML_CLUE (o)->curr = HTML_CLUE (o)->curr->next;
 	}
 

@@ -67,7 +67,6 @@
 #include "body.h"
 #include "spell.h"
 #include "resolver-progressive-impl.h"
-#include "html-stream-mem.h"
 
 #include "gtkhtmldebug.h"
 
@@ -82,11 +81,6 @@ static BonoboGenericFactory *factory;
 static gint active_controls = 0;
 
 #endif
-static void send_event_stream (GNOME_GtkHTML_Editor_Engine engine, 
-			       GNOME_GtkHTML_Editor_Listener listener,
-			       const char *name,
-			       const char *url,
-			       GtkHTMLStream *stream); 
 
 
 /* This is the initialization that can only be performed after the
@@ -98,7 +92,7 @@ struct _SetFrameData {
 };
 typedef struct _SetFrameData SetFrameData;
 
-static GtkHTMLEditorAPI *editor_api;
+GtkHTMLEditorAPI *editor_api;
 
 static gint
 gtk_toolbar_focus (GtkContainer     *container,
@@ -174,6 +168,7 @@ release (GtkWidget *widget, GdkEventButton *event, GtkHTMLControlData *cd)
 		}
 		if (run_dialog) {
 			cd->properties_dialog = gtk_html_edit_properties_dialog_new (cd, FALSE, _("Properties"));
+
 			html_cursor_jump_to (e->cursor, e, cd->obj, 0);
 			html_engine_disable_selection (e);
 			html_engine_set_mark (e);
@@ -265,7 +260,7 @@ load_from_file (GtkHTML *html,
 		/* check to see if we stopped because of an error */
 		gtk_html_end (html, handle, GTK_HTML_STREAM_ERROR);
 		g_warning ("%s", g_strerror (errno));
-		return TRUE;
+		return FALSE;
 	}	
 	/* done with no errors */
 	gtk_html_end (html, handle, GTK_HTML_STREAM_OK);
@@ -273,7 +268,6 @@ load_from_file (GtkHTML *html,
 	return TRUE;
 }
 
-#if 0
 static int
 load_from_corba (BonoboControl *control,
 		 GtkHTML *html,
@@ -314,36 +308,27 @@ load_from_corba (BonoboControl *control,
 
 	return ret_val;
 }
-#endif
 
 static void
 url_requested_cb (GtkHTML *html, const char *url, GtkHTMLStream *handle, gpointer data)
 {
-	GtkHTMLControlData *cd = (GtkHTMLControlData *)data;
+	BonoboControl *control;
 
 	g_return_if_fail (data != NULL);
 	g_return_if_fail (url != NULL);
 	g_return_if_fail (handle != NULL);
 
-	if (load_from_file (html, url, handle)) {
-		/* g_warning ("valid local reponse"); */
-		
-	} else if (cd->editor_bonobo_engine) {
-		GNOME_GtkHTML_Editor_Engine engine;
-		GNOME_GtkHTML_Editor_Listener listener;
-		CORBA_Environment ev;
-		
-		CORBA_exception_init (&ev);
-		engine = bonobo_object_corba_objref (BONOBO_OBJECT (cd->editor_bonobo_engine));
+	control = BONOBO_CONTROL (data);
 
-		if (engine != CORBA_OBJECT_NIL
-		    && (listener = GNOME_GtkHTML_Editor_Engine__get_listener (engine, &ev)) != CORBA_OBJECT_NIL) {
-			send_event_stream (engine, listener, "url_requested", url, handle);
-		}	
-		CORBA_exception_free (&ev);
-	} else {
+	if (load_from_corba (control, html, url, handle))
+		;
+		/* g_warning ("valid corba reponse"); */
+	else if (load_from_file (html, url, handle))
+		;
+		/* g_warning ("valid local reponse"); */
+	else
 		g_warning ("unable to resolve url: %s", url);
-	}
+
 }
 
 static gint
@@ -417,8 +402,7 @@ editor_init_painters (GtkHTMLControlData *cd)
 		cd->plain_painter = HTML_GDK_PAINTER (html_plain_painter_new (TRUE));
 		html_font_manager_set_default (&HTML_PAINTER (cd->plain_painter)->font_manager,
 					       prop->font_var,      prop->font_fix,
-					       prop->font_var_size, prop->font_var_points,
-					       prop->font_fix_size, prop->font_fix_points);
+					       prop->font_var_size, prop->font_fix_size);
 		
 		html_colorset_add_slave (html->engine->settings->color_set, 
 					 HTML_PAINTER (cd->plain_painter)->color_set);
@@ -497,7 +481,7 @@ editor_set_prop (BonoboPropertyBag *bag,
 {
 	GtkHTMLControlData *cd = user_data;
 	
-	g_warning ("set_prop");
+	/* g_warning ("set_prop"); */
 	switch (arg_id) {
 	case PROP_EDIT_HTML:
 		editor_set_format (cd, BONOBO_ARG_GET_BOOLEAN (arg));
@@ -576,7 +560,7 @@ editor_control_construct (BonoboControl *control, GtkWidget *vbox)
 			    GTK_SIGNAL_FUNC (destroy_control_data_cb), cd);
 
 	gtk_signal_connect (GTK_OBJECT (html_widget), "url_requested",
-			    GTK_SIGNAL_FUNC (url_requested_cb), cd);
+			    GTK_SIGNAL_FUNC (url_requested_cb), control);
 
 	gtk_signal_connect (GTK_OBJECT (html_widget), "button_press_event",
 			    GTK_SIGNAL_FUNC (html_button_pressed), cd);
@@ -671,34 +655,6 @@ send_event_void (GNOME_GtkHTML_Editor_Engine engine, GNOME_GtkHTML_Editor_Listen
 	CORBA_free (any);
 }
 
-static void
-send_event_stream (GNOME_GtkHTML_Editor_Engine engine, 
-		   GNOME_GtkHTML_Editor_Listener listener,
-		   const char *name,
-		   const char *url,
-		   GtkHTMLStream *stream) 
-{
-	CORBA_any *any;
-	GNOME_GtkHTML_Editor_URLRequestEvent e;
-	CORBA_Environment ev;
-	BonoboStream *bstream;
-
-	any = CORBA_any__alloc ();
-	any->_type = TC_GNOME_GtkHTML_Editor_URLRequestEvent;
-	any->_value = &e;
-
-	e.url = (char *)url;
-	bstream = html_stream_mem_create (stream);
-	e.stream = BONOBO_OBJREF (bstream);
-	
-	CORBA_exception_init (&ev);
-	GNOME_GtkHTML_Editor_Listener_event (listener, name, any, &ev);
-
-	bonobo_object_unref (BONOBO_OBJECT (bstream));
-	CORBA_exception_free (&ev);
-	CORBA_free (any);
-}
-		  
 static GtkArg *
 editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GtkArg **args, gpointer data)
 {
@@ -717,7 +673,6 @@ editor_api_event (GtkHTML *html, GtkHTMLEditorEventType event_type, GtkArg **arg
 
 		if (engine != CORBA_OBJECT_NIL
 		    && (listener = GNOME_GtkHTML_Editor_Engine__get_listener (engine, &ev)) != CORBA_OBJECT_NIL) {
-
 			switch (event_type) {
 			case GTK_HTML_EDITOR_EVENT_COMMAND:
 				gtk_retval = send_event_str (engine, listener, "command", args [0]);
@@ -759,7 +714,6 @@ new_editor_api ()
 	editor_api->suggestion_request = spell_suggestion_request;
 	editor_api->add_to_personal    = spell_add_to_personal;
 	editor_api->add_to_session     = spell_add_to_session;
-	editor_api->set_language       = spell_set_language;
 	editor_api->command            = editor_api_command;
 	editor_api->event              = editor_api_event;
 	editor_api->create_input_line  = editor_api_create_input_line;
@@ -768,16 +722,12 @@ new_editor_api ()
 static void
 editor_control_init (void)
 {
-	static gboolean initialized = FALSE;
-
-	if (!initialized) {
-		initialized = TRUE;
-
-		new_editor_api ();
-		gdk_rgb_init ();
-		glade_gnome_init ();
-	}
+	new_editor_api ();
+	gdk_rgb_init ();
+	glade_gnome_init ();
 }
+
+static gboolean editor_control_initialized = FALSE;
 
 static BonoboObject *
 editor_control_factory (BonoboGenericFactory *factory, gpointer closure)
@@ -785,7 +735,8 @@ editor_control_factory (BonoboGenericFactory *factory, gpointer closure)
 	BonoboControl *control;
 	GtkWidget *vbox;
 
-	editor_control_init ();
+	if (!editor_control_initialized)
+		editor_control_init ();
 
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (vbox);
@@ -815,7 +766,7 @@ BONOBO_OAF_SHLIB_FACTORY ("OAFIID:GNOME_GtkHTML_Editor_Factory", "GNOME HTML Edi
 static CORBA_ORB
 init_corba (int *argc, char **argv)
 {
-	gnome_init_with_popt_table ("gnome-gtkhtml-editor", "0.0",
+	gnome_init_with_popt_table ("html-editor-factory", "0.0",
 				    *argc, argv, oaf_popt_options, 0, NULL);
 
 	return oaf_init (*argc, argv);

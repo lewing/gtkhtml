@@ -52,6 +52,7 @@
 #include "htmltable.h"
 #include "htmltext.h"
 #include "htmlselection.h"
+#include "htmlundo.h"
 
 #include "gtkhtml.h"
 #include "gtkhtml-embedded.h"
@@ -866,7 +867,7 @@ size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 		e->width  = allocation->width;
 		e->height = allocation->height;
 
-		html_engine_calc_size (html->engine, FALSE);
+		html_engine_calc_size (html->engine);
 		gtk_html_update_scrollbars_on_resize (html, old_doc_width, old_doc_height, old_width, old_height,
 						      &changed_x, &changed_y);
 		gtk_html_private_calc_scrollbars (html, &changed_x, &changed_y);
@@ -1315,16 +1316,16 @@ selection_get (GtkWidget        *widget,
 	  {
 		if (html->priv->primary) {
 			selection_string =
-			   html_object_get_selection_string (html->priv->primary);
-			g_print("primary paste: `%s'\n", selection_string);
+			   html_object_get_selection_string (html->priv->primary, html->engine);
+			/* g_print("primary paste: `%s'\n", selection_string); */
 		}
 	  }
 	else	/* CLIPBOARD */
 	  {
 		if (html->engine->clipboard) {
 			selection_string =
-			   html_object_get_selection_string (html->engine->clipboard);
-			g_print("clipboard paste: `%s'\n", selection_string);
+			   html_object_get_selection_string (html->engine->clipboard, html->engine);
+			/* g_print("clipboard paste: `%s'\n", selection_string); */
 		}
 	  }
 
@@ -1338,13 +1339,13 @@ selection_get (GtkWidget        *widget,
 	
 	if (selection_string != NULL) {
 		if (info == TARGET_UTF8_STRING) {
-			printf ("UTF8_STRING\n");
+			/* printf ("UTF8_STRING\n"); */
 			gtk_selection_data_set (selection_data,
 						gdk_atom_intern ("UTF8_STRING", FALSE), 8,
 						(const guchar *) selection_string,
 						strlen (selection_string));
 		} else if (info == TARGET_UTF8) {
-			printf ("UTF-8\n");
+			/* printf ("UTF-8\n"); */
 			gtk_selection_data_set (selection_data,
 						gdk_atom_intern ("UTF-8", FALSE), 8,
 						(const guchar *) selection_string,
@@ -1394,29 +1395,25 @@ selection_received (GtkWidget *widget,
 		    GtkSelectionData *selection_data, 
 		    guint time)
 {
-	HTMLEngine *e;
-
 	g_return_if_fail (widget != NULL);
 	g_return_if_fail (GTK_IS_HTML (widget));
 	g_return_if_fail (selection_data != NULL);
 	
-	printf("got selection from system\n");
-
-	e = GTK_HTML (widget)->engine;
+	/* printf ("got selection from system\n"); */
 
 	/* If the Widget is editable,
 	** and we are the owner of the atom requested
 	** then we are pasting between ourself and we
 	** need not do all the conversion.
 	*/
-	if (html_engine_get_editable (e)
+	if (html_engine_get_editable (GTK_HTML (widget)->engine)
 	    && widget->window == gdk_selection_owner_get (selection_data->selection)) {
 
 		/* Check which atom was requested (PRIMARY or CLIPBOARD) */
 		if (selection_data->selection == gdk_atom_intern ("CLIPBOARD", FALSE)
- 			&& e->clipboard) {
+ 			&& GTK_HTML (widget)->engine->clipboard) {
 
-			html_engine_paste (e);
+			html_engine_paste (GTK_HTML (widget)->engine);
 			return;
 
 		} else if (selection_data->selection == GDK_SELECTION_PRIMARY
@@ -1429,9 +1426,11 @@ selection_received (GtkWidget *widget,
 			** buffer
 			*/
 			copy = html_object_op_copy (GTK_HTML (widget)->priv->primary,
-						    e, NULL, NULL, &len);
+				 GTK_HTML (widget)->engine, NULL, NULL, &len);
 
-			html_engine_paste_object (e, copy, GTK_HTML (widget)->priv->primary_len);
+			html_engine_paste_object (GTK_HTML (widget)->engine,
+				copy,
+				GTK_HTML (widget)->priv->primary_len);
 			return;
 		}
 	}
@@ -1454,6 +1453,7 @@ selection_received (GtkWidget *widget,
 	    && (selection_data->type != gdk_atom_intern ("UTF-8", FALSE))) {
 		g_warning ("Selection \"STRING\" was not returned as strings!\n");
 	} else if (selection_data->length > 0) {
+		HTMLEngine *e = GTK_HTML (widget)->engine;
 		printf ("selection text \"%.*s\"\n",
 			selection_data->length, selection_data->data); 
 
@@ -1472,16 +1472,12 @@ selection_received (GtkWidget *widget,
 
 			g_free (utf8);
 		}
-		if (HTML_IS_TEXT (e->cursor->object))
-			html_text_magic_link (HTML_TEXT (e->cursor->object), e,
-					      html_object_get_length (e->cursor->object));
-
 		return;
 	}
 
-	if (html_engine_get_editable (e))
-		html_engine_paste (e);
-}
+	if (html_engine_get_editable (GTK_HTML (widget)->engine))
+		html_engine_paste (GTK_HTML (widget)->engine);
+}  
 
 gint
 gtk_html_request_paste (GtkHTML *html, GdkAtom selection, gint type, gint32 time)
@@ -1552,13 +1548,12 @@ set_fonts_idle (GtkHTML *html)
 	if (html->engine) {
 		html_font_manager_set_default (&html->engine->painter->font_manager,
 					       prop->font_var,      prop->font_fix,
-					       prop->font_var_size, prop->font_var_points,
-					       prop->font_fix_size, prop->font_fix_points);
+					       prop->font_var_size, prop->font_fix_size);
 
 		if (html->engine->clue) {
 			html_object_reset (html->engine->clue);
 			html_object_change_set_down (html->engine->clue, HTML_CHANGE_ALL);
-			html_engine_calc_size (html->engine, FALSE);
+			html_engine_calc_size (html->engine);
 			html_engine_schedule_update (html->engine);
 		}
 	}
@@ -1607,10 +1602,6 @@ client_notify_widget (GConfClient* client,
 		g_free (prop->font_fix);
 		prop->font_fix = gconf_client_get_string (client, entry->key, NULL);
 		set_fonts (html);
-	} else if (!strcmp (tkey, "/font_variable_points")) {
-		prop->font_var_points = gconf_client_get_bool (client, entry->key, NULL);
-	} else if (!strcmp (tkey, "/font_fixed_points")) {
-		prop->font_fix_points = gconf_client_get_bool (client, entry->key, NULL);
 	} else if (!strcmp (tkey, "/font_variable_size")) {
 		prop->font_var_size = gconf_client_get_int (client, entry->key, NULL);
 		set_fonts (html);
@@ -1634,8 +1625,6 @@ client_notify_widget (GConfClient* client,
 	} else if (!strcmp (tkey, "/language")) {
 		g_free (prop->language);
 		prop->language = g_strdup (gconf_client_get_string (client, entry->key, NULL));
-		gtk_html_api_set_language (html);
-		html_engine_spell_check (html->engine);
 	}
 }
 
@@ -2206,8 +2195,6 @@ gtk_html_allow_selection (GtkHTML *html,
 GtkHTMLStream *
 gtk_html_begin (GtkHTML *html)
 {
-	g_return_val_if_fail (GTK_IS_HTML (html), NULL);
-
 	return gtk_html_begin_content (html, html->priv->content_type);
 }
 
@@ -2428,7 +2415,7 @@ gtk_html_private_calc_scrollbars (GtkHTML *html, gboolean *changed_x, gboolean *
 	vadj->page_increment = html->engine->height;
 
 	hadj->lower = 0.0;
-	hadj->upper = width;
+	hadj->upper = MIN (MAX_WIDGET_WIDTH, width);
 	hadj->page_size = html->engine->width;
 	hadj->step_increment = 14; /* FIXME */
 	hadj->page_increment = html->engine->width;
@@ -2746,14 +2733,6 @@ gtk_html_get_object_by_id (GtkHTML *html, const gchar *id)
 
 */
 
-static gint
-get_line_height (GtkHTML *html)
-{
-	return html->engine->painter->font_manager.var_points
-		? html->engine->painter->font_manager.var_size / 10
-		:html->engine->painter->font_manager.var_size;
-}
-
 static void
 scroll (GtkHTML *html,
 	GtkOrientation orientation,
@@ -2772,8 +2751,8 @@ scroll (GtkHTML *html,
 		? gtk_layout_get_vadjustment (GTK_LAYOUT (html)) : gtk_layout_get_hadjustment (GTK_LAYOUT (html));
 
 
-	line25_height = (html->engine && adj->page_increment > ((5 * get_line_height (html)) >> 1))
-		? ((5 * get_line_height (html)) >> 1)
+	line25_height = (html->engine && adj->page_increment > ((5 * html->engine->painter->font_manager.var_size) >> 1))
+		? ((5 * html->engine->painter->font_manager.var_size) >> 1)
 		: 0;
 
 	switch (scroll_type) {
@@ -2874,8 +2853,8 @@ cursor_move (GtkHTML *html, GtkDirectionType dir_type, GtkHTMLCursorSkipType ski
 		gint line25_height;
 
 		line25_height =  GTK_WIDGET (html)->allocation.height
-			> ((5 * get_line_height (html)) >> 1)
-			? ((5 * get_line_height (html)) >> 1)
+			> ((5 * html->engine->painter->font_manager.var_size) >> 1)
+			? ((5 * html->engine->painter->font_manager.var_size) >> 1)
 			: 0;
 
 
@@ -3719,26 +3698,10 @@ gtk_html_select_all (GtkHTML *html)
 }
 
 void
-gtk_html_api_set_language (GtkHTML *html)
-{
-	g_assert (GTK_IS_HTML (html));
-
-	if (html->editor_api) {
-		/* printf ("set language through API to '%s'\n",
-		   GTK_HTML_CLASS (GTK_OBJECT (html)->klass)->properties->language); */
-
-		html->editor_api->set_language (html, GTK_HTML_CLASS (GTK_OBJECT (html)->klass)->properties->language,
-						html->editor_data);
-	}
-}
-
-void
 gtk_html_set_editor_api (GtkHTML *html, GtkHTMLEditorAPI *api, gpointer data)
 {
 	html->editor_api  = api;
 	html->editor_data = data;
-
-	gtk_html_api_set_language (html);
 }
 
 static gchar *
@@ -3821,8 +3784,8 @@ gtk_html_build_with_gconf ()
 #endif
 }
 
-void
-gtk_html_insert_html (GtkHTML *html, const gchar *html_src)
+static void
+gtk_html_insert_html_generic (GtkHTML *html, const gchar *html_src, gboolean obj_only)
 {
 	GtkHTML *tmp;
 	GtkWidget *window, *sw;
@@ -3834,11 +3797,42 @@ gtk_html_insert_html (GtkHTML *html, const gchar *html_src)
 	gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (sw));
 	gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (tmp));
 	gtk_widget_realize (GTK_WIDGET (tmp));
-	o                 = tmp->engine->clue;
-	tmp->engine->clue = NULL;
 	html_image_factory_move_images (html->engine->image_factory, tmp->engine->image_factory);
-	html_engine_insert_object (html->engine, o, html_object_get_recursive_length (o));
+	if (obj_only) {
+		HTMLObject *next;
+		g_return_if_fail (tmp->engine->clue && HTML_CLUE (tmp->engine->clue)->head
+				  && HTML_CLUE (HTML_CLUE (tmp->engine->clue)->head)->head);
+
+		html_undo_level_begin (html->engine->undo, "Append HTML", "Remove appended HTML");
+		o = HTML_CLUE (tmp->engine->clue)->head;
+		for (; o; o = next) {
+			next = o->next;
+			html_object_remove_child (o->parent, o);
+			html_engine_append_flow (html->engine, o, html_object_get_recursive_length (o));
+		}
+		html_undo_level_end (html->engine->undo);
+	} else {
+		g_return_if_fail (tmp->engine->clue);
+
+		o = tmp->engine->clue;
+		tmp->engine->clue = NULL;
+		html_engine_insert_object (html->engine, o,
+					   html_object_get_recursive_length (o),
+					   html_object_get_insert_level (o));
+	}
 	gtk_widget_destroy (window);
+}
+
+void
+gtk_html_insert_html (GtkHTML *html, const gchar *html_src)
+{
+	gtk_html_insert_html_generic (html, html_src, FALSE);
+}
+
+void
+gtk_html_append_html (GtkHTML *html, const gchar *html_src)
+{
+	gtk_html_insert_html_generic (html, html_src, TRUE);
 }
 
 static void
