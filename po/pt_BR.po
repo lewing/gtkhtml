@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 0.6.1\n"
-"POT-Creation-Date: 2000-09-26 16:15-0300\n"
+"POT-Creation-Date: 2000-10-19 11:05+0200\n"
 "PO-Revision-Date: 2000-09-27 18:05-03:00\n"
 "Last-Translator: Gustavo Maciel Dias Vieira <gdvieira@zaz.com.br>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -133,51 +133,57 @@ msgstr "Imagem de fundo"
 msgid "Colors"
 msgstr "Cores"
 
-#: components/html-editor/editor-control-factory.c:133
-#: components/html-editor/popup.c:86
+#: components/html-editor/editor-control-factory.c:126
+#: components/html-editor/popup.c:71
+msgid "Properties"
+msgstr "Propriedades"
+
+#: components/html-editor/editor-control-factory.c:137
+#: components/html-editor/menubar.c:96 components/html-editor/popup.c:86
 msgid "Image"
 msgstr "Imagem"
 
-#: components/html-editor/editor-control-factory.c:142
-#: components/html-editor/popup.c:79
+#: components/html-editor/editor-control-factory.c:146
+#: components/html-editor/menubar.c:117 components/html-editor/popup.c:79
 msgid "Text"
 msgstr "Texto"
 
-#: components/html-editor/editor-control-factory.c:154
+#: components/html-editor/editor-control-factory.c:158
 #: components/html-editor/popup.c:93
 msgid "Paragraph"
 msgstr "Parágrafo"
 
-#: components/html-editor/editor-control-factory.c:159
-#: components/html-editor/menubar.c:109 components/html-editor/popup.c:100
+#: components/html-editor/editor-control-factory.c:163
+#: components/html-editor/menubar.c:101 components/html-editor/menubar.c:122
+#: components/html-editor/popup.c:100
 msgid "Link"
 msgstr "Vínculo"
 
-#: components/html-editor/editor-control-factory.c:164
+#: components/html-editor/editor-control-factory.c:168
 #: components/html-editor/popup.c:107
 msgid "Page"
 msgstr "Página"
 
-#: components/html-editor/image.c:409
+#: components/html-editor/image.c:142
 msgid "Image selection"
 msgstr "Seleção de imagem"
 
-#: components/html-editor/image.c:417
+#: components/html-editor/image.c:150
 msgid "Border"
 msgstr "Borda"
 
 #. ADD_ITEM("Left",   GDK_F4);
 #. ADD_ITEM("Right",  GDK_F5);
-#: components/html-editor/image.c:450
+#: components/html-editor/image.c:183
 msgid "Alignment"
 msgstr "Alinhamento"
 
-#: components/html-editor/image.c:462 components/html-editor/rule.c:124
+#: components/html-editor/image.c:195 components/html-editor/rule.c:124
 #: components/html-editor/text.c:160
 msgid "Size"
 msgstr "Tamanho"
 
-#: components/html-editor/image.c:489
+#: components/html-editor/image.c:222
 msgid "Padding"
 msgstr "Espaçamento"
 
@@ -197,11 +203,12 @@ msgstr "Não foi possível iniciar GNORBA"
 msgid "Could not initialize Bonobo"
 msgstr "Não foi possível iniciar Bonobo"
 
-#: components/html-editor/menubar.c:93
-msgid "Insert image"
-msgstr "Insere imagem"
+#: components/html-editor/menubar.c:94 components/html-editor/menubar.c:114
+#: components/html-editor/properties.c:110
+msgid "Insert"
+msgstr "Inserir"
 
-#: components/html-editor/menubar.c:128
+#: components/html-editor/menubar.c:142
 msgid "Cannot execute gtkhtml properties"
 msgstr "Não é possível executar propriedades gtkhtml"
 
@@ -225,15 +232,6 @@ msgstr "Centrado"
 msgid "Right"
 msgstr "Direita"
 
-#: components/html-editor/properties.c:92
-#: components/html-editor/properties.c:93
-msgid "Insert"
-msgstr "Inserir"
-
-#: components/html-editor/properties.c:95
-msgid "Properties"
-msgstr "Propriedades"
-
 #: components/html-editor/popup.c:178
 msgid "Remove link"
 msgstr "Excluir vínculo"
@@ -255,11 +253,11 @@ msgstr "Substituir todas"
 msgid "Next"
 msgstr "Próximo"
 
-#: components/html-editor/replace.c:152 components/html-editor/search.c:66
+#: components/html-editor/replace.c:152 components/html-editor/search.c:67
 msgid "search backward"
 msgstr "busca regressiva"
 
-#: components/html-editor/replace.c:153 components/html-editor/search.c:67
+#: components/html-editor/replace.c:153 components/html-editor/search.c:68
 msgid "case sensitive"
 msgstr "diferenciar maiúsculas de minúsculas"
 
@@ -299,11 +297,11 @@ msgstr "Régua"
 msgid "Set Shade"
 msgstr "Ligar sombra"
 
-#: components/html-editor/search.c:63
+#: components/html-editor/search.c:64
 msgid "Regex search"
 msgstr "Busca por regex"
 
-#: components/html-editor/search.c:63
+#: components/html-editor/search.c:64
 msgid "Search"
 msgstr "Busca"
 
@@ -530,3 +528,6 @@ msgstr "_Visualizar impressão"
 #: src/testgtkhtml.c:111
 msgid "Print preview"
 msgstr "Visualizar impressão"
+
+#~ msgid "Insert image"
+#~ msgstr "Insere imagem"

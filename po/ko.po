@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 0.6.1\n"
-"POT-Creation-Date: 2000-08-19 22:55+0200\n"
+"POT-Creation-Date: 2000-10-19 11:05+0200\n"
 "PO-Revision-Date: 2000-08-19 23:00+02:00\n"
 "Last-Translator: Chideok <hwang@mizi.co.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -13,77 +13,116 @@ msgstr ""
 "Content-Type: text/plain; charset=euc-kr\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: capplet/gnome-bindings-prop.c:153 capplet/gnome-bindings-prop.c:221
-#: capplet/gnome-bindings-prop.c:296 capplet/gnome-bindings-prop.c:431
-#: capplet/gnome-bindings-prop.c:432
+#: capplet/gnome-bindings-prop.c:154 capplet/gnome-bindings-prop.c:222
+#: capplet/gnome-bindings-prop.c:297 capplet/gnome-bindings-prop.c:435
+#: capplet/gnome-bindings-prop.c:436
 msgid "<None>"
 msgstr "<없음>"
 
-#: capplet/gnome-bindings-prop.c:521
+#: capplet/gnome-bindings-prop.c:525
 msgid "Key"
 msgstr "키"
 
-#: capplet/gnome-bindings-prop.c:521
+#: capplet/gnome-bindings-prop.c:525
 msgid "Command"
 msgstr "명령어"
 
-#: capplet/gnome-bindings-prop.c:522
+#: capplet/gnome-bindings-prop.c:526
 msgid "Commands"
 msgstr "명령어들"
 
-#: capplet/gnome-bindings-prop.c:523
+#: capplet/gnome-bindings-prop.c:527
 msgid "Keymaps"
 msgstr "키맵"
 
-#: capplet/gnome-bindings-prop.c:541
+#: capplet/gnome-bindings-prop.c:545
 msgid "Add"
 msgstr "추가"
 
-#: capplet/gnome-bindings-prop.c:544
-#: components/html-editor/test-html-editor-control.c:325
+#: capplet/gnome-bindings-prop.c:548
+#: components/html-editor/test-html-editor-control.c:323
 #: components/html-editor/toolbar.c:495
 msgid "Copy"
 msgstr "복사"
 
-#: capplet/gnome-bindings-prop.c:547
+#: capplet/gnome-bindings-prop.c:551
 msgid "Delete"
 msgstr "삭제"
 
-#: capplet/gnome-bindings-prop.c:578
+#: capplet/gnome-bindings-prop.c:582
 msgid "Grab key"
 msgstr ""
 
-#: capplet/main.c:175
-msgid "Appearance"
-msgstr "모양새"
-
-#: capplet/main.c:181
-msgid "Variable width font"
-msgstr "가변폭 글꼴"
-
-#: capplet/main.c:185
-msgid "Select HTML variable width font"
-msgstr "HTML 가변폭 글꼴을 선택합니다"
-
-#: capplet/main.c:190
-msgid "Fixed width font"
-msgstr "고정폭 글꼴"
-
-#: capplet/main.c:194
-msgid "Select HTML fixed width font"
-msgstr "HTML 고정폭 글꼴을 선택합니다"
-
-#: capplet/main.c:204
-msgid "Behaviour"
+#: capplet/main.c:220
+msgid "Spell checking"
 msgstr ""
 
-#: capplet/main.c:205
+#: capplet/main.c:223
+msgid "live spell checking"
+msgstr ""
+
+#: capplet/main.c:232
+msgid "spell checking color"
+msgstr ""
+
+#: capplet/main.c:239
+msgid "language"
+msgstr ""
+
+#: capplet/main.c:245
+msgid "Miscellaneous"
+msgstr ""
+
+#: capplet/main.c:247
 msgid "magic links"
 msgstr "자동 링크 생성"
 
-#: capplet/main.c:212
-msgid "Keybindings"
+#: capplet/main.c:266
+#, fuzzy
+msgid "Bindings"
 msgstr "키 결합"
+
+#: capplet/main.c:267 capplet/viewer.c:188
+msgid "Behaviour"
+msgstr ""
+
+#: capplet/viewer.c:148
+msgid "Appearance"
+msgstr "모양새"
+
+#: capplet/viewer.c:154
+msgid "Variable width font"
+msgstr "가변폭 글꼴"
+
+#: capplet/viewer.c:158
+msgid "Select HTML variable width font"
+msgstr "HTML 가변폭 글꼴을 선택합니다"
+
+#: capplet/viewer.c:162 capplet/viewer.c:177
+msgid "for printing"
+msgstr ""
+
+#: capplet/viewer.c:164
+#, fuzzy
+msgid "Select HTML variable width font for printing"
+msgstr "HTML 가변폭 글꼴을 선택합니다"
+
+#: capplet/viewer.c:169
+msgid "Fixed width font"
+msgstr "고정폭 글꼴"
+
+#: capplet/viewer.c:173
+msgid "Select HTML fixed width font"
+msgstr "HTML 고정폭 글꼴을 선택합니다"
+
+#: capplet/viewer.c:179
+#, fuzzy
+msgid "Select HTML fixed width font for printing"
+msgstr "HTML 고정폭 글꼴을 선택합니다"
+
+#: capplet/viewer.c:189
+msgid "Animations"
+msgstr ""
 
 #: components/html-editor/body.c:107
 msgid "use background image"
@@ -97,51 +136,57 @@ msgstr "배경 이미지"
 msgid "Colors"
 msgstr "색상"
 
-#: components/html-editor/editor-control-factory.c:133
-#: components/html-editor/popup.c:86
+#: components/html-editor/editor-control-factory.c:126
+#: components/html-editor/popup.c:71
+msgid "Properties"
+msgstr "특성들"
+
+#: components/html-editor/editor-control-factory.c:137
+#: components/html-editor/menubar.c:96 components/html-editor/popup.c:86
 msgid "Image"
 msgstr "이미지"
 
-#: components/html-editor/editor-control-factory.c:142
-#: components/html-editor/popup.c:79
+#: components/html-editor/editor-control-factory.c:146
+#: components/html-editor/menubar.c:117 components/html-editor/popup.c:79
 msgid "Text"
 msgstr "텍스트"
 
-#: components/html-editor/editor-control-factory.c:154
+#: components/html-editor/editor-control-factory.c:158
 #: components/html-editor/popup.c:93
 msgid "Paragraph"
 msgstr "문단"
 
-#: components/html-editor/editor-control-factory.c:159
-#: components/html-editor/menubar.c:157 components/html-editor/popup.c:100
+#: components/html-editor/editor-control-factory.c:163
+#: components/html-editor/menubar.c:101 components/html-editor/menubar.c:122
+#: components/html-editor/popup.c:100
 msgid "Link"
 msgstr "링크"
 
-#: components/html-editor/editor-control-factory.c:164
+#: components/html-editor/editor-control-factory.c:168
 #: components/html-editor/popup.c:107
 msgid "Page"
 msgstr "쪽"
 
-#: components/html-editor/image.c:409
+#: components/html-editor/image.c:142
 msgid "Image selection"
 msgstr "이미지 선택"
 
-#: components/html-editor/image.c:417
+#: components/html-editor/image.c:150
 msgid "Border"
 msgstr "둘레"
 
 #. ADD_ITEM("Left",   GDK_F4);
 #. ADD_ITEM("Right",  GDK_F5);
-#: components/html-editor/image.c:450
+#: components/html-editor/image.c:183
 msgid "Alignment"
 msgstr "정렬"
 
-#: components/html-editor/image.c:462 components/html-editor/rule.c:124
+#: components/html-editor/image.c:195 components/html-editor/rule.c:124
 #: components/html-editor/text.c:160
 msgid "Size"
 msgstr "크기"
 
-#: components/html-editor/image.c:489
+#: components/html-editor/image.c:222
 msgid "Padding"
 msgstr "채움"
 
@@ -161,47 +206,12 @@ msgstr "GNORBA을 초기화할 수 없습니다"
 msgid "Could not initialize Bonobo"
 msgstr "Bonobo를 초기화할 수 없습니다"
 
-#: components/html-editor/menubar.c:60
-msgid "Find Rege_x..."
-msgstr "정규식 찾기(_x)..."
+#: components/html-editor/menubar.c:94 components/html-editor/menubar.c:114
+#: components/html-editor/properties.c:110
+msgid "Insert"
+msgstr "삽입"
 
-#: components/html-editor/menubar.c:60
-msgid "Regular expressions search..."
-msgstr "정규식 패턴으로 문자열을 찾아줍니다..."
-
-#: components/html-editor/menubar.c:69
-msgid "_Image..."
-msgstr "이미지(_I)..."
-
-#: components/html-editor/menubar.c:69
-msgid "Insert image into document..."
-msgstr "문서안으로 이미지를 삽입합니다..."
-
-#: components/html-editor/menubar.c:70
-msgid "_Link..."
-msgstr "링크(_L)..."
-
-#: components/html-editor/menubar.c:70
-msgid "Insert HTML link into document..."
-msgstr "문서안으로 링크를 삽입합니다..."
-
-#: components/html-editor/menubar.c:71
-msgid "_Rule..."
-msgstr "가로선(_R)..."
-
-#: components/html-editor/menubar.c:71
-msgid "Insert rule into document..."
-msgstr "문서안으로 가로선을 삽입합니다..."
-
-#: components/html-editor/menubar.c:76
-msgid "_Insert"
-msgstr "삽입(_I)"
-
-#: components/html-editor/menubar.c:143
-msgid "Insert image"
-msgstr "이미지를 삽입한다"
-
-#: components/html-editor/menubar.c:175
+#: components/html-editor/menubar.c:142
 msgid "Cannot execute gtkhtml properties"
 msgstr "gtkhtml properties를 실행할 수 없습니다"
 
@@ -225,15 +235,6 @@ msgstr "가운데"
 msgid "Right"
 msgstr "오른쪽"
 
-#: components/html-editor/properties.c:92
-#: components/html-editor/properties.c:93
-msgid "Insert"
-msgstr "삽입"
-
-#: components/html-editor/properties.c:95
-msgid "Properties"
-msgstr "특성들"
-
 #: components/html-editor/popup.c:178
 msgid "Remove link"
 msgstr "링크 제거"
@@ -255,11 +256,11 @@ msgstr "전부 치환"
 msgid "Next"
 msgstr "다음"
 
-#: components/html-editor/replace.c:152 components/html-editor/search.c:66
+#: components/html-editor/replace.c:152 components/html-editor/search.c:67
 msgid "search backward"
 msgstr "뒤로 찾기"
 
-#: components/html-editor/replace.c:153 components/html-editor/search.c:67
+#: components/html-editor/replace.c:153 components/html-editor/search.c:68
 msgid "case sensitive"
 msgstr "대소문자 구별"
 
@@ -299,73 +300,73 @@ msgstr "막대"
 msgid "Set Shade"
 msgstr ""
 
-#: components/html-editor/search.c:63
+#: components/html-editor/search.c:64
 msgid "Regex search"
 msgstr "정규식 찾기"
 
-#: components/html-editor/search.c:63
+#: components/html-editor/search.c:64
 msgid "Search"
 msgstr "찾기"
 
-#: components/html-editor/test-html-editor-control.c:234
+#: components/html-editor/test-html-editor-control.c:232
 msgid "Open file..."
 msgstr "파일 열기..."
 
-#: components/html-editor/test-html-editor-control.c:236
+#: components/html-editor/test-html-editor-control.c:234
 msgid "Save file as..."
 msgstr "새 이름으로 저장..."
 
-#: components/html-editor/test-html-editor-control.c:302
+#: components/html-editor/test-html-editor-control.c:300
 msgid "Open (PersistFile)"
 msgstr "열기 (PersistFile)"
 
-#: components/html-editor/test-html-editor-control.c:302
+#: components/html-editor/test-html-editor-control.c:300
 msgid "Open using the PersistFile interface"
 msgstr "PersistFile 인터페이스를 사용해서 열기"
 
-#: components/html-editor/test-html-editor-control.c:304
+#: components/html-editor/test-html-editor-control.c:302
 msgid "Save as... (PersistFile)"
 msgstr "저장 ... (PersistFile)"
 
-#: components/html-editor/test-html-editor-control.c:304
+#: components/html-editor/test-html-editor-control.c:302
 msgid "Save using the PersistFile interface"
 msgstr "PersistFile 인터페이스를 이용해서 저장합니다"
 
-#: components/html-editor/test-html-editor-control.c:307
+#: components/html-editor/test-html-editor-control.c:305
 msgid "Open (PersistStream)"
 msgstr "열기 (PersistStream)"
 
-#: components/html-editor/test-html-editor-control.c:307
+#: components/html-editor/test-html-editor-control.c:305
 msgid "Open using the PersistStream interface"
 msgstr "PersistStream을 사용해서 열기"
 
-#: components/html-editor/test-html-editor-control.c:309
+#: components/html-editor/test-html-editor-control.c:307
 msgid "Save as... (PersistStream)"
 msgstr "저장... (PersistStream)"
 
-#: components/html-editor/test-html-editor-control.c:309
+#: components/html-editor/test-html-editor-control.c:307
 msgid "Save using the PersistStream interface"
 msgstr "PersistStream을 사용해서 저장"
 
-#: components/html-editor/test-html-editor-control.c:323
+#: components/html-editor/test-html-editor-control.c:321
 #: components/html-editor/toolbar.c:493
 msgid "Cut"
 msgstr "잘라내기"
 
-#: components/html-editor/test-html-editor-control.c:323
+#: components/html-editor/test-html-editor-control.c:321
 msgid "Cut selection to the clipboard"
 msgstr "현재 선택된 부분을 클립보드로 잘라 보냅니다"
 
-#: components/html-editor/test-html-editor-control.c:325
+#: components/html-editor/test-html-editor-control.c:323
 msgid "Copy selection to the clipboard"
 msgstr "현재 선택된 부분을 클립보드로 복사합니다"
 
-#: components/html-editor/test-html-editor-control.c:327
+#: components/html-editor/test-html-editor-control.c:325
 #: components/html-editor/toolbar.c:497
 msgid "Paste"
 msgstr "붙여넣기"
 
-#: components/html-editor/test-html-editor-control.c:327
+#: components/html-editor/test-html-editor-control.c:325
 #: components/html-editor/toolbar.c:497
 msgid "Paste contents of the clipboard"
 msgstr "클립보드의 내용을 붙여넣습니다"
@@ -523,87 +524,91 @@ msgstr ""
 msgid "Indent paragraphs more"
 msgstr ""
 
-#: glibwww/gnome-dialogs.c:85
-msgid "Transfer Progress"
-msgstr ""
-
-#: glibwww/gnome-dialogs.c:139
-#, c-format
-msgid "Looking up %s"
-msgstr "%s를 찾아보는 중"
-
-#: glibwww/gnome-dialogs.c:145
-#, c-format
-msgid "Contacting %s"
-msgstr "%s를 접속하는 중"
-
-#: glibwww/gnome-dialogs.c:152
-msgid "Waiting for a connection..."
-msgstr "접속을 기달립니다..."
-
-#: glibwww/gnome-dialogs.c:156
-msgid "Logging in..."
-msgstr "로그인중..."
-
-#: glibwww/gnome-dialogs.c:165
-msgid "Read %d%%%% of %l"
-msgstr "%d%%%% of %l 읽음"
-
-#: glibwww/gnome-dialogs.c:175 glibwww/gnome-dialogs.c:177
-#, c-format
-msgid "Read %d bytes"
-msgstr "%d 바이트 읽음"
-
-#: glibwww/gnome-dialogs.c:179
-msgid "Reading..."
-msgstr "읽는 중..."
-
-#: glibwww/gnome-dialogs.c:194
-msgid "Writing %d%%%% of %l"
-msgstr "%d%%%% of %l 쓰는 중"
-
-#: glibwww/gnome-dialogs.c:204 glibwww/gnome-dialogs.c:206
-#, c-format
-msgid "Writing %d bytes"
-msgstr "%d 바이트 쓰는 중"
-
-#: glibwww/gnome-dialogs.c:208
-msgid "Writing..."
-msgstr "쓰는 중..."
-
-#: glibwww/gnome-dialogs.c:216
-msgid "Done!"
-msgstr "끝!"
-
-#: glibwww/gnome-dialogs.c:220
-msgid "Interrupted!"
-msgstr "중단됨!"
-
-#: glibwww/gnome-dialogs.c:224
-msgid "Please wait..."
-msgstr "잠시 기다리세요..."
-
-#: glibwww/gnome-dialogs.c:228
-msgid "Request timeout!"
-msgstr "요청이 시간 초과되었습니다!"
-
-#: glibwww/gnome-dialogs.c:232
-msgid "Unknown"
-msgstr "알려지지않음"
-
-#: glibwww/gnome-dialogs.c:275
-msgid "Enter Text"
-msgstr "문자열을 넣으세요"
-
-#: glibwww/gnome-dialogs.c:316 glibwww/gnome-dialogs.c:357
-msgid "Enter Password"
-msgstr "비밀번호를 넣으세요"
-
-#: src/testgtkhtml.c:110
+#: src/testgtkhtml.c:111
 msgid "Print pre_view"
 msgstr "인쇄 미리보기(_v)"
 
-#: src/testgtkhtml.c:110
+#: src/testgtkhtml.c:111
 msgid "Print preview"
 msgstr "인쇄가 되는 모습을 미리 확인해봅니다"
 
+#~ msgid "Find Rege_x..."
+#~ msgstr "정규식 찾기(_x)..."
+
+#~ msgid "Regular expressions search..."
+#~ msgstr "정규식 패턴으로 문자열을 찾아줍니다..."
+
+#~ msgid "_Image..."
+#~ msgstr "이미지(_I)..."
+
+#~ msgid "Insert image into document..."
+#~ msgstr "문서안으로 이미지를 삽입합니다..."
+
+#~ msgid "_Link..."
+#~ msgstr "링크(_L)..."
+
+#~ msgid "Insert HTML link into document..."
+#~ msgstr "문서안으로 링크를 삽입합니다..."
+
+#~ msgid "_Rule..."
+#~ msgstr "가로선(_R)..."
+
+#~ msgid "Insert rule into document..."
+#~ msgstr "문서안으로 가로선을 삽입합니다..."
+
+#~ msgid "_Insert"
+#~ msgstr "삽입(_I)"
+
+#~ msgid "Insert image"
+#~ msgstr "이미지를 삽입한다"
+
+#~ msgid "Looking up %s"
+#~ msgstr "%s를 찾아보는 중"
+
+#~ msgid "Contacting %s"
+#~ msgstr "%s를 접속하는 중"
+
+#~ msgid "Waiting for a connection..."
+#~ msgstr "접속을 기달립니다..."
+
+#~ msgid "Logging in..."
+#~ msgstr "로그인중..."
+
+#~ msgid "Read %d%%%% of %l"
+#~ msgstr "%d%%%% of %l 읽음"
+
+#~ msgid "Read %d bytes"
+#~ msgstr "%d 바이트 읽음"
+
+#~ msgid "Reading..."
+#~ msgstr "읽는 중..."
+
+#~ msgid "Writing %d%%%% of %l"
+#~ msgstr "%d%%%% of %l 쓰는 중"
+
+#~ msgid "Writing %d bytes"
+#~ msgstr "%d 바이트 쓰는 중"
+
+#~ msgid "Writing..."
+#~ msgstr "쓰는 중..."
+
+#~ msgid "Done!"
+#~ msgstr "끝!"
+
+#~ msgid "Interrupted!"
+#~ msgstr "중단됨!"
+
+#~ msgid "Please wait..."
+#~ msgstr "잠시 기다리세요..."
+
+#~ msgid "Request timeout!"
+#~ msgstr "요청이 시간 초과되었습니다!"
+
+#~ msgid "Unknown"
+#~ msgstr "알려지지않음"
+
+#~ msgid "Enter Text"
+#~ msgstr "문자열을 넣으세요"
+
+#~ msgid "Enter Password"
+#~ msgstr "비밀번호를 넣으세요"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2000-09-04 20:53+0200\n"
+"POT-Creation-Date: 2000-10-19 11:05+0200\n"
 "PO-Revision-Date: 2000-08-06 22:43+0200\n"
 "Last-Translator: Andraz Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -13,57 +13,116 @@ msgstr ""
 "Content-Type: text/plain; charset=iso8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: capplet/gnome-bindings-prop.c:153 capplet/gnome-bindings-prop.c:221
-#: capplet/gnome-bindings-prop.c:296 capplet/gnome-bindings-prop.c:431
-#: capplet/gnome-bindings-prop.c:432
+#: capplet/gnome-bindings-prop.c:154 capplet/gnome-bindings-prop.c:222
+#: capplet/gnome-bindings-prop.c:297 capplet/gnome-bindings-prop.c:435
+#: capplet/gnome-bindings-prop.c:436
 msgid "<None>"
 msgstr "<Brez>"
 
-#: capplet/gnome-bindings-prop.c:521
+#: capplet/gnome-bindings-prop.c:525
 msgid "Key"
 msgstr "Kljuè"
 
-#: capplet/gnome-bindings-prop.c:521
+#: capplet/gnome-bindings-prop.c:525
 msgid "Command"
 msgstr "Ukaz"
 
-#: capplet/gnome-bindings-prop.c:522
+#: capplet/gnome-bindings-prop.c:526
 msgid "Commands"
 msgstr "Ukazi"
 
-#: capplet/gnome-bindings-prop.c:523
+#: capplet/gnome-bindings-prop.c:527
 msgid "Keymaps"
 msgstr "Mapiranja tipk"
 
-#: capplet/gnome-bindings-prop.c:541
+#: capplet/gnome-bindings-prop.c:545
 msgid "Add"
 msgstr "Dodaj"
 
-#: capplet/gnome-bindings-prop.c:544
-#: components/html-editor/test-html-editor-control.c:325
+#: capplet/gnome-bindings-prop.c:548
+#: components/html-editor/test-html-editor-control.c:323
 #: components/html-editor/toolbar.c:495
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: capplet/gnome-bindings-prop.c:547
+#: capplet/gnome-bindings-prop.c:551
 msgid "Delete"
 msgstr "Zbri¹i"
 
-#: capplet/gnome-bindings-prop.c:578
+#: capplet/gnome-bindings-prop.c:582
 msgid "Grab key"
 msgstr "Preberi tipko"
 
-#: capplet/main.c:127
-msgid "Behaviour"
-msgstr "Obna¹anje"
+#: capplet/main.c:220
+msgid "Spell checking"
+msgstr ""
 
-#: capplet/main.c:128
+#: capplet/main.c:223
+msgid "live spell checking"
+msgstr ""
+
+#: capplet/main.c:232
+msgid "spell checking color"
+msgstr ""
+
+#: capplet/main.c:239
+msgid "language"
+msgstr ""
+
+#: capplet/main.c:245
+msgid "Miscellaneous"
+msgstr ""
+
+#: capplet/main.c:247
 msgid "magic links"
 msgstr "èarobne povezave"
 
-#: capplet/main.c:135
-msgid "Keybindings"
+#: capplet/main.c:266
+#, fuzzy
+msgid "Bindings"
 msgstr "Vezi tipk"
+
+#: capplet/main.c:267 capplet/viewer.c:188
+msgid "Behaviour"
+msgstr "Obna¹anje"
+
+#: capplet/viewer.c:148
+msgid "Appearance"
+msgstr "Izgled"
+
+#: capplet/viewer.c:154
+msgid "Variable width font"
+msgstr "Pisava s spremenljivo ¹irino"
+
+#: capplet/viewer.c:158
+msgid "Select HTML variable width font"
+msgstr "Izberi HTML pisavo s spremenljivo ¹irino"
+
+#: capplet/viewer.c:162 capplet/viewer.c:177
+msgid "for printing"
+msgstr ""
+
+#: capplet/viewer.c:164
+#, fuzzy
+msgid "Select HTML variable width font for printing"
+msgstr "Izberi HTML pisavo s spremenljivo ¹irino"
+
+#: capplet/viewer.c:169
+msgid "Fixed width font"
+msgstr "Pisava z nespremenljivo ¹irino"
+
+#: capplet/viewer.c:173
+msgid "Select HTML fixed width font"
+msgstr "Izberi pisavo z nespremenljivo dol¾ino"
+
+#: capplet/viewer.c:179
+#, fuzzy
+msgid "Select HTML fixed width font for printing"
+msgstr "Izberi pisavo z nespremenljivo dol¾ino"
+
+#: capplet/viewer.c:189
+msgid "Animations"
+msgstr ""
 
 #: components/html-editor/body.c:107
 msgid "use background image"
@@ -77,51 +136,57 @@ msgstr "Slika ozadja"
 msgid "Colors"
 msgstr "Barve"
 
-#: components/html-editor/editor-control-factory.c:133
-#: components/html-editor/popup.c:86
+#: components/html-editor/editor-control-factory.c:126
+#: components/html-editor/popup.c:71
+msgid "Properties"
+msgstr "Lastnosti"
+
+#: components/html-editor/editor-control-factory.c:137
+#: components/html-editor/menubar.c:96 components/html-editor/popup.c:86
 msgid "Image"
 msgstr "Slika"
 
-#: components/html-editor/editor-control-factory.c:142
-#: components/html-editor/popup.c:79
+#: components/html-editor/editor-control-factory.c:146
+#: components/html-editor/menubar.c:117 components/html-editor/popup.c:79
 msgid "Text"
 msgstr "Besedilo"
 
-#: components/html-editor/editor-control-factory.c:154
+#: components/html-editor/editor-control-factory.c:158
 #: components/html-editor/popup.c:93
 msgid "Paragraph"
 msgstr "Odstavek"
 
-#: components/html-editor/editor-control-factory.c:159
-#: components/html-editor/menubar.c:157 components/html-editor/popup.c:100
+#: components/html-editor/editor-control-factory.c:163
+#: components/html-editor/menubar.c:101 components/html-editor/menubar.c:122
+#: components/html-editor/popup.c:100
 msgid "Link"
 msgstr "Povezava"
 
-#: components/html-editor/editor-control-factory.c:164
+#: components/html-editor/editor-control-factory.c:168
 #: components/html-editor/popup.c:107
 msgid "Page"
 msgstr "Stran"
 
-#: components/html-editor/image.c:409
+#: components/html-editor/image.c:142
 msgid "Image selection"
 msgstr "Izbira slike"
 
-#: components/html-editor/image.c:417
+#: components/html-editor/image.c:150
 msgid "Border"
 msgstr "Rob"
 
 #. ADD_ITEM("Left",   GDK_F4);
 #. ADD_ITEM("Right",  GDK_F5);
-#: components/html-editor/image.c:450
+#: components/html-editor/image.c:183
 msgid "Alignment"
 msgstr "Poravnava"
 
-#: components/html-editor/image.c:462 components/html-editor/rule.c:124
+#: components/html-editor/image.c:195 components/html-editor/rule.c:124
 #: components/html-editor/text.c:160
 msgid "Size"
 msgstr "Velikost"
 
-#: components/html-editor/image.c:489
+#: components/html-editor/image.c:222
 msgid "Padding"
 msgstr "Polnjenje"
 
@@ -141,47 +206,12 @@ msgstr "Nisem mogel inicializirati GNORBA-e"
 msgid "Could not initialize Bonobo"
 msgstr "Nisem mogel inicializirati Bonoba"
 
-#: components/html-editor/menubar.c:60
-msgid "Find Rege_x..."
-msgstr "P_oi¹èi..."
+#: components/html-editor/menubar.c:94 components/html-editor/menubar.c:114
+#: components/html-editor/properties.c:110
+msgid "Insert"
+msgstr "Vstavi"
 
-#: components/html-editor/menubar.c:60
-msgid "Regular expressions search..."
-msgstr "Iskanje s pomoèjo regularnega izraza..."
-
-#: components/html-editor/menubar.c:69
-msgid "_Image..."
-msgstr "_Slika..."
-
-#: components/html-editor/menubar.c:69
-msgid "Insert image into document..."
-msgstr "V dokument vstavi sliko..."
-
-#: components/html-editor/menubar.c:70
-msgid "_Link..."
-msgstr "_Povezava..."
-
-#: components/html-editor/menubar.c:70
-msgid "Insert HTML link into document..."
-msgstr "V dokument vstavi HTML povezavo..."
-
-#: components/html-editor/menubar.c:71
-msgid "_Rule..."
-msgstr "P_ravilo..."
-
-#: components/html-editor/menubar.c:71
-msgid "Insert rule into document..."
-msgstr "V dokument vstavi pravilo"
-
-#: components/html-editor/menubar.c:76
-msgid "_Insert"
-msgstr "Vstav_i"
-
-#: components/html-editor/menubar.c:143
-msgid "Insert image"
-msgstr "Vstavi sliko"
-
-#: components/html-editor/menubar.c:175
+#: components/html-editor/menubar.c:142
 msgid "Cannot execute gtkhtml properties"
 msgstr "Ne morem izvesti gtkhtml lastnosti"
 
@@ -205,15 +235,6 @@ msgstr "Na sredini"
 msgid "Right"
 msgstr "Desno"
 
-#: components/html-editor/properties.c:92
-#: components/html-editor/properties.c:93
-msgid "Insert"
-msgstr "Vstavi"
-
-#: components/html-editor/properties.c:95
-msgid "Properties"
-msgstr "Lastnosti"
-
 #: components/html-editor/popup.c:178
 msgid "Remove link"
 msgstr "Odstrani povezavo"
@@ -235,11 +256,11 @@ msgstr "Zamenjaj vse"
 msgid "Next"
 msgstr "Naslednji"
 
-#: components/html-editor/replace.c:152 components/html-editor/search.c:66
+#: components/html-editor/replace.c:152 components/html-editor/search.c:67
 msgid "search backward"
 msgstr "i¹èi nazaj"
 
-#: components/html-editor/replace.c:153 components/html-editor/search.c:67
+#: components/html-editor/replace.c:153 components/html-editor/search.c:68
 msgid "case sensitive"
 msgstr "razlikuj velike in male èrke"
 
@@ -279,73 +300,73 @@ msgstr "Pravilo"
 msgid "Set Shade"
 msgstr "Nastavi odtenek"
 
-#: components/html-editor/search.c:63
+#: components/html-editor/search.c:64
 msgid "Regex search"
 msgstr "Iskanje z reg. izrazom"
 
-#: components/html-editor/search.c:63
+#: components/html-editor/search.c:64
 msgid "Search"
 msgstr "Iskanje"
 
-#: components/html-editor/test-html-editor-control.c:234
+#: components/html-editor/test-html-editor-control.c:232
 msgid "Open file..."
 msgstr "Odpri datoteko..."
 
-#: components/html-editor/test-html-editor-control.c:236
+#: components/html-editor/test-html-editor-control.c:234
 msgid "Save file as..."
 msgstr "Shranitev datoteke kot..."
 
-#: components/html-editor/test-html-editor-control.c:302
+#: components/html-editor/test-html-editor-control.c:300
 msgid "Open (PersistFile)"
 msgstr "Odpri (TrajnaDatoteka)"
 
-#: components/html-editor/test-html-editor-control.c:302
+#: components/html-editor/test-html-editor-control.c:300
 msgid "Open using the PersistFile interface"
 msgstr "Odpri z uporabo vmesnika TrajnaDatoteka"
 
-#: components/html-editor/test-html-editor-control.c:304
+#: components/html-editor/test-html-editor-control.c:302
 msgid "Save as... (PersistFile)"
 msgstr "Shrani kot... (TrajnaDatoteka)"
 
-#: components/html-editor/test-html-editor-control.c:304
+#: components/html-editor/test-html-editor-control.c:302
 msgid "Save using the PersistFile interface"
 msgstr "Shrani z uporabo vmesnika TrajnaDatoteka"
 
-#: components/html-editor/test-html-editor-control.c:307
+#: components/html-editor/test-html-editor-control.c:305
 msgid "Open (PersistStream)"
 msgstr "Odpri (TrajniTok)"
 
-#: components/html-editor/test-html-editor-control.c:307
+#: components/html-editor/test-html-editor-control.c:305
 msgid "Open using the PersistStream interface"
 msgstr "Odpri z uporabo vmesnika TrajniTok"
 
-#: components/html-editor/test-html-editor-control.c:309
+#: components/html-editor/test-html-editor-control.c:307
 msgid "Save as... (PersistStream)"
 msgstr "Shrani kot... (TrajniTok)"
 
-#: components/html-editor/test-html-editor-control.c:309
+#: components/html-editor/test-html-editor-control.c:307
 msgid "Save using the PersistStream interface"
 msgstr "Shrani z uporabo vmesnika TrajniTok"
 
-#: components/html-editor/test-html-editor-control.c:323
+#: components/html-editor/test-html-editor-control.c:321
 #: components/html-editor/toolbar.c:493
 msgid "Cut"
 msgstr "Izre¾i"
 
-#: components/html-editor/test-html-editor-control.c:323
+#: components/html-editor/test-html-editor-control.c:321
 msgid "Cut selection to the clipboard"
 msgstr "Izre¾i izbrano na odlo¾i¹èe"
 
-#: components/html-editor/test-html-editor-control.c:325
+#: components/html-editor/test-html-editor-control.c:323
 msgid "Copy selection to the clipboard"
 msgstr "Kopiraj izbrano na odlo¾i¹èe"
 
-#: components/html-editor/test-html-editor-control.c:327
+#: components/html-editor/test-html-editor-control.c:325
 #: components/html-editor/toolbar.c:497
 msgid "Paste"
 msgstr "Prilepi"
 
-#: components/html-editor/test-html-editor-control.c:327
+#: components/html-editor/test-html-editor-control.c:325
 #: components/html-editor/toolbar.c:497
 msgid "Paste contents of the clipboard"
 msgstr "Prilepi vsebino odlo¾i¹èa"
@@ -511,20 +532,35 @@ msgstr "_Predogled tiskanja"
 msgid "Print preview"
 msgstr "Predogled tiskanja"
 
-#~ msgid "Appearance"
-#~ msgstr "Izgled"
+#~ msgid "Find Rege_x..."
+#~ msgstr "P_oi¹èi..."
 
-#~ msgid "Variable width font"
-#~ msgstr "Pisava s spremenljivo ¹irino"
+#~ msgid "Regular expressions search..."
+#~ msgstr "Iskanje s pomoèjo regularnega izraza..."
 
-#~ msgid "Select HTML variable width font"
-#~ msgstr "Izberi HTML pisavo s spremenljivo ¹irino"
+#~ msgid "_Image..."
+#~ msgstr "_Slika..."
 
-#~ msgid "Fixed width font"
-#~ msgstr "Pisava z nespremenljivo ¹irino"
+#~ msgid "Insert image into document..."
+#~ msgstr "V dokument vstavi sliko..."
 
-#~ msgid "Select HTML fixed width font"
-#~ msgstr "Izberi pisavo z nespremenljivo dol¾ino"
+#~ msgid "_Link..."
+#~ msgstr "_Povezava..."
+
+#~ msgid "Insert HTML link into document..."
+#~ msgstr "V dokument vstavi HTML povezavo..."
+
+#~ msgid "_Rule..."
+#~ msgstr "P_ravilo..."
+
+#~ msgid "Insert rule into document..."
+#~ msgstr "V dokument vstavi pravilo"
+
+#~ msgid "_Insert"
+#~ msgstr "Vstav_i"
+
+#~ msgid "Insert image"
+#~ msgstr "Vstavi sliko"
 
 #~ msgid "Transfer Progress"
 #~ msgstr "Napredek prenosa"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtkhtml cvs\n"
-"POT-Creation-Date: 2000-09-26 23:34+0200\n"
+"POT-Creation-Date: 2000-10-19 11:05+0200\n"
 "PO-Revision-Date: 2000-09-26 23:07+0200\n"
 "Last-Translator: Dennis Smit <mek@antenna.nl>\n"
 "Language-Team: DUTCH <nl@li.org>\n"
@@ -133,51 +133,57 @@ msgstr "Achtergronds plaatje"
 msgid "Colors"
 msgstr "Kleuren"
 
-#: components/html-editor/editor-control-factory.c:136
-#: components/html-editor/popup.c:86
+#: components/html-editor/editor-control-factory.c:126
+#: components/html-editor/popup.c:71
+msgid "Properties"
+msgstr "Instellingen"
+
+#: components/html-editor/editor-control-factory.c:137
+#: components/html-editor/menubar.c:96 components/html-editor/popup.c:86
 msgid "Image"
 msgstr "Plaatje"
 
-#: components/html-editor/editor-control-factory.c:145
-#: components/html-editor/popup.c:79
+#: components/html-editor/editor-control-factory.c:146
+#: components/html-editor/menubar.c:117 components/html-editor/popup.c:79
 msgid "Text"
 msgstr "Tekst"
 
-#: components/html-editor/editor-control-factory.c:157
+#: components/html-editor/editor-control-factory.c:158
 #: components/html-editor/popup.c:93
 msgid "Paragraph"
 msgstr "Paragraaf"
 
-#: components/html-editor/editor-control-factory.c:162
-#: components/html-editor/menubar.c:109 components/html-editor/popup.c:100
+#: components/html-editor/editor-control-factory.c:163
+#: components/html-editor/menubar.c:101 components/html-editor/menubar.c:122
+#: components/html-editor/popup.c:100
 msgid "Link"
 msgstr "Verwijzing"
 
-#: components/html-editor/editor-control-factory.c:167
+#: components/html-editor/editor-control-factory.c:168
 #: components/html-editor/popup.c:107
 msgid "Page"
 msgstr "Pagina"
 
-#: components/html-editor/image.c:409
+#: components/html-editor/image.c:142
 msgid "Image selection"
 msgstr "Plaatjes selectie"
 
-#: components/html-editor/image.c:417
+#: components/html-editor/image.c:150
 msgid "Border"
 msgstr "Rand"
 
 #. ADD_ITEM("Left",   GDK_F4);
 #. ADD_ITEM("Right",  GDK_F5);
-#: components/html-editor/image.c:450
+#: components/html-editor/image.c:183
 msgid "Alignment"
 msgstr "Uitlijning"
 
-#: components/html-editor/image.c:462 components/html-editor/rule.c:124
+#: components/html-editor/image.c:195 components/html-editor/rule.c:124
 #: components/html-editor/text.c:160
 msgid "Size"
 msgstr "Groote"
 
-#: components/html-editor/image.c:489
+#: components/html-editor/image.c:222
 msgid "Padding"
 msgstr "Uitvullen"
 
@@ -197,11 +203,12 @@ msgstr "Kon GNORBA niet initializeren"
 msgid "Could not initialize Bonobo"
 msgstr "Kon BONOBO niet initializeren"
 
-#: components/html-editor/menubar.c:93
-msgid "Insert image"
-msgstr "Voeg een plaatje toe"
+#: components/html-editor/menubar.c:94 components/html-editor/menubar.c:114
+#: components/html-editor/properties.c:110
+msgid "Insert"
+msgstr "Voeg toe"
 
-#: components/html-editor/menubar.c:128
+#: components/html-editor/menubar.c:142
 msgid "Cannot execute gtkhtml properties"
 msgstr "Kan gtkhtml instellingen niet uitvoeren"
 
@@ -224,15 +231,6 @@ msgstr "Centreren"
 #: components/html-editor/paragraph.c:123
 msgid "Right"
 msgstr "Rechts"
-
-#: components/html-editor/properties.c:92
-#: components/html-editor/properties.c:93
-msgid "Insert"
-msgstr "Voeg toe"
-
-#: components/html-editor/properties.c:95
-msgid "Properties"
-msgstr "Instellingen"
 
 #: components/html-editor/popup.c:178
 msgid "Remove link"
@@ -530,6 +528,9 @@ msgstr "Print _voorproef"
 #: src/testgtkhtml.c:111
 msgid "Print preview"
 msgstr "Print voorproef"
+
+#~ msgid "Insert image"
+#~ msgstr "Voeg een plaatje toe"
 
 #~ msgid "_Image..."
 #~ msgstr "Plaatje..."

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
-"POT-Creation-Date: 2000-08-14 14:49+0300\n"
+"POT-Creation-Date: 2000-10-19 11:05+0200\n"
 "PO-Revision-Date: 2000-08-14 14:50+0200\n"
 "Last-Translator: Yuri Syrota <rasta@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -13,57 +13,114 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-u\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: capplet/gnome-bindings-prop.c:153 capplet/gnome-bindings-prop.c:221
-#: capplet/gnome-bindings-prop.c:296 capplet/gnome-bindings-prop.c:431
-#: capplet/gnome-bindings-prop.c:432
+#: capplet/gnome-bindings-prop.c:154 capplet/gnome-bindings-prop.c:222
+#: capplet/gnome-bindings-prop.c:297 capplet/gnome-bindings-prop.c:435
+#: capplet/gnome-bindings-prop.c:436
 msgid "<None>"
 msgstr "<Нема╓>"
 
-#: capplet/gnome-bindings-prop.c:521
+#: capplet/gnome-bindings-prop.c:525
 msgid "Key"
 msgstr "Клав╕ша"
 
-#: capplet/gnome-bindings-prop.c:521
+#: capplet/gnome-bindings-prop.c:525
 msgid "Command"
 msgstr "Команда"
 
-#: capplet/gnome-bindings-prop.c:522
+#: capplet/gnome-bindings-prop.c:526
 msgid "Commands"
 msgstr "Команди"
 
-#: capplet/gnome-bindings-prop.c:523
+#: capplet/gnome-bindings-prop.c:527
 msgid "Keymaps"
 msgstr "Клав╕ш╕"
 
-#: capplet/gnome-bindings-prop.c:541
+#: capplet/gnome-bindings-prop.c:545
 msgid "Add"
 msgstr "Додати"
 
-#: capplet/gnome-bindings-prop.c:544
-#: components/html-editor/test-html-editor-control.c:325
+#: capplet/gnome-bindings-prop.c:548
+#: components/html-editor/test-html-editor-control.c:323
 #: components/html-editor/toolbar.c:495
 msgid "Copy"
 msgstr "Коп╕ювати"
 
-#: capplet/gnome-bindings-prop.c:547
+#: capplet/gnome-bindings-prop.c:551
 msgid "Delete"
 msgstr "Стерти"
 
-#: capplet/gnome-bindings-prop.c:578
+#: capplet/gnome-bindings-prop.c:582
 msgid "Grab key"
 msgstr "Захопити клав╕шу"
 
-#: capplet/main.c:127
-msgid "Behaviour"
-msgstr "Повед╕нка"
+#: capplet/main.c:220
+msgid "Spell checking"
+msgstr ""
 
-#: capplet/main.c:128
+#: capplet/main.c:223
+msgid "live spell checking"
+msgstr ""
+
+#: capplet/main.c:232
+msgid "spell checking color"
+msgstr ""
+
+#: capplet/main.c:239
+msgid "language"
+msgstr ""
+
+#: capplet/main.c:245
+msgid "Miscellaneous"
+msgstr ""
+
+#: capplet/main.c:247
 msgid "magic links"
 msgstr "маг╕чн╕ посилання"
 
-#: capplet/main.c:135
-msgid "Keybindings"
+#: capplet/main.c:266
+#, fuzzy
+msgid "Bindings"
 msgstr "Комб╕нац╕╖ клав╕ш"
+
+#: capplet/main.c:267 capplet/viewer.c:188
+msgid "Behaviour"
+msgstr "Повед╕нка"
+
+#: capplet/viewer.c:148
+msgid "Appearance"
+msgstr ""
+
+#: capplet/viewer.c:154
+msgid "Variable width font"
+msgstr ""
+
+#: capplet/viewer.c:158
+msgid "Select HTML variable width font"
+msgstr ""
+
+#: capplet/viewer.c:162 capplet/viewer.c:177
+msgid "for printing"
+msgstr ""
+
+#: capplet/viewer.c:164
+msgid "Select HTML variable width font for printing"
+msgstr ""
+
+#: capplet/viewer.c:169
+msgid "Fixed width font"
+msgstr ""
+
+#: capplet/viewer.c:173
+msgid "Select HTML fixed width font"
+msgstr ""
+
+#: capplet/viewer.c:179
+msgid "Select HTML fixed width font for printing"
+msgstr ""
+
+#: capplet/viewer.c:189
+msgid "Animations"
+msgstr ""
 
 #: components/html-editor/body.c:107
 msgid "use background image"
@@ -77,51 +134,57 @@ msgstr "Зображення на тл╕"
 msgid "Colors"
 msgstr "Кольори"
 
-#: components/html-editor/editor-control-factory.c:133
-#: components/html-editor/popup.c:86
+#: components/html-editor/editor-control-factory.c:126
+#: components/html-editor/popup.c:71
+msgid "Properties"
+msgstr "Властивост╕"
+
+#: components/html-editor/editor-control-factory.c:137
+#: components/html-editor/menubar.c:96 components/html-editor/popup.c:86
 msgid "Image"
 msgstr "Зображення"
 
-#: components/html-editor/editor-control-factory.c:142
-#: components/html-editor/popup.c:79
+#: components/html-editor/editor-control-factory.c:146
+#: components/html-editor/menubar.c:117 components/html-editor/popup.c:79
 msgid "Text"
 msgstr "Текст"
 
-#: components/html-editor/editor-control-factory.c:154
+#: components/html-editor/editor-control-factory.c:158
 #: components/html-editor/popup.c:93
 msgid "Paragraph"
 msgstr "Абзац"
 
-#: components/html-editor/editor-control-factory.c:159
-#: components/html-editor/menubar.c:157 components/html-editor/popup.c:100
+#: components/html-editor/editor-control-factory.c:163
+#: components/html-editor/menubar.c:101 components/html-editor/menubar.c:122
+#: components/html-editor/popup.c:100
 msgid "Link"
 msgstr "Посилання"
 
-#: components/html-editor/editor-control-factory.c:164
+#: components/html-editor/editor-control-factory.c:168
 #: components/html-editor/popup.c:107
 msgid "Page"
 msgstr "Стор╕нка"
 
-#: components/html-editor/image.c:409
+#: components/html-editor/image.c:142
 msgid "Image selection"
 msgstr "Виб╕р зображення"
 
-#: components/html-editor/image.c:417
+#: components/html-editor/image.c:150
 msgid "Border"
 msgstr "Рамка"
 
 #. ADD_ITEM("Left",   GDK_F4);
 #. ADD_ITEM("Right",  GDK_F5);
-#: components/html-editor/image.c:450
+#: components/html-editor/image.c:183
 msgid "Alignment"
 msgstr "Вир╕внювання"
 
-#: components/html-editor/image.c:462 components/html-editor/rule.c:124
+#: components/html-editor/image.c:195 components/html-editor/rule.c:124
 #: components/html-editor/text.c:160
 msgid "Size"
 msgstr "Розм╕р"
 
-#: components/html-editor/image.c:489
+#: components/html-editor/image.c:222
 msgid "Padding"
 msgstr "Заповнення"
 
@@ -141,47 +204,12 @@ msgstr "Не вдалося ╕н╕ц╕ал╕зувати GNORBA"
 msgid "Could not initialize Bonobo"
 msgstr "Не вдалося ╕н╕ц╕ал╕зувати Bonobo"
 
-#: components/html-editor/menubar.c:60
-msgid "Find Rege_x..."
-msgstr "Знайти ре╜улярний вираз..."
-
-#: components/html-editor/menubar.c:60
-msgid "Regular expressions search..."
-msgstr "Знайти ре╜улярний вираз..."
-
-#: components/html-editor/menubar.c:69
-msgid "_Image..."
-msgstr "Зображення..."
-
-#: components/html-editor/menubar.c:69
-msgid "Insert image into document..."
-msgstr "Вставити зображення у документ..."
-
-#: components/html-editor/menubar.c:70
-msgid "_Link..."
-msgstr "Посилання..."
-
-#: components/html-editor/menubar.c:70
-msgid "Insert HTML link into document..."
-msgstr "Вставити HTML-посилання у документ..."
-
-#: components/html-editor/menubar.c:71
-msgid "_Rule..."
-msgstr "Л╕н╕йка..."
-
-#: components/html-editor/menubar.c:71
-msgid "Insert rule into document..."
-msgstr "Вставити л╕н╕йку в документ..."
-
-#: components/html-editor/menubar.c:76
-msgid "_Insert"
+#: components/html-editor/menubar.c:94 components/html-editor/menubar.c:114
+#: components/html-editor/properties.c:110
+msgid "Insert"
 msgstr "Вставити"
 
-#: components/html-editor/menubar.c:143
-msgid "Insert image"
-msgstr "Вставити зображення"
-
-#: components/html-editor/menubar.c:175
+#: components/html-editor/menubar.c:142
 msgid "Cannot execute gtkhtml properties"
 msgstr "Неможливо виконати властивост╕ gtkhtml"
 
@@ -205,15 +233,6 @@ msgstr "В центр╕"
 msgid "Right"
 msgstr "Праворуч"
 
-#: components/html-editor/properties.c:92
-#: components/html-editor/properties.c:93
-msgid "Insert"
-msgstr "Вставити"
-
-#: components/html-editor/properties.c:95
-msgid "Properties"
-msgstr "Властивост╕"
-
 #: components/html-editor/popup.c:178
 msgid "Remove link"
 msgstr "Видалити посилання"
@@ -235,11 +254,11 @@ msgstr "Зам╕нити все"
 msgid "Next"
 msgstr "Дал╕"
 
-#: components/html-editor/replace.c:152 components/html-editor/search.c:66
+#: components/html-editor/replace.c:152 components/html-editor/search.c:67
 msgid "search backward"
 msgstr "пошук назад"
 
-#: components/html-editor/replace.c:153 components/html-editor/search.c:67
+#: components/html-editor/replace.c:153 components/html-editor/search.c:68
 msgid "case sensitive"
 msgstr "ре╜╕строва чутлив╕сть"
 
@@ -279,73 +298,73 @@ msgstr "Л╕н╕йка"
 msgid "Set Shade"
 msgstr "Встановити т╕нь"
 
-#: components/html-editor/search.c:63
+#: components/html-editor/search.c:64
 msgid "Regex search"
 msgstr "Пошук ре╜улярного виразу'"
 
-#: components/html-editor/search.c:63
+#: components/html-editor/search.c:64
 msgid "Search"
 msgstr "Пошук"
 
-#: components/html-editor/test-html-editor-control.c:234
+#: components/html-editor/test-html-editor-control.c:232
 msgid "Open file..."
 msgstr "В╕дкрити файл..."
 
-#: components/html-editor/test-html-editor-control.c:236
+#: components/html-editor/test-html-editor-control.c:234
 msgid "Save file as..."
 msgstr "Зберегти файл як..."
 
-#: components/html-editor/test-html-editor-control.c:302
+#: components/html-editor/test-html-editor-control.c:300
 msgid "Open (PersistFile)"
 msgstr "В╕дкрити (PersistFile)"
 
-#: components/html-editor/test-html-editor-control.c:302
+#: components/html-editor/test-html-editor-control.c:300
 msgid "Open using the PersistFile interface"
 msgstr "В╕дкрити використовуючи ╕нтерфейс PersistFile"
 
-#: components/html-editor/test-html-editor-control.c:304
+#: components/html-editor/test-html-editor-control.c:302
 msgid "Save as... (PersistFile)"
 msgstr "Зберегти як... (PersistFile)"
 
-#: components/html-editor/test-html-editor-control.c:304
+#: components/html-editor/test-html-editor-control.c:302
 msgid "Save using the PersistFile interface"
 msgstr "Зберегти використовуючи ╕нтерфейс PersistFile"
 
-#: components/html-editor/test-html-editor-control.c:307
+#: components/html-editor/test-html-editor-control.c:305
 msgid "Open (PersistStream)"
 msgstr "В╕дкрити (PersistStream)"
 
-#: components/html-editor/test-html-editor-control.c:307
+#: components/html-editor/test-html-editor-control.c:305
 msgid "Open using the PersistStream interface"
 msgstr "В╕дкрити використовуючи ╕нтерфейс PersistStream"
 
-#: components/html-editor/test-html-editor-control.c:309
+#: components/html-editor/test-html-editor-control.c:307
 msgid "Save as... (PersistStream)"
 msgstr "Зберегти як... (PersistStream)"
 
-#: components/html-editor/test-html-editor-control.c:309
+#: components/html-editor/test-html-editor-control.c:307
 msgid "Save using the PersistStream interface"
 msgstr "Зберегти використовуючи ╕нтерфейс PersistStream"
 
-#: components/html-editor/test-html-editor-control.c:323
+#: components/html-editor/test-html-editor-control.c:321
 #: components/html-editor/toolbar.c:493
 msgid "Cut"
 msgstr "Вир╕зати"
 
-#: components/html-editor/test-html-editor-control.c:323
+#: components/html-editor/test-html-editor-control.c:321
 msgid "Cut selection to the clipboard"
 msgstr "Вир╕зати вибране в буфер обм╕ну"
 
-#: components/html-editor/test-html-editor-control.c:325
+#: components/html-editor/test-html-editor-control.c:323
 msgid "Copy selection to the clipboard"
 msgstr "Скоп╕ювати вибране в буфер обм╕ну"
 
-#: components/html-editor/test-html-editor-control.c:327
+#: components/html-editor/test-html-editor-control.c:325
 #: components/html-editor/toolbar.c:497
 msgid "Paste"
 msgstr "Вставити"
 
-#: components/html-editor/test-html-editor-control.c:327
+#: components/html-editor/test-html-editor-control.c:325
 #: components/html-editor/toolbar.c:497
 msgid "Paste contents of the clipboard"
 msgstr "Вставити вм╕ст буферу обм╕ну"
@@ -503,86 +522,94 @@ msgstr "В╕дступ"
 msgid "Indent paragraphs more"
 msgstr "Зб╕льшити в╕дступ абзацу"
 
-#: glibwww/gnome-dialogs.c:85
-msgid "Transfer Progress"
-msgstr "Поступ передач╕"
-
-#: glibwww/gnome-dialogs.c:139
-#, c-format
-msgid "Looking up %s"
-msgstr "Пошук %s"
-
-#: glibwww/gnome-dialogs.c:145
-#, c-format
-msgid "Contacting %s"
-msgstr "З'╓днання %s"
-
-#: glibwww/gnome-dialogs.c:152
-msgid "Waiting for a connection..."
-msgstr "Оч╕кування з'╓днання..."
-
-#: glibwww/gnome-dialogs.c:156
-msgid "Logging in..."
-msgstr "Ре╓страц╕я..."
-
-#: glibwww/gnome-dialogs.c:165
-msgid "Read %d%%%% of %l"
-msgstr "Зчитано %d%%%% з %l"
-
-#: glibwww/gnome-dialogs.c:175 glibwww/gnome-dialogs.c:177
-#, c-format
-msgid "Read %d bytes"
-msgstr "Зчитано %d байт╕в"
-
-#: glibwww/gnome-dialogs.c:179
-msgid "Reading..."
-msgstr "Зчитування..."
-
-#: glibwww/gnome-dialogs.c:194
-msgid "Writing %d%%%% of %l"
-msgstr "Запис %d%%%% з %l"
-
-#: glibwww/gnome-dialogs.c:204 glibwww/gnome-dialogs.c:206
-#, c-format
-msgid "Writing %d bytes"
-msgstr "Запис  %d байт"
-
-#: glibwww/gnome-dialogs.c:208
-msgid "Writing..."
-msgstr "Запис..."
-
-#: glibwww/gnome-dialogs.c:216
-msgid "Done!"
-msgstr "Завершено!"
-
-#: glibwww/gnome-dialogs.c:220
-msgid "Interrupted!"
-msgstr "Зупинено!"
-
-#: glibwww/gnome-dialogs.c:224
-msgid "Please wait..."
-msgstr "Будь ласка, зачекайте..."
-
-#: glibwww/gnome-dialogs.c:228
-msgid "Request timeout!"
-msgstr "Перевищено час оч╕кування!"
-
-#: glibwww/gnome-dialogs.c:232
-msgid "Unknown"
-msgstr "Нев╕домий"
-
-#: glibwww/gnome-dialogs.c:275
-msgid "Enter Text"
-msgstr "Вв╕д тексту"
-
-#: glibwww/gnome-dialogs.c:316 glibwww/gnome-dialogs.c:357
-msgid "Enter Password"
-msgstr "Вв╕д паролю"
-
-#: src/testgtkhtml.c:110
+#: src/testgtkhtml.c:111
 msgid "Print pre_view"
 msgstr "Перегляд друку"
 
-#: src/testgtkhtml.c:110
+#: src/testgtkhtml.c:111
 msgid "Print preview"
 msgstr "Перегляд друку"
+
+#~ msgid "Find Rege_x..."
+#~ msgstr "Знайти ре╜улярний вираз..."
+
+#~ msgid "Regular expressions search..."
+#~ msgstr "Знайти ре╜улярний вираз..."
+
+#~ msgid "_Image..."
+#~ msgstr "Зображення..."
+
+#~ msgid "Insert image into document..."
+#~ msgstr "Вставити зображення у документ..."
+
+#~ msgid "_Link..."
+#~ msgstr "Посилання..."
+
+#~ msgid "Insert HTML link into document..."
+#~ msgstr "Вставити HTML-посилання у документ..."
+
+#~ msgid "_Rule..."
+#~ msgstr "Л╕н╕йка..."
+
+#~ msgid "Insert rule into document..."
+#~ msgstr "Вставити л╕н╕йку в документ..."
+
+#~ msgid "_Insert"
+#~ msgstr "Вставити"
+
+#~ msgid "Insert image"
+#~ msgstr "Вставити зображення"
+
+#~ msgid "Transfer Progress"
+#~ msgstr "Поступ передач╕"
+
+#~ msgid "Looking up %s"
+#~ msgstr "Пошук %s"
+
+#~ msgid "Contacting %s"
+#~ msgstr "З'╓днання %s"
+
+#~ msgid "Waiting for a connection..."
+#~ msgstr "Оч╕кування з'╓днання..."
+
+#~ msgid "Logging in..."
+#~ msgstr "Ре╓страц╕я..."
+
+#~ msgid "Read %d%%%% of %l"
+#~ msgstr "Зчитано %d%%%% з %l"
+
+#~ msgid "Read %d bytes"
+#~ msgstr "Зчитано %d байт╕в"
+
+#~ msgid "Reading..."
+#~ msgstr "Зчитування..."
+
+#~ msgid "Writing %d%%%% of %l"
+#~ msgstr "Запис %d%%%% з %l"
+
+#~ msgid "Writing %d bytes"
+#~ msgstr "Запис  %d байт"
+
+#~ msgid "Writing..."
+#~ msgstr "Запис..."
+
+#~ msgid "Done!"
+#~ msgstr "Завершено!"
+
+#~ msgid "Interrupted!"
+#~ msgstr "Зупинено!"
+
+#~ msgid "Please wait..."
+#~ msgstr "Будь ласка, зачекайте..."
+
+#~ msgid "Request timeout!"
+#~ msgstr "Перевищено час оч╕кування!"
+
+#~ msgid "Unknown"
+#~ msgstr "Нев╕домий"
+
+#~ msgid "Enter Text"
+#~ msgstr "Вв╕д тексту"
+
+#~ msgid "Enter Password"
+#~ msgstr "Вв╕д паролю"
