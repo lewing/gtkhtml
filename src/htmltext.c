@@ -1244,32 +1244,40 @@ prepare_attrs (HTMLText *text, HTMLPainter *painter)
 		start = html_text_get_text (text,  text->select_start);
 		end = g_utf8_offset_to_pointer (start, text->select_length);
 			
-/* 		attr = pango_attr_background_new (bg.red, bg.green, bg.blue); */
-/* 		attr->start_index = start - text->text; */
-/* 		attr->end_index = end - text->text; */
-/* 		pango_attr_list_change (attrs, attr); */
+		attr = pango_attr_background_new (bg.red, bg.green, bg.blue);
+		attr->start_index = start - text->text;
+		attr->end_index = end - text->text;
+		pango_attr_list_change (attrs, attr);
 			
 		attr = pango_attr_foreground_new (fg.red, fg.green, fg.blue);
 		attr->start_index = start - text->text;
 		attr->end_index = end - text->text;
-/* 		attr->start_index = 0; */
-/* 		attr->end_index = 3; */
 		pango_attr_list_change (attrs, attr);
 	}
 
 	return attrs;
 }
 
-static PangoDirection
+PangoDirection
 html_text_get_pango_direction (HTMLText *text)
+{
+	return pango_find_base_dir (text->text, text->text_bytes);
+}
+
+static PangoDirection
+get_pango_base_direction (HTMLText *text)
 {
 	switch (html_object_get_direction (HTML_OBJECT (text))) {
 	case HTML_DIRECTION_RTL:
 		return PANGO_DIRECTION_RTL;
 	case HTML_DIRECTION_LTR:
+		return PANGO_DIRECTION_LTR;
 	case HTML_DIRECTION_DERIVED:
 	default:
-		return PANGO_DIRECTION_LTR;
+		if (text->text)
+			return html_text_get_pango_direction (text);
+		else
+			return HTML_DIRECTION_LTR;
 	}
 }
 
@@ -1361,7 +1369,7 @@ html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 		int i, offset;
 
 		attrs = prepare_attrs (text, painter);
-		items = pango_itemize_with_base_dir (painter->pango_context, html_text_get_pango_direction (text), text->text, 0, text->text_bytes, attrs, NULL);
+		items = pango_itemize_with_base_dir (painter->pango_context, get_pango_base_direction (text), text->text, 0, text->text_bytes, attrs, NULL);
 		pango_attr_list_unref (attrs);
 
 		/* create pango info */
@@ -2243,15 +2251,15 @@ select_range (HTMLObject *self,
 		length = HTML_TEXT (self)->text_len - offset;
 
 	/* extend to cursor positions */
-/* 	while (offset > 0 && !pi->attrs [offset].is_cursor_position) { */
-/* 		offset --; */
-/* 		length ++; */
-/* 	} */
+	while (offset > 0 && !pi->attrs [offset].is_cursor_position) {
+		offset --;
+		length ++;
+	}
 
-/* 	while (offset + length < text->text_len && !pi->attrs [offset + length].is_cursor_position) */
-/* 		length ++; */
+	while (offset + length < text->text_len && !pi->attrs [offset + length].is_cursor_position)
+		length ++;
 
-/* 	printf ("updated offset: %d length: %d (end offset %d)\n", offset, length, offset + length); */
+	printf ("updated offset: %d length: %d (end offset %d)\n", offset, length, offset + length);
 
 	if (offset != text->select_start || length != text->select_length) {
 		HTMLObject *slave;
