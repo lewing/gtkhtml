@@ -1,14 +1,15 @@
 # gtkhtml: translation to Brazilian Portuguese (pt_BR)
-# Copyright (C) 2000-2003 Free Software Foundation, Inc.
+# Copyright (C) 2000-2004 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtkhtml package.
-# Gustavo Maciel Dias Vieira <gdvieira@zaz.com.br>, 2000-2003.
+# Gustavo Maciel Dias Vieira <gdvieira@zaz.com.br>, 2000,2004.
 # Alexandre Folle de Menezes <afmenez@terra.com.br>, 2002-2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 3.0.8\n"
-"POT-Creation-Date: 2003-10-20 16:31-0400\n"
-"PO-Revision-Date: 2003-10-20 17:12-0400\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-20 17:21-0500\n"
+"PO-Revision-Date: 2004-01-20 17:25-0500\n"
 "Last-Translator: Gustavo Maciel Dias Vieira <gdvieira@zaz.com.br>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -606,8 +607,7 @@ msgstr "Refazer a ação desfeita"
 
 #: components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:88
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:88
-#: components/html-editor/replace.c:79 components/html-editor/replace.c:153
-#: components/html-editor/replace.c:215
+#: components/html-editor/replace.c:153 components/html-editor/replace.c:215
 msgid "Replace"
 msgstr "Substituir"
 
@@ -982,7 +982,9 @@ msgstr "Retângulos"
 msgid ""
 "The quick brown <a href=\"mailto:fox\">fox</a> jumps over the lazy <a href="
 "\"mailto:dog\">dog</a>."
-msgstr "<a href=\"mailto:gazeta\">Gazeta</a> publica hoje breve anúncio de faxina na <a href=\"mailto:quermesse\">quermesse</a>."
+msgstr ""
+"<a href=\"mailto:gazeta\">Gazeta</a> publica hoje breve anúncio de faxina na "
+"<a href=\"mailto:quermesse\">quermesse</a>."
 
 #: components/html-editor/body.c:276 src/gtkhtml.c:2555
 msgid "Document Title"
@@ -1596,12 +1598,16 @@ msgid "Replace confirmation"
 msgstr "Confirmação de substituição"
 
 #: components/html-editor/replace.c:76
-msgid "Replace all"
-msgstr "Substituir todas"
+msgid "Replace _All"
+msgstr "Substituir _todas"
 
 #: components/html-editor/replace.c:77
-msgid "Next"
-msgstr "Próximo"
+msgid "_Next"
+msgstr "_Próximo"
+
+#: components/html-editor/replace.c:79
+msgid "_Replace"
+msgstr "_Substituir"
 
 #: components/html-editor/replace.c:161
 msgid "Search _backward"
@@ -1643,11 +1649,15 @@ msgstr "_Regressivo"
 msgid "Find Regular Expression"
 msgstr "Localizar expressão regular"
 
-#: components/html-editor/spell.c:277
+#: components/html-editor/spell.c:278
+msgid "No misspelled word found"
+msgstr "Nenhuma palavra errada foi encontrada"
+
+#: components/html-editor/spell.c:285
 msgid "Spell checker"
 msgstr "Verificador ortográfico"
 
-#: components/html-editor/spell.c:366
+#: components/html-editor/spell.c:378
 msgid "Current _Languages"
 msgstr "_Línguas atuais"
 
