@@ -278,3 +278,19 @@ html_a11y_get_size (AtkComponent *component, gint *width, gint *height)
 	*width = obj->width;
 	*height = obj->ascent + obj->descent;
 }
+
+AtkObject *
+html_a11y_new (HTMLObject *html_obj, AtkRole role)
+{
+	GObject *object;
+	AtkObject *accessible;
+
+	object = g_object_new (G_TYPE_HTML_A11Y, NULL);
+
+	accessible = ATK_OBJECT (object);
+	atk_object_initialize (accessible, html_obj);
+
+	accessible->role = role;
+
+	return accessible;
+}

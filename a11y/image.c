@@ -33,6 +33,8 @@ static void html_a11y_image_class_init    (HTMLA11YImageClass *klass);
 static void html_a11y_image_init          (HTMLA11YImage *a11y_image);
 static void atk_image_interface_init      (AtkImageIface *iface);
 
+static G_CONST_RETURN gchar * html_a11y_image_get_name (AtkObject *accessible);
+
 static void html_a11y_image_get_image_position (AtkImage *image, gint *x, gint *y, AtkCoordType coord_type);
 static void html_a11y_image_get_image_size (AtkImage *image, gint *width, gint *height);
 static G_CONST_RETURN gchar *html_a11y_image_get_image_description (AtkImage *image);
@@ -89,7 +91,7 @@ html_a11y_image_finalize (GObject *obj)
 static void
 html_a11y_image_initialize (AtkObject *obj, gpointer data)
 {
-	printf ("html_a11y_image_initialize\n");
+	/* printf ("html_a11y_image_initialize\n"); */
 
 	if (ATK_OBJECT_CLASS (parent_class)->initialize)
 		ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
@@ -103,6 +105,7 @@ html_a11y_image_class_init (HTMLA11YImageClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
+	atk_class->get_name = html_a11y_image_get_name;
 	atk_class->initialize = html_a11y_image_initialize;
 	gobject_class->finalize = html_a11y_image_finalize;
 }
@@ -131,6 +134,18 @@ html_a11y_image_new (HTMLObject *html_obj)
 
 	return accessible;
 }
+
+static G_CONST_RETURN gchar *
+html_a11y_image_get_name (AtkObject *accessible)
+{
+	HTMLImage *img = HTML_IMAGE (HTML_A11Y_HTML (accessible));
+
+	return g_strdup (img->image_ptr->url);
+}
+
+/*
+ * AtkImage interface
+ */
 
 static void
 html_a11y_image_get_image_position (AtkImage *image, gint *x, gint *y, AtkCoordType coord_type)

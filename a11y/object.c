@@ -83,8 +83,6 @@ gtk_html_a11y_finalize (GObject *obj)
 static void
 gtk_html_a11y_initialize (AtkObject *obj, gpointer data)
 {
-	GtkAccessible *accs = GTK_ACCESSIBLE (obj);
-
 	/* printf ("gtk_html_a11y_initialize\n"); */
 
 	if (ATK_OBJECT_CLASS (parent_class)->initialize)

@@ -23,6 +23,7 @@
 
 #include <config.h>
 #include <atk/atkcomponent.h>
+#include <atk/atktext.h>
 
 #include "htmltext.h"
 #include "htmltextslave.h"
@@ -33,9 +34,20 @@
 static void html_a11y_text_class_init    (HTMLA11YTextClass *klass);
 static void html_a11y_text_init          (HTMLA11YText *a11y_text);
 static void atk_component_interface_init (AtkComponentIface *iface);
+static void atk_text_interface_init      (AtkTextIface *iface);
+
 static void html_a11y_text_get_extents   (AtkComponent *component,
 					  gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type);
 static void html_a11y_text_get_size      (AtkComponent *component, gint *width, gint *height);
+static gchar * html_a11y_text_get_text (AtkText *text, gint start_offset, gint end_offset);
+static gchar * html_a11y_text_get_text_after_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
+						     gint *start_offset, gint *end_offset);
+static gchar * html_a11y_text_get_text_at_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
+						  gint *start_offset, gint *end_offset);
+static gunichar html_a11y_text_get_character_at_offset (AtkText *text, gint offset);
+static gchar * html_a11y_text_get_text_before_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
+						      gint *start_offset, gint *end_offset);
+static gint html_a11y_text_get_character_count (AtkText *text);
 
 static AtkObjectClass *parent_class = NULL;
 
@@ -64,8 +76,15 @@ html_a11y_text_get_type (void)
 			NULL
 		};
 
+		static const GInterfaceInfo atk_text_info = {
+			(GInterfaceInitFunc) atk_text_interface_init,
+			(GInterfaceFinalizeFunc) NULL,
+			NULL
+		};
+
 		type = g_type_register_static (G_TYPE_HTML_A11Y, "HTMLA11YText", &tinfo, 0);
 		g_type_add_interface_static (type, ATK_TYPE_COMPONENT, &atk_component_info);
+		g_type_add_interface_static (type, ATK_TYPE_TEXT, &atk_text_info);
 	}
 
 	return type;
@@ -81,6 +100,19 @@ atk_component_interface_init (AtkComponentIface *iface)
 }
 
 static void
+atk_text_interface_init (AtkTextIface *iface)
+{
+	g_return_if_fail (iface != NULL);
+
+	iface->get_text = html_a11y_text_get_text;
+	iface->get_text_after_offset = html_a11y_text_get_text_after_offset;
+	iface->get_text_before_offset = html_a11y_text_get_text_before_offset;
+	iface->get_text_at_offset = html_a11y_text_get_text_at_offset;
+	iface->get_character_at_offset = html_a11y_text_get_character_at_offset;
+	iface->get_character_count = html_a11y_text_get_character_count;
+}
+
+static void
 html_a11y_text_finalize (GObject *obj)
 {
 }
@@ -88,7 +120,7 @@ html_a11y_text_finalize (GObject *obj)
 static void
 html_a11y_text_initialize (AtkObject *obj, gpointer data)
 {
-	printf ("html_a11y_text_initialize\n");
+	/* printf ("html_a11y_text_initialize\n"); */
 
 	if (ATK_OBJECT_CLASS (parent_class)->initialize)
 		ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
@@ -131,6 +163,10 @@ html_a11y_text_new (HTMLObject *html_obj)
 	return accessible;
 }
 
+/*
+ * AtkComponent interface
+ */
+
 static void
 get_size (HTMLObject *obj, gint *width, gint *height)
 {
@@ -170,3 +206,119 @@ html_a11y_text_get_size (AtkComponent *component, gint *width, gint *height)
 	html_a11y_get_size (component, width, height);
 	get_size (obj, width, height);
 }
+
+/*
+ * AtkText interface
+ */
+
+static gchar *
+html_a11y_text_get_text (AtkText *text, gint start_offset, gint end_offset)
+{
+	HTMLText *to = HTML_TEXT (HTML_A11Y_HTML (text));
+	gchar *str;
+
+	/* printf ("%d - %d\n", start_offset, end_offset); */
+	if (end_offset == -1)
+		end_offset = to->text_len;
+
+	g_return_val_if_fail (start_offset <= end_offset, NULL);
+	g_return_val_if_fail (start_offset >= 0, NULL);
+	g_return_val_if_fail (start_offset <= to->text_len, NULL);
+	g_return_val_if_fail (end_offset <= to->text_len, NULL);
+
+	str = html_text_get_text (to, start_offset);
+
+	return g_strndup (str, g_utf8_offset_to_pointer (str, end_offset - start_offset) - str);
+}
+
+static gchar *
+html_a11y_text_get_text_after_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
+				      gint *start_offset, gint *end_offset)
+{
+}
+
+static gchar *
+html_a11y_text_get_text_at_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
+				   gint *start_offset, gint *end_offset)
+{
+}
+
+static gunichar
+html_a11y_text_get_character_at_offset (AtkText *text, gint offset)
+{
+	HTMLText *to = HTML_TEXT (HTML_A11Y_HTML (text));
+
+	g_return_val_if_fail (offset <= to->text_len, 0);
+
+	return html_text_get_char (to, offset);
+}
+
+static gchar *
+html_a11y_text_get_text_before_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
+				       gint *start_offset, gint *end_offset)
+{
+}
+
+static gint
+html_a11y_text_get_character_count (AtkText *text)
+{
+	return HTML_TEXT (HTML_A11Y_HTML (text))->text_len;
+}
+
+/*
+  gchar*         (* get_text)                     (AtkText          *text,
+                                                   gint             start_offset,
+                                                   gint             end_offset);
+  gchar*         (* get_text_after_offset)        (AtkText          *text,
+                                                   gint             offset,
+                                                   AtkTextBoundary  boundary_type,
+						   gint             *start_offset,
+						   gint             *end_offset);
+  gchar*         (* get_text_at_offset)           (AtkText          *text,
+                                                   gint             offset,
+                                                   AtkTextBoundary  boundary_type,
+						   gint             *start_offset,
+						   gint             *end_offset);
+  gunichar       (* get_character_at_offset)      (AtkText          *text,
+                                                   gint             offset);
+  gchar*         (* get_text_before_offset)       (AtkText          *text,
+                                                   gint             offset,
+                                                   AtkTextBoundary  boundary_type,
+ 						   gint             *start_offset,
+						   gint             *end_offset);
+  gint           (* get_caret_offset)             (AtkText          *text);
+  AtkAttributeSet* (* get_run_attributes)         (AtkText	    *text,
+						   gint	  	    offset,
+						   gint             *start_offset,
+						   gint	 	    *end_offset);
+  AtkAttributeSet* (* get_default_attributes)     (AtkText	    *text);
+  void           (* get_character_extents)        (AtkText          *text,
+                                                   gint             offset,
+                                                   gint             *x,
+                                                   gint             *y,
+                                                   gint             *width,
+                                                   gint             *height,
+                                                   AtkCoordType	    coords);
+  gint           (* get_character_count)          (AtkText          *text);
+  gint           (* get_offset_at_point)          (AtkText          *text,
+                                                   gint             x,
+                                                   gint             y,
+                                                   AtkCoordType	    coords);
+  gint		 (* get_n_selections)		  (AtkText          *text);
+  gchar*         (* get_selection)	          (AtkText          *text,
+						   gint		    selection_num,
+						   gint		    *start_offset,
+						   gint		    *end_offset);
+  gboolean       (* add_selection)		  (AtkText          *text,
+						   gint		    start_offset,
+						   gint		    end_offset);
+  gboolean       (* remove_selection)		  (AtkText          *text,
+						   gint             selection_num);
+  gboolean       (* set_selection)		  (AtkText          *text,
+						   gint		    selection_num,
+						   gint		    start_offset,
+						   gint		    end_offset);
+  gboolean       (* set_caret_offset)             (AtkText          *text,
+                                                   gint             offset);
+
+*/

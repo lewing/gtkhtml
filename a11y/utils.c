@@ -21,11 +21,14 @@
  *  Boston, MA 02111-1307, USA.
  */
 
+#include "htmlembedded.h"
 #include "htmlobject.h"
 
+#include "cell.h"
 #include "image.h"
-#include "text.h"
 #include "paragraph.h"
+#include "table.h"
+#include "text.h"
 #include "utils.h"
 
 static AtkObject *
@@ -43,10 +46,34 @@ create_accessible (HTMLObject *o, AtkObject *parent)
 	case HTML_TYPE_IMAGE:
 		accessible = html_a11y_image_new (o);
 		break;
+	case HTML_TYPE_TABLE:
+		accessible = html_a11y_table_new (o);
+		break;
+	case HTML_TYPE_TABLECELL:
+		accessible = html_a11y_cell_new (o);
+		break;
+	case HTML_TYPE_RULE:
+		accessible = html_a11y_new (o, ATK_ROLE_SEPARATOR);
+		break;
+	case HTML_TYPE_EMBEDDED:
+	case HTML_TYPE_SELECT:
+	case HTML_TYPE_RADIO:
+	case HTML_TYPE_OBJECT:
+	case HTML_TYPE_TEXTAREA:
+	case HTML_TYPE_TEXTINPUT:
+	case HTML_TYPE_BUTTON:
+	case HTML_TYPE_CHECKBOX:
+		accessible = gtk_widget_get_accessible (HTML_EMBEDDED (o)->widget);
+		break;
+	case HTML_TYPE_TEXTSLAVE: /* ignore */
+		break;
+	default:
+		accessible = html_a11y_new (o, ATK_ROLE_UNKNOWN);
+		break;
 	}
 
 	if (accessible && parent) {
-		printf ("set parent of %p to %p\n", accessible, parent);
+		/* printf ("set parent of %p to %p\n", accessible, parent); */
 		atk_object_set_parent (accessible, parent);
 	}
 

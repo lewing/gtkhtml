@@ -21,86 +21,91 @@
  *  Boston, MA 02111-1307, USA.
  */
 
-#include "htmlclueflow.h"
-#include "paragraph.h"
+#include <config.h>
 
-static void html_a11y_paragraph_class_init (HTMLA11YParagraphClass *klass);
-static void html_a11y_paragraph_init       (HTMLA11YParagraph *a11y_paragraph);
+#include "htmltablecell.h"
+
+#include "html.h"
+#include "cell.h"
+
+static void html_a11y_cell_class_init    (HTMLA11YCellClass *klass);
+static void html_a11y_cell_init          (HTMLA11YCell *a11y_cell);
 
 static AtkObjectClass *parent_class = NULL;
 
 GType
-html_a11y_paragraph_get_type (void)
+html_a11y_cell_get_type (void)
 {
 	static GType type = 0;
 
 	if (!type) {
 		static const GTypeInfo tinfo = {
-			sizeof (HTMLA11YParagraphClass),
+			sizeof (HTMLA11YCellClass),
 			NULL,                                                      /* base init */
 			NULL,                                                      /* base finalize */
-			(GClassInitFunc) html_a11y_paragraph_class_init,           /* class init */
+			(GClassInitFunc) html_a11y_cell_class_init,           /* class init */
 			NULL,                                                      /* class finalize */
 			NULL,                                                      /* class data */
-			sizeof (HTMLA11YParagraph),                                /* instance size */
+			sizeof (HTMLA11YCell),                                /* instance size */
 			0,                                                         /* nb preallocs */
-			(GInstanceInitFunc) html_a11y_paragraph_init,              /* instance init */
-			NULL                                                       /* value table */
+			(GInstanceInitFunc) html_a11y_cell_init,              /* instance init */
+			NULL                                                       /* value cell */
 		};
 
-		type = g_type_register_static (G_TYPE_HTML_A11Y, "HTMLA11YParagraph", &tinfo, 0);
+
+		type = g_type_register_static (G_TYPE_HTML_A11Y, "HTMLA11YCell", &tinfo, 0);
 	}
 
 	return type;
 }
 
 static void
-html_a11y_paragraph_finalize (GObject *obj)
+html_a11y_cell_finalize (GObject *obj)
 {
 }
 
 static void
-html_a11y_paragraph_initialize (AtkObject *obj, gpointer data)
+html_a11y_cell_initialize (AtkObject *obj, gpointer data)
 {
-	/* printf ("html_a11y_paragraph_initialize\n"); */
+	/* printf ("html_a11y_cell_initialize\n"); */
 
 	if (ATK_OBJECT_CLASS (parent_class)->initialize)
 		ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
 }
 
 static void
-html_a11y_paragraph_class_init (HTMLA11YParagraphClass *klass)
+html_a11y_cell_class_init (HTMLA11YCellClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 	AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
-	atk_class->initialize = html_a11y_paragraph_initialize;
-	gobject_class->finalize = html_a11y_paragraph_finalize;
+	atk_class->initialize = html_a11y_cell_initialize;
+	gobject_class->finalize = html_a11y_cell_finalize;
 }
 
 static void
-html_a11y_paragraph_init (HTMLA11YParagraph *a11y_paragraph)
+html_a11y_cell_init (HTMLA11YCell *a11y_cell)
 {
 }
 
-AtkObject *
-html_a11y_paragraph_new (HTMLObject *html_obj)
+AtkObject* 
+html_a11y_cell_new (HTMLObject *html_obj)
 {
 	GObject *object;
 	AtkObject *accessible;
 
-	g_return_val_if_fail (HTML_IS_CLUEFLOW (html_obj), NULL);
+	g_return_val_if_fail (HTML_IS_TABLE_CELL (html_obj), NULL);
 
-	object = g_object_new (G_TYPE_HTML_A11Y_PARAGRAPH, NULL);
+	object = g_object_new (G_TYPE_HTML_A11Y_CELL, NULL);
 
 	accessible = ATK_OBJECT (object);
 	atk_object_initialize (accessible, html_obj);
 
-	accessible->role = ATK_ROLE_PANEL; /* FIX2 fixme PARAGRAPH */
+	accessible->role = ATK_ROLE_TABLE_CELL;
 
-	/* printf ("created new html accessible paragraph object\n"); */
+	/* printf ("created new html accessible table cell object\n"); */
 
 	return accessible;
 }
