@@ -39,5 +39,6 @@ void  gtk_html_debug_dump_list_simple  (GList       *list,
 					gint         level);
 void  gtk_html_debug_dump_object       (HTMLObject  *o,
 					gint         level);
+void  gtk_html_debug_list_text_attrs   (HTMLText    *text);
 
 #endif /* _GTKHTML_DEBUG_H_ */

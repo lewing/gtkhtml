@@ -2775,6 +2775,7 @@ gtk_html_im_preedit_changed_cb (GtkIMContext *context, GtkHTML *html)
 	gchar *preedit_string;
 	gint cursor_pos;
 	gboolean state = html->priv->im_block_reset;
+	PangoAttrList *attrs;
 
 	html->priv->im_block_reset = TRUE;
 
@@ -2789,7 +2790,7 @@ gtk_html_im_preedit_changed_cb (GtkIMContext *context, GtkHTML *html)
 		html->priv->im_orig_style = html_engine_get_font_style (html->engine);
 
 	/* FIXME: retrieve pango attributes list and set style approprietly */
-	gtk_im_context_get_preedit_string (html->priv->im_context, &preedit_string, NULL, &cursor_pos);
+	gtk_im_context_get_preedit_string (html->priv->im_context, &preedit_string, &attrs, &cursor_pos);
 
 	printf ("IM preedit changed to %s\n", preedit_string);
 	html->priv->im_pre_len = g_utf8_strlen (preedit_string, -1);
@@ -2797,14 +2798,8 @@ gtk_html_im_preedit_changed_cb (GtkIMContext *context, GtkHTML *html)
 	if (html->priv->im_pre_len > 0) {
 		cursor_pos = CLAMP (cursor_pos, 0, html->priv->im_pre_len);
 		html->priv->im_pre_pos = html->engine->cursor->position;
-		html_engine_paste_text (html->engine, preedit_string, html->priv->im_pre_len);
-		html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos);
-		html_engine_set_mark (html->engine);
-		html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos + html->priv->im_pre_len);
+		html_engine_paste_text_with_attributes (html->engine, preedit_string, html->priv->im_pre_len, attrs);
 
-		/* FIXME: use pango attributes */
-		html_engine_set_font_style (html->engine, GTK_HTML_FONT_STYLE_MAX, GTK_HTML_FONT_STYLE_UNDERLINE);
-		html_engine_unselect_all (html->engine);
 		html_cursor_jump_to_position_no_spell (html->engine->cursor, html->engine, html->priv->im_pre_pos + cursor_pos);
 	} else
 		html_engine_set_font_style (html->engine, 0, html->priv->im_orig_style);

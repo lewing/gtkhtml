@@ -311,6 +311,41 @@ html_text_op_copy_helper (HTMLText *text, GList *from, GList *to, guint *len, HT
 	ct->word_width [i] = text->word_width [w1 + i]; */
 }
 
+static gboolean
+cut_attr_list_filter (PangoAttribute *attr, gpointer data)
+{
+	PangoAttribute *range = (PangoAttribute *) data;
+	gint delta;
+
+	if (attr->start_index >= range->start_index && attr->end_index <= range->end_index)
+		return TRUE;
+
+	delta = range->end_index - range->start_index;
+	if (attr->start_index > range->end_index) {
+		attr->start_index -= delta;
+		attr->end_index -= delta;
+	} else if (attr->start_index > range->start_index) {
+		attr->start_index = range->start_index;
+		attr->end_index -= delta;
+		if (attr->end_index <= attr->start_index)
+			return TRUE;
+	}
+}
+
+static void
+cut_attr_list (HTMLText *text, gint begin_index, gint end_index)
+{
+	PangoAttrList *removed;
+	PangoAttribute range;
+
+	range.start_index = begin_index;
+	range.end_index = end_index;
+
+	removed = pango_attr_list_filter (text->attr_list, cut_attr_list_filter, &range);
+	if (removed)
+		pango_attr_list_unref (removed);
+}
+
 HTMLObject *
 html_text_op_cut_helper (HTMLText *text, HTMLEngine *e, GList *from, GList *to, GList *left, GList *right,
 			 guint *len, HTMLTextHelperFunc f)
@@ -339,12 +374,13 @@ html_text_op_cut_helper (HTMLText *text, HTMLEngine *e, GList *from, GList *to, 
 
 		tail = html_text_get_text (text, end);
 		begin_index = html_text_get_index (text, begin);
+		text->text_bytes -= tail - (text->text + begin_index);
 		text->text [begin_index] = 0;
+		cut_attr_list (text, begin_index, tail - text->text);
 		nt = g_strconcat (text->text, tail, NULL);
 		g_free (text->text);
 		text->text = nt;
 		text->text_len -= end - begin;
-		text->text_bytes -= tail - (text->text + begin_index);
 		*len           += end - begin;
 
 		text->spell_errors = remove_spell_errors (text->spell_errors, begin, end - begin);
@@ -411,6 +447,8 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, G
 	move_spell_errors (t2->spell_errors, 0, t1->text_len);
 	t1->spell_errors = g_list_concat (t1->spell_errors, t2->spell_errors);
 	t2->spell_errors = NULL;
+
+	pango_attr_list_splice (t1->attr_list, t2->attr_list, t1->text_bytes, t2->text_bytes);
 
 	to_free       = t1->text;
 	t1->text      = g_strconcat (t1->text, t2->text, NULL);
