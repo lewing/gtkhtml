@@ -24,6 +24,7 @@
 #ifndef __HTML_A11Y_TEXT_H__
 #define __HTML_A11Y_TEXT_H__
 
+#include <libgail-util/gail-util.h>
 #include "html.h"
 
 #define G_TYPE_HTML_A11Y_TEXT            (html_a11y_text_get_type ())
@@ -43,6 +44,8 @@ typedef struct _HTMLA11YTextClass HTMLA11YTextClass;
 
 struct _HTMLA11YText {
 	HTMLA11Y html_a11y_object;
+
+	GailTextUtil *util;
 };
 
 GType html_a11y_text_get_type (void);

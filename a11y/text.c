@@ -62,12 +62,12 @@ html_a11y_text_get_type (void)
 			sizeof (HTMLA11YTextClass),
 			NULL,                                                      /* base init */
 			NULL,                                                      /* base finalize */
-			(GClassInitFunc) html_a11y_text_class_init,           /* class init */
+			(GClassInitFunc) html_a11y_text_class_init,                /* class init */
 			NULL,                                                      /* class finalize */
 			NULL,                                                      /* class data */
-			sizeof (HTMLA11YText),                                /* instance size */
+			sizeof (HTMLA11YText),                                     /* instance size */
 			0,                                                         /* nb preallocs */
-			(GInstanceInitFunc) html_a11y_text_init,              /* instance init */
+			(GInstanceInitFunc) html_a11y_text_init,                   /* instance init */
 			NULL                                                       /* value table */
 		};
 
@@ -121,10 +121,24 @@ html_a11y_text_finalize (GObject *obj)
 static void
 html_a11y_text_initialize (AtkObject *obj, gpointer data)
 {
+	GtkTextBuffer *buffer;
+	HTMLText *to;
+	HTMLA11YText *ato;
+	gchar *text;
+
 	/* printf ("html_a11y_text_initialize\n"); */
 
 	if (ATK_OBJECT_CLASS (parent_class)->initialize)
 		ATK_OBJECT_CLASS (parent_class)->initialize (obj, data);
+
+	to = HTML_TEXT (data);
+	ato = HTML_A11Y_TEXT (obj);
+
+	buffer = gtk_text_buffer_new (NULL);
+	ato->util = gail_text_util_new ();
+	gtk_text_buffer_set_text (buffer, to->text, -1);
+	gail_text_util_buffer_setup (ato->util, buffer);
+	g_object_unref (buffer);
 }
 
 static void
@@ -236,12 +250,16 @@ static gchar *
 html_a11y_text_get_text_after_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
 				      gint *start_offset, gint *end_offset)
 {
+	return gail_text_util_get_text (HTML_A11Y_TEXT (text)->util, NULL, GAIL_AFTER_OFFSET, boundary_type, offset, 
+					start_offset, end_offset);
 }
 
 static gchar *
 html_a11y_text_get_text_at_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
 				   gint *start_offset, gint *end_offset)
 {
+	return gail_text_util_get_text (HTML_A11Y_TEXT (text)->util, NULL, GAIL_AT_OFFSET, boundary_type, offset, 
+					start_offset, end_offset);
 }
 
 static gunichar
@@ -258,6 +276,8 @@ static gchar *
 html_a11y_text_get_text_before_offset (AtkText *text, gint offset, AtkTextBoundary boundary_type,
 				       gint *start_offset, gint *end_offset)
 {
+	return gail_text_util_get_text (HTML_A11Y_TEXT (text)->util, NULL, GAIL_BEFORE_OFFSET, boundary_type, offset, 
+					start_offset, end_offset);
 }
 
 static gint
