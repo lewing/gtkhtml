@@ -140,7 +140,7 @@ op_cut (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *left, GL
 }
 
 static gboolean
-merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *right)
+merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
 	return FALSE;
 }
@@ -742,13 +742,13 @@ html_object_op_cut (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GLi
 }
 
 gboolean
-html_object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *right)
+html_object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
 	if ((HTML_OBJECT_TYPE (self) == HTML_OBJECT_TYPE (with)
 	     /* FIXME */
 	     || (HTML_OBJECT_TYPE (self) == HTML_TYPE_TABLECELL && HTML_OBJECT_TYPE (with) == HTML_TYPE_CLUEV)
 	     || (HTML_OBJECT_TYPE (with) == HTML_TYPE_TABLECELL && HTML_OBJECT_TYPE (self) == HTML_TYPE_CLUEV))
-	    && (* HO_CLASS (self)->merge) (self, with, e, left, right)) {
+	    && (* HO_CLASS (self)->merge) (self, with, e, left, right, cursor)) {
 		if (with->parent)
 			html_object_remove_child (with->parent, with);
 		html_object_destroy (with);
@@ -1745,7 +1745,7 @@ merge_down (HTMLEngine *e, GList *left, GList *right)
 		ro    = HTML_OBJECT (right->data);
 		left  = left->next;
 		right = right->next;
-		if (!html_object_merge (lo, ro, e, left, right))
+		if (!html_object_merge (lo, ro, e, &left, &right, NULL))
 			break;
 	}
 }
@@ -1754,4 +1754,18 @@ void
 html_object_merge_down (HTMLObject *o, HTMLObject *w, HTMLEngine *e)
 {
 	merge_down (e, html_object_tails_list (o), html_object_heads_list (w));
+}
+
+gboolean
+html_object_is_parent (HTMLObject *parent, HTMLObject *child)
+{
+	g_assert (parent && child);
+
+	while (child) {
+		if (child->parent == parent)
+			return TRUE;
+		child = child->parent;
+	}
+
+	return FALSE;
 }

@@ -225,7 +225,7 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 	HTMLObject *lo, *ro, *prev;
 	gint len;
 
-	/* printf ("before merge\n");
+	printf ("before merge\n");
 	gtk_html_debug_dump_tree_simple (e->clue, 0);
 	if (left && left->data) {
 		printf ("left\n");
@@ -235,7 +235,7 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 	if (right && right->data) {
 		printf ("right\n");
 		gtk_html_debug_dump_tree_simple (right->data, 0);
-		} */
+	}
 
 	while (left && left->data && right && right->data) {
 
@@ -269,7 +269,7 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 		}
 
 		if (merge && lo && ro) {
-			if (!html_object_merge (lo, ro, e, left, right))
+			if (!html_object_merge (lo, ro, e, &left, &right, c))
 				break;
 			if (ro == e->cursor->object) {
 				e->cursor->object  = lo;
@@ -283,9 +283,9 @@ remove_empty_and_merge (HTMLEngine *e, gboolean merge, GList *left, GList *right
 		e->cursor->object = prev;
 		e->cursor->offset = html_object_get_length (e->cursor->object);
 	}
-	/* printf ("-- after\n");
+	printf ("-- after\n");
 	gtk_html_debug_dump_tree_simple (e->clue, 0);
-	printf ("-- END merge\n"); */
+	printf ("-- END merge\n");
 }
 
 static gboolean
@@ -355,22 +355,22 @@ split_and_add_empty_texts (HTMLEngine *e, gint level, GList **left, GList **righ
 {
 	HTMLObject *object = NULL;
 
-	if ((e->cursor->offset == 0 || (html_object_get_length (e->cursor->object) == e->cursor->offset))) {
+	/* if ((e->cursor->offset == 0 || (html_object_get_length (e->cursor->object) == e->cursor->offset))) {
 		HTMLObject *leaf;
 		gboolean prev;
 
 		prev = html_object_get_length (e->cursor->object) != e->cursor->offset;
 
 		leaf = prev
-		? html_object_prev_leaf_not_type (e->cursor->object, HTML_TYPE_TEXTSLAVE)
-		: html_object_next_leaf_not_type (e->cursor->object, HTML_TYPE_TEXTSLAVE);
+			? html_object_prev_leaf_not_type (e->cursor->object, HTML_TYPE_TEXTSLAVE)
+			: html_object_next_leaf_not_type (e->cursor->object, HTML_TYPE_TEXTSLAVE);
 		if (leaf) {
 			if (prev)
 				object = split_between_objects (e->cursor->object, leaf, right, left, &level);
 			else
 				object = split_between_objects (e->cursor->object, leaf, left, right, &level);
 		}
-	}
+		} */
 
 	if (!object)
 		object = e->cursor->object;
@@ -631,7 +631,7 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint len, gboolean check, HTM
 	orig = html_cursor_dup (e->cursor);
 
 	html_object_change_set_down (obj, HTML_CHANGE_ALL);
-	split_and_add_empty_texts (e, MIN (3, level), &left, &right);
+	split_and_add_empty_texts (e, MIN (4, level), &left, &right);
 	first = html_object_heads_list (obj);
 	last  = html_object_tails_list (obj);
 	set_cursor_at_end_of_object (e, obj, len);
@@ -699,9 +699,9 @@ static void
 insert_object (HTMLEngine *e, HTMLObject *obj, guint len, HTMLUndoDirection dir, gboolean check)
 {
 	/* FIXME for tables */
-	if (HTML_IS_TABLE (obj))
+	/* if (HTML_IS_TABLE (obj))
 		append_object (e, obj, len, dir);
-	else if (len > 0) {
+		else if (len > 0) */ {
 		insert_object_do (e, obj, len, check, dir);
 		insert_setup_undo (e, len, dir);
 	}
@@ -922,7 +922,7 @@ change_link (HTMLObject *o, HTMLEngine *e, gpointer data)
 			html_clue_remove (HTML_CLUE (o->parent), o);
 			html_object_destroy (o);
 			if (changed->prev)
-				html_object_merge (changed->prev, changed, e, NULL, NULL);
+				html_object_merge (changed->prev, changed, e, NULL, NULL, NULL);
 		} else {
 			html_object_destroy (e->clipboard);
 			e->clipboard     = changed;

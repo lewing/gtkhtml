@@ -317,7 +317,7 @@ op_cut (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *left, GL
 }
 
 static gboolean
-object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *right)
+object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
 	HTMLText *t1, *t2;
 	gchar *to_free;
@@ -383,11 +383,11 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	html_clue_append_after (HTML_CLUE (self->parent), dup, self);
 
 	prev = self->prev;
-	if (t1->text_len == 0 && prev && html_object_merge (prev, self, e, NULL, NULL))
+	if (t1->text_len == 0 && prev && html_object_merge (prev, self, e, NULL, NULL, NULL))
 		self = prev;
 
 	if (t2->text_len == 0 && dup->next)
-		html_object_merge (dup, dup->next, e, NULL, NULL);
+		html_object_merge (dup, dup->next, e, NULL, NULL, NULL);
 
 	/* printf ("--- before split offset %d dup len %d\n", offset, HTML_TEXT (dup)->text_len);
 	   debug_spell_errors (HTML_TEXT (self)->spell_errors); */

@@ -13,6 +13,7 @@
 #include <config.h>
 #include <libgnome/gnome-defs.h>
 #include <libgnome/gnome-util.h>
+#include <bonobo/bonobo-storage.h>
 #include <bonobo/bonobo-storage-plugin.h>
 #include "bonobo-storage-http.h"
 #include "bonobo-stream-http.h"

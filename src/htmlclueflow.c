@@ -217,7 +217,7 @@ could_merge (HTMLClueFlow *cf1, HTMLClueFlow *cf2)
 }
 
 static gboolean
-merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *right)
+merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
 	HTMLClueFlow *cf1, *cf2;
 	gboolean rv;
@@ -246,7 +246,7 @@ merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList *left, GList *ri
 		html_object_copy_data_from_object (self, with);
 	}
 
-	rv = (* HTML_OBJECT_CLASS (parent_class)->merge) (self, with, e, left, right);
+	rv = (* HTML_OBJECT_CLASS (parent_class)->merge) (self, with, e, left, right, cursor);
 
 	update_item_number (self);
 	cf1->item_number --;
