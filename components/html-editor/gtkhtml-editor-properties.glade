@@ -4243,7 +4243,7 @@
       </child>
 
       <child>
-	<widget class="GtkVBox" id="link_properties">
+	<widget class="GtkVBox" id="link_page">
 	  <property name="border_width">12</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
@@ -4284,9 +4284,9 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label170">
+		<widget class="GtkLabel" id="label_description">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Description</property>
+		  <property name="label" translatable="yes">_Description:</property>
 		  <property name="use_underline">True</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>

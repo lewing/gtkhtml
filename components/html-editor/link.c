@@ -21,8 +21,10 @@
 */
 
 #include <config.h>
-#include <libgnome/gnome-i18n.h>
 #include <string.h>
+#include <libgnome/gnome-i18n.h>
+#include <glade/glade.h>
+
 #include "htmlcolor.h"
 #include "htmlcolorset.h"
 #include "htmltext.h"
@@ -38,21 +40,23 @@
 
 struct _GtkHTMLEditLinkProperties {
 	GtkHTMLControlData *cd;
-	GtkWidget *entry_text;
+	GtkWidget *entry_description;
+	GtkWidget *label_description;
 	GtkWidget *entry_url;
 
-	HTMLText *text;
+	HTMLObject *object;
 	gint offset;
-
-	gboolean url_changed;
+	gboolean selection;
+	gboolean insert;
+	int insert_start_offset;
+	int insert_end_offset;
+	HTMLObject *insert_object;
 };
 typedef struct _GtkHTMLEditLinkProperties GtkHTMLEditLinkProperties;
 
 static void
 changed (GtkWidget *w, GtkHTMLEditLinkProperties *data)
 {
-	data->url_changed = TRUE;
-	gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
 }
 
 static void
@@ -65,24 +69,89 @@ test_clicked (GtkWidget *w, GtkHTMLEditLinkProperties *data)
 }
 
 static void
-set_ui (GtkHTMLEditLinkProperties *data)
+set_ui (GtkHTMLEditLinkProperties *d)
 {
+	HTMLEngine *e = d->cd->html->engine;
 	gchar *url, *link_text;
 
-	link_text = html_text_get_link_text (data->text, data->offset);
+	if (html_engine_is_selection_active (e)) {
+		d->selection = TRUE;
+
+		gtk_widget_hide (d->label_description);
+		gtk_widget_hide (d->entry_description);
+	} else {
+		char *url = html_object_get_complete_url (e->cursor->object, e->cursor->offset);
+
+		d->selection = FALSE;
+		d->insert = TRUE;
+		d->insert_object = e->cursor->object;
+
+		if (url) {
+			gtk_entry_set_text (GTK_ENTRY (d->entry_url), url);
+			gtk_widget_hide (d->label_description);
+			gtk_widget_hide (d->entry_description);
+		
+			if (HTML_IS_IMAGE (d->insert_object)) {
+				d->insert_start_offset = 0;
+				d->insert_end_offset = 1;
+			} else {
+				Link *link;
+				link = html_text_get_link_at_offset (HTML_TEXT (d->insert_object), e->cursor->offset);
+
+				if (link) {
+					d->insert_start_offset = link->start_offset;
+					d->insert_end_offset = link->end_offset;
+				}
+			}
+		} else {
+			gtk_entry_set_text (GTK_ENTRY (d->entry_url), "http://");
+
+			d->insert_start_offset = d->insert_end_offset = e->cursor->offset;
+		}
+	}
+
+	/* link_text = html_text_get_link_text (data->text, data->offset);
 	gtk_entry_set_text (GTK_ENTRY (data->entry_text), link_text);
 	g_free (link_text);
 
 	url = html_object_get_complete_url (HTML_OBJECT (data->text), data->offset);
 	gtk_entry_set_text (GTK_ENTRY (data->entry_url), url ? url : "");
-	g_free (url);
+	g_free (url); */
+}
+
+static void
+test_url_clicked (GtkWidget *w, GtkHTMLEditLinkProperties *d)
+{
+	const char *url = gtk_entry_get_text (GTK_ENTRY (d->entry_url));
+
+	if (url)
+		gnome_url_show (url, NULL);
 }
 
 static GtkWidget *
-link_widget (GtkHTMLEditLinkProperties *data, gboolean insert)
+link_widget (GtkHTMLEditLinkProperties *d, gboolean insert)
 {
-	GtkHTMLControlData *cd = data->cd;
-	GtkWidget *vbox, *hbox, *button, *frame, *f1;
+	GtkHTMLControlData *cd = d->cd;
+	GtkWidget *link_page, *button;
+	GladeXML *xml;
+
+	xml = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "link_page", NULL);
+	if (!xml)
+		g_error (_("Could not load glade file."));
+
+	link_page = glade_xml_get_widget (xml, "link_page");
+
+	editor_check_stock ();
+	button = gtk_button_new_from_stock (GTKHTML_STOCK_TEST_URL);
+	g_signal_connect (button, "clicked", G_CALLBACK (test_url_clicked), d);
+	gtk_widget_show (button);
+	gtk_table_attach (GTK_TABLE (glade_xml_get_widget (xml, "table_link")), button, 2, 3, 0, 1, 0, 0, 0, 0);
+
+	d->entry_url = glade_xml_get_widget (xml, "entry_url");
+	d->entry_description = glade_xml_get_widget (xml, "entry_description");
+	d->label_description = glade_xml_get_widget (xml, "label_description");
+
+	/*GtkWidget *vbox, *hbox, *button, *frame, *f1;
 
 	vbox = gtk_vbox_new (FALSE, 18);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
@@ -114,11 +183,12 @@ link_widget (GtkHTMLEditLinkProperties *data, gboolean insert)
 
 	g_signal_connect (data->entry_text, "changed", G_CALLBACK (changed), data);
 	g_signal_connect (data->entry_url, "changed", G_CALLBACK (changed), data);
-	g_signal_connect (button, "clicked", G_CALLBACK (test_clicked), data);
+	g_signal_connect (button, "clicked", G_CALLBACK (test_clicked), data);*/
 
-	gtk_widget_show_all (vbox);
+	gtk_widget_show_all (link_page);
+	set_ui (d);
 
-	return vbox;
+	return link_page;
 }
 
 GtkWidget *
@@ -142,8 +212,8 @@ link_properties (GtkHTMLControlData *cd, gpointer *set_data)
 
 	*set_data = data;
 	data->cd = cd;
-	data->text = HTML_TEXT (cd->html->engine->cursor->object);
-	data->offset = cd->html->engine->cursor->offset;
+	//data->text = HTML_TEXT (cd->html->engine->cursor->object);
+	//data->offset = cd->html->engine->cursor->offset;
 
 	return link_widget (data, FALSE);
 }
@@ -157,7 +227,7 @@ link_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
 	const gchar *url;
 	gchar *target;
 
-	if (data->url_changed) {
+	/* if (data->url_changed) {
 		gchar *url_copy;
 		gint position;
 
@@ -185,7 +255,7 @@ link_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
 		html_engine_update_insertion_url_and_target (e);
 		g_free (url_copy);
 		html_cursor_jump_to_position (e->cursor, e, position);
-	}
+		} */
 
 	return TRUE;
 }
@@ -199,7 +269,7 @@ link_insert_cb (GtkHTMLControlData *cd, gpointer get_data)
 	gchar *target;
 	const gchar *text;
 
-	url  = gtk_entry_get_text (GTK_ENTRY (data->entry_url));
+	/* url  = gtk_entry_get_text (GTK_ENTRY (data->entry_url));
 	text = gtk_entry_get_text (GTK_ENTRY (data->entry_text));
 	if (url && text && *url && *text) {
 		HTMLObject *new_text;
@@ -232,7 +302,7 @@ link_insert_cb (GtkHTMLControlData *cd, gpointer get_data)
 
 		gtk_dialog_run (GTK_DIALOG (dialog));
 		gtk_widget_destroy (dialog);
-	}
+		} */
 
 	return FALSE;
 }
