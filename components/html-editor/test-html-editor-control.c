@@ -417,7 +417,7 @@ app_destroy_cb (GtkWidget *app, BonoboUIContainer *uic)
 {
 	bonobo_object_unref (BONOBO_OBJECT (uic));
 
-	gtk_main_quit ();
+	bonobo_main_quit ();
 }
 
 static int
