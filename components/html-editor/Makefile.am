@@ -125,7 +125,7 @@ server_DATA = $(server_in_files:.server.in=.server)
 @INTLTOOL_SERVER_RULE@
 
 GNOME_GtkHTML_Editor.xml: GNOME_GtkHTML_Editor.xml.in Makefile
-	sed -e 's?\@ICONSDIR\@?$(GTKHTML_DATADIR)/gtkhtml/icons?g' \
+	sed -e 's?\@ICONSDIR\@?$(datadir)/gtkhtml/icons?g' \
 	      < $(srcdir)/GNOME_GtkHTML_Editor.xml.in > GNOME_GtkHTML_Editor.xml.tmp \
 	  && mv GNOME_GtkHTML_Editor.xml.tmp GNOME_GtkHTML_Editor.xml
 

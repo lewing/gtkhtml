@@ -276,5 +276,11 @@ BONOBO_TYPE_FUNC_FULL (
 EditorEngine *
 editor_engine_new (GtkHTMLControlData *cd)
 {
-	return g_object_new (EDITOR_ENGINE_TYPE, NULL);
+	EditorEngine *ee;
+
+	ee = g_object_new (EDITOR_ENGINE_TYPE, NULL);
+
+	ee->cd = cd;
+
+	return ee;
 }

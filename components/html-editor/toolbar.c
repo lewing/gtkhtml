@@ -253,7 +253,8 @@ toolbar_apply_color (GtkHTMLControlData *cd)
 }
 
 static void
-color_changed (GtkWidget *w, GdkColor *gdk_color, gboolean by_user, GtkHTMLControlData *cd)
+color_changed (GtkWidget *w, GdkColor *gdk_color, gboolean custom, gboolean by_user, gboolean is_default,
+	       GtkHTMLControlData *cd)
 {
 	/* If the color was changed programatically there's not need to set things */
 	if (!by_user)
@@ -307,7 +308,7 @@ setup_color_combo (GtkHTMLControlData *cd)
 	cd->combo = color_combo_new (NULL, _("Automatic"), &color->color, color_group_fetch ("toolbar_text", cd));
 	GTK_WIDGET_UNSET_FLAGS (cd->combo, GTK_CAN_FOCUS);
 	gtk_container_forall (GTK_CONTAINER (cd->combo), unset_focus, NULL);
-        gtk_signal_connect (GTK_OBJECT (cd->combo), "changed", GTK_SIGNAL_FUNC (color_changed), cd);
+        gtk_signal_connect (GTK_OBJECT (cd->combo), "color_changed", GTK_SIGNAL_FUNC (color_changed), cd);
 
 	gtk_widget_show_all (cd->combo);
 	return cd->combo;
@@ -567,17 +568,14 @@ html_destroy_cb (GtkObject *object,
 static GtkWidget *
 create_style_toolbar (GtkHTMLControlData *cd)
 {
-	GtkWidget *frame, *hbox;
+	GtkWidget *hbox;
 
 	hbox = gtk_hbox_new (FALSE, 0);
-	frame = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
 
 	cd->toolbar_style = gtk_toolbar_new ();
 	gtk_toolbar_set_style (GTK_TOOLBAR (cd->toolbar_style), GTK_TOOLBAR_ICONS);
 
-	gtk_container_add (GTK_CONTAINER (frame), cd->toolbar_style);
-	gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), cd->toolbar_style, TRUE, TRUE, 0);
 
 	gtk_widget_show_all (hbox);
 
