@@ -4,12 +4,12 @@ INCLUDES = -I$(top_srcdir)/src $(GTKHTML_CFLAGS)
 
 CFLAGS += $(GAIL_CFLAGS)
 
-lib_LTLIBRARIES = libgtkhtml-a11y.la
+lib_LTLIBRARIES = libgtkhtml-a11y-3.0.la
 
-libgtkhtml_a11y_la_LDFLAGS = -release $(GTKHTML_RELEASE) -version-info $(GTKHTML_CURRENT):$(GTKHTML_REVISION):$(GTKHTML_AGE)
-libgtkhtml_a11y_la_LIBADD = $(GTKHTML_LIBS) $(GAIL_LIBS)
+libgtkhtml_a11y_3_0_la_LDFLAGS = -version-info $(GTKHTML_CURRENT):$(GTKHTML_REVISION):$(GTKHTML_AGE)
+libgtkhtml_a11y_3_0_la_LIBADD = $(GTKHTML_LIBS) $(GAIL_LIBS)
 
-libgtkhtml_a11y_la_SOURCES =				\
+libgtkhtml_a11y_3_0_la_SOURCES =			\
 	cell.h						\
 	cell.c						\
 	factory.h					\
