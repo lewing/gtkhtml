@@ -1,3 +1,11 @@
+Wed Aug  4 10:54:35 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* Released 3.3.1
+
+	* NEWS: Minimal update
+
+	* configure.in: Increment package version.
+
 2004-08-27  Radek Doulik  <rodo@ximian.com>
 
 	* configure.in: increment revision number
