@@ -17,7 +17,6 @@ SUBDIRS =					\
 	po
 
 EXTRA_DIST =					\
-	html-component.gnorba			\
 	gtkhtml.spec.in				\
 	gtkhtml.spec                            \
 	COPYING.LIB				\
