@@ -247,6 +247,7 @@ dump_object_simple (HTMLObject *obj,
 			 html_type_name (HTML_OBJECT_TYPE (obj)),
 			 text->text);
 		g_print ("len %d bytes %d\n", text->text_len, text->text_bytes);
+		gtk_html_debug_list_links (text);
 		gtk_html_debug_list_text_attrs (text);
 	} else if (HTML_OBJECT_TYPE (obj) == HTML_TYPE_TEXTSLAVE) {
 		HTMLTextSlave *slave = HTML_TEXT_SLAVE (obj);
@@ -350,4 +351,17 @@ gtk_html_debug_list_text_attrs (HTMLText *text)
 		D_ATTR_TYPE (SCALE, "Scale");
 		g_print ("------------\n");
 	} while (pango_attr_iterator_next (iter));
+}
+
+void
+gtk_html_debug_list_links (HTMLText *text)
+{
+	GSList *l;
+
+	for (l = text->links; l; l = l->next)
+		if (l->data) {
+			Link *link = (Link *) l->data;
+
+			g_print ("%d-%d: %s#%s\n", link->start_offset, link->end_offset, link->url, link->target);
+		}
 }

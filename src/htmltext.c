@@ -220,6 +220,16 @@ pango_info_destroy (HTMLText *text)
 }
 
 static void
+free_links (GSList *list)
+{
+	GSList *l;
+
+	for (l = list; l; l = l->next)
+		html_link_free ((Link *) l->data);
+	g_slist_free (list);
+}
+
+static void
 copy (HTMLObject *s,
       HTMLObject *d)
 {
@@ -356,6 +366,31 @@ cut_attr_list (HTMLText *text, gint begin_index, gint end_index)
 		pango_attr_list_unref (removed);
 }
 
+static void
+cut_links (HTMLText *text, gint start_offset, gint end_offset)
+{
+	GSList *l, *next;
+	Link *link;
+
+	for (l = text->links; l; l = next) {
+		next = l->next;
+		link = (Link *) l->data;
+
+		if (start_offset <= link->start_offset && link->end_offset <= end_offset) {
+			gboolean set_links = FALSE;
+			html_link_free (link);
+			if (l == text->links)
+				set_links = TRUE;
+			l = g_slist_delete_link (l, l);
+			if (set_links)
+				text->links = l;
+		} else if (start_offset <= link->start_offset && link->start_offset <= end_offset)
+			link->start_offset = end_offset;
+		else if (start_offset <= link->end_offset && link->end_offset <= end_offset)
+			link->end_offset = start_offset;
+	}
+}
+
 HTMLObject *
 html_text_op_cut_helper (HTMLText *text, HTMLEngine *e, GList *from, GList *to, GList *left, GList *right,
 			 guint *len, HTMLTextHelperFunc f)
@@ -387,6 +422,7 @@ html_text_op_cut_helper (HTMLText *text, HTMLEngine *e, GList *from, GList *to, 
 		text->text_bytes -= tail - (text->text + begin_index);
 		text->text [begin_index] = 0;
 		cut_attr_list (text, begin_index, tail - text->text);
+		cut_links (text, begin, end);
 		nt = g_strconcat (text->text, tail, NULL);
 		g_free (text->text);
 		text->text = nt;
@@ -436,6 +472,36 @@ op_cut (HTMLObject *self, HTMLEngine *e, GList *from, GList *to, GList *left, GL
 	return html_text_op_cut_helper (HTML_TEXT (self), e, from, to, left, right, len, new_text);
 }
 
+static void
+merge_links (HTMLText *t1, HTMLText *t2)
+{
+	Link *tail, *head;
+	GSList *l, *t;
+
+	if (t2->links) {
+		for (l = t2->links; l; l = l->next) {
+			Link *link = (Link *) l->data;
+
+			link->start_offset += t1->text_len;
+			link->end_offset += t1->text_len;
+		}
+
+		t = g_slist_last (t1->links);
+		if (t) {
+			head = (Link *) t2->links->data;
+			tail = (Link *) t->data;
+
+			if (head->start_offset == tail->end_offset && html_link_equal (head, tail)) {
+				tail->end_offset = head->end_offset;
+				html_link_free (head);
+				t2->links = g_slist_delete_link (t2->links, t2->links);
+			}
+		}
+		t1->links = g_slist_concat (t1->links, t2->links);
+		t2->links = NULL;
+	}
+}
+
 static gboolean
 object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, GList **right, HTMLCursor *cursor)
 {
@@ -459,6 +525,7 @@ object_merge (HTMLObject *self, HTMLObject *with, HTMLEngine *e, GList **left, G
 	t2->spell_errors = NULL;
 
 	pango_attr_list_splice (t1->attr_list, t2->attr_list, t1->text_bytes, t2->text_bytes);
+	merge_links (t1, t2);
 
 	to_free       = t1->text;
 	t1->text      = g_strconcat (t1->text, t2->text, NULL);
@@ -523,6 +590,53 @@ split_attrs (HTMLText *t1, HTMLText *t2, gint index)
 }
 
 static void
+split_links (HTMLText *t1, HTMLText *t2, gint offset)
+{
+	GSList *l, *prev;
+
+	for (l = t1->links; l; l = l->next) {
+		Link *link = (Link *) l->data;
+
+		if (link->end_offset > offset) {
+			if (link->start_offset < offset) {
+				link->end_offset = offset;
+				prev = l;
+				l = l->next;
+			}
+			if (l) {
+				if (prev)
+					prev->next = NULL;
+				else
+					t1->links = NULL;
+				free_links (l);
+			}
+			break;
+		}
+		prev = l;
+	}
+
+	for (l = t2->links; l; l = l->next) {
+		Link *link = (Link *) l->data;
+
+		if (link->start_offset < offset) {
+			if (link->end_offset > offset)
+				link->start_offset = offset;
+			else {
+				prev = l;
+				l = l->next;
+			}
+			if (prev) {
+				prev->next = NULL;
+				free_links (t1->links);
+			}
+			t1->links = l;
+			break;
+		}
+		prev = l;
+	}
+}
+
+static void
 object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, gint level, GList **left, GList **right)
 {
 	HTMLObject *dup, *prev;
@@ -550,6 +664,7 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	t2->text_len   -= offset;
 	t2->text_bytes -= split_index;
 	split_attrs (t1, t2, split_index);
+	split_links (t1, t2, offset);
 	if (!html_text_convert_nbsp (t2, FALSE))
 		t2->text = g_strdup (t2->text);
 	g_free (tt);
@@ -1469,6 +1584,8 @@ destroy (HTMLObject *obj)
 	pango_info_destroy (text);
 	pango_attr_list_unref (text->attr_list);
 	text->attr_list = NULL;
+	free_links (text->links);
+	text->links = NULL;
 
 	HTML_OBJECT_CLASS (parent_class)->destroy (obj);
 }
@@ -2304,4 +2421,19 @@ html_link_dup (Link *l)
 	nl->end_offset = l->end_offset;
 
 	return nl;
+}
+
+void
+html_link_free (Link *link)
+{
+	g_free (link->url);
+	g_free (link->target);
+	g_free (link);
+}
+
+gboolean
+html_link_equal (Link *l1, Link *l2)
+{
+	return l1->url && l2->url && !strcasecmp (l1->url, l2->url)
+		&& (l1->target == l2->target || (l1->target && l2->target && !strcasecmp (l1->target, l2->target)));
 }

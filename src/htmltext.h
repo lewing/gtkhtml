@@ -214,10 +214,13 @@ gboolean          html_text_last_link_offset             (HTMLText           *te
 gchar            *html_text_get_link_text                (HTMLText           *text,
 							  gint                offset);
 
-void  html_link_set_url_and_target  (Link  *link,
-				     gchar *url,
-				     gchar *target);
-Link *html_link_dup                 (Link  *link);
+void      html_link_set_url_and_target  (Link  *link,
+					 gchar *url,
+					 gchar *target);
+Link     *html_link_dup                 (Link  *link);
+void      html_link_free                (Link  *link);
+gboolean  html_link_equal               (Link  *l1,
+					 Link  *l2);
 
 /*
  * protected
