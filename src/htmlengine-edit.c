@@ -697,4 +697,5 @@ html_engine_set_title (HTMLEngine *e, const gchar *title)
 	if (e->title)
 		g_string_free (e->title, TRUE);
 	e->title = g_string_new (title);
+	g_signal_emit_by_name (e, "title_changed");
 }
