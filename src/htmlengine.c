@@ -3034,21 +3034,21 @@ parse_one_token (HTMLEngine *p, HTMLObject *clue, const gchar *str)
 guint
 html_engine_get_type (void)
 {
-	static guint html_engine_type = 0;
+	static GType html_engine_type = 0;
 
-	if (!html_engine_type) {
-		static const GtkTypeInfo html_engine_info = {
-			"HTMLEngine",
-			sizeof (HTMLEngine),
+	if (html_engine_type == 0) {
+		static const GTypeInfo html_engine_info = {
 			sizeof (HTMLEngineClass),
-			(GtkClassInitFunc) html_engine_class_init,
-			(GtkObjectInitFunc) html_engine_init,
-			/* reserved_1 */ NULL,
-			/* reserved_2 */ NULL,
-			(GtkClassInitFunc) NULL,
+			NULL,
+			NULL,
+			(GClassInitFunc) html_engine_class_init,
+			NULL,
+			NULL,
+			sizeof (HTMLEngine),
+			1,
+			(GInstanceInitFunc) html_engine_init,
 		};
-		
-		html_engine_type = gtk_type_unique (GTK_TYPE_OBJECT, &html_engine_info);
+		html_engine_type = g_type_register_static (G_TYPE_OBJECT, "HTMLEngine", &html_engine_info, 0);
 	}
 
 	return html_engine_type;
@@ -3064,7 +3064,7 @@ clear_selection (HTMLEngine *e)
 }
 
 static void
-html_engine_destroy (GtkObject *object)
+html_engine_finalize (GObject *object)
 {
 	HTMLEngine *engine;
 	GList *p;
@@ -3236,20 +3236,18 @@ html_engine_destroy (GtkObject *object)
 		engine->insertion_target = NULL;
 	}
 
-	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
-html_engine_set_arg (GtkObject        *object,
-		     GtkArg           *arg,
-		     guint             arg_id)
+html_engine_set_property (GObject *object, guint id, const GValue *value, GParamSpec *pspec)
 {
 	HTMLEngine *engine = HTML_ENGINE (object);
 
-	if (arg_id == 1) {
+	if (id == 1) {
 		GtkHTMLClassProperties *prop;
 
-		engine->widget          = GTK_HTML (GTK_VALUE_OBJECT (*arg));
+		engine->widget          = GTK_HTML (g_value_get_object (value));
 		engine->painter         = html_gdk_painter_new (GTK_WIDGET (engine->widget), TRUE);
 		engine->settings        = html_settings_new (GTK_WIDGET (engine->widget));
 		engine->defaultSettings = html_settings_new (GTK_WIDGET (engine->widget));
@@ -3265,11 +3263,12 @@ html_engine_set_arg (GtkObject        *object,
 static void
 html_engine_class_init (HTMLEngineClass *klass)
 {
-	GtkObjectClass *object_class;
+	GObjectClass *object_class;
+	GParamSpec *pspec;
 
-	object_class = (GtkObjectClass *)klass;
+	object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = gtk_type_class (GTK_TYPE_OBJECT);
+	parent_class = g_type_class_ref (G_TYPE_OBJECT);
 
 	signals [SET_BASE] =
 		g_signal_new ("set_base",
@@ -3362,13 +3361,11 @@ html_engine_class_init (HTMLEngineClass *klass)
 			      GTK_TYPE_BOOL, 1,
 			      GTK_TYPE_POINTER);
 
-	gtk_object_add_arg_type ("HTMLEngine::html",
-				 GTK_TYPE_HTML,
-				 GTK_ARG_WRITABLE | GTK_ARG_CONSTRUCT_ONLY,
-				 1);
+	object_class->finalize = html_engine_finalize;
+	object_class->set_property = html_engine_set_property;
 
-	object_class->set_arg = html_engine_set_arg;
-	object_class->destroy = html_engine_destroy;
+	pspec = g_param_spec_object ("html", NULL, NULL, GTK_TYPE_HTML, G_PARAM_WRITABLE | GTK_ARG_CONSTRUCT_ONLY);
+	g_object_class_install_property (object_class, 1, pspec);
 
 	html_engine_init_magic_links ();
 
@@ -3471,11 +3468,11 @@ html_engine_init (HTMLEngine *engine)
 HTMLEngine *
 html_engine_new (GtkWidget *w)
 {
-	GtkObject *engine;
+	HTMLEngine *engine;
 
-	engine = gtk_object_new (html_engine_get_type (), "html", w, NULL);
+	engine = g_object_new (HTML_TYPE_ENGINE, "html", w, NULL);
 
-	return HTML_ENGINE (engine);
+	return engine;
 }
 
 void

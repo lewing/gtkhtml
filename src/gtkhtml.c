@@ -654,39 +654,39 @@ destroy (GtkObject *object)
 
 	connect_adjustments (html, NULL, NULL);
 
-	if (html->priv->idle_handler_id != 0) {
-		gtk_idle_remove (html->priv->idle_handler_id);
-		html->priv->idle_handler_id = 0;
-	}
-
-	if (html->priv->scroll_timeout_id != 0) {
-		gtk_timeout_remove (html->priv->scroll_timeout_id);
-		html->priv->scroll_timeout_id = 0;
-	}
-
-	if (html->priv->set_font_id) {
-		g_source_remove (html->priv->set_font_id);
-		html->priv->set_font_id = 0;
-	}
-
-	if (html->priv->notify_id) {
-		gconf_client_notify_remove (gconf_client, html->priv->notify_id);
-		html->priv->notify_id = 0;
-	}
-
-	if (html->priv->notify_spell_id) {
-		gconf_client_notify_remove (gconf_client, html->priv->notify_spell_id);
-		html->priv->notify_spell_id = 0;
-	}
-
 	if (html->priv) {
+		if (html->priv->idle_handler_id != 0) {
+			gtk_idle_remove (html->priv->idle_handler_id);
+			html->priv->idle_handler_id = 0;
+		}
+
+		if (html->priv->scroll_timeout_id != 0) {
+			gtk_timeout_remove (html->priv->scroll_timeout_id);
+			html->priv->scroll_timeout_id = 0;
+		}
+
+		if (html->priv->set_font_id) {
+			g_source_remove (html->priv->set_font_id);
+			html->priv->set_font_id = 0;
+		}
+
+		if (html->priv->notify_id) {
+			gconf_client_notify_remove (gconf_client, html->priv->notify_id);
+			html->priv->notify_id = 0;
+		}
+
+		if (html->priv->notify_spell_id) {
+			gconf_client_notify_remove (gconf_client, html->priv->notify_spell_id);
+			html->priv->notify_spell_id = 0;
+		}
+
 		g_free (html->priv->content_type);
 		g_free (html->priv);
 		html->priv = NULL;
 	}
 
 	if (html->engine) {
-		gtk_object_unref (GTK_OBJECT (html->engine));
+		g_object_unref (G_OBJECT (html->engine));
 		html->engine = NULL;
 	}
 
@@ -2609,24 +2609,24 @@ gtk_html_construct (GtkWidget *widget)
 	html->engine        = html_engine_new (widget);
 	html->iframe_parent = NULL;
 	
-	gtk_signal_connect (GTK_OBJECT (html->engine), "title_changed",
-			    GTK_SIGNAL_FUNC (html_engine_title_changed_cb), html);
-	gtk_signal_connect (GTK_OBJECT (html->engine), "set_base",
-			    GTK_SIGNAL_FUNC (html_engine_set_base_cb), html);
-	gtk_signal_connect (GTK_OBJECT (html->engine), "set_base_target",
-			    GTK_SIGNAL_FUNC (html_engine_set_base_target_cb), html);
-	gtk_signal_connect (GTK_OBJECT (html->engine), "load_done",
-			    GTK_SIGNAL_FUNC (html_engine_load_done_cb), html);
-	gtk_signal_connect (GTK_OBJECT (html->engine), "url_requested",
-			    GTK_SIGNAL_FUNC (html_engine_url_requested_cb), html);
-	gtk_signal_connect (GTK_OBJECT (html->engine), "draw_pending",
-			    GTK_SIGNAL_FUNC (html_engine_draw_pending_cb), html);
-	gtk_signal_connect (GTK_OBJECT (html->engine), "redirect",
-			    GTK_SIGNAL_FUNC (html_engine_redirect_cb), html);
-	gtk_signal_connect (GTK_OBJECT (html->engine), "submit",
-			    GTK_SIGNAL_FUNC (html_engine_submit_cb), html);
-	gtk_signal_connect (GTK_OBJECT (html->engine), "object_requested",
-			    GTK_SIGNAL_FUNC (html_engine_object_requested_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "title_changed",
+			  G_CALLBACK (html_engine_title_changed_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "set_base",
+			  G_CALLBACK (html_engine_set_base_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "set_base_target",
+			  G_CALLBACK (html_engine_set_base_target_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "load_done",
+			  G_CALLBACK (html_engine_load_done_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "url_requested",
+			  G_CALLBACK (html_engine_url_requested_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "draw_pending",
+			  G_CALLBACK (html_engine_draw_pending_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "redirect",
+			  G_CALLBACK (html_engine_redirect_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "submit",
+			  G_CALLBACK (html_engine_submit_cb), html);
+	g_signal_connect (G_OBJECT (html->engine), "object_requested",
+			  G_CALLBACK (html_engine_object_requested_cb), html);
 
 	init_properties_widget (html);
 }

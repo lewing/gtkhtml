@@ -24,8 +24,8 @@
 #ifndef _HTMLENGINE_H_
 #define _HTMLENGINE_H_
 
+#include <glib-object.h>
 #include <gdk/gdktypes.h>
-#include <gtk/gtkobject.h>
 #include <gtk/gtkwidget.h>
 #include "gtkhtml-types.h"
 
@@ -35,10 +35,10 @@
 
 
 #define HTML_TYPE_ENGINE                 (html_engine_get_type ())
-#define HTML_ENGINE(obj)                 (GTK_CHECK_CAST ((obj), HTML_TYPE_ENGINE, HTMLEngine))
-#define HTML_ENGINE_CLASS(klass)         (GTK_CHECK_CLASS_CAST ((klass), HTML_TYPE_ENGINE, HTMLEngineClass))
-#define HTML_IS_ENGINE(obj)              (GTK_CHECK_TYPE ((obj), HTML_TYPE_ENGINE))
-#define HTML_IS_ENGINE_CLASS(klass)      (GTK_CHECK_CLASS_TYPE ((klass), HTML_TYPE_ENGINE))
+#define HTML_ENGINE(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), HTML_TYPE_ENGINE, HTMLEngine))
+#define HTML_ENGINE_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), HTML_TYPE_ENGINE, HTMLEngineClass))
+#define HTML_IS_ENGINE(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), HTML_TYPE_ENGINE))
+#define HTML_IS_ENGINE_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), HTML_TYPE_ENGINE))
 
 
 /* FIXME extreme hideous ugliness in the following lines.  */
@@ -51,7 +51,7 @@
 /* FIXME this needs splitting.  */
 
 struct _HTMLEngine {
-	GtkObject parent;
+	GObject parent;
 	HTMLDrawQueue *draw_queue;
 
 	HTMLPainter *painter;
@@ -265,7 +265,7 @@ struct _HTMLEngine {
 struct _HTMLEmbedded;
 
 struct _HTMLEngineClass {
-	GtkObjectClass parent_class;
+	GObjectClass parent_class;
 	
 	void (* title_changed) (HTMLEngine *engine);
 	void (* set_base) (HTMLEngine *engine, const gchar *base);
