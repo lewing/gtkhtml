@@ -999,17 +999,28 @@ calc_nb_after (HTMLText *text, HTMLPainter *painter)
 		HTMLTextPangoInfo *pi = html_text_get_pango_info (text, painter);
 
 		if (!pi->entries [pi->n - 1].attrs [pi->entries [pi->n - 1].item->num_chars - 1].is_line_break) {
-			gint ii, io;
+			gint ii, io, offset;
 
 			pi = html_text_get_pango_info (HTML_TEXT (next), painter);
-			ii = io = 0;
+			ii = io = offset = 0;
 
 			while (!pi->entries [ii].attrs [io].is_line_break) {
-				nbw += PANGO_PIXELS (pi->entries [ii].widths [io]);
+				if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter))
+					nbw += PANGO_PIXELS (pi->entries [ii].widths [io]);
 				if (!html_text_pi_backward (pi, &ii, &io)) {
 					nbw += calc_nb_after (HTML_TEXT (next), painter);
 					break;
 				}
+			}
+
+			if (!HTML_IS_GDK_PAINTER (painter) && !HTML_IS_PLAIN_PAINTER (painter)) {
+				gint w;
+
+				html_painter_calc_text_size (painter, html_text_get_text (HTML_TEXT (next), 0),
+							     offset, NULL, NULL, 0, NULL, html_text_get_font_style (text), text->face,
+							     &w, NULL, NULL);
+
+				nbw += w;
 			}
 		}
 	}
