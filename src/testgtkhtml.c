@@ -970,7 +970,7 @@ main (gint argc, gchar *argv[])
 	   argc, argv, options, 0, &ctx); */
 	gnome_program_init ("testgtkhtml", VERSION, LIBGNOMEUI_MODULE, argc, argv,
 
-			    GNOME_PARAM_HUMAN_READABLE_NAME, _("GtkHTML Test Application"),
+			    GNOME_PARAM_HUMAN_READABLE_NAME, "GtkHTML Test Application",
 			    NULL);
 
 	app = gnome_app_new ("testgtkhtml", "GtkHTML: testbed application");
