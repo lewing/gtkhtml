@@ -2122,31 +2122,21 @@ focus (GtkWidget *w, GtkDirectionType direction)
 	}
 
 	if (html_engine_focus (e, direction) && e->focus_object) {
-		HTMLObject *cur, *obj = html_engine_get_focus_object (e, NULL);
+		gint offset;
+		HTMLObject *cur, *obj = html_engine_get_focus_object (e, &offset);
 		gint x1, y1, x2, y2, xo, yo;
 
 		xo = e->x_offset;
 		yo = e->y_offset;
 
-		html_object_calc_abs_position (obj, &x1, &y1);
-		y2 = y1 + obj->descent;
-		x2 = x1 + obj->width;
-		y1 -= obj->ascent;
-
-		/* correct coordinates for text slaves */
-		if (html_object_is_text (obj) && obj->next) {
-			cur = obj->next;
-			while (cur && HTML_IS_TEXT_SLAVE (cur)) {
-				gint xa, ya;
-				html_object_calc_abs_position (cur, &xa, &ya);
-				xa += cur->width;
-				if (xa > x2)
-					x2 = xa;
-				ya += cur->descent;
-				if (ya > y2)
-					y2 = ya;
-				cur = cur->next;
-			}
+		if (HTML_IS_TEXT (obj))
+			if (!html_text_get_link_rectangle (HTML_TEXT (obj), e->painter, offset, &x1, &y1, &x2, &y2))
+				return FALSE;
+		else {
+			html_object_calc_abs_position (obj, &x1, &y1);
+			y2 = y1 + obj->descent;
+			x2 = x1 + obj->width;
+			y1 -= obj->ascent;
 		}
 
 		/* printf ("child pos: %d,%d x %d,%d\n", x1, y1, x2, y2); */

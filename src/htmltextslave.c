@@ -817,11 +817,20 @@ draw (HTMLObject *o,
 	
 	if (HTML_OBJECT (owner)->draw_focused) {
 		GdkRectangle rect;
+		Link *link = html_text_get_link_at_offset (owner, owner->focused_link_offset);
 
-		html_object_get_bounds (o, &rect);
-		rect.x += tx;
-		rect.y += ty;
-		draw_focus (p, &rect);
+		if (link && MAX (link->start_index, textslave->posStart) < MIN (link->end_index, textslave->posStart + textslave->posLen)) {
+			gint bw = 0;
+			html_object_get_bounds (o, &rect);
+			if (textslave->posStart > link->start_index)
+				bw = html_text_calc_part_width (owner, p, textslave->posStart, link->start_index - textslave->posStart, NULL, NULL);
+			rect.x += tx - bw;
+			rect.width -= bw;
+			if (textslave->posStart + textslave->posLen > link->end_index)
+				rect.width -= html_text_calc_part_width (owner, p, link->end_index,  textslave->posStart + textslave->posLen - link->end_index, NULL, NULL);
+			rect.y += ty;
+			draw_focus (p, &rect);
+		}
 	}
 }
 

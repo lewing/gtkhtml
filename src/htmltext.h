@@ -71,6 +71,7 @@ struct _HTMLText {
 	HTMLTextPangoInfo *pi;
 
 	GSList *links;
+	gint focused_link_offset;
 };
 
 struct _HTMLTextClass {
@@ -89,103 +90,119 @@ struct _HTMLTextClass {
 extern HTMLTextClass html_text_class;
 
 void              html_text_type_init                    (void);
-void              html_text_class_init                   (HTMLTextClass     *klass,
-							  HTMLType           type,
-							  guint              object_size);
-void              html_text_init                         (HTMLText          *text_object,
-							  HTMLTextClass     *klass,
-							  const gchar       *text,
-							  gint               len,
-							  GtkHTMLFontStyle   font_style,
-							  HTMLColor         *color);
-HTMLObject       *html_text_new                          (const gchar       *text,
-							  GtkHTMLFontStyle   font_style,
-							  HTMLColor         *color);
-HTMLObject       *html_text_new_with_len                 (const gchar       *text,
-							  gint               len,
-							  GtkHTMLFontStyle   font_style,
-							  HTMLColor         *color);
-void              html_text_queue_draw                   (HTMLText          *text,
-							  HTMLEngine        *engine,
-							  guint              offset,
-							  guint              len);
-GtkHTMLFontStyle  html_text_get_font_style               (const HTMLText    *text);
-HTMLColor        *html_text_get_color                    (HTMLText          *text,
-							  HTMLPainter       *painter);
-void              html_text_set_font_style               (HTMLText          *text,
-							  HTMLEngine        *engine,
-							  GtkHTMLFontStyle   style);
-void              html_text_set_color                    (HTMLText          *text,
-							  HTMLEngine        *engine,
-							  HTMLColor         *color);
-void              html_text_append                       (HTMLText          *text,
-							  const gchar       *str,
-							  gint               len);
-void              html_text_set_text                     (HTMLText          *text,
-							  const gchar       *new_text);
-void              html_text_set_font_face                (HTMLText          *text,
-							  HTMLFontFace      *face);
-gint              html_text_get_nb_width                 (HTMLText          *text,
-							  HTMLPainter       *painter,
-							  gboolean           begin);
-guint             html_text_get_bytes                    (HTMLText          *text);
-guint             html_text_get_index                    (HTMLText          *text,
-							  guint              offset);
-gunichar          html_text_get_char                     (HTMLText          *text,
-							  guint              offset);
-gchar            *html_text_get_text                     (HTMLText          *text,
-							  guint              offset);
-GList            *html_text_get_items                    (HTMLText          *text,
-							  HTMLPainter       *painter);
-void              html_text_spell_errors_clear           (HTMLText          *text);
-void              html_text_spell_errors_clear_interval  (HTMLText          *text,
-							  HTMLInterval      *i);
-void              html_text_spell_errors_add             (HTMLText          *text,
-							  guint              off,
-							  guint              len);
-gboolean          html_text_magic_link                   (HTMLText          *text,
-							  HTMLEngine        *engine,
-							  guint              offset);
-gint              html_text_trail_space_width            (HTMLText          *text,
-							  HTMLPainter       *painter);
-gboolean          html_text_convert_nbsp                 (HTMLText          *text,
-							  gboolean           free_text);
-gint              html_text_get_line_offset              (HTMLText          *text,
-							  HTMLPainter       *painter,
-							  gint               offset);
-gint              html_text_text_line_length             (const gchar       *text,
-							  gint              *line_offset,
-							  guint              len,
-							  gint              *tabs);
-gint              html_text_calc_part_width              (HTMLText          *text,
-							  HTMLPainter       *painter,
-							  gint               offset,
-							  gint               len,
-							  gint              *asc,
-							  gint              *dsc);
-gint              html_text_get_item_index               (HTMLText          *text,
-							  HTMLPainter       *painter,
-							  gint               offset,
-							  gint              *item_offset);
-gboolean          html_text_pi_backward                  (HTMLTextPangoInfo *pi,
-							  gint              *ii,
-							  gint              *io);
-gboolean          html_text_pi_forward                   (HTMLTextPangoInfo *pi,
-							  gint              *ii,
-							  gint              *io);
-gint              html_text_tail_white_space             (HTMLText          *text,
-							  HTMLPainter       *painter,
-							  gint               offset,
-							  gint               ii,
-							  gint               io,
-							  gint              *white_len,
-							  gint               line_offset,
-							  gchar             *s);
-void              html_text_add_link                     (HTMLText          *text,
-							  gchar             *url,
-							  gchar             *target,
-							  gint               start_index,
-							  gint               end_index);
+void              html_text_class_init                   (HTMLTextClass      *klass,
+							  HTMLType            type,
+							  guint               object_size);
+void              html_text_init                         (HTMLText           *text_object,
+							  HTMLTextClass      *klass,
+							  const gchar        *text,
+							  gint                len,
+							  GtkHTMLFontStyle    font_style,
+							  HTMLColor          *color);
+HTMLObject       *html_text_new                          (const gchar        *text,
+							  GtkHTMLFontStyle    font_style,
+							  HTMLColor          *color);
+HTMLObject       *html_text_new_with_len                 (const gchar        *text,
+							  gint                len,
+							  GtkHTMLFontStyle    font_style,
+							  HTMLColor          *color);
+void              html_text_queue_draw                   (HTMLText           *text,
+							  HTMLEngine         *engine,
+							  guint               offset,
+							  guint               len);
+GtkHTMLFontStyle  html_text_get_font_style               (const HTMLText     *text);
+HTMLColor        *html_text_get_color                    (HTMLText           *text,
+							  HTMLPainter        *painter);
+void              html_text_set_font_style               (HTMLText           *text,
+							  HTMLEngine         *engine,
+							  GtkHTMLFontStyle    style);
+void              html_text_set_color                    (HTMLText           *text,
+							  HTMLEngine         *engine,
+							  HTMLColor          *color);
+void              html_text_append                       (HTMLText           *text,
+							  const gchar        *str,
+							  gint                len);
+void              html_text_set_text                     (HTMLText           *text,
+							  const gchar        *new_text);
+void              html_text_set_font_face                (HTMLText           *text,
+							  HTMLFontFace       *face);
+gint              html_text_get_nb_width                 (HTMLText           *text,
+							  HTMLPainter        *painter,
+							  gboolean            begin);
+guint             html_text_get_bytes                    (HTMLText           *text);
+guint             html_text_get_index                    (HTMLText           *text,
+							  guint               offset);
+gunichar          html_text_get_char                     (HTMLText           *text,
+							  guint               offset);
+gchar            *html_text_get_text                     (HTMLText           *text,
+							  guint               offset);
+GList            *html_text_get_items                    (HTMLText           *text,
+							  HTMLPainter        *painter);
+void              html_text_spell_errors_clear           (HTMLText           *text);
+void              html_text_spell_errors_clear_interval  (HTMLText           *text,
+							  HTMLInterval       *i);
+void              html_text_spell_errors_add             (HTMLText           *text,
+							  guint               off,
+							  guint               len);
+gboolean          html_text_magic_link                   (HTMLText           *text,
+							  HTMLEngine         *engine,
+							  guint               offset);
+gint              html_text_trail_space_width            (HTMLText           *text,
+							  HTMLPainter        *painter);
+gboolean          html_text_convert_nbsp                 (HTMLText           *text,
+							  gboolean            free_text);
+gint              html_text_get_line_offset              (HTMLText           *text,
+							  HTMLPainter        *painter,
+							  gint                offset);
+gint              html_text_text_line_length             (const gchar        *text,
+							  gint               *line_offset,
+							  guint               len,
+							  gint               *tabs);
+gint              html_text_calc_part_width              (HTMLText           *text,
+							  HTMLPainter        *painter,
+							  gint                offset,
+							  gint                len,
+							  gint               *asc,
+							  gint               *dsc);
+gint              html_text_get_item_index               (HTMLText           *text,
+							  HTMLPainter        *painter,
+							  gint                offset,
+							  gint               *item_offset);
+gboolean          html_text_pi_backward                  (HTMLTextPangoInfo  *pi,
+							  gint               *ii,
+							  gint               *io);
+gboolean          html_text_pi_forward                   (HTMLTextPangoInfo  *pi,
+							  gint               *ii,
+							  gint               *io);
+gint              html_text_tail_white_space             (HTMLText           *text,
+							  HTMLPainter        *painter,
+							  gint                offset,
+							  gint                ii,
+							  gint                io,
+							  gint               *white_len,
+							  gint                line_offset,
+							  gchar              *s);
+void              html_text_add_link                     (HTMLText           *text,
+							  gchar              *url,
+							  gchar              *target,
+							  gint                start_index,
+							  gint                end_index);
+gboolean          html_text_get_link_rectangle           (HTMLText           *text,
+							  HTMLPainter        *painter,
+							  gint                offset,
+							  gint               *x1,
+							  gint               *y1,
+							  gint               *x2,
+							  gint               *y2);
+Link             *html_text_get_link_at_offset           (HTMLText           *text,
+							  gint                offset);
+HTMLTextSlave    *html_text_get_slave_at_offset          (HTMLObject         *o,
+							  gint                offset);
+Link             *html_text_get_link_slaves_at_offset    (HTMLText           *text,
+							  gint                offset,
+							  HTMLTextSlave     **start,
+							  HTMLTextSlave     **end);
+
 
 /*
  * protected

@@ -1574,12 +1574,12 @@ get_cursor_base (HTMLObject *self,
 	html_object_calc_abs_position (self, x, y);
 }
 
-static Link *
-get_link (HTMLObject *o, gint offset)
+Link *
+html_text_get_link_at_offset (HTMLText *text, gint offset)
 {
 	GSList *l;
 
-	for (l = HTML_TEXT (o)->links; l; l = l->next) {
+	for (l = text->links; l; l = l->next) {
 		Link *link = (Link *) l->data;
 
 		if (link->start_index <= offset && offset <= link->end_index)
@@ -1592,7 +1592,7 @@ get_link (HTMLObject *o, gint offset)
 static const gchar *
 get_url (HTMLObject *object, gint offset)
 {
-	Link *link = get_link (object, offset);
+	Link *link = html_text_get_link_at_offset (HTML_TEXT (object), offset);
 
 	return link ? link->url : NULL;
 }
@@ -1600,7 +1600,7 @@ get_url (HTMLObject *object, gint offset)
 static const gchar *
 get_target (HTMLObject *object, gint offset)
 {
-	Link *link = get_link (object, offset);
+	Link *link = html_text_get_link_at_offset (HTML_TEXT (object), offset);
 
 	return link ? link->target : NULL;
 }
@@ -2068,4 +2068,71 @@ html_text_add_link (HTMLText *text, gchar *url, gchar *target, gint start_index,
 	link->end_index = end_index;
 
 	text->links = g_slist_prepend (text->links, link);
+}
+
+HTMLTextSlave *
+html_text_get_slave_at_offset (HTMLObject *o, gint offset)
+{
+	if (!o || (!HTML_IS_TEXT (o) && !HTML_IS_TEXT_SLAVE (o)))
+		return NULL;
+
+	if (HTML_IS_TEXT (o))
+		o = o->next;
+
+	while (o && HTML_IS_TEXT_SLAVE (o)) {
+		if (HTML_IS_TEXT_SLAVE (o) && HTML_TEXT_SLAVE (o)->posStart <= offset
+		    && (offset < HTML_TEXT_SLAVE (o)->posStart + HTML_TEXT_SLAVE (o)->posLen
+			|| (offset == HTML_TEXT_SLAVE (o)->posStart + HTML_TEXT_SLAVE (o)->posLen && HTML_TEXT_SLAVE (o)->owner->text_len == offset)))
+			return HTML_TEXT_SLAVE (o);
+		o = o->next;
+	}
+
+	return NULL;
+}
+
+Link *
+html_text_get_link_slaves_at_offset (HTMLText *text, gint offset, HTMLTextSlave **start, HTMLTextSlave **end)
+{
+	Link *link = html_text_get_link_at_offset (text, offset);
+
+	if (link) {
+		*start = html_text_get_slave_at_offset (HTML_OBJECT (text), link->start_index);
+		*end = html_text_get_slave_at_offset (HTML_OBJECT (*start), link->end_index);
+
+		if (*start && *end)
+			return link;
+	}
+
+	return NULL;
+}
+
+gboolean
+html_text_get_link_rectangle (HTMLText *text, HTMLPainter *painter, gint offset, gint *x1, gint *y1, gint *x2, gint *y2)
+{
+	HTMLTextSlave *start;
+	HTMLTextSlave *end;
+	Link *link;
+
+	link = html_text_get_link_slaves_at_offset (text, offset, &start, &end);
+	if (link) {
+		gint xs, ys, xe, ye;
+
+		html_object_calc_abs_position (HTML_OBJECT (start), &xs, &ys);
+		xs += html_text_calc_part_width (text, painter, start->posStart, link->start_index - start->posStart, NULL, NULL);
+		ys -= HTML_OBJECT (start)->ascent;
+
+		html_object_calc_abs_position (HTML_OBJECT (end), &xe, &ye);
+		xe += HTML_OBJECT (end)->width;
+		xe -= html_text_calc_part_width (text, painter, link->end_index, end->posStart + start->posLen - link->end_index, NULL, NULL);
+		ye += HTML_OBJECT (end)->descent;
+
+		*x1 = MIN (xs, xe);
+		*y1 = MIN (ys, ye);
+		*x2 = MAX (xs, xe);
+		*y2 = MAX (ys, ye);
+
+		return TRUE;
+	}
+
+	return FALSE;
 }

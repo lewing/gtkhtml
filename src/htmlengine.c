@@ -6173,17 +6173,17 @@ html_engine_get_language (HTMLEngine *e)
 }
 
 static void
-draw_link_text (HTMLText *lt, HTMLEngine *e, gint offset)
+draw_link_text (HTMLText *text, HTMLEngine *e, gint offset)
 {
-	HTMLObject *cur = HTML_OBJECT (lt)->next;
+	HTMLTextSlave *start, *end;
 
-	/* FIXME-link, draw only link on offset */
-
-	/* printf ("draw link text\n"); */
-	while (cur && HTML_IS_TEXT_SLAVE (cur)) {
-		/* printf ("slave\n"); */
-		html_engine_queue_draw (e, cur);
-		cur = cur->next;
+	if (html_text_get_link_slaves_at_offset (text, offset, &start, &end)) {
+		while (start) {
+			html_engine_queue_draw (e, HTML_OBJECT (start));
+			if (start == end)
+				break;
+			start = HTML_TEXT_SLAVE (HTML_OBJECT (start)->next);
+		}
 	}
 }
 
@@ -6333,6 +6333,8 @@ html_engine_set_focus_object (HTMLEngine *e, HTMLObject *o, gint offset)
 
 		if (!html_object_is_frame (e->focus_object)) {
 			o->draw_focused = TRUE;
+			if (HTML_IS_TEXT (o))
+				HTML_TEXT (o)->focused_link_offset = offset;
 			draw_focus_object (e, o, offset);
 			html_engine_flush_draw_queue (e);
 		}
