@@ -72,20 +72,6 @@ html_cursor_get_left (HTMLCursor *cursor, HTMLObject **obj, gint *off)
 }
 
 static void
-html_cursor_get_right (HTMLCursor *cursor, HTMLObject **obj, gint *off)
-{
-	if (cursor->offset >= html_object_get_length (cursor->object)) {
-		*obj = html_object_next_not_slave (cursor->object);
-		if (*obj) {
-			*off = 0;
-		}
-		return;
-	}
-	*obj = cursor->object;
-	*off = cursor->offset;
-}
-
-static void
 html_point_get_left (HTMLPoint *source, HTMLPoint *dest)
 {
 	if (source->offset == 0) {
@@ -403,42 +389,7 @@ move_cursor_before_delete (HTMLEngine *e)
 				e->cursor->object = obj;
 				e->cursor->offset = off;
 			}
-		} /* else {
-			HTMLObject *obj;
-			gint off;
-
-			html_cursor_get_right (e->mark, &obj, &off);
-			if (obj) {
-				e->cursor->object = obj;
-				e->cursor->offset = 0;
-			}
-			} */
-	}
-}
-
-static void
-move_cursor_after_delete (HTMLEngine *e)
-{
-	if (e->cursor->offset == html_object_get_length (e->cursor->object)) {
-		if (html_object_next_not_slave (e->cursor->object)) {
-			HTMLObject *obj;
-			gint off;
-
-			html_cursor_get_right (e->cursor, &obj, &off);
-			if (obj) {
-				e->cursor->object = obj;
-				e->cursor->offset = off;
-			}
-		} /* else {
-			HTMLObject *obj;
-			gint off;
-
-			html_cursor_get_left (e->mark, &obj, &off);
-			if (obj) {
-				e->cursor->object = obj;
-				e->cursor->offset = off;
-			}
-			} */
+		}
 	}
 }
 
@@ -446,18 +397,6 @@ static void
 place_cursor_before_mark (HTMLEngine *e)
 {
 	if (e->mark->position < e->cursor->position) {
-		HTMLCursor *tmp;
-
-		tmp = e->cursor;
-		e->cursor = e->mark;
-		e->mark = tmp;
-	}
-}
-
-static void
-place_cursor_after_mark (HTMLEngine *e)
-{
-	if (e->mark->position > e->cursor->position) {
 		HTMLCursor *tmp;
 
 		tmp = e->cursor;
@@ -571,6 +510,32 @@ set_cursor_at_end_of_object (HTMLEngine *e, HTMLObject *o, guint len)
 }
 
 static inline void
+isolate_tables (HTMLEngine *e, HTMLCursor *orig, HTMLUndoDirection dir)
+{
+	HTMLObject *next;
+
+	next = html_object_next_not_slave (e->cursor->object);
+	if (next && e->cursor->offset == html_object_get_length (e->cursor->object)
+	    && (HTML_IS_TABLE (e->cursor->object) || HTML_IS_TABLE (next))) {
+		insert_empty_paragraph (e, dir);
+		html_cursor_backward (e->cursor, e);
+	}
+
+	next = html_object_next_not_slave (orig->object);
+	if (next && orig->offset == html_object_get_length (orig->object)
+	    && (HTML_IS_TABLE (orig->object) || HTML_IS_TABLE (next))) {
+		HTMLCursor tmp;
+
+		tmp = *e->cursor;
+		*e->cursor = *orig;
+		insert_empty_paragraph (e, dir);
+		*orig = *e->cursor;
+		*e->cursor = tmp;
+		e->cursor->position ++;
+	}
+}
+
+static inline void
 insert_object_do (HTMLEngine *e, HTMLObject *obj, guint *len, gboolean check, HTMLUndoDirection dir)
 {
 	HTMLObject *cur;
@@ -580,24 +545,6 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint *len, gboolean check, HT
 	gint level, cursor_level;
 
 	html_engine_freeze (e);
-
-	/* if (HTML_IS_TABLE (e->cursor->object)) {
-		if (e->cursor->offset) {
-			HTMLObject *head = html_object_get_head_leaf (obj);
-
-			if (!head->parent || (HTML_IS_CLUEFLOW (head->parent)
-					      && !html_clueflow_is_empty (HTML_CLUEFLOW (head->parent))))
-				insert_empty_paragraph (e, dir);
-		} else {
-			HTMLObject *tail = html_object_get_tail_leaf (obj);
-
-			if (!tail->parent || (HTML_IS_CLUEFLOW (tail->parent)
-					      && !html_clueflow_is_empty (HTML_CLUEFLOW (tail->parent)))) {
-				insert_empty_paragraph (e, dir);
-				html_cursor_backward (e->cursor, e);
-			}
-		}
-		} */
 
 	level = 0;
 	cur   = html_object_get_head_leaf (obj);
@@ -635,8 +582,6 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint *len, gboolean check, HT
 			html_clue_append_after (HTML_CLUE (parent), obj, where);
 	}
 
-	//e->cursor->position += len;
-
 #ifdef OP_DEBUG
 	printf ("position before merge %d\n", e->cursor->position);
 #endif
@@ -647,6 +592,7 @@ insert_object_do (HTMLEngine *e, HTMLObject *obj, guint *len, gboolean check, HT
 #endif
 
 	*len = e->cursor->position - orig->position;
+	isolate_tables (e, orig, dir);
 
 	if (check)
 		html_engine_spell_check_range (e, orig, e->cursor);
@@ -748,8 +694,9 @@ insert_empty_paragraph (HTMLEngine *e, HTMLUndoDirection dir)
 	html_engine_freeze (e);
 	orig = html_cursor_dup (e->cursor);
 	split_and_add_empty_texts (e, 2, &left, &right);
-	e->cursor->position ++;
+	//e->cursor->position ++;
 	remove_empty_and_merge (e, FALSE, left, right, orig);
+	html_cursor_forward (e->cursor, e);
 
 	/* replace empty text in new empty flow by text with current style */
 	if (html_clueflow_is_empty (HTML_CLUEFLOW (e->cursor->object->parent))) {

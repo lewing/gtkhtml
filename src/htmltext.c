@@ -386,8 +386,6 @@ object_split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, g
 	g_free (tt);
 
 	html_clue_append_after (HTML_CLUE (self->parent), dup, self);
-	e->cursor->object = dup;
-	e->cursor->offset = 0;
 
 	prev = self->prev;
 	if (t1->text_len == 0 && prev && html_object_merge (prev, self, e, NULL, NULL, NULL))

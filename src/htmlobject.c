@@ -164,18 +164,15 @@ split (HTMLObject *self, HTMLEngine *e, HTMLObject *child, gint offset, gint lev
 
 	if (offset) {
 		if (!self->next) {
-			e->cursor->object = html_engine_new_text_empty (e);
-			e->cursor->offset = 0;
-			html_clue_append (HTML_CLUE (self->parent), e->cursor->object);
-		} else {
-			e->cursor->object = self->next;
-			e->cursor->offset = 0;
+			html_clue_append (HTML_CLUE (self->parent), html_engine_new_text_empty (e));
 		}
 		*left  = g_list_prepend (*left,  self);
 		*right = g_list_prepend (*right, self->next);
 	} else {
 		if (!self->prev) {
-			html_clue_prepend (HTML_CLUE (self->parent), html_engine_new_text_empty (e));
+			e->cursor->object = html_engine_new_text_empty (e);
+			e->cursor->offset = 0;
+			html_clue_prepend (HTML_CLUE (self->parent), e->cursor->object);
 		}
 		*left  = g_list_prepend (*left,  self->prev);
 		*right = g_list_prepend (*right, self);
