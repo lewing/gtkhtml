@@ -1,3 +1,7 @@
+2004-01-19  Yong Sun <Yong.Sun@sun.com>
+
+	* configure.in: add macro AC_DEFINE_UNQUOTED for GETTEXT_PACKAGE
+
 2003-10-24  Radek Doulik  <rodo@ximian.com>
 
 	* applied Adrian Bunk's patch which fixes gal required version,
