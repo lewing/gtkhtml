@@ -85,21 +85,17 @@ replace_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char *cname)
 static void
 insert_image_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char *cname)
 {
+	GtkWidget *filesel = gtk_file_selection_new (_("Insert image"));
 	HTMLObject *img;
 
-	if (cd->properties_dialog)
-		gtk_html_edit_properties_dialog_close (cd->properties_dialog);
-	cd->properties_dialog = gtk_html_edit_properties_dialog_new (cd, _("Insert"), ICONDIR "/insert-image-24.png");
-
-	img = html_image_new (cd->html->engine->image_factory, ICONDIR "/empty_image.png", NULL, NULL, 0, 0, 0, 0, 0, NULL, HTML_VALIGN_NONE, TRUE);
-	html_engine_paste_object (cd->html->engine, img, 1);
-
-	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
-						   GTK_HTML_EDIT_PROPERTY_IMAGE, _("Image"),
-						   image_insertion,
-						   image_insert_cb,
-						   image_close_cb);
-	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
+	if (filesel) {
+		if (gtk_dialog_run (GTK_DIALOG (filesel)) == GTK_RESPONSE_OK) {
+			img = html_image_new (cd->html->engine->image_factory, gtk_file_selection_get_filename (GTK_FILE_SELECTION (filesel)),
+					      NULL, NULL, 0, 0, 0, 0, 0, NULL, HTML_VALIGN_NONE, TRUE);
+			html_engine_paste_object (cd->html->engine, img, 1);
+		}
+		gtk_widget_destroy (filesel);
+	}
 }
 
 static void
@@ -113,7 +109,6 @@ insert_link_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char *cnam
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_LINK, _("Link"),
 						   link_insert,
-						   link_insert_cb,
 						   link_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
@@ -131,7 +126,6 @@ insert_rule_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char *cnam
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_RULE, _("Rule"),
 						   rule_insert,
-						   rule_insert_cb,
 						   rule_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
@@ -148,7 +142,6 @@ insert_table (GtkHTMLControlData *cd)
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_TABLE, _("Table"),
 						   table_insert,
-						   table_insert_cb,
 						   table_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
@@ -171,7 +164,6 @@ insert_template_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char *
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_TABLE, _("Template"),
 						   template_insert,
-						   template_insert_cb,
 						   template_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
@@ -326,7 +318,6 @@ format_page_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char *cnam
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_BODY, _("Page"),
 						   body_properties,
-						   body_apply_cb,
 						   body_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
@@ -344,7 +335,6 @@ format_text_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char *cnam
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_BODY, _("Text"),
 						   text_properties,
-						   text_apply_cb,
 						   text_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
@@ -362,7 +352,6 @@ format_paragraph_cb (BonoboUIComponent *uic, GtkHTMLControlData *cd, const char 
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_BODY, _("Paragraph"),
 						   paragraph_properties,
-						   paragraph_apply_cb,
 						   paragraph_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);

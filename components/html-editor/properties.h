@@ -27,7 +27,6 @@
 #include "control-data.h"
 
 typedef GtkWidget * (*GtkHTMLEditPropertyCreateFunc) (GtkHTMLControlData *cd, gpointer *own_data);
-typedef gboolean    (*GtkHTMLEditPropertyApplyFunc)  (GtkHTMLControlData *cd, gpointer  own_data);
 typedef void        (*GtkHTMLEditPropertyCloseFunc)  (GtkHTMLControlData *cd, gpointer  own_data);
 
 struct _GtkHTMLEditPropertiesDialog {
@@ -61,7 +60,6 @@ void                          gtk_html_edit_properties_dialog_add_entry    (GtkH
 									    GtkHTMLEditPropertyType t,
 									    const gchar *name,
 									    GtkHTMLEditPropertyCreateFunc create,
-									    GtkHTMLEditPropertyApplyFunc apply_cb,
 									    GtkHTMLEditPropertyCloseFunc close_cb);
 void                          gtk_html_edit_properties_dialog_show         (GtkHTMLEditPropertiesDialog *d);
 void                          gtk_html_edit_properties_dialog_close        (GtkHTMLEditPropertiesDialog *d);

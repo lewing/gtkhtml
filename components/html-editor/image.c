@@ -528,8 +528,6 @@ image_widget (GtkHTMLEditImageProperties *d, gboolean insert)
 			    "changed", G_CALLBACK (pentry_changed), d);
 
 	gtk_widget_show_all (d->page);
-	if (!insert)
-		gtk_widget_hide (frame_template);
 	gnome_pixmap_entry_set_preview (GNOME_PIXMAP_ENTRY (d->pentry), FALSE);
 
 	editor_check_stock ();

@@ -40,19 +40,11 @@
 
 struct _PageData {
 	GtkHTMLEditPropertyType      type;
-	GtkHTMLEditPropertyApplyFunc apply;
 	GtkHTMLEditPropertyCloseFunc close;
 	gchar *name;
 	gpointer data;
 };
 typedef struct _PageData PageData;
-
-static void
-apply_cb (PageData *pd, GtkHTMLEditPropertiesDialog *d)
-{
-	if (!(*pd->apply) (d->control_data, pd->data))
-		d->all_changes_applied = FALSE;
-}
 
 static void
 prop_close (GtkHTMLEditPropertiesDialog *d)
@@ -90,8 +82,7 @@ dialog_response (GtkDialog *dialog, gint response_id, GtkHTMLEditPropertiesDialo
 	switch (response_id) {
 	case GTK_RESPONSE_CANCEL:
 	case GTK_RESPONSE_CLOSE: /* OK */
-		if (apply (d))
-			prop_close (d);
+		prop_close (d);
 		break;
 	}
 }
@@ -161,7 +152,6 @@ gtk_html_edit_properties_dialog_add_entry (GtkHTMLEditPropertiesDialog *d,
 					   GtkHTMLEditPropertyType t,
 					   const gchar *name,
 					   GtkHTMLEditPropertyCreateFunc create,
-					   GtkHTMLEditPropertyApplyFunc apply_cb,
 					   GtkHTMLEditPropertyCloseFunc close_cb)
 
 {
@@ -169,7 +159,6 @@ gtk_html_edit_properties_dialog_add_entry (GtkHTMLEditPropertiesDialog *d,
 	GtkWidget *page;
 
 	page = (*create) (d->control_data, &pd->data);
-	pd->apply = apply_cb;
 	pd->close = close_cb;
 	pd->type  = t;
 	pd->name  = g_strdup (name);

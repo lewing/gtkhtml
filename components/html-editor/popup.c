@@ -105,7 +105,6 @@ insert_link (GtkWidget *mi, GtkHTMLControlData *cd)
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_LINK, _("Link"),
 						   link_insert,
-						   link_insert_cb,
 						   link_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
@@ -194,56 +193,48 @@ show_prop_dialog (GtkHTMLControlData *cd, GtkHTMLEditPropertyType start)
 			gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 								   t, _("Text"),
 								   text_properties,
-								   text_apply_cb,
 								   text_close_cb);
 			break;
 		case GTK_HTML_EDIT_PROPERTY_LINK:
 			gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 								   t, _("Link"),
 								   link_properties,
-								   link_apply_cb,
 								   link_close_cb);
 			break;
 		case GTK_HTML_EDIT_PROPERTY_IMAGE:
 			gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 								   t, _("Image"),
 								   image_properties,
-								   image_apply_cb,
 								   image_close_cb);
 								   break;
 		case GTK_HTML_EDIT_PROPERTY_PARAGRAPH:
 			gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 								   t, _("Paragraph"),
 								   paragraph_properties,
-								   paragraph_apply_cb,
 								   paragraph_close_cb);
 			break;
 		case GTK_HTML_EDIT_PROPERTY_BODY:
 			gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 								   t, _("Page"),
 								   body_properties,
-								   body_apply_cb,
 								   body_close_cb);
 			break;
 		case GTK_HTML_EDIT_PROPERTY_RULE:
 			gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 								   t, _("Rule"),
 								   rule_properties,
-								   rule_apply_cb,
 								   rule_close_cb);
 			break;
 		case GTK_HTML_EDIT_PROPERTY_TABLE:
 			gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 								   t, _("Table"),
 								   table_properties,
-								   table_apply_cb,
 								   table_close_cb);
 			break;
 		case GTK_HTML_EDIT_PROPERTY_CELL:
 			gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 								   t, _("Cell"),
 								   cell_properties,
-								   cell_apply_cb,
 								   cell_close_cb);
 			break;
 		default:
@@ -274,7 +265,6 @@ link_prop_dialog (GtkWidget *mi, GtkHTMLControlData *cd)
 	gtk_html_edit_properties_dialog_add_entry (cd->properties_dialog,
 						   GTK_HTML_EDIT_PROPERTY_LINK, _("Link"),
 						   link_properties,
-						   link_apply_cb,
 						   link_close_cb);
 
 	gtk_html_edit_properties_dialog_show (cd->properties_dialog);
