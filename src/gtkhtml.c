@@ -1977,6 +1977,8 @@ init_properties (GtkHTMLClass *klass)
 	gconf_client_notify_add (gconf_client, GTK_HTML_GCONF_DIR, client_notify_class, klass, NULL, &gconf_error);
 	if (gconf_error)
 		g_warning ("gconf error: %s\n", gconf_error->message);
+
+	initialized = TRUE;
 }
 
 static gint
@@ -2026,8 +2028,6 @@ focus (GtkContainer *container, GtkDirectionType direction)
 	gtk_container_set_focus_child (container, NULL);
 	return FALSE;
 #endif
-
-	initialized = TRUE;
 }
 
 /* dnd begin */
@@ -2512,7 +2512,7 @@ gtk_html_init (GtkHTML* html)
 	};
 	static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
 
-	init_properties (GTK_OBJECT (html)->klass);
+	init_properties (GTK_HTML_CLASS (G_OBJECT_GET_CLASS (html)));
 
 	GTK_WIDGET_SET_FLAGS (GTK_WIDGET (html), GTK_CAN_FOCUS);
 	GTK_WIDGET_SET_FLAGS (GTK_WIDGET (html), GTK_APP_PAINTABLE);
