@@ -5245,6 +5245,19 @@ html_engine_set_language (HTMLEngine *e, const gchar *language)
 	gtk_html_api_set_language (GTK_HTML (e->widget));
 }
 
+static void
+draw_link_text (HTMLLinkText *lt, HTMLEngine *e)
+{
+	HTMLObject *cur = HTML_OBJECT (lt)->next;
+
+	printf ("draw link text\n");
+	while (cur && HTML_IS_TEXT_SLAVE (cur)) {
+		printf ("slave\n");
+		html_engine_queue_draw (e, cur);
+		cur = cur->next;
+	}
+}
+
 gboolean
 html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 {
@@ -5252,10 +5265,12 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 		HTMLObject *cur;
 		gint offset;
 
-		/* try to move focus in child embedded widget */
 		if (e->focus_object) {
-			printf ("try to focus in current child\n");
-			if (html_object_is_embedded (e->focus_object)) {
+			if (HTML_IS_LINK_TEXT (e->focus_object)) {
+				draw_link_text (HTML_LINK_TEXT (e->focus_object), e);
+			} else if (HTML_IS_IMAGE (e->focus_object)) {
+				html_engine_queue_draw (e, e->focus_object);
+			} else if (html_object_is_embedded (e->focus_object)) {
 				if (gtk_widget_child_focus (HTML_EMBEDDED (e->focus_object)->widget, dir))
 					return TRUE;
 			}
@@ -5275,9 +5290,17 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 			if (HTML_IS_LINK_TEXT (cur)) {
 				e->focus_object = cur;
 				printf ("focus link: %s\n", HTML_LINK_TEXT (cur)->url);
-				
+				draw_link_text (HTML_LINK_TEXT (cur), e);
+				html_engine_flush_draw_queue (e);
+
 				return TRUE;
-				break;
+			} else if (HTML_IS_IMAGE (cur) && HTML_IMAGE (cur)->url && *HTML_IMAGE (cur)->url) {
+				e->focus_object = cur;
+				printf ("focus image: %s\n", HTML_IMAGE (cur)->url);
+				html_engine_queue_draw (e, cur);
+				html_engine_flush_draw_queue (e);
+
+				return TRUE;
 			} else if (html_object_is_embedded (cur) && !html_object_is_frame (cur)) {
 				if (!GTK_WIDGET_DRAWABLE (HTML_EMBEDDED (cur)->widget)) {
 					gint x, y;
@@ -5289,6 +5312,7 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 
 				if (gtk_widget_child_focus (HTML_EMBEDDED (cur)->widget, dir)) {
 					e->focus_object = cur;
+					html_engine_flush_draw_queue (e);
 					return TRUE;
 				}
 			}
@@ -5297,10 +5321,16 @@ html_engine_focus (HTMLEngine *e, GtkDirectionType dir)
 				? html_object_next_cursor (cur, &offset)
 				: html_object_prev_cursor (cur, &offset);
 		}
+		printf ("no focus\n");
+		e->focus_object = NULL;
+		html_engine_flush_draw_queue (e);
 	}
 
-	printf ("no focus\n");
-	e->focus_object = NULL;
-
 	return FALSE;
+}
+
+void
+html_engine_queue_draw_focus (HTMLEngine *e)
+{
+	
 }
