@@ -779,7 +779,7 @@ html_painter_set_clip_rectangle (HTMLPainter *painter,
 	painter->clip_width = width;
 	painter->clip_height = height;
 
-	printf ("clip rect: %d,%d %dx%d\n", x, y, width, height);
+	/* printf ("clip rect: %d,%d %dx%d\n", x, y, width, height); */
 
 	(* HP_CLASS (painter)->set_clip_rectangle) (painter, x, y, width, height);
 }

@@ -98,7 +98,7 @@ begin (HTMLPainter *painter, int x1, int y1, int x2, int y2)
 {
 	HTMLGdkPainter *gdk_painter;
 
-	printf ("painter begin %d,%d %d,%d\n", x1, y1, x2, y2);
+	/* printf ("painter begin %d,%d %d,%d\n", x1, y1, x2, y2); */
 
 	gdk_painter = HTML_GDK_PAINTER (painter);
 	g_return_if_fail (gdk_painter->window != NULL);

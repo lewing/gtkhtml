@@ -1309,7 +1309,7 @@ html_tmp_fix_pango_glyph_string_get_logical_widths (PangoGlyphString *glyphs,
   int last_cluster_width = 0;
   const char *p = text;		/* Points to start of current cluster */
 
-  //printf ("html_tmp_fix_pango_glyph_string_get_logical_widths");
+  /* printf ("html_tmp_fix_pango_glyph_string_get_logical_widths"); */
   
   for (i=0; i<=glyphs->num_glyphs; i++)
     {
@@ -1341,7 +1341,7 @@ html_tmp_fix_pango_glyph_string_get_logical_widths (PangoGlyphString *glyphs,
 	  
 	  for (j = last_cluster; j < next_cluster; j++) {
 	    logical_widths[j] = (width - last_cluster_width) / (next_cluster - last_cluster);
-	    //printf (" %d", logical_widths [j]);
+	    /* printf (" %d", logical_widths [j]); */
 	  }
 	  
 	  if (last_cluster != next_cluster) {
@@ -1353,7 +1353,7 @@ html_tmp_fix_pango_glyph_string_get_logical_widths (PangoGlyphString *glyphs,
       if (i < glyphs->num_glyphs)
 	width += glyphs->glyphs[glyph_index].geometry.width;
     }
-  //printf ("\n");
+  /* printf ("\n"); */
 }
 
 HTMLTextPangoInfo *
@@ -2259,7 +2259,7 @@ select_range (HTMLObject *self,
 	while (offset + length < text->text_len && !pi->attrs [offset + length].is_cursor_position)
 		length ++;
 
-	printf ("updated offset: %d length: %d (end offset %d)\n", offset, length, offset + length);
+	/* printf ("updated offset: %d length: %d (end offset %d)\n", offset, length, offset + length); */
 
 	if (offset != text->select_start || length != text->select_length) {
 		HTMLObject *slave;
