@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-06 17:40+0100\n"
+"POT-Creation-Date: 2005-02-11 08:20+0100\n"
 "PO-Revision-Date: 2004-08-26 14:56+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -1633,21 +1633,21 @@ msgstr "反向(_B)"
 msgid "_Regular Expression"
 msgstr "正则表达式(_R)"
 
-#: components/html-editor/spell.c:110
+#: components/html-editor/spellchecker.c:110
 msgid ""
 "Unable to add word to dictionary,\n"
 "language settings are broken.\n"
-msgstr ""
+msgstr "无法将单词添加到字典，\n语言设置有错。"
 
-#: components/html-editor/spell.c:298
+#: components/html-editor/spellchecker.c:298
 msgid "No misspelled word found"
 msgstr "没有找到拼错的单词"
 
-#: components/html-editor/spell.c:305
+#: components/html-editor/spellchecker.c:305
 msgid "Spell checker"
 msgstr "拼写检查器"
 
-#: components/html-editor/spell.c:398
+#: components/html-editor/spellchecker.c:398
 msgid "Current _Languages"
 msgstr "当前语言(_L)"
 
