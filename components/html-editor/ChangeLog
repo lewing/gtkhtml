@@ -1,3 +1,13 @@
+2003-09-02  Larry Ewing  <lewing@ximian.com>
+
+	* GNOME_GtkHTML_Editor-emacs.xml.in: add file with emacs friendly
+	keybindings converted by Alain Mellan (see Ximian #41187).
+
+	* menubar.c (menubar_setup): load emacs keybindings if the
+	use_emacs_keybindings is set in the class.
+
+	* Makefile.am: add rules for GNOME_GtkHTML_Editor-emacs.xml.in.
+
 2003-09-03  Radek Doulik  <rodo@ximian.com>
 
 	* menubar.c (menubar_set_languages): use control data languge
@@ -27,6 +37,7 @@
 	(set_frame_cb): Don't set up the menubar here, nor the sensitivity
 	of the EditSpellCheck verb.
 
+>>>>>>> 1.410.2.7
 2003-09-05  Antonio Xu  <antonio.xu@sun.com>
 
 	* editor-control-factory.c (load_from_file): use
