@@ -49,13 +49,11 @@ upper_lower (HTMLObject *obj, HTMLEngine *e, gpointer data)
 {
 	if (html_object_is_text (obj)) {
 		gboolean up = GPOINTER_TO_INT (data);
-		guchar *text;
+		guchar *old_text;
 
-		text = HTML_TEXT (obj)->text;
-		while (*text) {
-			*text = (up) ? toupper (*text) : tolower (*text);
-			text++;
-		}
+		old_text = HTML_TEXT (obj)->text;
+		HTML_TEXT (obj)->text = up ? g_utf8_strup (old_text, -1) : g_utf8_strdown (old_text, -1);
+		g_free (old_text);
 	}
 }
 
