@@ -130,7 +130,7 @@ libgnome_gtkhtml_editor_3_0_la_SOURCES =	\
 	editor-control-shlib.c
 
 libgnome_gtkhtml_editor_3_0_la_LDFLAGS =	\
-	-avoid-version -no-undefined
+	-avoid-version -module
 
 libgnome_gtkhtml_editor_3_0_la_LIBADD =	\
 	$(LDADD)			\
