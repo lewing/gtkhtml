@@ -452,6 +452,8 @@ static void
 set_ui (GtkHTMLEditTableProperties *d)
 {
 	if (editor_has_html_object (d->cd, HTML_OBJECT (d->table))) {
+		HTMLHAlignType halign;
+
 		d->disable_change = TRUE;
 
 		color_combo_set_color (COLOR_COMBO (d->combo_bg_color), d->table->bgColor);
@@ -473,7 +475,10 @@ set_ui (GtkHTMLEditTableProperties *d)
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_border),  d->table->border);
 
 		g_return_if_fail (HTML_OBJECT (d->table)->parent);
-		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_align), HTML_CLUE (HTML_OBJECT (d->table)->parent)->halign - HTML_HALIGN_LEFT);
+		halign = HTML_CLUE (HTML_OBJECT (d->table)->parent)->halign;
+		if (halign == HTML_HALIGN_NONE)
+			halign = HTML_HALIGN_LEFT;
+		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_align), halign - HTML_HALIGN_LEFT);
 
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), d->has_width);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width),  d->width);
