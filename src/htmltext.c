@@ -960,16 +960,23 @@ html_text_tail_white_space (HTMLText *text, HTMLPainter *painter, gint offset, g
 	gint ww = 0;
 
 	if (html_text_pi_backward (pi, &ii, &io)) {
+		s = g_utf8_prev_char (s);
+		printf ("lo: %d\n", line_offset);
 		if (pi->entries [ii].attrs [io].is_white) {
 			if (HTML_IS_GDK_PAINTER (painter) || HTML_IS_PLAIN_PAINTER (painter)) {
 				if (*s == '\t') {
-					gint skip = 8 - (line_offset % 8);
+					gint skip = 8, co = offset;
 
-					ww += line_offset*(PANGO_PIXELS (pi->entries [ii].widths [io]));
-					line_offset -= skip;
+					do {
+						s = g_utf8_prev_char (s);
+						co --;
+						if (*s != '\t')
+							skip --;
+					} while (s && co > 0 && *s != '\t');
+
+					ww += skip*(PANGO_PIXELS (pi->entries [ii].widths [io]));
 				} else {
 					ww += PANGO_PIXELS (pi->entries [ii].widths [io]);
-					line_offset --;
 				}
 			}
 			wl ++;
