@@ -3,7 +3,7 @@
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004.
 # Martin Norbäck <d95mback@dtek.chalmers.se>, 2000.
 #
-# $Id: sv.po,v 1.87.2.2 2004/09/02 17:35:49 otaylor Exp $
+# $Id: sv.po,v 1.87.2.3 2004/09/16 21:47:57 otaylor Exp $
 #
 msgid ""
 msgstr ""
