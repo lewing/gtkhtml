@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 0.8\n"
-"POT-Creation-Date: 2002-05-23 15:57+0200\n"
-"PO-Revision-Date: 2002-05-23 16:00+0200\n"
+"POT-Creation-Date: 2002-06-01 12:16+0200\n"
+"PO-Revision-Date: 2002-06-01 12:17+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -342,7 +342,7 @@ msgid "Insert Smiley 7 smiley into document..."
 msgstr "Sett inn smilefjes 7 i dokumentet..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:44
-msgid "Insert Surpriced smiley into document..."
+msgid "Insert Surprised smiley into document..."
 msgstr "Sett inn overrasket smilefjes i dokumentet..."
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:45
@@ -542,7 +542,7 @@ msgid "Su_perscript"
 msgstr "Su_perskript"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:90
-msgid "Su_rpriced"
+msgid "Su_rprised"
 msgstr "Ove_rrasket"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:91
@@ -638,7 +638,7 @@ msgstr "Skri_fttypestørrelse"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:112
 msgid "_Frown"
-msgstr ""
+msgstr "_Rynk på nesen"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:113
 msgid "_Heading"
@@ -1095,6 +1095,8 @@ msgid ""
 "@link_begin@<img@width@@height@@align@ "
 "border=@border@@padh@@padv@@src@>@link_end@"
 msgstr ""
+"@link_begin@<img@width@@height@@align@ "
+"border=@border@@padh@@padv@@src@>@link_end@"
 
 #: components/html-editor/image.c:119
 msgid "Frame"
@@ -1108,6 +1110,11 @@ msgid ""
 "@src@@width@@height@align=top border=0></td></tr></table></td></tr></table></"
 "center>"
 msgstr ""
+"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
+"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
+"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
+"@src@@width@@height@align=top border=0></td></tr></table></td></tr></table></"
+"center>"
 
 #: components/html-editor/image.c:129
 msgid "Caption"
@@ -1121,14 +1128,19 @@ msgid ""
 "@src@@width@@height@align=top border=0></td></tr><tr><td><b>[Place your "
 "comment here]</td></tr></table></td></tr></table></center>"
 msgstr ""
+"<center><table bgcolor=\"#c0c0c0\" cellspacing=\"0\" "
+"cellpadding=@border@><tr><td><table bgcolor=\"#f2f2f2\" cellspacing=\"0\" "
+"cellpadding=\"8\" width=\"100%\"><tr><td align=\"center\"><img "
+"@src@@width@@height@align=top border=0></td></tr><tr><td><b>[Place your "
+"comment here]</td></tr></table></td></tr></table></center>"
 
 #: components/html-editor/image.c:251
 msgid "The quick brown fox jumped over the lazy dog. "
-msgstr ""
+msgstr "Den raske brune reven hoppet over den late hunden. "
 
 #: components/html-editor/image.c:253
 msgid "The quick brown fox jumped over the lazy dog."
-msgstr ""
+msgstr "Den raske brune reven hoppet over den late hunden."
 
 #: components/html-editor/link.c:91
 msgid "Link text"
@@ -1291,7 +1303,7 @@ msgstr "Bilde..."
 
 #: components/html-editor/replace.c:83
 msgid "Replace confirmation"
-msgstr "Erstatt bekreftelse"
+msgstr "Bekreftelse for erstatning"
 
 #: components/html-editor/replace.c:84
 msgid "Replace all"
@@ -1355,12 +1367,17 @@ msgid ""
 "\"@width@@align@><tr><td><table bgcolor=\"#fffff0\" cellpadding=3 "
 "cellspacing=0 width=\"100%\"><tr><td valign=top><img src=\"file://"
 msgstr ""
+"<table cellspacing=0 cellpadding=1 bgcolor=\"#ccccc0"
+"\"@width@@align@><tr><td><table bgcolor=\"#fffff0\" cellpadding=3 "
+"cellspacing=0 width=\"100%\"><tr><td valign=top><img src=\"file://"
 
 #: components/html-editor/template.c:86
 msgid ""
 "/bulb.png\" hspace=10></td><td width=\"100%\">Place your text here</td></"
 "tr></table></td></tr></table>"
 msgstr ""
+"/bulb.png\" hspace=10></td><td width=\"100%\">Plasser din tekst her</td></"
+"tr></table></td></tr></table>"
 
 #: components/html-editor/template.c:92
 msgid "Image frame"
@@ -1372,12 +1389,17 @@ msgid ""
 "bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%"
 "\"><tr><td align=\"center\"><img src=\"file://"
 msgstr ""
+"<table bgcolor=\"#c0c0c0\" cellspacing=\"0\" @width@@align@><tr><td><table "
+"bgcolor=\"#f2f2f2\" cellspacing=\"0\" cellpadding=\"8\" width=\"100%"
+"\"><tr><td align=\"center\"><img src=\"file://"
 
 #: components/html-editor/template.c:98
 msgid ""
 "/empty_image.png\" align=\"top\" border=\"0\"></td></tr><tr><td><font size="
 "\"-1\">Image 1: <b>description</b></font></td></tr></table></td></tr></table>"
 msgstr ""
+"/empty_image.png\" align=\"top\" border=\"0\"></td></tr><tr><td><font size="
+"\"-1\">Image 1: <b>description</b></font></td></tr></table></td></tr></table>"
 
 #: components/html-editor/test-html-editor-control.c:262
 msgid "Open file..."
