@@ -55,130 +55,23 @@ typedef struct
 	GtkWidget *spin_padding;
 	GtkWidget *spin_border;
 	GtkWidget *option_align;
-
-	gboolean   has_width;
-	gboolean   changed_width;
-	gint       width;
-	gboolean   width_percent;
 	GtkWidget *spin_width;
 	GtkWidget *check_width;
 	GtkWidget *option_width;
-
 	GtkWidget *spin_cols;
 	GtkWidget *spin_rows;
 
-	gint       template;
-	GtkWidget *option_template;
-
 	gboolean   disable_change;
-	gboolean   insert;
 } GtkHTMLEditTableProperties;
 
-static void set_insert_ui (GtkHTMLEditTableProperties *d);
-
-#define TEMPLATES 3
-typedef struct {
-	gchar *name;
-	gint offset;
-
-	gint default_width;
-	gboolean default_percent;
-
-	HTMLHAlignType default_align;
-
-	gint default_border;
-	gint default_spacing;
-	gint default_padding;
-
-	gint default_rows;
-	gint default_columns;
-	gboolean set_rows, set_columns;
-
-	gchar *table_begin;
-	gchar *table_end;
-	gchar *cell_begin;
-	gchar *cell_end;
-} TableInsertTemplate;
-
-
-static TableInsertTemplate table_templates [TEMPLATES] = {
-	{
-		N_("Plain"), 1,
-		100, TRUE, HTML_HALIGN_CENTER, 1, 2, 1, 3, 3, FALSE, FALSE,
-		"<table border=@border@ cellspacing=@spacing@ cellpadding=@padding@@align@@width@>",
-		"</table>",
-		"<td>",
-		"</td>"
-	},
-	{
-		N_("Flat gray"), 2,
-		100, TRUE, HTML_HALIGN_CENTER, 0, 1, 3, 3, 3, FALSE, FALSE,
-		"<table cellspacing=0 cellpadding=@border@ bgcolor=\"#bfbfbf\"@width@@align@><tr><td>"
-		"<table bgcolor=\"#f2f2f2\" cellspacing=@spacing@ cellpadding=@padding@ width=\"100%\">",
-		"</table></td></tr></table>",
-		"<td>",
-		"</td>"
-	},
-	{
-		N_("Dark header"), 11,
-		100, TRUE, HTML_HALIGN_CENTER, 0, 1, 3, 3, 3, FALSE, FALSE,
-		"<table bgcolor=\"#7f7f7f\" cellpadding=3 cellspacing=0>"
-		"<tr><td><font color=\"#ffffff\"><b>Header</td></tr></table>"
-		"<table cellspacing=0 cellpadding=@border@ bgcolor=\"#bfbfbf\"@width@@align@><tr><td>"
-		"<table bgcolor=\"#f2f2f2\" cellspacing=@spacing@ cellpadding=@padding@ width=\"100%\">",
-		"</table></td></tr></table>",
-		"<td>",
-		"</td>"
-	},
-};
-
-static gchar *
-substitute_int (gchar *str, const gchar *var_name, gint value)
-{
-	gchar *substr;
-
-	substr = strstr (str, var_name);
-	if (substr) {
-		gchar *new_str;
-
-		*substr = 0;
-		new_str = g_strdup_printf ("%s%d%s", str, value, substr + strlen (var_name));
-		g_free (str);
-		str = new_str;
-	}
-
-	return str;
-}
-
-static gchar *
-substitute_char (gchar *str, const gchar *var_name, const gchar *value)
-{
-	gchar *substr;
-
-	substr = strstr (str, var_name);
-	if (substr) {
-		gchar *new_str;
-
-		*substr = 0;
-		new_str = g_strdup_printf ("%s%s%s", str, value, substr + strlen (var_name));
-		g_free (str);
-		str = new_str;
-	}
-
-	return str;
-}
-
 static GtkHTMLEditTableProperties *
-data_new (GtkHTMLControlData *cd)
+data_new (GtkHTMLControlData *cd, HTMLTable *table)
 {
 	GtkHTMLEditTableProperties *data = g_new0 (GtkHTMLEditTableProperties, 1);
 
 	/* fill data */
-	data->cd                = cd;
-	data->table             = NULL;
-	data->has_width         = TRUE;
-	data->width_percent     = TRUE;
-	data->width             = 100;
+	data->cd = cd;
+	data->table = table;
 
 	return data;
 }
@@ -249,31 +142,39 @@ changed_align (GtkWidget *w, GtkHTMLEditTableProperties *d)
 }
 
 static void
+set_width (GtkHTMLEditTableProperties *d)
+{
+	GtkWidget *menu;
+
+	if (d->disable_change || !editor_has_html_object (d->cd, HTML_OBJECT (d->table)))
+		return;
+
+	menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_width))) {
+		if (g_list_index (GTK_MENU_SHELL (menu)->children, gtk_menu_get_active (GTK_MENU (menu))))
+			html_engine_table_set_width (d->cd->html->engine, d->table, gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width)), TRUE);
+		else
+			html_engine_table_set_width (d->cd->html->engine, d->table, gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width)), FALSE);
+	} else
+			html_engine_table_set_width (d->cd->html->engine, d->table, 0, FALSE);
+}
+
+static void
 changed_width (GtkWidget *w, GtkHTMLEditTableProperties *d)
 {
-	d->width = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_width));
-	if (!d->disable_change) {
-		d->disable_change = TRUE;
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), TRUE);
-		d->disable_change = FALSE;
-		d->changed_width = TRUE;
-	}
+	set_width (d);
 }
 
 static void
 set_has_width (GtkWidget *check, GtkHTMLEditTableProperties *d)
 {
-	d->has_width = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (d->check_width));
-	if (!d->disable_change)
-		d->changed_width = TRUE;
+	set_width (d);
 }
 
 static void
 changed_width_percent (GtkWidget *w, GtkHTMLEditTableProperties *d)
 {
-	d->width_percent = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w))) ? TRUE : FALSE;
-	if (!d->disable_change)
-		d->changed_width = TRUE;
+	set_width (d);
 }
 
 static void
@@ -292,23 +193,6 @@ changed_rows (GtkWidget *w, GtkHTMLEditTableProperties *d)
 		return;
 
 	html_engine_table_set_rows (d->cd->html->engine, gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (d->spin_rows)));
-}
-
-static void
-changed_template (GtkWidget *w, GtkHTMLEditTableProperties *d)
-{
-	/*d->template = g_list_index (GTK_MENU_SHELL (w)->children, gtk_menu_get_active (GTK_MENU (w)));
-
-	d->border  = table_templates [d->template].default_border;
-	d->spacing = table_templates [d->template].default_spacing;
-	d->padding = table_templates [d->template].default_padding;
-
-	if (table_templates [d->template].set_rows)
-		d->rows    = table_templates [d->template].default_rows;
-	if (table_templates [d->template].set_columns)
-		d->cols    = table_templates [d->template].default_columns;
-
-		set_insert_ui (d);*/
 }
 
 /*
@@ -386,73 +270,12 @@ table_widget (GtkHTMLEditTableProperties *d)
 }
 
 static void
-fill_templates (GtkHTMLEditTableProperties *d)
-{
-	GtkWidget *menu;
-	gint i;
-
-	menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template));
-
-	for (i = 0; i < TEMPLATES; i ++)
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_menu_item_new_with_label (_(table_templates [i].name)));
-	gtk_menu_set_active (GTK_MENU (menu), 0);
-	gtk_container_remove (GTK_CONTAINER (menu), gtk_menu_get_active (GTK_MENU (menu)));
-}
-
-static GtkWidget *
-table_insert_widget (GtkHTMLEditTableProperties *d)
-{
-	GtkWidget *table_page;
-	GladeXML *xml;
-
-	d->insert = TRUE;
-	xml       = glade_xml_new (GLADE_DATADIR "/gtkhtml-editor-properties.glade", "table_insert_page", GETTEXT_PACKAGE);
-	if (!xml)
-		g_error (_("Could not load glade file."));
-
-	table_page = glade_xml_get_widget (xml, "table_insert_page");
-
-	d->spin_cols = glade_xml_get_widget (xml, "spin_table_columns");
-	g_signal_connect (d->spin_cols, "value_changed", G_CALLBACK (changed_cols), d);
-	d->spin_rows = glade_xml_get_widget (xml, "spin_table_rows");
-	g_signal_connect (d->spin_rows, "value_changed", G_CALLBACK (changed_rows), d);
-	UPPER_FIX (cols);
-	UPPER_FIX (rows);
-
-	d->spin_width   = glade_xml_get_widget (xml, "spin_table_width");
-	UPPER_FIX (width);
-	g_signal_connect (d->spin_width, "value_changed", G_CALLBACK (changed_width), d);
-	d->check_width  = glade_xml_get_widget (xml, "check_table_width");
-	g_signal_connect (d->check_width, "toggled", G_CALLBACK (set_has_width), d);
-	d->option_width = glade_xml_get_widget (xml, "option_table_width");
-	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_width)), "selection-done",
-			  G_CALLBACK (changed_width_percent), d);
-
-	d->spin_spacing = glade_xml_get_widget (xml, "spin_spacing");
-	g_signal_connect (d->spin_spacing, "value_changed", G_CALLBACK (changed_spacing), d);
-	d->spin_padding = glade_xml_get_widget (xml, "spin_padding");
-	g_signal_connect (d->spin_padding, "value_changed", G_CALLBACK (changed_padding), d);
-	d->spin_border  = glade_xml_get_widget (xml, "spin_border");
-	g_signal_connect (d->spin_border, "value_changed", G_CALLBACK (changed_border), d);
-	UPPER_FIX (padding);
-	UPPER_FIX (spacing);
-	UPPER_FIX (border);
-
-	d->option_template = glade_xml_get_widget (xml, "option_table_template");
-	g_signal_connect (gtk_option_menu_get_menu (GTK_OPTION_MENU (d->option_template)), "selection-done",
-			  G_CALLBACK (changed_template), d);
-	fill_templates (d);
-
-	gtk_widget_show_all (table_page);
-
-	return table_page;
-}
-
-static void
 set_ui (GtkHTMLEditTableProperties *d)
 {
 	if (editor_has_html_object (d->cd, HTML_OBJECT (d->table))) {
 		HTMLHAlignType halign;
+		int width = 0;
+		gboolean percent = FALSE, has_width = FALSE;
 
 		d->disable_change = TRUE;
 
@@ -480,9 +303,23 @@ set_ui (GtkHTMLEditTableProperties *d)
 			halign = HTML_HALIGN_LEFT;
 		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_align), halign - HTML_HALIGN_LEFT);
 
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), d->has_width);
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width),  d->width);
-		gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width), d->width_percent ? 1 : 0);
+		if (HTML_OBJECT (d->table)->percent) {
+			width = HTML_OBJECT (d->table)->percent;
+			percent = TRUE;
+			has_width = TRUE;
+		} else if (d->table->specified_width) {
+			width = d->table->specified_width;
+			percent = FALSE;
+			has_width = TRUE;
+		} else
+			has_width = FALSE;
+
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (d->check_width), has_width);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_width),  width);
+		if (percent)
+			gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width), 1);
+		else
+			gtk_option_menu_set_history (GTK_OPTION_MENU (d->option_width), 0);
 
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_cols),  d->table->totalCols);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (d->spin_rows),  d->table->totalRows);
@@ -491,93 +328,17 @@ set_ui (GtkHTMLEditTableProperties *d)
 	}
 }
 
-static void
-set_insert_ui (GtkHTMLEditTableProperties *d)
-{
-}
-
-static void
-get_data (GtkHTMLEditTableProperties *d)
-{
-	d->table = html_engine_get_table (d->cd->html->engine);
-	g_return_if_fail (d->table);
-
-	if (HTML_OBJECT (d->table)->percent) {
-		d->width = HTML_OBJECT (d->table)->percent;
-		d->width_percent = TRUE;
-		d->has_width = TRUE;
-	} else if (d->table->specified_width) {
-		d->width = d->table->specified_width;
-		d->width_percent = FALSE;
-		d->has_width = TRUE;
-	} else
-		d->has_width = FALSE;
-}
-
-
 GtkWidget *
 table_properties (GtkHTMLControlData *cd, gpointer *set_data)
 {
-	GtkHTMLEditTableProperties *data = data_new (cd);
+	GtkHTMLEditTableProperties *data = data_new (cd, html_engine_get_table (cd->html->engine));
 	GtkWidget *rv;
 
-	get_data (data);
 	*set_data = data;
-	rv        = table_widget (data);
+	rv = table_widget (data);
 	set_ui (data);
 
 	return rv;
-}
-
-GtkWidget *
-table_insert (GtkHTMLControlData *cd, gpointer *set_data)
-{
-	GtkHTMLEditTableProperties *data = data_new (cd);
-	GtkWidget *rv;
-
-	*set_data = data;
-	rv = table_insert_widget (data);
-	set_insert_ui (data);
-	gtk_html_edit_properties_dialog_change (data->cd->properties_dialog);
-
-	return rv;
-}
-
-gboolean
-table_apply_cb (GtkHTMLControlData *cd, gpointer get_data)
-{
-	GtkHTMLEditTableProperties *d = (GtkHTMLEditTableProperties *) get_data;
-	HTMLEngine *e = d->cd->html->engine;
-	gint position;
-
-	position = e->cursor->position;
-
-	if (html_engine_get_table (e) != d->table) {
-		if (html_engine_goto_table_0 (e, d->table))
-			html_cursor_forward (e->cursor, e);
-		if (html_engine_get_table (e) != d->table) {
-			GtkWidget *dialog;
-
-			dialog = gtk_message_dialog_new (GTK_WINDOW (d->cd->properties_dialog->dialog),
-							 GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-							 _("The editted table was removed from the document.\nCannot apply your changes."));
-			gtk_dialog_run (GTK_DIALOG (dialog));
-			gtk_widget_destroy (dialog);
-			html_cursor_jump_to_position (e->cursor, e, position);
-
-			return FALSE;
-		}
-	}
-
-	if (d->changed_width) {
-		html_engine_table_set_width (d->cd->html->engine, d->table,
-					     d->has_width ? d->width : 0, d->has_width ? d->width_percent : FALSE);
-		d->changed_width = FALSE;
-	}
-
-	html_cursor_jump_to_position (e->cursor, e, position);
-
-	return TRUE;
 }
 
 void
