@@ -1,14 +1,14 @@
 # gtkhtml fr.po.
-# Copyright (C) 2000-2001 Free Software Foundation, Inc.
+# Copyright (C) 2000-2002 Free Software Foundation, Inc.
 # Yannick LE NY <y-le-ny@ifrance.com>, 2000.
-# maintainer: Christophe Merlet (RedFox) <redfox@eikonex.org>, 2000-2001.
+# maintainer: Christophe Merlet (RedFox) <christophe@merlet.net>, 2000-2002.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml 0.15.99\n"
-"POT-Creation-Date: 2002-04-18 16:02-0500\n"
-"PO-Revision-Date: 2001-10-13 09:14+0200\n"
-"Last-Translator: Christophe Merlet (RedFox) <redfox@eikonex.org>\n"
+"Project-Id-Version: gtkhtml 1.0.3.99\n"
+"POT-Creation-Date: 2002-05-23 22:29+0200\n"
+"PO-Revision-Date: 2002-05-23 22:21+0200\n"
+"Last-Translator: Christophe Merlet (RedFox) <christophe@merlet.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -30,128 +30,132 @@ msgid "*********************"
 msgstr "*********************"
 
 #: capplet/gtkhtml-capplet.glade.h:2
+msgid "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
+msgstr "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
+
+#: capplet/gtkhtml-capplet.glade.h:3
 msgid "Add Keyboard Shortcuts"
 msgstr "Ajouter des raccourcis clavier"
 
-#: capplet/gtkhtml-capplet.glade.h:3
+#: capplet/gtkhtml-capplet.glade.h:4
 msgid "Automatically detect links"
 msgstr "Détecter automatiquement les liens"
 
-#: capplet/gtkhtml-capplet.glade.h:4
+#: capplet/gtkhtml-capplet.glade.h:5
 msgid "Behavior"
 msgstr "Comportement"
 
 #. color selection
-#: capplet/gtkhtml-capplet.glade.h:5 components/html-editor/text.c:218
+#: capplet/gtkhtml-capplet.glade.h:6 components/html-editor/text.c:218
 msgid "Color"
 msgstr "Couleur"
 
-#: capplet/gtkhtml-capplet.glade.h:6
+#: capplet/gtkhtml-capplet.glade.h:7
 msgid "Command"
 msgstr "Commande"
 
-#: capplet/gtkhtml-capplet.glade.h:7
+#: capplet/gtkhtml-capplet.glade.h:8
 msgid "Composer Properties"
 msgstr "Propriétés de l'éditeur"
 
-#: capplet/gtkhtml-capplet.glade.h:8
+#: capplet/gtkhtml-capplet.glade.h:9
 msgid "Composer Properties planned"
 msgstr "Propriétés planifiées de l'éditeur"
 
-#: capplet/gtkhtml-capplet.glade.h:9
+#: capplet/gtkhtml-capplet.glade.h:10
 msgid "Enable spell checking"
 msgstr "Activer la vérification orthographique"
 
-#: capplet/gtkhtml-capplet.glade.h:10
+#: capplet/gtkhtml-capplet.glade.h:11
 msgid "Fixed width"
 msgstr "Largeur constante"
 
-#: capplet/gtkhtml-capplet.glade.h:11
+#: capplet/gtkhtml-capplet.glade.h:12
 msgid "Fonts"
 msgstr "Polices"
 
-#: capplet/gtkhtml-capplet.glade.h:12
+#: capplet/gtkhtml-capplet.glade.h:13
 msgid "For printing"
 msgstr "Pour l'impression"
 
-#: capplet/gtkhtml-capplet.glade.h:13
+#: capplet/gtkhtml-capplet.glade.h:14
 msgid "Grab keys"
 msgstr "Capturer les touches"
 
-#: capplet/gtkhtml-capplet.glade.h:14
+#: capplet/gtkhtml-capplet.glade.h:15
 msgid "Information"
 msgstr "Information"
 
-#: capplet/gtkhtml-capplet.glade.h:15
+#: capplet/gtkhtml-capplet.glade.h:16
 msgid "Keyboard Shortcuts"
 msgstr "Raccourcis clavier"
 
-#: capplet/gtkhtml-capplet.glade.h:16
+#: capplet/gtkhtml-capplet.glade.h:17
 msgid "Language"
 msgstr "Langage"
 
-#: capplet/gtkhtml-capplet.glade.h:17
+#: capplet/gtkhtml-capplet.glade.h:18
 #: components/html-editor/gtkhtml-editor-properties.glade.h:22
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: capplet/gtkhtml-capplet.glade.h:18
-msgid "New shortcut:"
-msgstr "Nouveau raccourci :"
-
 #: capplet/gtkhtml-capplet.glade.h:19
+msgid "New shortcut:"
+msgstr "Nouveau raccourci :"
+
+#: capplet/gtkhtml-capplet.glade.h:20
 msgid "On screen"
 msgstr "Pour l'écran"
 
-#: capplet/gtkhtml-capplet.glade.h:20
+#: capplet/gtkhtml-capplet.glade.h:21
 msgid "Pick a color"
 msgstr "Piochez une couleur"
 
-#: capplet/gtkhtml-capplet.glade.h:21
+#: capplet/gtkhtml-capplet.glade.h:22
 msgid "Select HTML fixed width font"
 msgstr "Sélectionnez une police HTML à largeur constante"
 
-#: capplet/gtkhtml-capplet.glade.h:22
+#: capplet/gtkhtml-capplet.glade.h:23
 msgid "Select HTML fixed width font for printing"
 msgstr "Sélectionnez une police HTML à largeur constante pour l'impression"
 
-#: capplet/gtkhtml-capplet.glade.h:23
+#: capplet/gtkhtml-capplet.glade.h:24
 msgid "Select HTML variable width font"
 msgstr "Sélectionnez une police HTML à largeur variable"
 
-#: capplet/gtkhtml-capplet.glade.h:24
+#: capplet/gtkhtml-capplet.glade.h:25
 msgid "Select HTML variable width font for printing"
 msgstr "Sélectionnez une police HTML à largeur variable pour l'impression"
 
-#: capplet/gtkhtml-capplet.glade.h:25
+#: capplet/gtkhtml-capplet.glade.h:26
 msgid "Select command "
 msgstr "Sélectionner une commande "
 
-#: capplet/gtkhtml-capplet.glade.h:26
+#: capplet/gtkhtml-capplet.glade.h:27
 msgid "Shortcut"
 msgstr "Raccourci"
 
-#: capplet/gtkhtml-capplet.glade.h:27
-msgid "Shortcuts _type:"
-msgstr "_Type de raccourcis :"
-
 #: capplet/gtkhtml-capplet.glade.h:28
+msgid "Shortcuts _type:"
+msgstr "_Type de raccourcis :"
+
+#: capplet/gtkhtml-capplet.glade.h:29
 msgid "Show animated images"
 msgstr "Afficher les images animées"
 
-#: capplet/gtkhtml-capplet.glade.h:29
+#: capplet/gtkhtml-capplet.glade.h:30
 msgid "Spell Checking"
 msgstr "Vérification orthographique"
 
-#: capplet/gtkhtml-capplet.glade.h:30
+#: capplet/gtkhtml-capplet.glade.h:31
 msgid "Variable width"
 msgstr "Largeur variable"
 
-#: capplet/gtkhtml-capplet.glade.h:31
+#: capplet/gtkhtml-capplet.glade.h:32
 msgid "_Add"
 msgstr "_Ajouter"
 
-#: capplet/gtkhtml-capplet.glade.h:32
+#: capplet/gtkhtml-capplet.glade.h:33
 msgid "_Delete"
 msgstr "_Supprimer"
 
@@ -165,7 +169,7 @@ msgstr "Usine EBrowser"
 
 #: components/ebrowser/GNOME_GtkHTML_EBrowser.oaf.in.h:3
 msgid "Factory for the EBrowser control"
-msgstr "Usine pour le contrôle EBrowser"
+msgstr "Fabrique pour le contrôle EBrowser"
 
 #: components/ebrowser/GNOME_GtkHTML_EBrowser.oaf.in.h:4
 msgid "HTML Browser control"
@@ -771,15 +775,15 @@ msgstr "Alignement"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:3
 msgid "Alignment:"
-msgstr "Alignement :"
+msgstr "Alignement :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:4
 msgid "Apply changes to:"
-msgstr "Appliquer les changements à :"
+msgstr "Appliquer les changements à :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:6
 msgid "Border:"
-msgstr "Bordure :"
+msgstr "Bordure :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:7
 #: components/html-editor/image.c:203
@@ -798,7 +802,7 @@ msgstr "Centre"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:10
 msgid "Color:"
-msgstr "Couleur :"
+msgstr "Couleur :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:11
 #: components/html-editor/popup.c:472
@@ -807,11 +811,11 @@ msgstr "Colonne"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:12
 msgid "Column span:"
-msgstr "Fusion de colonnes :"
+msgstr "Fusion de colonnes :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:13
 msgid "Columns:"
-msgstr "Colonnes :"
+msgstr "Colonnes :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:14
 msgid "Don't wrap"
@@ -823,15 +827,15 @@ msgstr "En-tête"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:16
 msgid "Height:"
-msgstr "Hauteur :"
+msgstr "Hauteur :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:17
 msgid "Horizontal alignment:"
-msgstr "Alignement horizontal :"
+msgstr "Alignement horizontal :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:18
 msgid "Horizontal:"
-msgstr "Horizontal :"
+msgstr "Horizontal :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:19
 #: components/html-editor/paragraph.c:158
@@ -840,7 +844,7 @@ msgstr "Gauche"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:20
 msgid "Length:"
-msgstr "Longueur :"
+msgstr "Longueur :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:21
 #: components/html-editor/image.c:202
@@ -853,7 +857,7 @@ msgstr "Aucun"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:25
 msgid "Padding:"
-msgstr "Rembourrage :"
+msgstr "Rembourrage :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:26
 msgid "Percent"
@@ -872,7 +876,7 @@ msgstr "Pixels"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:30
 msgid "Pixmap:"
-msgstr "Image :"
+msgstr "Image :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:31
 msgid "Points"
@@ -890,11 +894,11 @@ msgstr "Rangée"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:34
 msgid "Row span:"
-msgstr "Fusion de rangée :"
+msgstr "Fusion de rangée :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:35
 msgid "Rows:"
-msgstr "Rangées :"
+msgstr "Rangées :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:37
 msgid "Scope"
@@ -916,7 +920,7 @@ msgstr "Espacement"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:41
 msgid "Spacing:"
-msgstr "Espacement :"
+msgstr "Espacement :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:42
 #: components/html-editor/paragraph.c:110 components/html-editor/text.c:168
@@ -925,7 +929,7 @@ msgstr "Style"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:43
 msgid "Style:"
-msgstr "Style :"
+msgstr "Style :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:45
 msgid "Table Insert"
@@ -938,11 +942,11 @@ msgstr "Haut"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:48
 msgid "Vertical:"
-msgstr "Vertical :"
+msgstr "Vertical :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:49
 msgid "Width:"
-msgstr "Largeur :"
+msgstr "Largeur :"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:50
 msgid "Wrap"
@@ -950,7 +954,7 @@ msgstr "Scinder"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:51
 msgid "Wrapping:"
-msgstr "Scindage :"
+msgstr "Scindage :"
 
 #: components/html-editor/image.c:179
 msgid "Image selection"
@@ -1048,17 +1052,17 @@ msgstr "Aligner"
 #: components/html-editor/popup.c:364
 #, c-format
 msgid "Check '%s' spelling..."
-msgstr "Vérifier l'orthographe de « %s »..."
+msgstr "Vérifier l'orthographe de « %s »..."
 
 #: components/html-editor/popup.c:367
 #, c-format
 msgid "Add '%s' to dictionary"
-msgstr "Ajouter « %s » au dictionnaire"
+msgstr "Ajouter « %s » au dictionnaire"
 
 #: components/html-editor/popup.c:370
 #, c-format
 msgid "Ignore '%s'"
-msgstr "Ignorer « %s »"
+msgstr "Ignorer « %s »"
 
 #: components/html-editor/popup.c:373 components/html-editor/spell.c:419
 msgid "Spell checker"
@@ -1232,7 +1236,7 @@ msgid ""
 "\"-1\">Image 1: <b>description</b></font></td></tr></table></td></tr></table>"
 msgstr ""
 "/empty_image.png\" align=\"top\" border=\"0\"></td></tr><tr><td><font size="
-"\"-1\">Image 1 : <b>description</b></font></td></tr></table></td></tr></"
+"\"-1\">Image 1 : <b>description</b></font></td></tr></table></td></tr></"
 "table>"
 
 #: components/html-editor/test-html-editor-control.c:276
@@ -1307,6 +1311,22 @@ msgstr "Augmente l'indentation du paragraphe"
 msgid "Sample"
 msgstr "Exemple"
 
+#: src/htmlbutton.c:149
+msgid "Submit Query"
+msgstr "Transmettre la requête"
+
+#: src/htmlbutton.c:152
+msgid "Reset"
+msgstr "Annuler"
+
+#: src/htmlengine-print.c:200
+msgid "Cannot allocate default font for printing\n"
+msgstr "Ne peut allouer de fonte par défaut pour l'impression\n"
+
+#: src/htmlprinter.c:69
+msgid "US-Letter"
+msgstr "US-Letter"
+
 #: src/htmlgdkpainter.c:228
 msgid "Can't load fixed font."
 msgstr "Ne peut charger la police fixed."
@@ -1318,9 +1338,6 @@ msgstr "_Aperçu avant impression"
 #: src/testgtkhtml.c:112
 msgid "Print preview"
 msgstr "Aperçu avant impression"
-
-#~ msgid "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
-#~ msgstr "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
 
 #~ msgid "_Numbered List"
 #~ msgstr "Liste _numérotée"
@@ -1396,7 +1413,7 @@ msgstr "Aperçu avant impression"
 #~ msgstr "Élément de liste (romain)"
 
 #~ msgid "Magic links (FIXME: better label)"
-#~ msgstr "Liens magiques (FIXME : meilleure étiquette)"
+#~ msgstr "Liens magiques (FIXME : meilleure étiquette)"
 
 #~ msgid "Replace a string"
 #~ msgstr "Remplacer une chaîne"
@@ -1531,7 +1548,7 @@ msgstr "Aperçu avant impression"
 #~ msgstr "Recharger la page"
 
 #~ msgid "Could not initialize Bonobo!"
-#~ msgstr "Ne peut initialiser Bonobo !"
+#~ msgstr "Ne peut initialiser Bonobo !"
 
 #~ msgid "Transfer Progress"
 #~ msgstr "Avancée du transfert"
@@ -1567,16 +1584,16 @@ msgstr "Aperçu avant impression"
 #~ msgstr "Ecriture..."
 
 #~ msgid "Done!"
-#~ msgstr "Fait !"
+#~ msgstr "Fait !"
 
 #~ msgid "Interrupted!"
-#~ msgstr "interrompu !"
+#~ msgstr "interrompu !"
 
 #~ msgid "Please wait..."
 #~ msgstr "Attendez s'il vous plait..."
 
 #~ msgid "Request timeout!"
-#~ msgstr "Délai d'attente requête dépassé !"
+#~ msgstr "Délai d'attente requête dépassé !"
 
 #~ msgid "Unknown"
 #~ msgstr "Inconnu"
