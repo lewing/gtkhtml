@@ -248,6 +248,10 @@ gint               html_text_pango_info_get_index  (HTMLTextPangoInfo *pi,
 						    gint               byte_offset,
 						    gint               idx);
 
+PangoAttribute *html_pango_attr_font_size_new  (int              size,
+						GtkHTMLFontStyle style);
+
+
 typedef HTMLObject * (* HTMLTextHelperFunc)       (HTMLText *, gint begin, gint end);
 HTMLObject *html_text_op_copy_helper    (HTMLText           *text,
 					 GList              *from,

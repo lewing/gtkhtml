@@ -919,9 +919,9 @@ apply_attributes (HTMLText *text, HTMLEngine *e, GtkHTMLFontStyle style, HTMLCol
 
 		base_size = e->painter->font_manager.var_size;
 		size = (style & GTK_HTML_FONT_STYLE_SIZE_MASK) - GTK_HTML_FONT_STYLE_SIZE_3;
-		real_size = PANGO_SCALE * ((gdouble) base_size + (size > 0 ? (1 << size) : size) * base_size/8.0);
+		real_size = 1000 * ((gdouble) base_size + (size > 0 ? (1 << size) : size) * base_size/8.0);
 
-		attr = pango_attr_size_new (real_size);
+		attr = html_pango_attr_font_size_new (real_size, style & GTK_HTML_FONT_STYLE_SIZE_MASK);
 		attr->start_index = last_pos;
 		attr->end_index = text->text_bytes;
 		pango_attr_list_change (text->attr_list, attr);

@@ -2547,3 +2547,52 @@ html_link_new (gchar *url, gchar *target, guint start_index, guint end_index, gi
 
 	return link;
 }
+
+/* extended pango attributes */
+
+struct _HTMLPangoAttrFontSize {
+        PangoAttrInt attr_int;
+	GtkHTMLFontStyle style;
+};
+typedef struct _HTMLPangoAttrFontSize HTMLPangoAttrFontSize;
+
+static PangoAttribute *
+html_pango_attr_font_size_copy (const PangoAttribute *attr)
+{
+	HTMLPangoAttrFontSize *font_size_attr = (HTMLPangoAttrFontSize *) attr;
+
+	return html_pango_attr_font_size_new (font_size_attr->attr_int.value, font_size_attr->style);
+}
+
+static void
+html_pango_attr_font_size_destroy (PangoAttribute *attr)
+{
+	g_free (attr);
+}
+
+static gboolean
+html_pango_attr_font_size_equal (const PangoAttribute *attr1, const PangoAttribute *attr2)
+{
+	const HTMLPangoAttrFontSize *font_size_attr1 = (const HTMLPangoAttrFontSize *) attr1;
+	const HTMLPangoAttrFontSize *font_size_attr2 = (const HTMLPangoAttrFontSize *) attr2;
+  
+	return (font_size_attr1->style == font_size_attr2->style);
+}
+
+PangoAttribute *
+html_pango_attr_font_size_new (int size, GtkHTMLFontStyle style)
+{
+	static const PangoAttrClass klass = {
+		PANGO_ATTR_SIZE,
+		html_pango_attr_font_size_copy,
+		html_pango_attr_font_size_destroy,
+		html_pango_attr_font_size_equal
+	};
+
+	HTMLPangoAttrFontSize *result = g_new (HTMLPangoAttrFontSize, 1);
+	result->attr_int.attr.klass = &klass;
+	result->attr_int.value = size;
+	result->style = style;
+
+	return (PangoAttribute *) result;
+}
