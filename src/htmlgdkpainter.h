@@ -77,7 +77,6 @@ HTMLTextPangoInfo *html_gdk_painter_text_itemize_and_prepare_glyphs  (HTMLGdkPai
 								      PangoFontDescription  *desc,
 								      const gchar           *text,
 								      gint                   bytes,
-								      GList                **glyphs,
-								      gint                  *n_pi);
+								      GList                **glyphs);
 
 #endif /* _HTMLGDKPAINTER_H */
