@@ -93,6 +93,10 @@ void               html_clueflow_set_indentation              (HTMLClueFlow     
 							       HTMLEngine         *engine,
 							       gint              indentation);
 guint8             html_clueflow_get_indentation              (HTMLClueFlow       *flow);
+GByteArray *       html_clueflow_dup_levels                   (HTMLClueFlow       *flow);
+void               html_clueflow_set_levels                   (HTMLClueFlow       *flow,
+							       HTMLEngine         *engine,
+							       GByteArray         *levels);
 void               html_clueflow_set_properties               (HTMLClueFlow       *flow,
 							       HTMLEngine         *engine,
 							       HTMLClueFlowStyle   style,
