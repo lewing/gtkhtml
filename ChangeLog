@@ -1,3 +1,15 @@
+2004-07-21  Rodney Dawes  <dobey@novell.com>
+
+	* configure.in: Bump version to 3.3.0
+	Require at least intltool 0.30
+	Require at least gnome-icon-theme 1.2.3
+
+	(GTKHTML_RELEASE): Get rid of this variable
+	(GTKHTML_API_VERSION): Define thise variable
+	(EDITOR_API_VERSION): Don't duplicate this, and move it up to
+	where we are defining other similar variables
+	(GTKHTML_RELEASE_STRING): Use GTKHTML_API_VERSION
+
 Thu Jul 15 12:49:11 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (GTKHTML_MODULES): Require libgnomeprint-2.7
