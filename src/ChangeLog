@@ -1,3 +1,20 @@
+2002-03-05  Larry Ewing  <lewing@ximian.com>
+
+	* htmlselect.c: convert from utf8 properly and use needs_update
+	boolean to postpone setting the popdown strings until they are
+	needed.  Because of how GtkCombo is implemented setting popdown
+	strings is extremely expensive.
+
+	* htmlselect.h: add update boolean.
+
+	* htmltextinput.c: handle utf8 strings correctly.
+
+	* htmltextarea.c (html_textarea_set_text): convert string to gtk
+	charset before setting gtk widget.
+
+	* htmlbutton.c (html_button_init): convert to gtk string before
+	creating label.
+
 2002-02-12  Radek Doulik  <rodo@ximian.com>
 
 	* htmlclueflow.c (write_list_finish_tags): new helper method,
