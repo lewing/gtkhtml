@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml VERSION\n"
 "POT-Creation-Date: 2003-07-07 16:40+0200\n"
-"PO-Revision-Date: 2003-07-07 16:50+0200\n"
+"PO-Revision-Date: 2003-07-08 12:59+0200\n"
 "Last-Translator: Andras Timar <timar@gnome.hu>\n"
 "Language-Team: Hungarian <hu@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -104,19 +104,19 @@ msgstr "Képernyőn"
 
 #: capplet/gtkhtml-capplet.glade.h:21
 msgid "Select HTML fixed width font"
-msgstr "Válassz fix szélességű betűkészletet a HTML-hez"
+msgstr "Fix szélességű betűkészlet választása a HTML-hez"
 
 #: capplet/gtkhtml-capplet.glade.h:22
 msgid "Select HTML fixed width font for printing"
-msgstr "Válassz fix szélességű betűkészletet a HTML nyomtatásához"
+msgstr "Fix szélességű betűkészlet választása a HTML nyomtatásához"
 
 #: capplet/gtkhtml-capplet.glade.h:23
 msgid "Select HTML variable width font"
-msgstr "Válassz változó szélességű betűkészletet a HTML-hez"
+msgstr "Változó szélességű betűkészlet választása a HTML-hez"
 
 #: capplet/gtkhtml-capplet.glade.h:24
 msgid "Select HTML variable width font for printing"
-msgstr "Válassz változó szélességű betűkészletet a HTML nyomtatásához"
+msgstr "Változó szélességű betűkészlet választása a HTML nyomtatásához"
 
 #: capplet/gtkhtml-capplet.glade.h:25
 msgid "Shortcuts _type:"
@@ -124,7 +124,7 @@ msgstr "Gyorsbillentyű _típusa:"
 
 #: capplet/gtkhtml-capplet.glade.h:26
 msgid "Show animated images"
-msgstr "Animált képek mutatása"
+msgstr "Animált képek megjelenítése"
 
 #: capplet/gtkhtml-capplet.glade.h:27
 msgid "Variable width"
@@ -225,11 +225,11 @@ msgstr "Másolás"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:15
 msgid "Copy selection to clipboard"
-msgstr "Kijelölés másolása a vágólapra"
+msgstr "A kijelölés másolása a vágólapra"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:16
 msgid "Copy the selection"
-msgstr "Kijelölés másolása"
+msgstr "A kijelölés másolása"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:17
 msgid "Cr_ying"
@@ -245,11 +245,11 @@ msgstr "Kivágás"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:20
 msgid "Cut selection to clipboard"
-msgstr "Kijelölés kivágása a vágólapra"
+msgstr "A kijelölés kivágása a vágólapra"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:21
 msgid "Cut the selection"
-msgstr "Kijelölés kivágása"
+msgstr "A kijelölés kivágása"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:22
 #: components/html-editor/search.c:74 components/html-editor/search.c:126
@@ -496,7 +496,7 @@ msgstr "Beillesztés a vágólapról"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:80
 msgid "Paste the clipboard"
-msgstr "Vágólap beillesztése"
+msgstr "A vágólap tartalmának beillesztése"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:81
 msgid "Paste the clipboard as a quotation"
@@ -513,7 +513,7 @@ msgstr "Lila"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:84
 msgid "Red"
-msgstr "Piros"
+msgstr "Vörös"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:85
 msgid "Redo"
@@ -521,11 +521,11 @@ msgstr "Újra"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:86
 msgid "Redo previously undone change"
-msgstr "Újra végrehajtja az előzőleg visszavont műveletet"
+msgstr "Az előzőleg visszavont művelet ismételt végrehajtása"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:87
 msgid "Redo the undone action"
-msgstr "Újra végrehajtja a visszavont műveletet"
+msgstr "A visszavont művelet ismételt végrehajtása"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:88
 #: components/html-editor/replace.c:79 components/html-editor/replace.c:153
@@ -809,7 +809,7 @@ msgstr "stb..."
 #: components/html-editor/body.c:66
 #: components/html-editor/gtkhtml-editor-properties.glade.h:48
 msgid "None"
-msgstr "Semmi"
+msgstr "Nincs"
 
 #: components/html-editor/body.c:74
 msgid "Perforated Paper"
@@ -926,11 +926,11 @@ msgstr "Félkövér"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:17
 msgid "Border"
-msgstr "Keret"
+msgstr "Szegély"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:18
 msgid "Border:"
-msgstr "Keret:"
+msgstr "Szegély:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:19
 msgid "Bottom"
@@ -970,7 +970,7 @@ msgstr "Átnyúló oszlop:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:28
 msgid "Columns:"
-msgstr "Oszlopok:"
+msgstr "Oszlop:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:29
 msgid "Description:"
@@ -1087,7 +1087,7 @@ msgstr "Átnyúló sor:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:62
 msgid "Rows:"
-msgstr "Sorok:"
+msgstr "Sor:"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:64
 msgid "Scope"
@@ -1398,7 +1398,7 @@ msgstr "Megerősítés csere előtt"
 
 #: components/html-editor/replace.c:76
 msgid "Replace all"
-msgstr "Minden cseréli"
+msgstr "Mindet cseréli"
 
 #: components/html-editor/replace.c:77
 msgid "Next"
@@ -1539,11 +1539,11 @@ msgstr "Áthúzza a szöveget"
 
 #: components/html-editor/toolbar.c:537
 msgid "Unindent"
-msgstr "Behúzás megszüntetése"
+msgstr "Behúzás csökkentése"
 
 #: components/html-editor/toolbar.c:537
 msgid "Indents the paragraphs less"
-msgstr "Csökkenti a behúzást"
+msgstr "A bekezdés behúzásának csökkentése"
 
 #: components/html-editor/toolbar.c:539
 msgid "Indent"
@@ -1551,7 +1551,7 @@ msgstr "Behúzás"
 
 #: components/html-editor/toolbar.c:539
 msgid "Indents the paragraphs more"
-msgstr "Növeli a behúzást"
+msgstr "A bekezdés behúzásának növelése"
 
 #: components/html-editor/utils.c:106
 msgid "Sample"
