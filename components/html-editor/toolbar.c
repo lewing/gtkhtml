@@ -619,6 +619,8 @@ create_style_toolbar (GtkHTMLControlData *cd)
 	gtk_toolbar_set_style (GTK_TOOLBAR (cd->toolbar_style), GTK_TOOLBAR_ICONS);
 	gtk_widget_show_all (hbox);
 
+	toolbar_update_format (cd);
+
 	return hbox;
 }
 
@@ -639,11 +641,13 @@ toolbar_item_update_sensitivity (GtkWidget *widget, gpointer data)
 void
 toolbar_update_format (GtkHTMLControlData *cd)
 {
-	gtk_container_forall (GTK_CONTAINER (cd->toolbar_style), 
-			      toolbar_item_update_sensitivity, cd);
+	if (cd->toolbar_style)
+		gtk_container_forall (GTK_CONTAINER (cd->toolbar_style), 
+				      toolbar_item_update_sensitivity, cd);
 
-	paragraph_style_option_menu_set_mode (cd->paragraph_option, 
-					      cd->format_html);
+	if (cd->paragraph_option)
+		paragraph_style_option_menu_set_mode (cd->paragraph_option, 
+						      cd->format_html);
 }
 
 

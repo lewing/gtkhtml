@@ -367,13 +367,8 @@ menu_format_html_cb (BonoboUIComponent           *component,
 		return;
 	formatHTML = *state == '0' ? 0 : 1;
 
-	arg = bonobo_arg_new_from (BONOBO_ARG_BOOLEAN, &formatHTML);
-	bonobo_widget_set_property (BONOBO_WIDGET (user_data), "FormatHTML", arg, NULL);
-	bonobo_arg_release (arg);
-
-	arg = bonobo_arg_new_from (BONOBO_ARG_STRING, "testing");
-	bonobo_widget_set_property (BONOBO_WIDGET (user_data), "HTMLTitle", arg, NULL);
-	bonobo_arg_release (arg);
+	bonobo_widget_set_property (BONOBO_WIDGET (user_data), "FormatHTML", TC_CORBA_boolean, formatHTML, NULL);
+	bonobo_widget_set_property (BONOBO_WIDGET (user_data), "HTMLTitle", TC_CORBA_string, "testing", NULL);
 }
 
 /* A dirty, non-translatable hack */
@@ -437,7 +432,6 @@ container_create (void)
 	BonoboUIContainer *container;
 	CORBA_Environment ev;
 	GNOME_GtkHTML_Editor_Engine engine;
-	BonoboArg *arg;
 
 	win = bonobo_window_new ("test-editor",
 				 "HTML Editor Control Test");
@@ -465,9 +459,7 @@ container_create (void)
 	if (control == NULL)
 		g_error ("Cannot get `%s'.", CONTROL_ID);
 
-	arg = bonobo_arg_new_from (BONOBO_ARG_BOOLEAN, &formatHTML);
-	bonobo_widget_set_property (BONOBO_WIDGET (control), "FormatHTML", arg, NULL);
-	bonobo_arg_release (arg);
+	bonobo_widget_set_property (BONOBO_WIDGET (control), "FormatHTML", TC_CORBA_boolean, formatHTML, NULL);
 	bonobo_ui_component_set_prop (component, "/commands/FormatHTML", "state", formatHTML ? "1" : "0", NULL);
 	bonobo_ui_component_add_listener (component, "FormatHTML", menu_format_html_cb, control);
 

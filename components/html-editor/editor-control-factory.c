@@ -351,7 +351,7 @@ editor_init_painters (GtkHTMLControlData *cd)
 		cd->gdk_painter = HTML_GDK_PAINTER (html->engine->painter);
 
 		/* the plain painter starts with a ref */
-		gtk_object_ref (GTK_OBJECT (cd->gdk_painter));
+		g_object_ref (G_OBJECT (cd->gdk_painter));
 	}	
 }
 

@@ -555,64 +555,65 @@ menubar_update_format (GtkHTMLControlData *cd)
 	gchar *sensitive;
 
 	uic = bonobo_control_get_ui_component (cd->control);
-
-	g_return_if_fail (uic != NULL);
-
-	sensitive = (cd->format_html ? "1" : "0");
-
-	CORBA_exception_init (&ev);
-
-	bonobo_ui_component_freeze (uic, &ev);
-
-	bonobo_ui_component_set_prop (uic, "/commands/InsertImage",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/InsertLink",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/InsertRule",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/InsertTable",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/InsertTemplate",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/InsertTemplate",
-				      "sensitive", sensitive, &ev);
-
-	bonobo_ui_component_set_prop (uic, "/commands/FormatBold",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/FormatItalic",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/FormatUnderline",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/FormatStrikeout",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/FormatPlain",
-				      "sensitive", sensitive, &ev);
 	
-	bonobo_ui_component_set_prop (uic, "/commands/AlignLeft",
-				      "sensitive", sensitive, &ev);		
-	bonobo_ui_component_set_prop (uic, "/commands/AlignRight",
-				      "sensitive", sensitive, &ev);	
-	bonobo_ui_component_set_prop (uic, "/commands/AlignCenter",
-				      "sensitive", sensitive, &ev);	
+	if (uic != CORBA_OBJECT_NIL && bonobo_ui_component_get_container (uic) != CORBA_OBJECT_NIL) {
 
-	bonobo_ui_component_set_prop (uic, "/commands/HeadingH1",
-				      "sensitive", sensitive, &ev);	
-	bonobo_ui_component_set_prop (uic, "/commands/HeadingH2",
-				      "sensitive", sensitive, &ev);	
-	bonobo_ui_component_set_prop (uic, "/commands/HeadingH3",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/HeadingH4",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/HeadingH5",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/HeadingH6",
-				      "sensitive", sensitive, &ev);
-	bonobo_ui_component_set_prop (uic, "/commands/HeadingAddress",
-				      "sensitive", sensitive, &ev);
+		sensitive = (cd->format_html ? "1" : "0");
 
-	bonobo_ui_component_thaw (uic, &ev);	
+		CORBA_exception_init (&ev);
 
-	CORBA_exception_free (&ev);	
+		bonobo_ui_component_freeze (uic, &ev);
+
+		bonobo_ui_component_set_prop (uic, "/commands/InsertImage",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/InsertLink",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/InsertRule",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/InsertTable",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/InsertTemplate",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/InsertTemplate",
+					      "sensitive", sensitive, &ev);
+
+		bonobo_ui_component_set_prop (uic, "/commands/FormatBold",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/FormatItalic",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/FormatUnderline",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/FormatStrikeout",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/FormatPlain",
+					      "sensitive", sensitive, &ev);
+	
+		bonobo_ui_component_set_prop (uic, "/commands/AlignLeft",
+					      "sensitive", sensitive, &ev);		
+		bonobo_ui_component_set_prop (uic, "/commands/AlignRight",
+					      "sensitive", sensitive, &ev);	
+		bonobo_ui_component_set_prop (uic, "/commands/AlignCenter",
+					      "sensitive", sensitive, &ev);	
+
+		bonobo_ui_component_set_prop (uic, "/commands/HeadingH1",
+					      "sensitive", sensitive, &ev);	
+		bonobo_ui_component_set_prop (uic, "/commands/HeadingH2",
+					      "sensitive", sensitive, &ev);	
+		bonobo_ui_component_set_prop (uic, "/commands/HeadingH3",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/HeadingH4",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/HeadingH5",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/HeadingH6",
+					      "sensitive", sensitive, &ev);
+		bonobo_ui_component_set_prop (uic, "/commands/HeadingAddress",
+					      "sensitive", sensitive, &ev);
+
+		bonobo_ui_component_thaw (uic, &ev);	
+
+		CORBA_exception_free (&ev);
+	}
 }
 
 void
@@ -670,4 +671,5 @@ menubar_setup (BonoboUIComponent  *uic,
 			       "GNOME_GtkHTML_Editor.xml",
 			       "GNOME_GtkHTML_Editor", NULL);
 	spell_create_language_menu (cd);
+	menubar_update_format (cd);
 }
