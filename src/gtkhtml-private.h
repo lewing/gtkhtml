@@ -53,9 +53,15 @@ struct _GtkHTMLPrivate {
 
 	GtkIMContext *im_context;
 	gboolean need_im_reset;
+	gint im_pre_len;
+	gint im_pre_pos;
+	GtkHTMLFontStyle im_orig_style;
+	gboolean im_block_reset;
 
 	HTMLObject *dnd_object;
+	gint        dnd_object_offset;
 	HTMLObject *dnd_real_object;
+	gint        dnd_real_object_offset;
 	gboolean    dnd_in_progress;
 	gchar      *dnd_url;
 
@@ -65,8 +71,6 @@ struct _GtkHTMLPrivate {
 	gboolean    magic_links;
 	gboolean    magic_smileys;
 	gboolean    inline_spelling;
-
-	gulong      toplevel_unmap_handler;
 
 	gboolean in_object_resize;
 	GdkCursor *resize_cursor;

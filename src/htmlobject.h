@@ -71,7 +71,6 @@ struct _HTMLObject {
 	guint draw_focused : 1; 
 
 	GData *object_data;
-	GData *object_data_nocp;
 };
 
 struct _HTMLObjectClearRectangle {
@@ -183,8 +182,8 @@ struct _HTMLObjectClass {
 
 	void (* reset) (HTMLObject *o);
 
-	const gchar * (* get_url)    (HTMLObject *o);
-	const gchar * (* get_target) (HTMLObject *o);
+	const gchar * (* get_url)    (HTMLObject *o, gint offset);
+	const gchar * (* get_target) (HTMLObject *o, gint offset);
 	const gchar * (* get_src)    (HTMLObject *o);
 
 	HTMLAnchor * (* find_anchor) (HTMLObject *o, const gchar *name, gint *x, gint *y);
@@ -398,9 +397,12 @@ gboolean        html_object_relayout              (HTMLObject            *obj,
 HTMLVAlignType  html_object_get_valign            (HTMLObject            *self);
 
 /* Links.  */
-const gchar    *html_object_get_url               (HTMLObject            *o);
-const gchar    *html_object_get_target            (HTMLObject            *o);
-gchar          *html_object_get_complete_url      (HTMLObject            *o);
+const gchar    *html_object_get_url               (HTMLObject            *o,
+						   gint                   offset);
+const gchar    *html_object_get_target            (HTMLObject            *o,
+						   gint                   offset);
+gchar          *html_object_get_complete_url      (HTMLObject            *o,
+						   gint                   offset);
 const gchar    *html_object_get_src               (HTMLObject            *o);
 HTMLAnchor     *html_object_find_anchor           (HTMLObject            *o,
 						   const gchar           *name,
@@ -519,18 +521,6 @@ void      html_object_copy_data_from_object  (HTMLObject          *dst,
 					      HTMLObject          *src);
 gboolean  html_object_save_data              (HTMLObject          *self,
 					      HTMLEngineSaveState *state);
-
-/* for acc object */
-void      html_object_set_data_nocp          (HTMLObject          *object,
-					      const gchar         *key,
-					      const gchar         *value);
-void      html_object_set_data_full_nocp     (HTMLObject          *object,
-					      const gchar         *key,
-					      const gpointer       value,
-					      GDestroyNotify       func);
-gpointer  html_object_get_data_nocp          (HTMLObject          *object,
-					      const gchar         *key);
-
 /*
  * editing
 */

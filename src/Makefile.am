@@ -75,7 +75,6 @@ libgtkhtml_HEADERS =				\
 	htmlimage.h				\
 	htmlimageinput.h			\
 	htmlinterval.h				\
-	htmllinktext.h				\
 	htmllist.h				\
 	htmlmap.h				\
 	htmlmarshal.h				\
@@ -159,7 +158,6 @@ libgtkhtml_3_1_la_SOURCES =			\
 	htmlimage.c				\
 	htmlimageinput.c			\
 	htmlinterval.c				\
-	htmllinktext.c				\
 	htmllist.c				\
 	htmlmap.c				\
 	htmlmarshal.c				\
@@ -209,6 +207,7 @@ testgtkhtml_SOURCES = 		\
 	testgtkhtml.c		\
 	htmlurl.h		\
 	htmlurl.c
+testgtkhtml_LDFLAGS = -static
 testgtkhtml_LDADD =					\
 	libgtkhtml-@GTKHTML_RELEASE@.la			\
 	../a11y/libgtkhtml-a11y-@GTKHTML_RELEASE@.la 	\

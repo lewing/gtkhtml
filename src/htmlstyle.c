@@ -36,7 +36,7 @@ parse_color (const gchar *text,
 	c [7] = 0;
 	if (*text != '#') {
 		c[0] = '#'; 
-		strncpy (c + 1, text, 6);
+		strncpy (c + 1, text, len);
 		len++;
 	} else {
 		strncpy (c, text, len);
@@ -52,8 +52,6 @@ HTMLStyle *
 html_style_new (void) 
 {
 	HTMLStyle *style = g_new0 (HTMLStyle, 1);
-
-	style->display = DISPLAY_NONE;
 
 	style->color = NULL;
 	style->mask = 0;
@@ -80,7 +78,7 @@ html_style_free (HTMLStyle *style)
 		html_color_unref (style->color);
 
 	if (style->bg_color)
-		html_color_unref (style->bg_color);
+		gdk_color_free (style->bg_color);
 
 	g_free (style);
 }
@@ -88,20 +86,16 @@ html_style_free (HTMLStyle *style)
 HTMLStyle *
 html_style_add_color (HTMLStyle *style, HTMLColor *color)
 {
-	HTMLColor *old;
-	
 	if (!style)
 		style = html_style_new ();
 
-	old = style->color;
+	if (style->color)
+		html_color_unref (style->color);
 
 	style->color = color;
 
 	if (color)
 		html_color_ref (color);
-	
-	if (old)
-		html_color_unref (old);
 
 	return style;
 }      
@@ -180,33 +174,15 @@ html_style_add_text_valign (HTMLStyle *style, HTMLVAlignType type)
 }
 
 HTMLStyle *
-html_style_add_background_color (HTMLStyle *style, HTMLColor *color)
-{
-	HTMLColor *old;
-
-	if (!style)
-		style = html_style_new ();
-
-	old = style->bg_color;
-
-	style->bg_color = color;
-
-	if (color)
-		html_color_ref (color);
-
-	if (old)
-		html_color_unref (old);
-
-	return style;
-}
-
-HTMLStyle *
-html_style_set_display (HTMLStyle *style, HTMLDisplayType display)
+html_style_add_background_color (HTMLStyle *style, GdkColor *color)
 {
 	if (!style)
 		style = html_style_new ();
 
-	style->display = display;
+	if (style->bg_color)
+		gdk_color_free (style->bg_color);
+
+	style->bg_color = gdk_color_copy (color);
 
 	return style;
 }
@@ -228,7 +204,11 @@ html_style_add_attribute (HTMLStyle *style, const char *attr)
 {
 	gchar **prop;
 
+	if (!style)
+		style = html_style_new ();
+
 	prop = g_strsplit (attr, ";", 100);
+
 	if (prop) {
 		gint i;
 		for (i = 0; prop[i]; i++) {
@@ -237,38 +217,20 @@ html_style_add_attribute (HTMLStyle *style, const char *attr)
 			text = g_strstrip (prop[i]);
 			if (!strncasecmp ("color: ", text, 7)) {
 				GdkColor color;
-
+				
 				if (parse_color (g_strstrip (text + 7), &color)) {
 					HTMLColor *hc = html_color_new_from_gdk_color (&color);
-					style = html_style_add_color (style, hc);
+					html_style_add_color (style, hc);
 				        html_color_unref (hc);
-				
 				}
-			} else if (!strncasecmp ("background: ", text, 12)) {
+			} else if (!strncasecmp ("background-color: ", text, 18)) {
 				GdkColor color;
+				
+				if (parse_color (g_strstrip (text + 18), &color))
+					html_style_add_background_color (style, &color);
 
-				if (parse_color (text + 12, &color)) {
-					HTMLColor *hc = html_color_new_from_gdk_color (&color);
-					style = html_style_add_background_color (style, hc);
-				        html_color_unref (hc);
-				}
-			} else if (!strncasecmp ("background-image: ", text, 18)) {
-				style = html_style_add_background_image (style, text + 18);
 			} else if (!strncasecmp ("text-decoration: none", text, 21)) {
-				style = html_style_unset_decoration (style, ~GTK_HTML_FONT_STYLE_SIZE_MASK);
-			} else if (!strncasecmp ("display: ", text, 9)) {
-				char *value = text + 9;
-				if (!strcasecmp ("block", value)) { 
-					style = html_style_set_display (style, DISPLAY_BLOCK);
-				} else if (!strcasecmp ("inline", value)) {
-					style = html_style_set_display (style, DISPLAY_INLINE);
-				} else if (!strcasecmp ("none", value)) {
-					style = html_style_set_display (style, DISPLAY_NONE);
-				} else if (!strcasecmp ("inline-table", value)) {
-					style = html_style_set_display (style, DISPLAY_INLINE_TABLE);
-				}
-			} else if (!strncasecmp ("text-align: center", text, 18)) {
-				style = html_style_add_text_align (style, HTML_HALIGN_CENTER);
+				html_style_unset_decoration (style, ~GTK_HTML_FONT_STYLE_SIZE_MASK);
 			}
 		}
 		g_strfreev (prop);
