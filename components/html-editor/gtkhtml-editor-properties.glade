@@ -1588,7 +1588,6 @@
 
             <child>
               <widget class="GtkFrame" id="frame14">
-                <property name="child_name">Notebook:tab</property>
                 <property name="border_width">2</property>
                 <property name="label" translatable="yes">Template</property>
                 <property name="label_xalign">0</property>
@@ -1652,7 +1651,6 @@
 
             <child>
               <widget class="GtkFrame" id="frame11">
-                <property name="child_name">Notebook:tab</property>
                 <property name="border_width">2</property>
                 <property name="label" translatable="yes">Size</property>
                 <property name="label_xalign">0</property>
@@ -2132,7 +2130,6 @@
 
             <child>
               <widget class="GtkFrame" id="frame_template">
-                <property name="child_name">Notebook:tab</property>
                 <property name="border_width">2</property>
                 <property name="label" translatable="yes">Template</property>
                 <property name="label_xalign">0</property>
@@ -2361,7 +2358,6 @@
 
                 <child>
                   <widget class="GtkFrame" id="frame17">
-                    <property name="child_name">Notebook:tab</property>
                     <property name="border_width">2</property>
                     <property name="label" translatable="yes">Style</property>
                     <property name="label_xalign">0</property>
