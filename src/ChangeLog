@@ -1,4 +1,34 @@
+2002-05-20  Larry Ewing  <lewing@ximian.com>
+
+	* htmlclueflow.c (get_level_indent): make the indent match the
+	plain indent so that the wrap length is exact.
+	(plain_padding): rewrite this to be a little more sane and use the
+	new write_item_marker function.
+	(write_item_marker): overwrite any available spaces with the item
+	number string when saving plain text.  This means double indents
+	get more space for the item marker.  If the marker string is too
+	long, we don't really care, we just write out the full string and
+	let the indent get slightly messed up for the first line.  Doing
+	it this way means the line breaks will match the display breaks
+	and we don't have to calculate the longest value possible.
+	(html_clueflow_dup_levels): new function to handle duplicating the
+	levels array.
+	(html_clueflow_set_levels): copy the provided levels array into
+	the current flow.
+
+	* htmlengine-edit-clueflowstyle.c: store the entire indent array
+	for each op.
+	(free_prop): free the array.
+	(get_props): dup the levels.
+	(undo_or_redo): set the levels.
+
 2002-05-17  Larry Ewing  <lewing@ximian.com>
+
+	* htmlengine-edit-clueflowstyle.c: refactor in preparation for
+	indentation undo changes.  
+	(set_props): refactor, no longer return props, let that happen one
+	level up, clears up FIXME about getting then freeing props.
+	(free_prop): centralize prop destruction.
 
 	* gtkhtml.c (get_class_properties): move the gconf initialization
 	into the instance initialization to make michael happy.

@@ -62,10 +62,9 @@ static HTMLClueClass *parent_class = NULL;
 
 inline HTMLHAlignType html_clueflow_get_halignment (HTMLClueFlow *flow);
 static gchar * get_item_number_str (HTMLClueFlow *flow);
+static void update_items_after_indentation_change (HTMLClueFlow *flow);
 
-#define CLUEFLOW_ITEM_MARKER        "    * "
-#define CLUEFLOW_ITEM_MARKER_PAD    "      "
-#define CLUEFLOW_INDENT             "      "
+#define CLUEFLOW_INDENT             "        "
 #define CLUEFLOW_BLOCKQUOTE_CITE    "> "
           
 
@@ -109,9 +108,7 @@ copy (HTMLObject *self,
 {
 	(* HTML_OBJECT_CLASS (parent_class)->copy) (self, dest);
 
-	HTML_CLUEFLOW (dest)->levels = g_byte_array_new ();
-	copy_levels (HTML_CLUEFLOW (dest)->levels, HTML_CLUEFLOW (self)->levels);
-
+	HTML_CLUEFLOW (dest)->levels = html_clueflow_dup_levels (HTML_CLUEFLOW (self));
 	HTML_CLUEFLOW (dest)->style = HTML_CLUEFLOW (self)->style;
 	HTML_CLUEFLOW (dest)->item_type = HTML_CLUEFLOW (self)->item_type;
 	HTML_CLUEFLOW (dest)->item_number = HTML_CLUEFLOW (self)->item_number;
@@ -359,17 +356,6 @@ calc_padding (HTMLPainter *painter)
 }
 
 static guint
-calc_indent_unit (HTMLPainter *painter)
-{
-	guint ascent, descent;
-
-	ascent = html_painter_calc_ascent (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
-	descent = html_painter_calc_descent (painter, GTK_HTML_FONT_STYLE_SIZE_3, NULL);
-
-	return (ascent + descent) * 3;
-}
-
-static guint
 calc_bullet_size (HTMLPainter *painter)
 {
 	guint ascent, descent;
@@ -542,16 +528,17 @@ get_level_indent (HTMLClueFlow *flow,
 				indent += 0;
 				break;
 			default:
-				//g_warning ("Hit default");
-				indent += calc_indent_unit (painter);
+				indent += html_painter_calc_text_width (painter, 
+									CLUEFLOW_INDENT, 
+									strlen (CLUEFLOW_INDENT), &line_offset,
+									GTK_HTML_FONT_STYLE_SIZE_3, 
+									NULL);
 				break;
 			}
-			
-			//g_warning ("data[%d] = %d indent = %d", i,flow->levels->data[i], indent); 
 			i++;
 		}
 	} else {
-		indent = 5 * html_painter_get_space_width (painter, style, NULL);
+		indent = 4 * html_painter_get_space_width (painter, style, NULL);
 	}
 
 	return indent;
@@ -1127,7 +1114,7 @@ get_alpha_value (gint value, gboolean lower)
 	gchar *rv;
 	gint add = lower ? 'a' : 'A';
 
-	str = g_string_new (".");
+	str = g_string_new (". ");
 
 	do {
 		g_string_prepend_c (str, ((value - 1) % 26) + add);
@@ -1150,9 +1137,9 @@ get_roman_value (gint value, gboolean lower)
 	gint b, r, add = lower ? 'a' - 'A' : 0;
 
 	if (value > 3999)
-		g_strdup ("?.");
+		return g_strdup ("?. ");
 
-	str = g_string_new (".");
+	str = g_string_new (". ");
 
 	for (b = 0; value > 0 && b < BASES - 1; b += 2, value /= 10) {
 		r = value % 10;
@@ -1187,7 +1174,7 @@ get_item_number_str (HTMLClueFlow *flow)
 {
 	switch (flow->item_type) {
 	case HTML_LIST_TYPE_ORDERED_ARABIC:
-		return g_strdup_printf ("%d.", flow->item_number);
+		return g_strdup_printf ("%d. ", flow->item_number);
 	case HTML_LIST_TYPE_ORDERED_LOWER_ALPHA:
 	case HTML_LIST_TYPE_ORDERED_UPPER_ALPHA:
 		return get_alpha_value (flow->item_number, flow->item_type == HTML_LIST_TYPE_ORDERED_LOWER_ALPHA);
@@ -1216,7 +1203,6 @@ draw_quotes (HTMLObject *self, HTMLPainter *painter,
 		indent = get_level_indent (flow, i, painter);
 
 		html_painter_set_pen (painter, &html_colorset_get_color_allocated (painter, HTMLLinkColor)->color);
-		g_warning ("data[%d] = %d, indent[%d] = %d", i, flow->levels->data[i], i, indent);
 		if (is_cite (flow, i)) {
 			if (!HTML_IS_PLAIN_PAINTER (painter)) {
 				area.x0 = self->x + indent - 5;
@@ -1302,8 +1288,8 @@ draw_item (HTMLObject *self, HTMLPainter *painter, gint x, gint y, gint width, g
 
 			len   = strlen (number);
 			width = html_painter_calc_text_width (painter, number, len, &line_offset,
-							      html_clueflow_get_default_font_style (flow), NULL)
-				+ html_painter_get_space_width (painter, html_clueflow_get_default_font_style (flow), NULL);
+							      html_clueflow_get_default_font_style (flow), NULL);
+
 			html_painter_set_font_style (painter, html_clueflow_get_default_font_style (flow));
 			html_painter_set_font_face  (painter, NULL);
 			html_painter_draw_text (painter, self->x + first->x - width + tx,
@@ -1764,98 +1750,85 @@ string_append_nonbsp (GString *out, guchar *s, gint length)
 	return length;
 }
 
-static gchar *
-plain_get_marker (HTMLClueFlow *flow, gint *pad, gchar **pad_indent)
+static void
+write_item_marker (GString *pad_string, HTMLClueFlow *flow)
 {
-	gchar *number;
+	char *marker;
 
-	number = get_item_number_str (flow);
-	if (number) {
-		GString *str;
-		gint len;
-		gint i;
-
-		len = strlen (number);
-		if (len < 6) {
-			gint to_add;
-
-			to_add = 6 - len;
-			str = g_string_new (number);
-			g_string_append_c (str, ' ');
-			len ++;
-			for (i = 0; i < to_add; i++, len++)
-				g_string_prepend_c (str, ' ');
-			g_free (number);
-			number = str->str;
-			g_string_free (str, FALSE);
-		} else {
-			gchar *old;
-
-			old = number;
-			number = g_strconcat (number, " ", NULL);
-			g_free (old);
-			len ++;
-		}
-
-		*pad = len;
-		str = g_string_new (NULL);
-		for (i = 0; i < len; i ++)
-			g_string_append_c (str, ' ');
-		*pad_indent = str->str;
-		g_string_free (str, FALSE);
-	} else {
-		number = g_strdup (CLUEFLOW_ITEM_MARKER);
-		*pad = strlen (CLUEFLOW_ITEM_MARKER_PAD);
-		*pad_indent = g_strdup (CLUEFLOW_ITEM_MARKER_PAD);
+	switch (flow->item_type) {
+	case HTML_LIST_TYPE_ORDERED_ARABIC:
+	case HTML_LIST_TYPE_ORDERED_UPPER_ROMAN:
+	case HTML_LIST_TYPE_ORDERED_LOWER_ROMAN:
+	case HTML_LIST_TYPE_ORDERED_UPPER_ALPHA:
+	case HTML_LIST_TYPE_ORDERED_LOWER_ALPHA:
+		marker = get_item_number_str (flow);
+		break;
+	case HTML_LIST_TYPE_UNORDERED:
+		marker = g_strdup ("* ");
+		break;
+	default:
+		marker = NULL;
 	}
 
-	return number;
+	if (marker) {
+		gint marker_len = strlen (marker);
+		gint len = pad_string->len - 1;
+		char *str = pad_string->str;
+
+		while (len > 0) {
+			if ((str[len - 1] != ' ') || (pad_string->len - len >= marker_len))
+				break;
+			else 
+				len--;
+		}
+
+		if (len > 0)
+			g_string_truncate (pad_string, len);
+
+		g_string_append (pad_string, marker);
+	}
 }
 
 static gint 
 plain_padding (HTMLClueFlow *flow, GString *out, gboolean firstline)
 {
-	gchar *item_pad_str = NULL;
-	gchar *item_marker = NULL;
-	gint pad = 0;
-	gint item_pad = 0;
+	GString *pad_string = NULL;
+	gint pad_len = 0;
 	gint i;
 
-	if (is_item (flow))
-		item_marker = plain_get_marker (flow, &item_pad, &item_pad_str);
+	pad_string = g_string_new ("");
 
 #define APPEND_PLAIN(w) \
-        pad += strlen (w); \
-        if (out) g_string_append (out, w); 
+        pad_len += strlen (w); \
+        if (out) g_string_append (pad_string, w); 
 
 	if (flow->levels->len) {
 		for (i = 0; i < flow->levels->len; i++) {
-			if (flow->levels->data[i] == HTML_LIST_TYPE_BLOCKQUOTE_CITE) {
+			switch (flow->levels->data[i]) {
+			case HTML_LIST_TYPE_BLOCKQUOTE_CITE:
 				APPEND_PLAIN (CLUEFLOW_BLOCKQUOTE_CITE);
-			} else {			
-				if ((i == flow->levels->len - 1) 
-				    && is_item (flow) 
-				    && firstline) {
-					APPEND_PLAIN (item_marker);
-				} else {
-					APPEND_PLAIN (CLUEFLOW_INDENT);
-				}
+				break;
+			case HTML_LIST_TYPE_GLOSSARY_DL:
+				break;
+			default:
+				APPEND_PLAIN (CLUEFLOW_INDENT);
+				break;
 			}
 		}
-	} else {
-		/* FIXME item not inside a list... bad item */
-		if (is_item (flow)) {
-			if (firstline) {
-				APPEND_PLAIN (item_marker);
-			} else {
-				APPEND_PLAIN (item_pad_str);
-			}
-		}
+	} else if (is_item (flow)) {
+		/* item without a list block give it a little pading */
+		APPEND_PLAIN ("    ");
 	}
-	g_free (item_marker);
-	g_free (item_pad_str);
 
-	return pad;
+	if (is_item (flow) && firstline) {
+		write_item_marker (pad_string, flow);
+	}
+
+	if (out) 
+		g_string_append (out, pad_string->str);
+
+	g_string_free (pad_string, TRUE);
+	return pad_len;
 }
 
 static gboolean
@@ -2311,11 +2284,9 @@ HTMLObject *
 html_clueflow_new_from_flow (HTMLClueFlow *flow)
 {
 	HTMLObject *o;
-	GByteArray *levels = g_byte_array_new ();
 
-	copy_levels (levels, flow->levels);
-
-	o = html_clueflow_new (flow->style, levels, flow->item_type, flow->item_number);
+	o = html_clueflow_new (flow->style, html_clueflow_dup_levels (flow),
+			       flow->item_type, flow->item_number);
 	html_object_copy_data_from_object (o, HTML_OBJECT (flow));
 
 	return o;
@@ -2437,6 +2408,28 @@ html_clueflow_set_style (HTMLClueFlow *flow,
 	/* FIXME - make it more effective: relayout_with_siblings (flow, engine); */
 }
 
+GByteArray *
+html_clueflow_dup_levels (HTMLClueFlow *flow)
+{
+	GByteArray *levels;
+	
+	levels = g_byte_array_new ();
+	copy_levels (levels, flow->levels);
+	
+	return levels;
+}
+
+void
+html_clueflow_set_levels (HTMLClueFlow *flow,
+			  HTMLEngine *engine,
+			  GByteArray *levels)
+{
+	copy_levels (flow->levels, levels);
+	update_items_after_indentation_change (flow);
+
+	relayout_with_siblings (flow, engine);
+}
+
 void
 html_clueflow_set_item_type (HTMLClueFlow *flow,
 			     HTMLEngine *engine,
@@ -2511,6 +2504,7 @@ static void
 update_items_after_indentation_change (HTMLClueFlow *flow)
 {
 	if (is_item (flow)) {
+		/* FIXME levels */
 		update_item_number (HTML_OBJECT (flow));
 		if (HTML_OBJECT (flow)->next && is_item (HTML_CLUEFLOW (HTML_OBJECT (flow)->next)))
 			update_item_number (HTML_OBJECT (flow)->next);
