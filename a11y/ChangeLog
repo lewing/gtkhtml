@@ -1,3 +1,10 @@
+2003-07-21  Yuedong Du  <yuedong.du@sun.com>
+
+	* object.c: (gtk_html_a11y_cursor_move_cb): emit caret-move signal on
+	text object.
+	* text.c: (atk_text_interface_init), (html_a11y_text_get_caret_offset),
+	(html_a11y_text_set_caret_offset): add implementation of 2 interface.
+
 2003-07-02  Yuedong Du  <yuedong.du@sun.com>
 
 	* object.c: emit atk object when focus move from one object to another,

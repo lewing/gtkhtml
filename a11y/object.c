@@ -28,6 +28,7 @@
 #include "object.h"
 #include "paragraph.h"
 #include "utils.h"
+#include "text.h"
 
 static void gtk_html_a11y_class_init (GtkHTMLA11YClass *klass);
 static void gtk_html_a11y_init       (GtkHTMLA11Y *a11y);
@@ -188,7 +189,15 @@ gtk_html_a11y_cursor_move_cb(GtkWidget *widget,  GtkDirectionType dir_type, GtkH
 		prev_object = focus_object;
         	g_object_set_data (obj, "gail-focus-object", focus_object);
         	atk_focus_tracker_notify (focus_object);
-	}
+	} else {
+		if (G_IS_HTML_A11Y_TEXT(focus_object)) {
+			gint offset;
+                                                                                
+			offset = (GTK_HTML(widget))->engine->cursor->offset;
+			g_object_set_data(G_OBJECT(focus_object), "caret-offset", offset);
+			g_signal_emit_by_name(focus_object, "text_caret_moved",offset);
+                }
+        }
 }
 
 AtkObject* 
