@@ -2722,7 +2722,7 @@ end_of_word (gchar *ct, gboolean cited)
 	cited2 = FALSE;
 	while (*ct
 	       && (uc = g_utf8_get_char (ct))
-	       && (cn = g_utf8_next_char (ct)) && *cn
+	       && (cn = g_utf8_next_char (ct))
 	       && (html_selection_spell_word (uc, &cited2) || (!cited && cited2))) {
 		ct = cn;
 		cited2 = FALSE;

@@ -4181,8 +4181,8 @@ html_engine_calc_size (HTMLEngine *e, GList **changed_objs)
 		*changed_objs = NULL;
 	html_object_calc_size (e->clue, e->painter, redraw_whole ? NULL : changed_objs);
 
-	e->clue->x = 0;
-	e->clue->y = e->clue->ascent;
+	e->clue->x = e->leftBorder;
+	e->clue->y = e->clue->ascent + e->topBorder;
 
 	return redraw_whole;
 }

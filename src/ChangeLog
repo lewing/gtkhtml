@@ -1,3 +1,11 @@
+2002-03-25  Radek Doulik  <rodo@ximian.com>
+
+	* htmlclueflow.c (end_of_word): don't check for *cn to recognize
+	one char length words
+
+	* htmlengine.c (html_engine_calc_size): use border when setting
+	e->clue coordinates
+
 2002-03-18  Radek Doulik  <rodo@ximian.com>
 
 	* htmlengine.c (html_engine_set_focus): test for clue before
