@@ -27,12 +27,13 @@
 
 #include "htmlcolor.h"
 #include "htmlcolorset.h"
-#include "htmltext.h"
 #include "htmlengine-edit.h"
 #include "htmlengine-edit-fontstyle.h"
 #include "htmlengine-edit-cut-and-paste.h"
+#include "htmlimage.h"
 #include "htmlselection.h"
 #include "htmlsettings.h"
+#include "htmltext.h"
 
 #include "properties.h"
 #include "link.h"
@@ -47,16 +48,60 @@ struct _GtkHTMLEditLinkProperties {
 	HTMLObject *object;
 	gint offset;
 	gboolean selection;
+	gboolean description_empty;
 	gboolean insert;
 	int insert_start_offset;
 	int insert_end_offset;
 	HTMLObject *insert_object;
+
+	gboolean disable_change;
 };
 typedef struct _GtkHTMLEditLinkProperties GtkHTMLEditLinkProperties;
 
 static void
-changed (GtkWidget *w, GtkHTMLEditLinkProperties *data)
+url_changed (GtkWidget *w, GtkHTMLEditLinkProperties *d)
 {
+	const char *url, *desc;
+
+	if (d->disable_change)
+		return;
+
+	url = gtk_entry_get_text (GTK_ENTRY (d->entry_url));
+	desc = gtk_entry_get_text (GTK_ENTRY (d->entry_description));
+	if (d->selection)
+		html_engine_set_link (d->cd->html->engine, url);
+	else {
+		if (!desc || !*desc || d->description_empty) {
+			gtk_entry_set_text (GTK_ENTRY (d->entry_description), url);
+			d->description_empty = TRUE;
+		}
+	}
+}
+
+static void
+description_changed (GtkWidget *w, GtkHTMLEditLinkProperties *d)
+{
+	HTMLEngine *e = d->cd->html->engine;
+	const char *text;
+	int len;
+
+	d->description_empty = FALSE;
+
+	if (d->disable_change || !editor_has_html_object (d->cd, d->insert_object))
+		return;
+
+	html_cursor_jump_to (e->cursor, e, d->insert_object, d->insert_start_offset);
+	html_engine_set_mark (e);
+	html_cursor_jump_to (e->cursor, e, d->insert_object, d->insert_end_offset);
+	html_engine_delete (e);
+	text = gtk_entry_get_text (GTK_ENTRY (w));
+	if (text && *text) {
+		len = g_utf8_strlen (text, -1);
+		html_engine_paste_link (e, text, len, gtk_entry_get_text (GTK_ENTRY (d->entry_url)));
+		d->insert_object = e->cursor->object;
+	} else
+		len = 0;
+	d->insert_end_offset = d->insert_start_offset + len;
 }
 
 static void
@@ -69,10 +114,12 @@ test_clicked (GtkWidget *w, GtkHTMLEditLinkProperties *data)
 }
 
 static void
-set_ui (GtkHTMLEditLinkProperties *d)
+link_set_ui (GtkHTMLEditLinkProperties *d)
 {
 	HTMLEngine *e = d->cd->html->engine;
 	gchar *url, *link_text;
+
+	d->disable_change = TRUE;
 
 	if (html_engine_is_selection_active (e)) {
 		d->selection = TRUE;
@@ -80,7 +127,10 @@ set_ui (GtkHTMLEditLinkProperties *d)
 		gtk_widget_hide (d->label_description);
 		gtk_widget_hide (d->entry_description);
 	} else {
-		char *url = html_object_get_complete_url (e->cursor->object, e->cursor->offset);
+		char *url = NULL;
+
+		if (HTML_IS_TEXT (e->cursor->object))
+			url = html_object_get_complete_url (e->cursor->object, e->cursor->offset);
 
 		d->selection = FALSE;
 		d->insert = TRUE;
@@ -109,6 +159,8 @@ set_ui (GtkHTMLEditLinkProperties *d)
 			d->insert_start_offset = d->insert_end_offset = e->cursor->offset;
 		}
 	}
+
+	d->disable_change = FALSE;
 
 	/* link_text = html_text_get_link_text (data->text, data->offset);
 	gtk_entry_set_text (GTK_ENTRY (data->entry_text), link_text);
@@ -148,7 +200,11 @@ link_widget (GtkHTMLEditLinkProperties *d, gboolean insert)
 	gtk_table_attach (GTK_TABLE (glade_xml_get_widget (xml, "table_link")), button, 2, 3, 0, 1, 0, 0, 0, 0);
 
 	d->entry_url = glade_xml_get_widget (xml, "entry_url");
+	g_signal_connect (d->entry_url, "changed", G_CALLBACK (url_changed), d);
+
 	d->entry_description = glade_xml_get_widget (xml, "entry_description");
+	g_signal_connect (d->entry_description, "changed", G_CALLBACK (description_changed), d);
+
 	d->label_description = glade_xml_get_widget (xml, "label_description");
 
 	/*GtkWidget *vbox, *hbox, *button, *frame, *f1;
@@ -186,7 +242,7 @@ link_widget (GtkHTMLEditLinkProperties *d, gboolean insert)
 	g_signal_connect (button, "clicked", G_CALLBACK (test_clicked), data);*/
 
 	gtk_widget_show_all (link_page);
-	set_ui (d);
+	link_set_ui (d);
 
 	return link_page;
 }
@@ -194,7 +250,7 @@ link_widget (GtkHTMLEditLinkProperties *d, gboolean insert)
 GtkWidget *
 link_insert (GtkHTMLControlData *cd, gpointer *set_data)
 {
-	GtkHTMLEditLinkProperties *data = g_new (GtkHTMLEditLinkProperties, 1);
+	GtkHTMLEditLinkProperties *data = g_new0 (GtkHTMLEditLinkProperties, 1);
 
 	*set_data = data;
 	data->cd = cd;
@@ -205,7 +261,7 @@ link_insert (GtkHTMLControlData *cd, gpointer *set_data)
 GtkWidget *
 link_properties (GtkHTMLControlData *cd, gpointer *set_data)
 {
-	GtkHTMLEditLinkProperties *data = g_new (GtkHTMLEditLinkProperties, 1);
+	GtkHTMLEditLinkProperties *data = g_new0 (GtkHTMLEditLinkProperties, 1);
 
 	g_return_val_if_fail (cd->html->engine->cursor->object, NULL);
 	g_return_val_if_fail (HTML_IS_LINK_TEXT (cd->html->engine->cursor->object), NULL);

@@ -224,7 +224,7 @@ editor_has_html_object (GtkHTMLControlData *cd, HTMLObject *o)
 	guint position = e->cursor->position;
 
 	if (e->cursor->object != o)
-		if (!html_cursor_jump_to (e->cursor, e, HTML_OBJECT (o), 1)) {
+		if (!o->parent || !html_cursor_jump_to (e->cursor, e, o, 0)) {
 			GtkWidget *dialog;
 			printf ("d: %p\n", cd->properties_dialog);
 			dialog = gtk_message_dialog_new (GTK_WINDOW (cd->properties_dialog->dialog),
