@@ -1,5 +1,8 @@
 2002-05-03  Larry Ewing  <lewing@ximian.com>
 
+	* htmlenums.h: add some clueflow styles (this should probably be
+	renamed).
+
 	* htmlengine-edit-clueflowstyle.c (get_props): use indentation
 	(this still needs fixing later).
 	(get_props_and_set): update to use index->levels (FIXME too)
