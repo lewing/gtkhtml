@@ -41,6 +41,7 @@ create_accessible (HTMLObject *o, AtkObject *parent)
 		accessible = html_a11y_paragraph_new (o);
 		break;
 	case HTML_TYPE_TEXT:
+	case HTML_TYPE_LINKTEXT:
 		accessible = html_a11y_text_new (o);
 		break;
 	case HTML_TYPE_IMAGE:
