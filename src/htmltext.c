@@ -941,13 +941,13 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 	offset = 0;
 	ii = io = 0;
 	while (offset < text->text_len) {
-		if (pi->entries [ii].attrs [io].is_line_break) {
-			mw -= html_text_tail_white_space (pi, ii, io, NULL);
+		if (offset > 0 && pi->entries [ii].attrs [io].is_line_break) {
+			ww -= PANGO_PIXELS (html_text_tail_white_space (pi, ii, io, NULL));
 			if (ww > mw)
 				mw = ww;
 			ww = 0;
 		}
-		ww += pi->entries [ii].widths [io];
+		ww += PANGO_PIXELS (pi->entries [ii].widths [io]);
 		offset ++;
 
 		html_text_pi_forward (pi, &ii, &io);
@@ -991,7 +991,7 @@ calc_min_width (HTMLObject *self, HTMLPainter *painter)
 			mw = w;
 			} */
 
-	return MAX (1, PANGO_PIXELS (mw));
+	return MAX (1, mw);
 }
 
 static void
