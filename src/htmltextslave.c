@@ -41,7 +41,6 @@
 HTMLTextSlaveClass html_text_slave_class;
 static HTMLObjectClass *parent_class = NULL;
 
-static HTMLTextPangoInfo * get_pango_info (HTMLTextSlave *slave, HTMLPainter *painter);
 static GList * get_glyphs (HTMLTextSlave *slave, HTMLPainter *painter);
 static GList * get_glyphs_part (HTMLTextSlave *slave, HTMLPainter *painter, guint offset, guint len);
 
@@ -141,7 +140,8 @@ get_offset_for_bounded_width (HTMLTextSlave *slave, HTMLPainter *painter, gint *
 	char *buffer = html_text_slave_get_text (slave);
 
 	len = (lower + upper) / 2;
-	html_painter_calc_text_size (painter, buffer, len, get_pango_info (slave, painter), get_glyphs (slave, painter), html_text_slave_get_start_byte_offset (slave),
+	html_painter_calc_text_size (painter, buffer, len, html_text_get_pango_info (text, painter),
+				     get_glyphs (slave, painter), html_text_slave_get_start_byte_offset (slave),
 				     &line_offset, html_text_get_font_style (text), text->face, &width, &asc, &dsc);
 	while (lower < upper) {
 		if (width > max_width)
@@ -150,7 +150,7 @@ get_offset_for_bounded_width (HTMLTextSlave *slave, HTMLPainter *painter, gint *
 			lower = len + 1;
 		len = (lower + upper) / 2;
 		line_offset = -1;
-		html_painter_calc_text_size (painter, buffer, len, get_pango_info (slave, painter), get_glyphs (slave, painter),
+		html_painter_calc_text_size (painter, buffer, len, html_text_get_pango_info (text, painter), get_glyphs (slave, painter),
 					     html_text_slave_get_start_byte_offset (slave),
 					     &line_offset, html_text_get_font_style (text), text->face, &width, &asc, &dsc);
 	}
@@ -498,7 +498,7 @@ draw_spell_errors (HTMLTextSlave *slave, HTMLPainter *p, gint tx, gint ty)
 		ma = MAX (se->off, slave->posStart);
 		mi = MIN (se->off + se->len, slave->posStart + slave->posLen);
 		if (ma < mi) {
-			GList *items, *glyphs;
+			GList *glyphs;
 			guint off = ma - slave->posStart;
 			guint len = mi - ma;
 			gint lo, width, asc, dsc;
@@ -509,7 +509,7 @@ draw_spell_errors (HTMLTextSlave *slave, HTMLPainter *p, gint tx, gint ty)
 			
 			glyphs = get_glyphs_part (slave, p, last_off, off - last_off);
 			html_painter_calc_text_size (p, text,
-						     off - last_off, items, glyphs, text - slave->owner->text,
+						     off - last_off, html_text_get_pango_info (slave->owner, p), glyphs, text - slave->owner->text,
 						     &line_offset,
 						     p->font_style,
 						     p->font_face, &width, &asc, &dsc);
@@ -519,7 +519,7 @@ draw_spell_errors (HTMLTextSlave *slave, HTMLPainter *p, gint tx, gint ty)
 			glyphs = get_glyphs_part (slave, p, off, len);
 			x_off += html_painter_draw_spell_error (p, obj->x + tx + x_off,
 								obj->y + ty + get_ys (slave->owner, p),
-								text, len, items, glyphs, text - slave->owner->text);
+								text, len, html_text_get_pango_info (slave->owner, p), glyphs, text - slave->owner->text);
 			glyphs_destroy (glyphs);
 			last_off = off + len;
 			if (line_offset != -1)
@@ -535,18 +535,19 @@ draw_spell_errors (HTMLTextSlave *slave, HTMLPainter *p, gint tx, gint ty)
 static gint
 get_pango_info_offset (HTMLTextSlave *slave, HTMLPainter *painter)
 {
+	gint pi_offset = 0;
+
 	if (!slave->pi) {
 		PangoItem *item;
-		gint pi_offset = 0;
 		gint start_offset = html_text_slave_get_text (slave) - slave->owner->text;
 
 		slave->pi = html_text_get_pango_info (slave->owner, painter);
 		if (slave->pi) {
-			item = slave->pi [pi_offset].item;
+			item = slave->pi->entries [pi_offset].item;
 
 			while (start_offset >= item->offset + item->length) {
 				pi_offset ++;
-				item = slave->pi [pi_offset].item;
+				item = slave->pi->entries [pi_offset].item;
 			}
 		}
 	}
@@ -589,13 +590,13 @@ static GList *
 get_glyphs_part (HTMLTextSlave *slave, HTMLPainter *painter, guint offset, guint len)
 {
 	GList *glyphs = NULL;
-	GList *items;
+	HTMLTextPangoInfo *pi;
 
-	items = get_items (slave, painter);
-	if (*items) {
+	pi = html_text_get_pango_info (slave->owner, painter);
+	if (pi) {
 		PangoItem *item;
 		gint index, c_len;
-		gint byte_offset;
+		gint byte_offset, ii;
 		const gchar *text, *owner_text;
 		gchar *end;
 
@@ -603,21 +604,17 @@ get_glyphs_part (HTMLTextSlave *slave, HTMLPainter *painter, guint offset, guint
 		text = g_utf8_offset_to_pointer (html_text_slave_get_text (slave), offset);
 		byte_offset = text - owner_text;
 
-		if (offset) {
-			while (items && (item = (PangoItem *) items->data) && item->offset + item->length <= byte_offset)
-				items = items->next;
-		}
-
+		ii = html_text_pango_info_get_index (pi, byte_offset, 0);
 		index = 0;
-		while (items && index < len) {
-			item = (PangoItem *) items->data;
+		while (index < len) {
+			item = pi->entries [ii].item;
 			c_len = MIN (item->num_chars - g_utf8_pointer_to_offset (owner_text + item->offset, text), len - index);
 
 			end = g_utf8_offset_to_pointer (text, c_len);
 			glyphs = html_get_glyphs_non_tab (glyphs, item, text, end - text, c_len);
 			text = end;
 			index += c_len;
-			items = items->next;
+			ii ++;
 		}
 		glyphs = g_list_reverse (glyphs);
 	}
@@ -658,14 +655,12 @@ draw_normal (HTMLTextSlave *self,
 		html_painter_set_pen (p, &HTML_TEXT (self->owner)->color->color);
 
 		if (self->posStart > 0)
-			glyphs = get_glyphs_part (self, p, 0, self->posLen, &items);
-		else {
-			items = get_items (self, p);
+			glyphs = get_glyphs_part (self, p, 0, self->posLen);
+		else
 			glyphs = get_glyphs (self, p);
-		}
 
 		html_painter_draw_text (p, obj->x + tx, obj->y + ty + get_ys (text, p),
-					str, self->posLen, items, glyphs, str - self->owner->text, html_text_slave_get_line_offset (self, 0, p));
+					str, self->posLen, html_text_get_pango_info (text, p), glyphs, str - self->owner->text, html_text_slave_get_line_offset (self, 0, p));
 
 		if (self->posStart > 0)
 			glyphs_destroy (glyphs);
@@ -716,8 +711,8 @@ draw_highlighted (HTMLTextSlave *slave,
 	if (start > slave->posStart) {
 		GList *glyphs1;
 
-		glyphs1 = get_glyphs_part (slave, p, 0, start - slave->posStart, &items1);
-		html_painter_calc_text_size (p, slave_begin, start - slave->posStart, items1, glyphs1, slave_begin - text, &lo,
+		glyphs1 = get_glyphs_part (slave, p, 0, start - slave->posStart);
+		html_painter_calc_text_size (p, slave_begin, start - slave->posStart, html_text_get_pango_info (owner, p), glyphs1, slave_begin - text, &lo,
 					     font_style, HTML_TEXT (owner)->face, &offset_width, &asc, &dsc);
 
 		html_painter_set_pen (p, &HTML_TEXT (owner)->color->color);
@@ -726,7 +721,7 @@ draw_highlighted (HTMLTextSlave *slave,
 			html_painter_draw_text (p,
 						obj->x + tx, obj->y + ty + get_ys (HTML_TEXT (slave->owner), p),
 						slave_begin,
-						start - slave->posStart, items1, glyphs1, slave_begin - slave->owner->text,
+						start - slave->posStart, html_text_get_pango_info (owner, p), glyphs1, slave_begin - slave->owner->text,
 						lo_start);
 
 		if (glyphs1)
@@ -745,9 +740,9 @@ draw_highlighted (HTMLTextSlave *slave,
 	if (len) {
 		GList *glyphs2;
 
-		glyphs2 = get_glyphs_part (slave, p, start - slave->posStart, len, &items2);
+		glyphs2 = get_glyphs_part (slave, p, start - slave->posStart, len);
 
-		html_painter_calc_text_size (p, highlight_begin, len, items2, glyphs2, highlight_begin - text, &lo,
+		html_painter_calc_text_size (p, highlight_begin, len, html_text_get_pango_info (owner, p), glyphs2, highlight_begin - text, &lo,
 					     font_style, HTML_TEXT (owner)->face, &text_width, &asc, &dsc);
 		/* printf ("s: %d l: %d - %d %d\n", start, len, offset_width, text_width); */
 
@@ -761,7 +756,7 @@ draw_highlighted (HTMLTextSlave *slave,
 		if (obj->x + offset_width + text_width >= x)
 			html_painter_draw_text (p, obj->x + tx + offset_width, 
 						obj->y + ty + get_ys (HTML_TEXT (slave->owner), p),
-						highlight_begin, len, items2, glyphs2, highlight_begin - slave->owner->text,
+						highlight_begin, len, html_text_get_pango_info (owner, p), glyphs2, highlight_begin - slave->owner->text,
 						lo_sel);
 		if (glyphs2)
 			glyphs_destroy (glyphs2);
@@ -777,14 +772,14 @@ draw_highlighted (HTMLTextSlave *slave,
 		gchar *end_text;
 		GList *glyphs3;
 
-		glyphs3 = get_glyphs_part (slave, p, start + len - slave->posStart, slave->posLen - start - len + slave->posStart, &items3);
+		glyphs3 = get_glyphs_part (slave, p, start + len - slave->posStart, slave->posLen - start - len + slave->posStart);
 		html_painter_set_pen (p, &HTML_TEXT (owner)->color->color);
 		end_text = g_utf8_offset_to_pointer (highlight_begin, end - start);
 		html_painter_draw_text (p,
 					obj->x + tx + offset_width + text_width,
 					obj->y + ty + get_ys (HTML_TEXT (slave->owner), p),
 					end_text,
-					slave->posStart + slave->posLen - end, items3, glyphs3, end_text - slave->owner->text, lo);
+					slave->posStart + slave->posLen - end, html_text_get_pango_info (owner, p), glyphs3, end_text - slave->owner->text, lo);
 		if (glyphs3)
 			glyphs_destroy (glyphs3);
 	}
@@ -900,8 +895,8 @@ get_offset_for_pointer (HTMLTextSlave *slave, HTMLPainter *painter, gint x, gint
 		len = (lower + upper + 1) / 2;
 
 		if (len) {
-			glyphs = get_glyphs_part (slave, painter, 0, len, &items);
-			html_painter_calc_text_size (painter, text, len, items, glyphs, html_text_slave_get_start_byte_offset (slave), 
+			glyphs = get_glyphs_part (slave, painter, 0, len);
+			html_painter_calc_text_size (painter, text, len, html_text_get_pango_info (owner, painter), glyphs, html_text_slave_get_start_byte_offset (slave), 
 						     &lo, font_style, owner->face, &width, &asc, &dsc);
 			glyphs_destroy (glyphs);
 		} else {

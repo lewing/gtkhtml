@@ -152,10 +152,13 @@ gint              html_text_calc_part_width              (HTMLText         *text
 /*
  * protected
  */
-HTMLTextPangoInfo *html_text_pango_info_new      (gint               n);
-void               html_text_pango_info_destroy  (HTMLTextPangoInfo *pi);
-HTMLTextPangoInfo *html_text_get_pango_info      (HTMLText          *text,
-						  HTMLPainter       *painter);
+HTMLTextPangoInfo *html_text_pango_info_new        (gint               n);
+void               html_text_pango_info_destroy    (HTMLTextPangoInfo *pi);
+HTMLTextPangoInfo *html_text_get_pango_info        (HTMLText          *text,
+						    HTMLPainter       *painter);
+gint               html_text_pango_info_get_index  (HTMLTextPangoInfo *pi,
+						    gint               byte_offset,
+						    gint               idx);
 
 typedef HTMLObject * (* HTMLTextHelperFunc)       (HTMLText *, gint begin, gint end);
 HTMLObject *html_text_op_copy_helper    (HTMLText           *text,

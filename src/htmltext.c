@@ -849,6 +849,16 @@ html_text_get_nb_width (HTMLText *text, HTMLPainter *painter, gboolean begin)
 	return 10;
 }
 
+gint
+html_text_pango_info_get_index (HTMLTextPangoInfo *pi, gint byte_offset, gint idx)
+{
+	while (idx < pi->n && pi->entries [idx].item->offset + pi->entries [idx].item->length <= byte_offset)
+		idx ++;
+
+	return idx;
+}
+
+
 HTMLTextPangoInfo *
 html_text_get_pango_info (HTMLText *text, HTMLPainter *painter)
 {

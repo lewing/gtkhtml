@@ -156,15 +156,6 @@ text_width (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *te
 	return PANGO_PIXELS (width);
 }
 
-static gint
-item_index (HTMLTextPangoInfo *pi, gint byte_offset, gint idx)
-{
-	while (idx < pi->n && pi->entries [idx].item->offset + pi->entries [idx].item->length <= byte_offset)
-		idx ++;
-
-	return idx;
-}
-
 static void
 text_size (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *text, gint bytes, HTMLTextPangoInfo *pi, GList *glyphs, gint start_byte_offset, gint *width, gint *asc, gint *dsc)
 {
@@ -183,7 +174,7 @@ text_size (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *tex
 		const gchar *c_text = text;
 		gint c_bytes, ii;
 
-		ii = item_index (pi, start_byte_offset, 0);
+		ii = html_text_pango_info_get_index (pi, start_byte_offset, 0);
 
 		c_bytes = 0;
 		for (gl = glyphs; gl && c_bytes < bytes; gl = gl->next) {
@@ -197,7 +188,7 @@ text_size (HTMLGdkPainter *painter, PangoFontDescription *desc, const gchar *tex
 			if (*text == '\t')
 				c_text ++;
 			c_bytes = c_text - text;
-			ii = item_index (pi, start_byte_offset + c_bytes, ii);
+			ii = html_text_pango_info_get_index (pi, start_byte_offset + c_bytes, ii);
 		}
 	}
 
@@ -935,7 +926,7 @@ draw_spell_error (HTMLPainter *painter, gint x, gint y, const gchar *text, gint 
 	x -= gdk_painter->x1;
 	y -= gdk_painter->y1;
 
-	ii = item_index (pi, start_byte_offset, 0);
+	ii = html_text_pango_info_get_index (pi, start_byte_offset, 0);
 	for (gl = glyphs; gl; gl = gl->next) {
 		str = (PangoGlyphString *) gl->data;
 		pango_glyph_string_extents (str, pi->entries [ii].item->analysis.font, NULL, &log_rect);
@@ -1006,14 +997,14 @@ draw_text (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, HT
 		guint i, char_offset = 0;
 
 		c_text = text;
-		ii = item_index (pi, start_byte_offset, 0);
+		ii = html_text_pango_info_get_index (pi, start_byte_offset, 0);
 		for (gl = glyphs; gl && char_offset < len; gl = gl->next) {
 			str = (PangoGlyphString *) gl->data;
 			gdk_draw_glyphs (gdk_painter->pixmap, gdk_painter->gc, pi->entries [ii].item->analysis.font, x + width, y, str);
 			for (i=0; i < str->num_glyphs; i ++)
 				width += PANGO_PIXELS (str->glyphs [i].geometry.width);
 			c_text = g_utf8_offset_to_pointer (c_text, str->num_glyphs);
-			ii = item_index (pi, start_byte_offset + (c_text - text), ii);
+			ii = html_text_pango_info_get_index (pi, start_byte_offset + (c_text - text), ii);
 			char_offset += str->num_glyphs;
 		}
 	}
@@ -1024,12 +1015,12 @@ draw_text (HTMLPainter *painter, gint x, gint y, const gchar *text, gint len, HT
 		gint dsc, asc;
 
 		c_text = text;
-		ii = item_index (pi, start_byte_offset, 0);
+		ii = html_text_pango_info_get_index (pi, start_byte_offset, 0);
 		for (gl = glyphs; gl; gl = gl->next) {
 			str = (PangoGlyphString *) gl->data;
 			pango_glyph_string_extents ((PangoGlyphString *) gl->data, pi->entries [ii].item->analysis.font, NULL, &log_rect);
 			c_text = g_utf8_offset_to_pointer (c_text, str->num_glyphs);
-			ii = item_index (pi, start_byte_offset + (c_text - text), ii);
+			ii = html_text_pango_info_get_index (pi, start_byte_offset + (c_text - text), ii);
 		}
 
 		width = PANGO_PIXELS (log_rect.width);
