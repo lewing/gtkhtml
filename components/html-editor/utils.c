@@ -131,7 +131,7 @@ editor_hig_vbox_full (gchar *text, GtkWidget *control, gboolean vexpand)
 	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 	gtk_misc_set_alignment (GTK_MISC (label), .0, .5);
 
-	vbox = gtk_vbox_new (FALSE, 6);
+	vbox = gtk_vbox_new (FALSE, 12);
 	hbox = gtk_hbox_new (FALSE, 0);
 
 	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0); \
