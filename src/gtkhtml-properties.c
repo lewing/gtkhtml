@@ -41,8 +41,8 @@ gtk_html_class_properties_new (void)
 	/* default values */
 	p->magic_links             = TRUE;
 	p->keybindings_theme       = g_strdup ("ms");
-	p->font_var                = g_strdup (_("helvetica Medium 12"));
-	p->font_fix                = g_strdup (_("courier Medium 12"));
+	p->font_var                = g_strdup (_("Sans"));
+	p->font_fix                = g_strdup (_("Monospace"));
 	p->font_var_size           = DEFAULT_FONT_SIZE;
 	p->font_fix_size           = DEFAULT_FONT_SIZE;
 	p->font_var_points         = FALSE;

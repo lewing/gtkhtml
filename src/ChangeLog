@@ -1,3 +1,8 @@
+2002-03-18  Radek Doulik  <rodo@ximian.com>
+
+	* htmlengine.c (html_engine_set_focus): test for clue before
+	calling html_object_forall on clue
+
 2002-03-11  Radek Doulik  <rodo@ximian.com>
 
 	* htmlprinter.c (calc_text_width): use correct len (in bytes) for

@@ -3161,6 +3161,7 @@ html_engine_set_arg (GtkObject        *object,
 		GtkHTMLClassProperties *prop;
 
 		engine->widget          = GTK_HTML (GTK_VALUE_OBJECT (*arg));
+		engine->painter         = html_gdk_painter_new (GTK_WIDGET (engine->widget), TRUE);
 		engine->settings        = html_settings_new (GTK_WIDGET (engine->widget));
 		engine->defaultSettings = html_settings_new (GTK_WIDGET (engine->widget));
 		html_colorset_add_slave (engine->settings->color_set, engine->painter->color_set);
@@ -3172,6 +3173,157 @@ html_engine_set_arg (GtkObject        *object,
 	}
 }
 
+static void 
+html_g_cclosure_marshal_VOID__STRING_POINTER (GClosure     *closure,
+					      GValue       *return_value,
+					      guint         n_param_values,
+					      const GValue *param_values,
+					      gpointer      invocation_hint,
+					      gpointer      marshal_data)
+{
+	typedef void (*HTMLGMarshalFunc_VOID__STRING_POINTER) (gpointer     data1,
+							       const gchar *arg_1,
+							       gpointer     arg_2,
+							       gpointer     data2);
+
+	register HTMLGMarshalFunc_VOID__STRING_POINTER ff;
+	register GCClosure *cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+
+	g_return_if_fail (n_param_values == 5);
+
+	if (G_CCLOSURE_SWAP_DATA (closure))
+		{
+			data1 = closure->data;
+			data2 = g_value_peek_pointer (param_values + 0);
+		}
+	else
+		{
+			data1 = g_value_peek_pointer (param_values + 0);
+			data2 = closure->data;
+		}
+	ff = (HTMLGMarshalFunc_VOID__STRING_POINTER) (marshal_data ? marshal_data : cc->callback);
+
+	ff (data1,
+	    g_value_get_string (param_values + 1),
+	    g_value_get_pointer (param_values + 2),
+	    data2);
+}
+
+static void 
+html_g_cclosure_marshal_BOOL__POINTER (GClosure     *closure,
+				       GValue       *return_value,
+				       guint         n_param_values,
+				       const GValue *param_values,
+				       gpointer      invocation_hint,
+				       gpointer      marshal_data)
+{
+	typedef gboolean (*HTMLGMarshalFunc_BOOL__POINTER) (gpointer     data1,
+							    gpointer     arg_1,
+							    gpointer     data2);
+
+	register HTMLGMarshalFunc_BOOL__POINTER ff;
+	register GCClosure *cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+	gboolean v_return;
+
+	g_return_if_fail (n_param_values == 5);
+
+	if (G_CCLOSURE_SWAP_DATA (closure))
+		{
+			data1 = closure->data;
+			data2 = g_value_peek_pointer (param_values + 0);
+		}
+	else
+		{
+			data1 = g_value_peek_pointer (param_values + 0);
+			data2 = closure->data;
+		}
+	ff = (HTMLGMarshalFunc_BOOL__POINTER) (marshal_data ? marshal_data : cc->callback);
+
+	v_return = ff (data1,
+		       g_value_get_pointer (param_values + 1),
+		       data2);
+
+	g_value_set_boolean (return_value, v_return);
+}
+
+static void 
+html_g_cclosure_marshal_VOID__POINTER_INT (GClosure     *closure,
+					   GValue       *return_value,
+					   guint         n_param_values,
+					   const GValue *param_values,
+					   gpointer      invocation_hint,
+					   gpointer      marshal_data)
+{
+	typedef void (*HTMLGMarshalFunc_VOID__POINTER_INT) (gpointer     data1,
+							    gpointer     arg_1,
+							    gint         arg_2,
+							    gpointer     data2);
+
+	register HTMLGMarshalFunc_VOID__POINTER_INT ff;
+	register GCClosure *cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+
+	g_return_if_fail (n_param_values == 5);
+
+	if (G_CCLOSURE_SWAP_DATA (closure))
+		{
+			data1 = closure->data;
+			data2 = g_value_peek_pointer (param_values + 0);
+		}
+	else
+		{
+			data1 = g_value_peek_pointer (param_values + 0);
+			data2 = closure->data;
+		}
+	ff = (HTMLGMarshalFunc_VOID__POINTER_INT) (marshal_data ? marshal_data : cc->callback);
+
+	ff (data1,
+	    g_value_get_pointer (param_values + 1),
+	    g_value_get_int (param_values + 2),
+	    data2);
+}
+
+static void 
+html_g_cclosure_marshal_VOID__POINTER_POINTER_POINTER (GClosure     *closure,
+						       GValue       *return_value,
+						       guint         n_param_values,
+						       const GValue *param_values,
+						       gpointer      invocation_hint,
+						       gpointer      marshal_data)
+{
+	typedef void (*HTMLGMarshalFunc_VOID__POINTER_POINTER_POINTER) (gpointer     data1,
+							       gpointer     arg_1,
+							       gpointer     arg_2,
+							       gpointer     arg_3,
+							       gpointer     data2);
+
+	register HTMLGMarshalFunc_VOID__POINTER_POINTER_POINTER ff;
+	register GCClosure *cc = (GCClosure*) closure;
+	register gpointer data1, data2;
+
+	g_return_if_fail (n_param_values == 5);
+
+	if (G_CCLOSURE_SWAP_DATA (closure))
+		{
+			data1 = closure->data;
+			data2 = g_value_peek_pointer (param_values + 0);
+		}
+	else
+		{
+			data1 = g_value_peek_pointer (param_values + 0);
+			data2 = closure->data;
+		}
+	ff = (HTMLGMarshalFunc_VOID__POINTER_POINTER_POINTER) (marshal_data ? marshal_data : cc->callback);
+
+	ff (data1,
+	    g_value_get_pointer (param_values + 1),
+	    g_value_get_pointer (param_values + 2),
+	    g_value_get_pointer (param_values + 3),
+	    data2);
+}
+
 static void
 html_engine_class_init (HTMLEngineClass *klass)
 {
@@ -3181,89 +3333,96 @@ html_engine_class_init (HTMLEngineClass *klass)
 
 	parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
-	/* signals [SET_BASE] =
-		gtk_signal_new ("set_base",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, set_base),
-				gtk_marshal_NONE__STRING,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_STRING);
+	signals [SET_BASE] =
+		g_signal_new ("set_base",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_FIRST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, set_base),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      GTK_TYPE_NONE, 1,
+			      GTK_TYPE_STRING);
 
 	signals [SET_BASE_TARGET] =
-		gtk_signal_new ("set_base_target",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, set_base_target),
-				gtk_marshal_NONE__STRING,
-				GTK_TYPE_NONE, 1,
-				GTK_TYPE_STRING);
+		g_signal_new ("set_base_target",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_FIRST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, set_base_target),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      GTK_TYPE_NONE, 1,
+			      GTK_TYPE_STRING);
 
 	signals [LOAD_DONE] = 
-		gtk_signal_new ("load_done",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, load_done),
-				gtk_marshal_NONE__NONE,
-				GTK_TYPE_NONE, 0);
+		g_signal_new ("load_done",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_FIRST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, load_done),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      GTK_TYPE_NONE, 0);
 
 	signals [TITLE_CHANGED] = 
-		gtk_signal_new ("title_changed",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, title_changed),
-				gtk_marshal_NONE__NONE,
-				GTK_TYPE_NONE, 0);
+		g_signal_new ("title_changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_FIRST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, title_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      GTK_TYPE_NONE, 0);
 
 	signals [URL_REQUESTED] =
-		gtk_signal_new ("url_requested",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, url_requested),
-				gtk_marshal_NONE__POINTER_POINTER,
-				GTK_TYPE_NONE, 2,
-				GTK_TYPE_STRING,
-				GTK_TYPE_POINTER);
+		g_signal_new ("url_requested",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_FIRST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, url_requested),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_VOID__STRING_POINTER,
+			      GTK_TYPE_NONE, 2,
+			      GTK_TYPE_STRING,
+			      GTK_TYPE_POINTER);
 
 	signals [DRAW_PENDING] =
-		gtk_signal_new ("draw_pending",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, draw_pending),
-				gtk_marshal_NONE__NONE,
-				GTK_TYPE_NONE, 0);
+		g_signal_new ("draw_pending",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_FIRST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, draw_pending),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      GTK_TYPE_NONE, 0);
 
 	signals [REDIRECT] =
-		gtk_signal_new ("redirect",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, redirect),
-				gtk_marshal_NONE__POINTER_INT,
-				GTK_TYPE_NONE, 2,
-				GTK_TYPE_STRING,
-				GTK_TYPE_INT);
+		g_signal_new ("redirect",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_FIRST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, redirect),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_VOID__POINTER_INT,
+			      GTK_TYPE_NONE, 2,
+			      GTK_TYPE_STRING,
+			      GTK_TYPE_INT);
 
 	signals [SUBMIT] =
-		gtk_signal_new ("submit",
-				GTK_RUN_FIRST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, submit),
-				gtk_marshal_NONE__POINTER_POINTER_POINTER,
-				GTK_TYPE_NONE, 3,
-				GTK_TYPE_STRING,
-				GTK_TYPE_STRING,
-				GTK_TYPE_STRING);
+		g_signal_new ("submit",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_FIRST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, submit),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_VOID__POINTER_POINTER_POINTER,
+			      GTK_TYPE_NONE, 3,
+			      GTK_TYPE_STRING,
+			      GTK_TYPE_STRING,
+			      GTK_TYPE_STRING);
 
 	signals [OBJECT_REQUESTED] =
-		gtk_signal_new ("object_requested",
-				GTK_RUN_LAST,
-				object_class->type,
-				GTK_SIGNAL_OFFSET (HTMLEngineClass, object_requested),
-				gtk_marshal_BOOL__POINTER,
-				GTK_TYPE_BOOL, 1,
-				GTK_TYPE_POINTER);
-
-				gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL); */
+		g_signal_new ("object_requested",
+			      G_TYPE_FROM_CLASS (object_class),
+			      GTK_RUN_LAST,
+			      G_STRUCT_OFFSET (HTMLEngineClass, object_requested),
+			      NULL, NULL,
+			      html_g_cclosure_marshal_BOOL__POINTER,
+			      GTK_TYPE_BOOL, 1,
+			      GTK_TYPE_POINTER);
 
 	gtk_object_add_arg_type ("HTMLEngine::html",
 				 GTK_TYPE_HTML,
@@ -3296,7 +3455,6 @@ html_engine_init (HTMLEngine *engine)
 	engine->invert_gc = NULL;
 
 	/* settings, colors and painter init */
-	engine->painter = html_gdk_painter_new (TRUE);
 
 	engine->newPage = FALSE;
 	engine->allow_frameset = FALSE;
@@ -4330,7 +4488,8 @@ html_engine_set_focus (HTMLEngine *engine,
 	engine->have_focus = have_focus;
 
 	html_painter_set_focus (engine->painter, engine->have_focus);
-	html_object_forall (engine->clue, engine, set_focus, GINT_TO_POINTER (have_focus));
+	if (engine->clue)
+		html_object_forall (engine->clue, engine, set_focus, GINT_TO_POINTER (have_focus));
 	html_engine_redraw_selection (engine);
 }
 

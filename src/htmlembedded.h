@@ -69,7 +69,7 @@ void          html_embedded_set_form       (HTMLEmbedded      *element,
 					    HTMLForm          *form);
 void          html_embedded_reset          (HTMLEmbedded      *element);
 gchar        *html_embedded_encode         (HTMLEmbedded      *element);
-const gchar  *html_embedded_encode_string  (gchar             *str);
+gchar        *html_embedded_encode_string  (const gchar       *str);
 HTMLEmbedded *html_embedded_new_widget     (GtkWidget         *parent,
 					    GtkHTMLEmbedded   *eb,
 					    HTMLEngine        *engine);

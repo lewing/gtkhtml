@@ -206,3 +206,11 @@ keybindings_DATA = \
 	keybindingsrc.emacs \
 	keybindingsrc.xemacs \
 	keybindingsrc.ms
+
+noinst_PROGRAMS = gtest
+
+gtest_SOURCES = \
+	test.c
+gtest_LDFLAGS = -static
+gtest_LDADD =	\
+	libgtkhtml.la
