@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml 0.8\n"
 "POT-Creation-Date: 2001-11-14 16:55-0600\n"
-"PO-Revision-Date: 2001-11-10 18:18+0100\n"
+"PO-Revision-Date: 2001-11-27 21:58+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "*********************"
 
 #: capplet/gtkhtml-capplet.glade.h:2
 msgid "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
-msgstr ""
+msgstr "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz∆Êÿ¯≈Â"
 
 #: capplet/gtkhtml-capplet.glade.h:3
 msgid "Add Keyboard Shortcuts"
