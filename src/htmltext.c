@@ -2434,8 +2434,8 @@ html_text_init (HTMLText *text,
 	html_object_init (HTML_OBJECT (text), HTML_OBJECT_CLASS (klass));
 
 	text->text_len      = text_len (&str, len);
-	text->text_bytes    = strlen (str);
-	text->text          = g_strndup (str, g_utf8_offset_to_pointer (str, text->text_len) - str);
+	text->text_bytes    = g_utf8_offset_to_pointer (str, text->text_len) - str;
+	text->text          = g_strndup (str, text->text_bytes);
 	text->font_style    = font_style;
 	text->face          = NULL;
 	text->color         = color;
