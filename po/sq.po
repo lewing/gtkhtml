@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml gnome-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-11 20:55+0200\n"
-"PO-Revision-Date: 2004-08-28 19:32+0200\n"
+"POT-Creation-Date: 2004-10-21 13:28+0200\n"
+"PO-Revision-Date: 2004-10-21 16:06+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1633,15 +1633,23 @@ msgstr "_Mbrapsht"
 msgid "_Regular Expression"
 msgstr "Shprehje të _regullta"
 
-#: components/html-editor/spell.c:278
+#: components/html-editor/spell.c:110
+msgid ""
+"Unable to add word to dictionary,\n"
+"language settings are broken.\n"
+msgstr ""
+"I pamundur shtimi i fjalës në fjalor,\n"
+"rregullimet e gjuhës janë të parregullta.\n"
+
+#: components/html-editor/spell.c:298
 msgid "No misspelled word found"
 msgstr "Nuk u gjetën gabime"
 
-#: components/html-editor/spell.c:285
+#: components/html-editor/spell.c:305
 msgid "Spell checker"
 msgstr "Kontrolluesi i drejtshkrimit"
 
-#: components/html-editor/spell.c:378
+#: components/html-editor/spell.c:398
 msgid "Current _Languages"
 msgstr "_Gjuhët aktuale"
 
@@ -1913,93 +1921,3 @@ msgstr "Pamja e parë e printimit"
 msgid "GtkHTML Test Application"
 msgstr "Programi i provave të GtkHTML"
 
-#~ msgid "<None>"
-#~ msgstr "<Asnjë>"
-
-#~ msgid "\n"
-#~ msgstr "\n"
-
-#~ msgid "*********************"
-#~ msgstr "*********************"
-
-#~ msgid "Add Keyboard Shortcuts"
-#~ msgstr "Shto përshpejtues nga tastiera"
-
-#~ msgid "Automatically detect links"
-#~ msgstr "Zbulon automatikisht lidhjet"
-
-#~ msgid "Behavior"
-#~ msgstr "Sjellja"
-
-#~ msgid "Composer Properties"
-#~ msgstr "Pronësitë e kompozuesit"
-
-#~ msgid "Composer Properties planned"
-#~ msgstr "Pronësitë e projektuara të Kompozuesit"
-
-#~ msgid "Configure spell checking"
-#~ msgstr "Konfiguro kontrolluesin e drejtëshkrimit"
-
-#~ msgid "Enable spell checking"
-#~ msgstr "Aktivo kontrollin e drejtshkrimit"
-
-#~ msgid "Fixed width"
-#~ msgstr "Gjerësia e fiksuar"
-
-#~ msgid "Fonts"
-#~ msgstr "Gërmat"
-
-#~ msgid "For printing"
-#~ msgstr "Për printim"
-
-#~ msgid "Grab keys"
-#~ msgstr "Rrëmbe kyçet"
-
-#~ msgid "Information"
-#~ msgstr "Informacione"
-
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "Kombinacione përshpejtuese nga tastiera"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "Të ndryshme"
-
-#~ msgid "New shortcut:"
-#~ msgstr "Përshpejtues i ri:"
-
-#~ msgid "On screen"
-#~ msgstr "Në ekran"
-
-#~ msgid "Select HTML fixed width font"
-#~ msgstr "Zgjidh gërmat me gjerësi fikse të HTML"
-
-#~ msgid "Select HTML fixed width font for printing"
-#~ msgstr "Zgjidh gërmat me gjerësi fikse të HTML për printim"
-
-#~ msgid "Select HTML variable width font"
-#~ msgstr "Zgjidh gërmat me gjerësi të ndryshueshme të HTML"
-
-#~ msgid "Select HTML variable width font for printing"
-#~ msgstr "Zgjidh gërmat me gjerësi të ndryshueshme të HTML për printim"
-
-#~ msgid "Shortcuts _type:"
-#~ msgstr "_Lloji i përshpejtuesit:"
-
-#~ msgid "Show animated images"
-#~ msgstr "Shfaq imazhet e animuara"
-
-#~ msgid "Variable width"
-#~ msgstr "Gjerësia e ndryshueshme"
-
-#~ msgid "_Add"
-#~ msgstr "_Shto"
-
-#~ msgid "_Delete"
-#~ msgstr "_Elemino"
-
-#~ msgid ""
-#~ "Cannot execute GNOME Spell control applet\n"
-#~ "Try to install GNOME Spell if you don't have it installed."
-#~ msgstr ""
-#~ "I pamundur ekzekutimi i instrumentit të kontrollit GNOME Spell\n"
-#~ "Provo të instalosh GNOME Spell nëse nuk e ke instaluar akoma."
