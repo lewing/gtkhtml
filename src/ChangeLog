@@ -1,3 +1,9 @@
+2005-04-06  Radek Doulik  <rodo@novell.com>
+
+	* added [un]block-selection commands. these are going to be used
+	from evolution's composer to avoid selection overriding when
+	changing signature (#36972)
+
 2005-04-04  Yu Mengjie  <meng-jie.yu@sun.com>
 
 	* gtkhtml.c: (idle_handler), (gtk_html_adjust_cursor_position):
