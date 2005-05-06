@@ -8,13 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-28 19:13+0100\n"
+"POT-Creation-Date: 2005-02-08 23:28+0100\n"
 "PO-Revision-Date: 2005-02-02 14:31+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: a11y/image.c:150
 #, c-format
@@ -821,7 +822,7 @@ msgstr "GNOME HTML redaktori juhtimine"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.server.in.in.h:3
 msgid "GNOME HTML Editor Factory"
-msgstr ""
+msgstr "GNOME'i HTML-redaktori Factory"
 
 #: components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:45
 msgid "Insert Sick smiley into document..."
@@ -879,7 +880,7 @@ msgstr "Mustand"
 
 #: components/html-editor/body.c:123
 msgid "Graph paper"
-msgstr ""
+msgstr "Millimeeterpaber"
 
 #: components/html-editor/body.c:243
 #: components/html-editor/gtkhtml-editor-properties.glade.h:53
@@ -1179,11 +1180,11 @@ msgstr "taevasinine"
 #. set the a11y name
 #: components/html-editor/gi-combo-box.c:419
 msgid "Popup"
-msgstr ""
+msgstr "Hüpik"
 
 #: components/html-editor/gnome-gtkhtml-editor.c:68
 msgid "GtkHTML Editor Control"
-msgstr ""
+msgstr "GtkHTML redaktori juhtimine"
 
 #: components/html-editor/gtkhtml-editor-properties.glade.h:1
 msgid "    "
@@ -1553,7 +1554,7 @@ msgstr "Viida laad..."
 
 #: components/html-editor/popup.c:471
 msgid "Rule Style..."
-msgstr ""
+msgstr "Reegli laad..."
 
 #: components/html-editor/popup.c:475
 msgid "Image Style..."
@@ -1723,7 +1724,7 @@ msgstr "Salvesta fail kui..."
 
 #: components/html-editor/test-html-editor-control.c:567
 msgid "GtkHTML Editor Test Container"
-msgstr ""
+msgstr "GtkHTML redaktori testkonteiner"
 
 #: components/html-editor/toolbar.c:52
 msgid "Roman List"
@@ -1801,88 +1802,88 @@ msgstr ""
 "Redigeeritav objekt eemaldati dokumendist.\n"
 "Sinu muudatusi pole võimalik rakendada."
 
-#: src/gtkhtml.c:2599
+#: src/gtkhtml.c:2579
 #, c-format
 msgid "Mozilla url dropped on Composer had wrong format (%d) or length (%d)\n"
-msgstr ""
+msgstr "Mozilla url, mis söödeti Composer'ile oli vales vormingus (%d) või pikkuses (%d)\n"
 
-#: src/gtkhtml.c:2976
+#: src/gtkhtml.c:2929
 msgid "Editable"
 msgstr "Redigeeritav"
 
-#: src/gtkhtml.c:2977
+#: src/gtkhtml.c:2930
 msgid "Whether the html can be edited"
 msgstr "Kas html'i saab redigeerida"
 
-#: src/gtkhtml.c:2983
+#: src/gtkhtml.c:2936
 msgid "Document Title"
 msgstr "Dokumendi pealkiri"
 
-#: src/gtkhtml.c:2984
+#: src/gtkhtml.c:2937
 msgid "The title of the current document"
 msgstr "Aktiivse dokumendi pealkiri"
 
-#: src/gtkhtml.c:2990
+#: src/gtkhtml.c:2943
 msgid "Document Base"
 msgstr "Dokumendi baas"
 
-#: src/gtkhtml.c:2991
+#: src/gtkhtml.c:2944
 msgid "The base URL for relative references"
 msgstr "BaasURL suhteliste viitade jaoks"
 
-#: src/gtkhtml.c:2997
+#: src/gtkhtml.c:2950
 msgid "Target Base"
 msgstr "Sihtkoha baas"
 
-#: src/gtkhtml.c:2998
+#: src/gtkhtml.c:2951
 msgid "The base URL of the targe frame"
 msgstr "BaasURL sihtraami jaoks"
 
-#: src/gtkhtml.c:3007
+#: src/gtkhtml.c:2960
 msgid "Fixed Width Font"
 msgstr "Fikseeritud laiusega font"
 
-#: src/gtkhtml.c:3008
+#: src/gtkhtml.c:2961
 msgid "The Monospace font to use for typewriter text"
 msgstr "Monospace kirjatüüp kirjutusmasinateksti jaoks"
 
-#: src/gtkhtml.c:3014
+#: src/gtkhtml.c:2967
 msgid "New Link Color"
 msgstr "Uus viidavärv"
 
-#: src/gtkhtml.c:3015
+#: src/gtkhtml.c:2968
 msgid "The color of new link elements"
 msgstr "Uute viidaelementide värv"
 
-#: src/gtkhtml.c:3020
+#: src/gtkhtml.c:2973
 msgid "Visited Link Color"
 msgstr "Külastatud viida värv"
 
-#: src/gtkhtml.c:3021
+#: src/gtkhtml.c:2974
 msgid "The color of visited link elements"
 msgstr "Külastatud viidaelementide värv"
 
-#: src/gtkhtml.c:3026
+#: src/gtkhtml.c:2979
 msgid "Active Link Color"
 msgstr "Aktiivse viida värv"
 
-#: src/gtkhtml.c:3027
+#: src/gtkhtml.c:2980
 msgid "The color of active link elements"
 msgstr "Aktiivsete viitade värvus"
 
-#: src/gtkhtml.c:3032
+#: src/gtkhtml.c:2985
 msgid "Spelling Error Color"
 msgstr "Kirjavea värvus"
 
-#: src/gtkhtml.c:3033
+#: src/gtkhtml.c:2986
 msgid "The color of the spelling error markers"
 msgstr "Kirjavigade tähistamise värvus"
 
-#: src/gtkhtml.c:3038
+#: src/gtkhtml.c:2991
 msgid "Cite Quotation Color"
 msgstr "Tsiteeringu värvus"
 
-#: src/gtkhtml.c:3039
+#: src/gtkhtml.c:2992
 msgid "The color of the cited text"
 msgstr "Tsiteeritud teksti värvus"
 
@@ -1962,84 +1963,3 @@ msgstr "Trükkimise eelvaade"
 #: src/testgtkhtml.c:1004
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML testrakendus"
-
-#~ msgid "<None>"
-#~ msgstr "<Ei ole>"
-
-#~ msgid "\n"
-#~ msgstr "\n"
-
-#~ msgid "*********************"
-#~ msgstr "*********************"
-
-#~ msgid "Add Keyboard Shortcuts"
-#~ msgstr "Lisa kiirklahve"
-
-#~ msgid "Automatically detect links"
-#~ msgstr "Leia viidad automaatselt"
-
-#~ msgid "Behavior"
-#~ msgstr "Käitumine"
-
-#~ msgid "Composer Properties"
-#~ msgstr "Koostaja eelistused"
-
-#~ msgid "Configure spell checking"
-#~ msgstr "Õigekirjakontrolli seadistamine"
-
-#~ msgid "Enable spell checking"
-#~ msgstr "Õigekirja kontroll"
-
-#~ msgid "Fixed width"
-#~ msgstr "Fikseeritud laiusega"
-
-#~ msgid "Fonts"
-#~ msgstr "Kirjatüübid"
-
-#~ msgid "For printing"
-#~ msgstr "Trükkimiseks"
-
-#~ msgid "Grab keys"
-#~ msgstr "Haara klahvid"
-
-#~ msgid "Information"
-#~ msgstr "Teave"
-
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "Kiirklahvid"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "Mitmesugust"
-
-#~ msgid "New shortcut:"
-#~ msgstr "Uus kiirklahv:"
-
-#~ msgid "On screen"
-#~ msgstr "Ekraanil"
-
-#~ msgid "Select HTML fixed width font"
-#~ msgstr "Vali HTML fikseeritud laiusega kirjatüüp"
-
-#~ msgid "Select HTML fixed width font for printing"
-#~ msgstr "Vali trükkimise jaoks HTML fikseeritud laiusega kirjatüüp"
-
-#~ msgid "Select HTML variable width font"
-#~ msgstr "Vali HTML muutuva laiusega kirjatüüp"
-
-#~ msgid "Select HTML variable width font for printing"
-#~ msgstr "Vali trükkimise jaoks HTML muutuva laiusega kirjatüüp"
-
-#~ msgid "Shortcuts _type:"
-#~ msgstr "Kiirklahvide _tüüp:"
-
-#~ msgid "Show animated images"
-#~ msgstr "Näita animeeritud pilte"
-
-#~ msgid "Variable width"
-#~ msgstr "Muutuva laiusega"
-
-#~ msgid "_Add"
-#~ msgstr "_Lisa"
-
-#~ msgid "_Delete"
-#~ msgstr "_Kustuta"
