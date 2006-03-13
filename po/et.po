@@ -10,7 +10,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml HEAD\n"
+"Project-Id-Version: gtkhtml 3.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-02-10 00:19+0100\n"
 "PO-Revision-Date: 2006-02-10 07:29+0200\n"
@@ -1695,7 +1695,7 @@ msgstr "Ühtki kirjavigadega sõna ei leitud"
 
 #: ../components/html-editor/spellchecker.c:309
 msgid "Spell checker"
-msgstr "Õigekirja kontroll"
+msgstr "Õigekirja kontrollimine"
 
 #: ../components/html-editor/spellchecker.c:402
 msgid "Current _Languages"
@@ -1914,63 +1914,3 @@ msgstr "Printimise eelvaade"
 #: ../src/testgtkhtml.c:1017
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML testrakendus"
-
-#~ msgid "Insert Lick smiley into document..."
-#~ msgstr "Limpsimise emotikoni lisamine dokumendile..."
-
-#~ msgid "_Insert"
-#~ msgstr "_Lisa"
-
-#~ msgid "Find And Replace"
-#~ msgstr "Otsimine ja asendamine"
-
-#~ msgid "_Preformat"
-#~ msgstr "_Eelvormindatud"
-
-#~ msgid "_Spell Check Document..."
-#~ msgstr "_Dokumendi õigekirjakontroll..."
-
-#~ msgid "_Strikeout"
-#~ msgstr "_Läbikriipsutatud"
-
-#~ msgid "_Visit..."
-#~ msgstr "_Külasta..."
-
-#~ msgid "Background Color"
-#~ msgstr "Taustavärvus"
-
-#~ msgid "Blue"
-#~ msgstr "Sinine"
-
-#~ msgid "Green"
-#~ msgstr "Roheline"
-
-#~ msgid "Orange"
-#~ msgstr "Oranž"
-
-#~ msgid "Other..."
-#~ msgstr "Muu..."
-
-#~ msgid "Purple"
-#~ msgstr "Purpurne"
-
-#~ msgid "Red"
-#~ msgstr "Punane"
-
-#~ msgid "Su_perscript"
-#~ msgstr "Üla_tekst"
-
-#~ msgid "Subs_cript"
-#~ msgstr "_Alatekst"
-
-#~ msgid "Yellow"
-#~ msgstr "Kollane"
-
-#~ msgid "etc..."
-#~ msgstr "jms..."
-
-#~ msgid "Length:"
-#~ msgstr "Pikkus:"
-
-#~ msgid "Thickness:"
-#~ msgstr "Paksus:"
