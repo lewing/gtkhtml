@@ -1,3 +1,12 @@
+2006-04-10  Chris Heath  <chris@heathens.co.nz>
+
+	* htmlengine.c (element_parse_object), (element_parse_cell),
+	(set_object_data): Fix memory leaks
+	* htmlcursor.c (html_cursor_beginning_of_paragraph),
+	(html_cursor_end_of_paragraph): ditto
+	* gtkhtml.c (button_press_event): ditto
+	* htmlstyle.c (html_style_free): ditto
+
 2006-04-10  Harish Krishnaswamy  <kharish@novell.com>
 
 	* gtkhtml.c: (gtk_html_im_commit_cb):
