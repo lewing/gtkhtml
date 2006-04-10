@@ -1,5 +1,11 @@
 2006-04-10  Harish Krishnaswamy  <kharish@novell.com>
 
+	* gtkhtml.c: (gtk_html_im_commit_cb):
+	Fixes #321310. Patch submitted by Hiroyuki Ikezoe 
+	<poincare@ikezoe.net>
+
+2006-04-10  Harish Krishnaswamy  <kharish@novell.com>
+
 	* htmlengine-edit-fontstyle.c:
 	(html_engine_get_document_font_style),
 	(html_engine_set_font_style):
