@@ -739,7 +739,7 @@ html_cursor_get_prev_char (const HTMLCursor *cursor)
 gboolean
 html_cursor_beginning_of_paragraph (HTMLCursor *cursor, HTMLEngine *engine)
 {
-	HTMLCursor *copy;
+	HTMLCursor copy;
 	HTMLObject *flow;
 	gboolean rv = FALSE;
 	gint level, new_level;
@@ -754,15 +754,14 @@ html_cursor_beginning_of_paragraph (HTMLCursor *cursor, HTMLEngine *engine)
 
 	while (1) {
 		if (!cursor->offset) {
-			copy = html_cursor_dup (cursor);
+			html_cursor_copy (&copy, cursor);
 			if (backward (cursor)) {
 				new_level = html_object_get_parent_level (cursor->object);
 				if (new_level < level
 				    || (new_level == level && flow != cursor->object->parent)) {
-					html_cursor_copy (cursor, copy);
+					html_cursor_copy (cursor, &copy);
 					break;
 				}
-				html_cursor_destroy (copy);
 			} else
 				break;
 		}
@@ -778,7 +777,7 @@ html_cursor_beginning_of_paragraph (HTMLCursor *cursor, HTMLEngine *engine)
 gboolean
 html_cursor_end_of_paragraph (HTMLCursor *cursor, HTMLEngine *engine)
 {
-	HTMLCursor *copy;
+	HTMLCursor copy;
 	HTMLObject *flow;
 	gboolean rv = FALSE;
 	gint level, new_level;
@@ -793,15 +792,14 @@ html_cursor_end_of_paragraph (HTMLCursor *cursor, HTMLEngine *engine)
 
 	while (1) {
 		if (cursor->offset == html_object_get_length (cursor->object)) {
-			copy = html_cursor_dup (cursor);
+			html_cursor_copy (&copy, cursor);
 			if (forward (cursor)) {
 				new_level = html_object_get_parent_level (cursor->object);
 				if (new_level < level
 				    || (new_level == level && flow != cursor->object->parent)) {
-					html_cursor_copy (cursor, copy);
+					html_cursor_copy (cursor, &copy);
 					break;
 				}
-				html_cursor_destroy (copy);
 			} else
 				break;
 		}
