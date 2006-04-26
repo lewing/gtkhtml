@@ -1,3 +1,10 @@
+2006-04-26  Li Yuan  <li.yuan@sun.com>
+
+	* toolbar.c: (create_style_toolbar):
+	make the toolbar focusable.
+
+	Fix for #338048.
+
 2006-02-28  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* body.c: (body_properties):
