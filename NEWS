@@ -1,3 +1,18 @@
+GtkHTML-3.10.3 2006-07-31
+-------------------------
+
+Updated translations:
+
+Raivis Dejus (lv), Changwoo Ryu (ko).
+
+Bug fixes :
+
+#303634 - 100% CPU Usage on message open (Rohini S)
+#334814 - Wrong html generation of bullet list (Rohini S)
+#334873 - Ugly TAB in compose (Sebastien Bacher)
+#344190 - Evolution crashes when run with Orca (Li Yuan)
+
+
 GtkHTML-3.10.2 "Clear Sky" 2006-05-29
 --------------------------------------
 
