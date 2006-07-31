@@ -1,3 +1,12 @@
+2006-07-31  Bastien Nocera  <hadess@hadess.net>
+
+	reviewed by: Veerapuram Varadhan <vvaradhan@novell.com>
+ 
+ 	* htmltext.c: Add "'" (single quote) as a possible character in
+ 	a URL
+ 
+ 	Fixes bug #327874
+
 2006-06-12  Rohini S  <srohini@novell.com>
 
 	Fixes bug #303634
