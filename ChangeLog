@@ -1,3 +1,7 @@
+2006-08-15  Sanlig Badrak  <badral@openmn.org>
+
+        * configure.in: Added mn to ALL_LINGUAS.
+
 2006-07-31  Harish Krishnaswamy  <kharish@novell.com>
 
 	* NEWS, configure.in: Release update - 3.10.3
