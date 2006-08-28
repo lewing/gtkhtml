@@ -3291,8 +3291,15 @@ get_surrounding_text (HTMLEngine *e, gint *offset)
 	}
 
 	while (o) {
-		if (html_object_is_text (o))
-			text = g_strconcat (text, HTML_TEXT (o)->text, NULL);
+		if (html_object_is_text (o)) {
+			if (!text)
+				text = g_strdup (HTML_TEXT (o)->text);
+			else {
+				gchar *concat = g_strconcat (text, HTML_TEXT (o)->text, NULL);
+				g_free (text);
+				text = concat;
+			}
+		}
 		o = html_object_next_not_slave (o);
 	}
 
@@ -3308,7 +3315,13 @@ gtk_html_im_retrieve_surrounding_cb (GtkIMContext *context, GtkHTML *html)
 	D_IM (printf ("IM gtk_html_im_retrieve_surrounding_cb\n");)
 
 	text = get_surrounding_text (html->engine, &offset);
-	gtk_im_context_set_surrounding (context, text, -1, offset);
+	if (text) {
+		/* convert char offset to byte offset */
+		offset = g_utf8_offset_to_pointer (text, offset) - text;
+		gtk_im_context_set_surrounding (context, text, -1, offset);
+		g_free (text);
+	} else
+		gtk_im_context_set_surrounding (context, NULL, 0, 0);
 
 	return TRUE;
 }
