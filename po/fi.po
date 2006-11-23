@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-02 19:01+0300\n"
-"PO-Revision-Date: 2006-07-02 19:02+0300\n"
+"POT-Creation-Date: 2006-11-23 05:30+0300\n"
+"PO-Revision-Date: 2006-11-23 05:29+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -180,7 +180,7 @@ msgstr "Etsi ja korvaa"
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:27
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:27
 msgid "For_mat"
-msgstr "M_uotoiltu"
+msgstr "M_uotoilu"
 
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:28
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:28
@@ -219,7 +219,7 @@ msgstr "_Lisää"
 
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:35
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:35
-#: ../components/html-editor/editor-control-factory.c:198
+#: ../components/html-editor/editor-control-factory.c:199
 #: ../components/html-editor/gtkhtml-editor-properties.glade.h:37
 #: ../components/html-editor/popup.c:216
 msgid "Image"
@@ -499,7 +499,7 @@ msgstr "Luettelo roomalaisin numeroin"
 
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:88
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:89
-#: ../components/html-editor/editor-control-factory.c:216
+#: ../components/html-editor/editor-control-factory.c:217
 #: ../components/html-editor/gtkhtml-editor-properties.glade.h:47
 #: ../components/html-editor/menubar.c:168
 #: ../components/html-editor/popup.c:234
@@ -928,25 +928,25 @@ msgstr "Glade-tiedostoa ei voitu ladata."
 msgid "Transparent"
 msgstr "Läpinäkyvä"
 
-#: ../components/html-editor/editor-control-factory.c:187
+#: ../components/html-editor/editor-control-factory.c:188
 #: ../components/html-editor/popup.c:195 ../components/html-editor/popup.c:276
 msgid "Properties"
 msgstr "Ominaisuudet"
 
-#: ../components/html-editor/editor-control-factory.c:206
+#: ../components/html-editor/editor-control-factory.c:207
 #: ../components/html-editor/gtkhtml-editor-properties.glade.h:54
 #: ../components/html-editor/menubar.c:400
 #: ../components/html-editor/popup.c:204
 msgid "Text"
 msgstr "Teksti"
 
-#: ../components/html-editor/editor-control-factory.c:225
+#: ../components/html-editor/editor-control-factory.c:226
 #: ../components/html-editor/menubar.c:418
 #: ../components/html-editor/popup.c:222
 msgid "Paragraph"
 msgstr "Kappale"
 
-#: ../components/html-editor/editor-control-factory.c:229
+#: ../components/html-editor/editor-control-factory.c:230
 #: ../components/html-editor/gtkhtml-editor-properties.glade.h:42
 #: ../components/html-editor/menubar.c:382
 #: ../components/html-editor/popup.c:228
@@ -1800,83 +1800,83 @@ msgstr ""
 "Muokattu kohde on poistettu asiakirjasta.\n"
 "Muutoksia ei voida ottaa käyttöön."
 
-#: ../src/gtkhtml.c:2995
+#: ../src/gtkhtml.c:3061
 msgid "Editable"
 msgstr "Muokattava"
 
-#: ../src/gtkhtml.c:2996
+#: ../src/gtkhtml.c:3062
 msgid "Whether the html can be edited"
 msgstr "Voiko HTML-tiedostoa muokata"
 
-#: ../src/gtkhtml.c:3002
+#: ../src/gtkhtml.c:3068
 msgid "Document Title"
 msgstr "Asiakirjan otsikko"
 
-#: ../src/gtkhtml.c:3003
+#: ../src/gtkhtml.c:3069
 msgid "The title of the current document"
 msgstr "Nykyisen asiakirjan otsikko"
 
-#: ../src/gtkhtml.c:3009
+#: ../src/gtkhtml.c:3075
 msgid "Document Base"
 msgstr "Asiakirjan kanta"
 
-#: ../src/gtkhtml.c:3010
+#: ../src/gtkhtml.c:3076
 msgid "The base URL for relative references"
 msgstr "Suhteellisten viittausten kanta-URL"
 
-#: ../src/gtkhtml.c:3016
+#: ../src/gtkhtml.c:3082
 msgid "Target Base"
 msgstr "Kohteen kanta"
 
-#: ../src/gtkhtml.c:3017
+#: ../src/gtkhtml.c:3083
 msgid "The base URL of the target frame"
 msgstr "Kohdekehyksen kanta-URL"
 
-#: ../src/gtkhtml.c:3026
+#: ../src/gtkhtml.c:3092
 msgid "Fixed Width Font"
 msgstr "Tasavälinen kirjasin"
 
-#: ../src/gtkhtml.c:3027
+#: ../src/gtkhtml.c:3093
 msgid "The Monospace font to use for typewriter text"
 msgstr "Kirjoituskonetekstissä käytettävä tasavälinen kirjasin"
 
-#: ../src/gtkhtml.c:3033
+#: ../src/gtkhtml.c:3099
 msgid "New Link Color"
 msgstr "Uuden linkin väri"
 
-#: ../src/gtkhtml.c:3034
+#: ../src/gtkhtml.c:3100
 msgid "The color of new link elements"
 msgstr "Uusien linkkielementtien väri"
 
-#: ../src/gtkhtml.c:3039
+#: ../src/gtkhtml.c:3105
 msgid "Visited Link Color"
 msgstr "Käydyn linkin väri"
 
-#: ../src/gtkhtml.c:3040
+#: ../src/gtkhtml.c:3106
 msgid "The color of visited link elements"
 msgstr "Käytyjen linkkielementtien väri"
 
-#: ../src/gtkhtml.c:3045
+#: ../src/gtkhtml.c:3111
 msgid "Active Link Color"
 msgstr "Aktiivisen linkkielementin väri"
 
-#: ../src/gtkhtml.c:3046
+#: ../src/gtkhtml.c:3112
 msgid "The color of active link elements"
 msgstr "Aktiivisten linkkielementtien väri"
 
-#: ../src/gtkhtml.c:3051
+#: ../src/gtkhtml.c:3117
 msgid "Spelling Error Color"
 msgstr "Kirjoitusvirheen väri"
 
-#: ../src/gtkhtml.c:3052
+#: ../src/gtkhtml.c:3118
 msgid "The color of the spelling error markers"
 msgstr "Kirjoitusvirheilmaisimen väri"
 
-#: ../src/gtkhtml.c:3057
+#: ../src/gtkhtml.c:3123
 msgid "Cite Quotation Color"
 msgstr "Lainauksen väri"
 
-#: ../src/gtkhtml.c:3058
+#: ../src/gtkhtml.c:3124
 msgid "The color of the cited text"
 msgstr "Lainatun tekstin väri"
 
