@@ -1,3 +1,14 @@
+2007-01-25  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* htmlengine-edit-fontstyle.c: (html_engine_get_document_color),
+	(html_engine_update_insertion_color):
+	* htmlengine-edit-table.c: (delete_cells_undo_destroy):
+	* htmlengine-edit.c: (html_engine_set_mark):
+	* htmlengine.c: (html_engine_finalize):
+	* htmlmap.c: (html_map_destroy):
+	Part two of the memory leak fixes from Chris Heath. Closes
+	bug #360393.
+
 2006-11-06  Srinivasa Ragavan  <sragavan@novell.com>
 
 	** Fix for bug #350981 
