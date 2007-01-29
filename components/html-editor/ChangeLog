@@ -1,3 +1,9 @@
+2007-01-29  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* toolbar.c: (create_style_toolbar): Patch from Michael
+	Monroe to make the toolbar completely themeable iconwise.
+	Closes bug 358641.
+
 2007-01-25  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* cell.c: (cell_widget):
