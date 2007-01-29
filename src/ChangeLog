@@ -1,3 +1,14 @@
+2007-01-29  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* htmlsearch.c: (html_search_destroy): Fix a leak.
+	Patch from Chris Heath. Closes bug #338884.
+
+2007-01-25  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtkhtml-stream.c: (gtk_html_stream_vprintf):
+	Fix crashes from an off by one in g_malloc() code. Closes
+	bug #373092. Patch from John N. Laliberte.
+
 2007-01-25  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* htmlengine-edit-fontstyle.c: (html_engine_get_document_color),
