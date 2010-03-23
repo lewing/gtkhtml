@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-12 19:52+0100\n"
-"PO-Revision-Date: 2010-03-23 19:33+0100\n"
+"PO-Revision-Date: 2010-03-23 19:38+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -192,7 +192,7 @@ msgstr "cyan"
 #: ../components/editor/gtkhtml-color-combo.c:111
 #: ../components/html-editor/gi-color-palette.c:590
 msgid "bright blue"
-msgstr "urdin disdiratsua"
+msgstr "urdin distiratsua"
 
 #: ../components/editor/gtkhtml-color-combo.c:112
 #: ../components/html-editor/gi-color-palette.c:591
@@ -1925,7 +1925,7 @@ msgstr "Uneko paragrafoa buletdun zerrenda bihurtzen du"
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:64
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:64
 msgid "Make the current paragraph a list with roman numerals"
-msgstr "Uneko paragrafoa zenbaki erromatardun zerrenda bihurtzen du"
+msgstr "Uneko paragrafoa zenbaki erromatarren zerrenda bihurtzen du"
 
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:65
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:65
@@ -2039,7 +2039,7 @@ msgstr "Paragrafoa eskuinean justifikatzen du"
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:89
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:89
 msgid "Roman Numeral List"
-msgstr "Zenbaki erromatardun zerrenda"
+msgstr "Zenbaki erromatarren zerrenda"
 
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:90
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:90
