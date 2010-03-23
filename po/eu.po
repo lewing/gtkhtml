@@ -1,21 +1,21 @@
 # translation of eu.po to Basque
 #
 # Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>, 2005.
-# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2006, 2007, 2008, 2009.
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2006, 2007, 2008, 2009, 2010.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-12 19:52+0100\n"
-"PO-Revision-Date: 2009-02-12 20:12+0100\n"
+"PO-Revision-Date: 2010-03-23 19:33+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "\n"
 
 #: ../a11y/image.c:151
@@ -102,7 +102,7 @@ msgstr "berde iluna"
 #: ../components/html-editor/gi-color-palette.c:569
 #: ../components/html-editor/gi-color-palette.c:622
 msgid "dull blue"
-msgstr "urdin itzaldua"
+msgstr "urdin motela"
 
 #: ../components/editor/gtkhtml-color-combo.c:93
 #: ../components/html-editor/gi-color-palette.c:570
@@ -113,7 +113,7 @@ msgstr "urdina"
 #: ../components/editor/gtkhtml-color-combo.c:94
 #: ../components/html-editor/gi-color-palette.c:571
 msgid "dull purple"
-msgstr "more itzaldua"
+msgstr "more motela"
 
 #: ../components/editor/gtkhtml-color-combo.c:95
 #: ../components/html-editor/gi-color-palette.c:572
@@ -138,12 +138,12 @@ msgstr "limoia"
 #: ../components/editor/gtkhtml-color-combo.c:100
 #: ../components/html-editor/gi-color-palette.c:578
 msgid "dull green"
-msgstr "berde itzaldua"
+msgstr "berde motela"
 
 #: ../components/editor/gtkhtml-color-combo.c:101
 #: ../components/html-editor/gi-color-palette.c:579
 msgid "dull blue #2"
-msgstr "2. urdin itzaldua"
+msgstr "2. urdin motela"
 
 #: ../components/editor/gtkhtml-color-combo.c:102
 #: ../components/html-editor/gi-color-palette.c:580
@@ -170,7 +170,7 @@ msgstr "magenta"
 #: ../components/editor/gtkhtml-color-combo.c:107
 #: ../components/html-editor/gi-color-palette.c:586
 msgid "bright orange"
-msgstr "laranja disdiratsua"
+msgstr "laranja distiratsua"
 
 #: ../components/editor/gtkhtml-color-combo.c:108
 #: ../components/html-editor/gi-color-palette.c:587
@@ -666,7 +666,7 @@ msgstr "_Lerrokatu"
 #: ../components/editor/gtkhtml-editor-actions.c:1380
 #: ../components/html-editor/spellchecker.c:424
 msgid "Current _Languages"
-msgstr "Uneko _hizkunzak"
+msgstr "Uneko _hizkuntzak"
 
 #: ../components/editor/gtkhtml-editor-actions.c:1387
 #: ../components/editor/main.c:358
@@ -783,7 +783,7 @@ msgstr "_Buletdun zerrenda"
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:135
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:135
 msgid "_Roman Numeral List"
-msgstr "Zenbaki erromatardun zerrenda"
+msgstr "Zenbaki erromatarren zerrenda"
 
 #: ../components/editor/gtkhtml-editor-actions.c:1515
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:76
@@ -1563,7 +1563,7 @@ msgstr ""
 
 #: ../components/editor/gtkhtml-spell-checker.c:200
 msgid "Language"
-msgstr "Hizkunza"
+msgstr "Hizkuntza"
 
 #: ../components/editor/gtkhtml-spell-checker.c:201
 msgid "The language used by the spell checker"
@@ -2740,7 +2740,7 @@ msgstr "Helburuko markoaren oinarriko URLa"
 
 #: ../gtkhtml/gtkhtml.c:3064
 msgid "Fixed Width Font"
-msgstr "Zabalera finkodun letra-tipoa"
+msgstr "Zabalera finkoko letra-tipoa"
 
 #: ../gtkhtml/gtkhtml.c:3065
 msgid "The Monospace font to use for typewriter text"
