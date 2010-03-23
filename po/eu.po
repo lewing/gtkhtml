@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtkhtml&component=general\n"
 "POT-Creation-Date: 2009-08-27 11:00+0000\n"
-"PO-Revision-Date: 2010-03-23 19:32+0100\n"
+"PO-Revision-Date: 2010-03-23 19:37+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -154,7 +154,7 @@ msgstr "cyan"
 
 #: ../components/editor/gtkhtml-color-combo.c:111
 msgid "bright blue"
-msgstr "urdin disdiratsua"
+msgstr "urdin distiratsua"
 
 #: ../components/editor/gtkhtml-color-combo.c:112
 msgid "red purple"
