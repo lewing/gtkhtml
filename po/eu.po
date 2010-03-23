@@ -1,14 +1,14 @@
-# translation of gtkhtml.HEAD.po to Basque
+# translation of eu.po to Basque
 #
 # Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>, 2005.
-# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2006, 2007, 2008.
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2006, 2007, 2008, 2010.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtkhtml.HEAD\n"
+"Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-14 16:26+0100\n"
-"PO-Revision-Date: 2008-01-12 00:59+0100\n"
+"PO-Revision-Date: 2010-03-23 19:36+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -367,7 +367,7 @@ msgstr "Uneko paragrafoa buletdun zerrenda bihurtzen du"
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:64
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:64
 msgid "Make the current paragraph a list with roman numerals"
-msgstr "Uneko paragrafoa zenbaki erromatardun zerrenda bihurtzen du"
+msgstr "Uneko paragrafoa zenbaki erromatarren zerrenda bihurtzen du"
 
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:65
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:65
@@ -499,7 +499,7 @@ msgstr "Paragrafoa eskuinean justifikatzen du"
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:89
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:89
 msgid "Roman Numeral List"
-msgstr "Zenbaki erromatardun zerrenda"
+msgstr "Zenbaki erromatarren zerrenda"
 
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:90
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:90
@@ -741,7 +741,7 @@ msgstr "E_skuinean"
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:135
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:135
 msgid "_Roman Numeral List"
-msgstr "Zenbaki erromatardun zerrenda"
+msgstr "Zenbaki _erromatarren zerrenda"
 
 #: ../components/html-editor/GNOME_GtkHTML_Editor-emacs.xml.in.h:136
 #: ../components/html-editor/GNOME_GtkHTML_Editor.xml.in.h:136
@@ -1023,7 +1023,7 @@ msgstr "berde iluna"
 #: ../components/html-editor/gi-color-palette.c:573
 #: ../components/html-editor/gi-color-palette.c:626
 msgid "dull blue"
-msgstr "urdin itzaldua"
+msgstr "urdin motela"
 
 #: ../components/html-editor/gi-color-palette.c:574
 #: ../components/html-editor/gi-color-palette.c:627
@@ -1032,7 +1032,7 @@ msgstr "urdina"
 
 #: ../components/html-editor/gi-color-palette.c:575
 msgid "dull purple"
-msgstr "more itzaldua"
+msgstr "more motela"
 
 #: ../components/html-editor/gi-color-palette.c:576
 msgid "dark grey"
@@ -1052,11 +1052,11 @@ msgstr "limoia"
 
 #: ../components/html-editor/gi-color-palette.c:582
 msgid "dull green"
-msgstr "berde itzaldua"
+msgstr "berde motela"
 
 #: ../components/html-editor/gi-color-palette.c:583
 msgid "dull blue #2"
-msgstr "2. urdin itzaldua"
+msgstr "2. urdin motela"
 
 #: ../components/html-editor/gi-color-palette.c:584
 msgid "sky blue #2"
@@ -1078,7 +1078,7 @@ msgstr "magenta"
 
 #: ../components/html-editor/gi-color-palette.c:590
 msgid "bright orange"
-msgstr "laranja disdiratsua"
+msgstr "laranja distiratsua"
 
 #: ../components/html-editor/gi-color-palette.c:591
 #: ../components/html-editor/gi-color-palette.c:622
@@ -1096,7 +1096,7 @@ msgstr "cyan"
 
 #: ../components/html-editor/gi-color-palette.c:594
 msgid "bright blue"
-msgstr "urdin disdiratsua"
+msgstr "urdin distiratsua"
 
 #: ../components/html-editor/gi-color-palette.c:595
 #: ../components/html-editor/gi-color-palette.c:612
@@ -1697,7 +1697,7 @@ msgstr "Ortografia-egiaztatzailea"
 
 #: ../components/html-editor/spellchecker.c:404
 msgid "Current _Languages"
-msgstr "Uneko _hizkunzak"
+msgstr "Uneko _hizkuntzak"
 
 #: ../components/html-editor/template.c:90
 msgid "Note"
@@ -1834,7 +1834,7 @@ msgstr "Helburuko markoaren oinarriko URLa"
 
 #: ../gtkhtml/gtkhtml.c:2948
 msgid "Fixed Width Font"
-msgstr "Zabalera finkodun letra-tipoa"
+msgstr "Zabalera finkoko letra-tipoa"
 
 #: ../gtkhtml/gtkhtml.c:2949
 msgid "The Monospace font to use for typewriter text"
@@ -1912,3 +1912,4 @@ msgstr "Inprimatzeko aurrebista"
 #: ../gtkhtml/testgtkhtml.c:1037
 msgid "GtkHTML Test Application"
 msgstr "GtkHTML probako aplikazioa"
+
