@@ -1,14 +1,14 @@
 # translation of eu.po to Basque
 #
 # Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>, 2005.
-# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2006, 2007, 2008, 2009.
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2006, 2007, 2008, 2009, 2010.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtkhtml&component=general\n"
 "POT-Creation-Date: 2009-08-27 11:00+0000\n"
-"PO-Revision-Date: 2009-08-27 14:24+0200\n"
+"PO-Revision-Date: 2010-03-23 19:32+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -86,7 +86,7 @@ msgstr "berde iluna"
 
 #: ../components/editor/gtkhtml-color-combo.c:92
 msgid "dull blue"
-msgstr "urdin itzaldua"
+msgstr "urdin motela"
 
 #: ../components/editor/gtkhtml-color-combo.c:93
 msgid "blue"
@@ -94,7 +94,7 @@ msgstr "urdina"
 
 #: ../components/editor/gtkhtml-color-combo.c:94
 msgid "dull purple"
-msgstr "more itzaldua"
+msgstr "more motela"
 
 #: ../components/editor/gtkhtml-color-combo.c:95
 msgid "dark grey"
@@ -114,11 +114,11 @@ msgstr "limoia"
 
 #: ../components/editor/gtkhtml-color-combo.c:100
 msgid "dull green"
-msgstr "berde itzaldua"
+msgstr "berde motela"
 
 #: ../components/editor/gtkhtml-color-combo.c:101
 msgid "dull blue #2"
-msgstr "2. urdin itzaldua"
+msgstr "2. urdin motela"
 
 #: ../components/editor/gtkhtml-color-combo.c:102
 msgid "sky blue #2"
@@ -138,7 +138,7 @@ msgstr "magenta"
 
 #: ../components/editor/gtkhtml-color-combo.c:107
 msgid "bright orange"
-msgstr "laranja disdiratsua"
+msgstr "laranja distiratsua"
 
 #: ../components/editor/gtkhtml-color-combo.c:108
 msgid "yellow"
@@ -559,7 +559,7 @@ msgstr "_Lerrokatu"
 
 #: ../components/editor/gtkhtml-editor-actions.c:1382
 msgid "Current _Languages"
-msgstr "Uneko _hizkunzak"
+msgstr "Uneko _hizkuntzak"
 
 #: ../components/editor/gtkhtml-editor-actions.c:1389
 #: ../components/editor/main.c:358
@@ -648,7 +648,7 @@ msgstr "_Buletdun zerrenda"
 
 #: ../components/editor/gtkhtml-editor-actions.c:1510
 msgid "_Roman Numeral List"
-msgstr "Zenbaki erromatardun zerrenda"
+msgstr "Zenbaki erromatarren zerrenda"
 
 #: ../components/editor/gtkhtml-editor-actions.c:1517
 msgid "Numbered _List"
@@ -1334,7 +1334,7 @@ msgstr "px"
 
 #: ../components/editor/gtkhtml-spell-checker.c:200
 msgid "Language"
-msgstr "Hizkunza"
+msgstr "Hizkuntza"
 
 #: ../components/editor/gtkhtml-spell-checker.c:201
 msgid "The language used by the spell checker"
@@ -1496,7 +1496,7 @@ msgstr "Helburuko markoaren oinarriko URLa"
 
 #: ../gtkhtml/gtkhtml.c:3103
 msgid "Fixed Width Font"
-msgstr "Zabalera finkodun letra-tipoa"
+msgstr "Zabalera finkoko letra-tipoa"
 
 #: ../gtkhtml/gtkhtml.c:3104
 msgid "The Monospace font to use for typewriter text"
