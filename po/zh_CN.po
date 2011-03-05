@@ -2,17 +2,18 @@
 # Copyright (C) 2001-2009 Free Software Foundation, Inc.
 # Zipeco <zipeco@btamail.net.cn>, 2001.
 # Funda Wang <fundawang@linux.net.cn>, 2003.
-# fujianwzh <fujianwzh@gmail.com>, 2009.
 #
+# fujianwzh <fujianwzh@gmail.com>, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtkhtml\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=gtkhtml&component=general\n"
-"POT-Creation-Date: 2009-07-28 00:19+0000\n"
-"PO-Revision-Date: 2009-07-30 00:00+0800\n"
+"POT-Creation-Date: 2010-08-31 08:34+0000\n"
+"PO-Revision-Date: 2011-03-05 22:48+0800\n"
 "Last-Translator: fujianwzh <fujianwzh@gmail.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -199,54 +200,54 @@ msgstr "白色"
 msgid "Choose Custom Color"
 msgstr "选择自定义颜色"
 
-#: ../components/editor/gtkhtml-color-combo.c:711
+#: ../components/editor/gtkhtml-color-combo.c:727
 #: ../components/editor/gtkhtml-color-state.c:205
 msgid "Current color"
 msgstr "当前颜色"
 
-#: ../components/editor/gtkhtml-color-combo.c:712
+#: ../components/editor/gtkhtml-color-combo.c:728
 msgid "The currently selected color"
 msgstr "目前选中的颜色"
 
-#: ../components/editor/gtkhtml-color-combo.c:721
+#: ../components/editor/gtkhtml-color-combo.c:737
 #: ../components/editor/gtkhtml-color-state.c:215
 msgid "Default color"
 msgstr "默认颜色"
 
-#: ../components/editor/gtkhtml-color-combo.c:722
+#: ../components/editor/gtkhtml-color-combo.c:738
 msgid "The color associated with the default button"
 msgstr "与默认按钮关联的颜色"
 
-#: ../components/editor/gtkhtml-color-combo.c:732
+#: ../components/editor/gtkhtml-color-combo.c:748
 #: ../components/editor/gtkhtml-color-state.c:226
 msgid "Default label"
 msgstr "默认标签"
 
-#: ../components/editor/gtkhtml-color-combo.c:733
+#: ../components/editor/gtkhtml-color-combo.c:749
 msgid "The label for the default button"
 msgstr "默认按钮的标签"
 
-#: ../components/editor/gtkhtml-color-combo.c:734
+#: ../components/editor/gtkhtml-color-combo.c:750
 #: ../components/editor/gtkhtml-color-state.c:228
 msgid "Default"
 msgstr "默认"
 
-#: ../components/editor/gtkhtml-color-combo.c:743
+#: ../components/editor/gtkhtml-color-combo.c:759
 #: ../components/editor/gtkhtml-color-state.c:237
 msgid "Default is transparent"
 msgstr "默认透明"
 
-#: ../components/editor/gtkhtml-color-combo.c:744
+#: ../components/editor/gtkhtml-color-combo.c:760
 #: ../components/editor/gtkhtml-color-state.c:238
 msgid "Whether the default color is transparent"
 msgstr "是否默认为透明颜色"
 
-#: ../components/editor/gtkhtml-color-combo.c:754
+#: ../components/editor/gtkhtml-color-combo.c:770
 #: ../components/editor/gtkhtml-color-state.c:248
 msgid "Color palette"
 msgstr "调色盘"
 
-#: ../components/editor/gtkhtml-color-combo.c:755
+#: ../components/editor/gtkhtml-color-combo.c:771
 #: ../components/editor/gtkhtml-color-state.c:249
 msgid "Custom color palette"
 msgstr "自定义调色盘"
@@ -254,14 +255,14 @@ msgstr "自定义调色盘"
 #. Translators: This is the nickname for a
 #. * GtkhtmlColorCombo property named "popup-shown",
 #. * based on a similar property in GtkComboBox.
-#: ../components/editor/gtkhtml-color-combo.c:767
+#: ../components/editor/gtkhtml-color-combo.c:783
 msgid "Popup shown"
 msgstr "显示的弹出项"
 
 #. Translators: This is the blurb for a
 #. * GtkhtmlColorCombo property named "popup-shown",
 #. * based on a similar property in GtkComboBox.
-#: ../components/editor/gtkhtml-color-combo.c:771
+#: ../components/editor/gtkhtml-color-combo.c:787
 msgid "Whether the combo's dropdown is shown"
 msgstr "是否显示组合框的下拉项"
 
@@ -269,7 +270,7 @@ msgstr "是否显示组合框的下拉项"
 #. GtkHtmlColorCombo property named "state". It holds all
 #. the internal values for a GtkHtml color combination box.
 #.
-#: ../components/editor/gtkhtml-color-combo.c:784
+#: ../components/editor/gtkhtml-color-combo.c:800
 msgid "Color state"
 msgstr "颜色状态"
 
@@ -277,15 +278,15 @@ msgstr "颜色状态"
 #. GtkHtmlColorCombo property named "state". It holds all
 #. the internal values for a GtkHtml color combination box.
 #.
-#: ../components/editor/gtkhtml-color-combo.c:789
+#: ../components/editor/gtkhtml-color-combo.c:805
 msgid "The state of a color combo box"
 msgstr "色彩组合框的状态"
 
-#: ../components/editor/gtkhtml-color-combo.c:971
+#: ../components/editor/gtkhtml-color-combo.c:987
 msgid "custom"
 msgstr "自定义"
 
-#: ../components/editor/gtkhtml-color-combo.c:979
+#: ../components/editor/gtkhtml-color-combo.c:995
 msgid "Custom Color..."
 msgstr "自定义颜色..."
 
@@ -427,563 +428,579 @@ msgstr "可怕(_V)"
 msgid "_Monkey"
 msgstr "鬼脸(_M)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:632
+#: ../components/editor/gtkhtml-editor-actions.c:191
+msgid "Failed to insert HTML file."
+msgstr "插入 HTML 文件失败。"
+
+#: ../components/editor/gtkhtml-editor-actions.c:228
+msgid "Failed to insert text file."
+msgstr "插入文本文件失败。"
+
+#: ../components/editor/gtkhtml-editor-actions.c:616
 msgid "Insert HTML File"
 msgstr "插入 HTML 文件"
 
-#: ../components/editor/gtkhtml-editor-actions.c:641
-#: ../components/editor/gtkhtml-editor-actions.c:1542
+#: ../components/editor/gtkhtml-editor-actions.c:636
+#: ../components/editor/gtkhtml-editor-actions.c:1550
 msgid "Insert Image"
 msgstr "插入图像"
 
-#: ../components/editor/gtkhtml-editor-actions.c:688
+#: ../components/editor/gtkhtml-editor-actions.c:685
 msgid "Insert Text File"
 msgstr "插入文本文件"
 
 #. Replace Button
-#: ../components/editor/gtkhtml-editor-actions.c:1177
-#: ../components/editor/gtkhtml-spell-dialog.c:522
+#: ../components/editor/gtkhtml-editor-actions.c:1185
+#: ../components/editor/gtkhtml-spell-dialog.c:520
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1184
+#: ../components/editor/gtkhtml-editor-actions.c:1192
 msgid "Replace _All"
 msgstr "全部替换(_A)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1198
+#: ../components/editor/gtkhtml-editor-actions.c:1206
 msgid "_Next"
 msgstr "下一个(_N)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1205
+#: ../components/editor/gtkhtml-editor-actions.c:1213
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1212
+#: ../components/editor/gtkhtml-editor-actions.c:1220
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1226
+#: ../components/editor/gtkhtml-editor-actions.c:1234
 msgid "Find A_gain"
 msgstr "再次查找(_G)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1240
+#: ../components/editor/gtkhtml-editor-actions.c:1248
 msgid "_Increase Indent"
 msgstr "增加缩进(_I)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1242
+#: ../components/editor/gtkhtml-editor-actions.c:1250
 msgid "Increase Indent"
 msgstr "增加缩进"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1247
+#: ../components/editor/gtkhtml-editor-actions.c:1255
 msgid "_HTML File..."
 msgstr "HTML 文件(_H)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1254
+#: ../components/editor/gtkhtml-editor-actions.c:1262
 msgid "Te_xt File..."
 msgstr "文本文件(_X)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1261
+#: ../components/editor/gtkhtml-editor-actions.c:1269
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1268
+#: ../components/editor/gtkhtml-editor-actions.c:1276
 msgid "Paste _Quotation"
 msgstr "带引用粘贴(_Q)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1275
+#: ../components/editor/gtkhtml-editor-actions.c:1283
 msgid "_Redo"
 msgstr "重做(_R)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1282
+#: ../components/editor/gtkhtml-editor-actions.c:1290
 msgid "Select _All"
 msgstr "全选(_A)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1289
+#: ../components/editor/gtkhtml-editor-actions.c:1297
 msgid "_Find..."
 msgstr "查找(_F)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1296
+#: ../components/editor/gtkhtml-editor-actions.c:1304
 msgid "Re_place..."
 msgstr "替换(_P)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1303
+#: ../components/editor/gtkhtml-editor-actions.c:1311
 msgid "Check _Spelling..."
 msgstr "拼写检查(_S)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1310
+#: ../components/editor/gtkhtml-editor-actions.c:1318
 #: ../components/editor/gtkhtml-editor-builder.ui.h:79
 msgid "_Test URL..."
 msgstr "测试 URL(_T)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1317
+#: ../components/editor/gtkhtml-editor-actions.c:1325
 msgid "_Undo"
 msgstr "撤消(_U)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1324
+#: ../components/editor/gtkhtml-editor-actions.c:1332
 msgid "_Decrease Indent"
 msgstr "减少缩进(_D)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1326
+#: ../components/editor/gtkhtml-editor-actions.c:1334
 msgid "Decrease Indent"
 msgstr "减少缩进"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1331
+#: ../components/editor/gtkhtml-editor-actions.c:1339
 msgid "_Wrap Lines"
 msgstr "换行(_W)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1340
+#: ../components/editor/gtkhtml-editor-actions.c:1348
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1347
+#: ../components/editor/gtkhtml-editor-actions.c:1355
 #: ../components/editor/main.c:327
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1354
+#: ../components/editor/gtkhtml-editor-actions.c:1362
 msgid "For_mat"
 msgstr "格式(_M)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1361
+#: ../components/editor/gtkhtml-editor-actions.c:1369
 msgid "_Paragraph Style"
 msgstr "段落样式(_P)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1368
+#: ../components/editor/gtkhtml-editor-actions.c:1376
 msgid "_Insert"
 msgstr "插入(_I)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1375
+#: ../components/editor/gtkhtml-editor-actions.c:1383
 msgid "_Alignment"
 msgstr "对齐方式(_A)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1382
+#: ../components/editor/gtkhtml-editor-actions.c:1390
 msgid "Current _Languages"
 msgstr "当前语言(_L)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1389
+#: ../components/editor/gtkhtml-editor-actions.c:1397
 #: ../components/editor/main.c:358
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1399
+#: ../components/editor/gtkhtml-editor-actions.c:1407
 msgid "_Center"
 msgstr "居中(_C)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1401
+#: ../components/editor/gtkhtml-editor-actions.c:1409
 msgid "Center Alignment"
 msgstr "居中对齐"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1406
+#: ../components/editor/gtkhtml-editor-actions.c:1414
 msgid "_Left"
 msgstr "左对齐(_L)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1408
+#: ../components/editor/gtkhtml-editor-actions.c:1416
 msgid "Left Alignment"
 msgstr "左对齐"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1413
+#: ../components/editor/gtkhtml-editor-actions.c:1421
 msgid "_Right"
 msgstr "右对齐(_R)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1415
+#: ../components/editor/gtkhtml-editor-actions.c:1423
 msgid "Right Alignment"
 msgstr "右对齐"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1423
+#: ../components/editor/gtkhtml-editor-actions.c:1431
 msgid "_HTML"
 msgstr "_HTML"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1425
+#: ../components/editor/gtkhtml-editor-actions.c:1433
 msgid "HTML editing mode"
 msgstr "HTML 编辑模式"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1430
+#: ../components/editor/gtkhtml-editor-actions.c:1438
 msgid "Plain _Text"
 msgstr "纯文本(_T)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1432
+#: ../components/editor/gtkhtml-editor-actions.c:1440
 msgid "Plain text editing mode"
 msgstr "纯文本编辑模式"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1440
+#: ../components/editor/gtkhtml-editor-actions.c:1448
 msgid "_Normal"
 msgstr "标准(_N)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1447
+#: ../components/editor/gtkhtml-editor-actions.c:1455
 msgid "Header _1"
 msgstr "标题 _1"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1454
+#: ../components/editor/gtkhtml-editor-actions.c:1462
 msgid "Header _2"
 msgstr "标题 _2"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1461
+#: ../components/editor/gtkhtml-editor-actions.c:1469
 msgid "Header _3"
 msgstr "标题 _3"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1468
+#: ../components/editor/gtkhtml-editor-actions.c:1476
 msgid "Header _4"
 msgstr "标题 _4"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1475
+#: ../components/editor/gtkhtml-editor-actions.c:1483
 msgid "Header _5"
 msgstr "标题 _5"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1482
+#: ../components/editor/gtkhtml-editor-actions.c:1490
 msgid "Header _6"
 msgstr "标题 _6"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1489
+#: ../components/editor/gtkhtml-editor-actions.c:1497
 msgid "A_ddress"
 msgstr "地址(_D)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1496
+#: ../components/editor/gtkhtml-editor-actions.c:1504
 msgid "_Preformatted"
 msgstr "预格式化(_P)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1503
+#: ../components/editor/gtkhtml-editor-actions.c:1511
 msgid "_Bulleted List"
 msgstr "项目符号列表(_B)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1510
+#: ../components/editor/gtkhtml-editor-actions.c:1518
 msgid "_Roman Numeral List"
 msgstr "罗马数字列表(_R)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1517
+#: ../components/editor/gtkhtml-editor-actions.c:1525
 msgid "Numbered _List"
 msgstr "数字列表(_L)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1524
+#: ../components/editor/gtkhtml-editor-actions.c:1532
 msgid "_Alphabetical List"
 msgstr "字母列表(_A)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1540
-#: ../components/editor/gtkhtml-editor-actions.c:1575
+#: ../components/editor/gtkhtml-editor-actions.c:1548
+#: ../components/editor/gtkhtml-editor-actions.c:1583
 msgid "_Image..."
 msgstr "图像(_I)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1547
-#: ../components/editor/gtkhtml-editor-actions.c:1582
+#: ../components/editor/gtkhtml-editor-actions.c:1555
+#: ../components/editor/gtkhtml-editor-actions.c:1590
 msgid "_Link..."
 msgstr "链接(_L)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1549
+#: ../components/editor/gtkhtml-editor-actions.c:1557
 msgid "Insert Link"
 msgstr "插入链接"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1554
-#: ../components/editor/gtkhtml-editor-actions.c:1596
+#: ../components/editor/gtkhtml-editor-actions.c:1562
+#: ../components/editor/gtkhtml-editor-actions.c:1604
 msgid "_Rule..."
 msgstr "标尺(_R)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1556
+#: ../components/editor/gtkhtml-editor-actions.c:1564
 msgid "Insert Rule"
 msgstr "插入直线"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1561
-#: ../components/editor/gtkhtml-editor-actions.c:1603
+#: ../components/editor/gtkhtml-editor-actions.c:1569
+#: ../components/editor/gtkhtml-editor-actions.c:1611
 msgid "_Table..."
 msgstr "表格(_T)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1563
+#: ../components/editor/gtkhtml-editor-actions.c:1571
 msgid "Insert Table"
 msgstr "插入表格"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1568
+#: ../components/editor/gtkhtml-editor-actions.c:1576
 msgid "_Cell..."
 msgstr "单元格(_C)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1589
+#: ../components/editor/gtkhtml-editor-actions.c:1597
 msgid "Pa_ge..."
 msgstr "页面(_G)..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1612
+#: ../components/editor/gtkhtml-editor-actions.c:1620
 msgid "Font _Size"
 msgstr "字体大小(_S)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1619
+#: ../components/editor/gtkhtml-editor-actions.c:1627
 msgid "_Font Style"
 msgstr "字体样式(_F)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1629
+#: ../components/editor/gtkhtml-editor-actions.c:1637
 #: ../components/editor/gtkhtml-editor-builder.ui.h:60
 msgid "_Bold"
 msgstr "粗体(_B)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1631
+#: ../components/editor/gtkhtml-editor-actions.c:1639
 msgid "Bold"
 msgstr "粗体"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1637
+#: ../components/editor/gtkhtml-editor-actions.c:1645
 #: ../components/editor/gtkhtml-editor-builder.ui.h:67
 msgid "_Italic"
 msgstr "斜体(_I)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1639
+#: ../components/editor/gtkhtml-editor-actions.c:1647
 msgid "Italic"
 msgstr "斜体"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1645
+#: ../components/editor/gtkhtml-editor-actions.c:1653
 msgid "_Plain Text"
 msgstr "纯文本(_P)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1647
+#: ../components/editor/gtkhtml-editor-actions.c:1655
 msgid "Plain Text"
 msgstr "纯文本"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1653
+#: ../components/editor/gtkhtml-editor-actions.c:1661
 #: ../components/editor/gtkhtml-editor-builder.ui.h:76
 msgid "_Strikethrough"
 msgstr "删除线(_S)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1655
+#: ../components/editor/gtkhtml-editor-actions.c:1663
 msgid "Strikethrough"
 msgstr "删除线"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1661
+#: ../components/editor/gtkhtml-editor-actions.c:1669
 #: ../components/editor/gtkhtml-editor-builder.ui.h:82
 msgid "_Underline"
 msgstr "下划线(_U)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1663
+#: ../components/editor/gtkhtml-editor-actions.c:1671
 msgid "Underline"
 msgstr "下划线"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1672
+#: ../components/editor/gtkhtml-editor-actions.c:1680
 msgid "-2"
 msgstr "-2"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1679
+#: ../components/editor/gtkhtml-editor-actions.c:1687
 msgid "-1"
 msgstr "-1"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1686
+#: ../components/editor/gtkhtml-editor-actions.c:1694
 msgid "+0"
 msgstr "+0"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1693
+#: ../components/editor/gtkhtml-editor-actions.c:1701
 msgid "+1"
 msgstr "+1"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1700
+#: ../components/editor/gtkhtml-editor-actions.c:1708
 msgid "+2"
 msgstr "+2"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1707
+#: ../components/editor/gtkhtml-editor-actions.c:1715
 msgid "+3"
 msgstr "+3"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1714
+#: ../components/editor/gtkhtml-editor-actions.c:1722
 msgid "+4"
 msgstr "+4"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1733
+#: ../components/editor/gtkhtml-editor-actions.c:1741
 msgid "Cell Contents"
 msgstr "单元格内容"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1740
+#: ../components/editor/gtkhtml-editor-actions.c:1748
 msgid "Column"
 msgstr "列"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1747
+#: ../components/editor/gtkhtml-editor-actions.c:1755
 msgid "Row"
 msgstr "行"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1754
-#: ../components/editor/gtkhtml-editor-actions.c:1837
+#: ../components/editor/gtkhtml-editor-actions.c:1762
+#: ../components/editor/gtkhtml-editor-actions.c:1845
 msgid "Table"
 msgstr "表格"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1763
+#: ../components/editor/gtkhtml-editor-actions.c:1771
 msgid "Table Delete"
 msgstr "表格删除"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1770
+#: ../components/editor/gtkhtml-editor-actions.c:1778
 msgid "Input Methods"
 msgstr "输入法"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1777
+#: ../components/editor/gtkhtml-editor-actions.c:1785
 msgid "Table Insert"
 msgstr "表格插入"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1784
+#: ../components/editor/gtkhtml-editor-actions.c:1792
 msgid "Properties"
 msgstr "属性"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1802
+#: ../components/editor/gtkhtml-editor-actions.c:1810
 msgid "Column After"
 msgstr "列的右边"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1809
+#: ../components/editor/gtkhtml-editor-actions.c:1817
 msgid "Column Before"
 msgstr "列的左边"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1816
+#: ../components/editor/gtkhtml-editor-actions.c:1824
 msgid "Insert _Link"
 msgstr "插入链接(_L)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1823
+#: ../components/editor/gtkhtml-editor-actions.c:1831
 msgid "Row Above"
 msgstr "行的上面"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1830
+#: ../components/editor/gtkhtml-editor-actions.c:1838
 msgid "Row Below"
 msgstr "行的下面"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1844
+#: ../components/editor/gtkhtml-editor-actions.c:1852
 msgid "Cell..."
 msgstr "单元格..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1851
+#: ../components/editor/gtkhtml-editor-actions.c:1859
 msgid "Image..."
 msgstr "图像..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1858
+#: ../components/editor/gtkhtml-editor-actions.c:1866
 msgid "Link..."
 msgstr "链接..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1865
+#: ../components/editor/gtkhtml-editor-actions.c:1873
 msgid "Page..."
 msgstr "页面..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1872
+#: ../components/editor/gtkhtml-editor-actions.c:1880
 msgid "Paragraph..."
 msgstr "段落..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1879
+#: ../components/editor/gtkhtml-editor-actions.c:1887
 msgid "Rule..."
 msgstr "标尺..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1886
+#: ../components/editor/gtkhtml-editor-actions.c:1894
 msgid "Table..."
 msgstr "表格..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1893
+#: ../components/editor/gtkhtml-editor-actions.c:1901
 msgid "Text..."
 msgstr "文本..."
 
-#: ../components/editor/gtkhtml-editor-actions.c:1900
+#: ../components/editor/gtkhtml-editor-actions.c:1908
 msgid "Remove Link"
 msgstr "删除链接"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1917
+#: ../components/editor/gtkhtml-editor-actions.c:1925
 msgid "Add Word to Dictionary"
 msgstr "向字典中添加单词"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1924
+#: ../components/editor/gtkhtml-editor-actions.c:1932
 msgid "Ignore Misspelled Word"
 msgstr "忽略拼错的单词"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1931
+#: ../components/editor/gtkhtml-editor-actions.c:1939
 msgid "Add Word To"
 msgstr "添加单词到"
 
-#: ../components/editor/gtkhtml-editor-actions.c:1940
+#: ../components/editor/gtkhtml-editor-actions.c:1948
 msgid "More Suggestions"
 msgstr "更多建议"
 
-#: ../components/editor/gtkhtml-editor-actions.c:2107
+#: ../components/editor/gtkhtml-editor-actions.c:2115
 msgid "_Emoticon"
 msgstr "表情(_E)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:2108
+#: ../components/editor/gtkhtml-editor-actions.c:2116
 msgid "Insert Emoticon"
 msgstr "插入表情符号"
 
-#: ../components/editor/gtkhtml-editor-actions.c:2169
+#: ../components/editor/gtkhtml-editor-actions.c:2177
 msgid "_Find"
 msgstr "查找(_F)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:2172
+#: ../components/editor/gtkhtml-editor-actions.c:2180
 msgid "Re_place"
 msgstr "替换(_P)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:2175
+#: ../components/editor/gtkhtml-editor-actions.c:2183
 msgid "_Image"
 msgstr "图像(_I)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:2178
+#: ../components/editor/gtkhtml-editor-actions.c:2186
 msgid "_Link"
 msgstr "链接(_L)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:2181
+#: ../components/editor/gtkhtml-editor-actions.c:2189
 msgid "_Rule"
 msgstr "直线(_R)"
 
-#: ../components/editor/gtkhtml-editor-actions.c:2184
+#: ../components/editor/gtkhtml-editor-actions.c:2192
 #: ../components/editor/gtkhtml-editor-builder.ui.h:78
 msgid "_Table"
 msgstr "表格(_T)"
 
-#: ../components/editor/gtkhtml-editor-private.c:264
+#: ../components/editor/gtkhtml-editor-private.c:273
 msgid "Paragraph Style"
 msgstr "段落样式"
 
-#: ../components/editor/gtkhtml-editor-private.c:278
+#: ../components/editor/gtkhtml-editor-private.c:287
 msgid "Editing Mode"
 msgstr "编辑模式"
 
-#: ../components/editor/gtkhtml-editor-private.c:290
+#: ../components/editor/gtkhtml-editor-private.c:299
 msgid "Font Color"
 msgstr "字体颜色"
 
-#: ../components/editor/gtkhtml-editor-private.c:300
+#: ../components/editor/gtkhtml-editor-private.c:309
 msgid "Font Size"
 msgstr "字体大小"
 
-#: ../components/editor/gtkhtml-editor-private.c:327
+#: ../components/editor/gtkhtml-editor-private.c:336
 msgid "Automatic"
 msgstr "自动"
 
-#: ../components/editor/gtkhtml-editor-private.c:599
+#: ../components/editor/gtkhtml-editor-private.c:589
 msgid "Could not open the link."
 msgstr "无法打开链接。"
 
-#: ../components/editor/gtkhtml-editor.c:754
+#: ../components/editor/gtkhtml-editor.c:778
 msgid "Current Folder"
 msgstr "当前文件夹"
 
-#: ../components/editor/gtkhtml-editor.c:755
+#: ../components/editor/gtkhtml-editor.c:779
 msgid "The initial folder for file chooser dialogs"
 msgstr "选择器对话框的初始文件夹"
 
-#: ../components/editor/gtkhtml-editor.c:765
+#: ../components/editor/gtkhtml-editor.c:789
 msgid "Filename"
 msgstr "文件名"
 
-#: ../components/editor/gtkhtml-editor.c:766
+#: ../components/editor/gtkhtml-editor.c:790
 msgid "The filename to use when saving"
 msgstr "保存时所使用的文件名"
 
-#: ../components/editor/gtkhtml-editor.c:776
+#: ../components/editor/gtkhtml-editor.c:800
+msgid "HTML Editing Widget"
+msgstr "HTML 编辑部件"
+
+#: ../components/editor/gtkhtml-editor.c:801
+msgid "The main HTML editing widget"
+msgstr "主 HTML 编辑部件"
+
+#: ../components/editor/gtkhtml-editor.c:811
 msgid "HTML Mode"
 msgstr "HTML 模式"
 
-#: ../components/editor/gtkhtml-editor.c:777
+#: ../components/editor/gtkhtml-editor.c:812
 msgid "Edit HTML or plain text"
 msgstr "编辑 HTML 还是纯文本"
 
-#: ../components/editor/gtkhtml-editor.c:787
+#: ../components/editor/gtkhtml-editor.c:822
 msgid "Inline Spelling"
 msgstr "内置检查"
 
-#: ../components/editor/gtkhtml-editor.c:788
+#: ../components/editor/gtkhtml-editor.c:823
 msgid "Check your spelling as you type"
 msgstr "输入时检查您的拼写"
 
-#: ../components/editor/gtkhtml-editor.c:798
+#: ../components/editor/gtkhtml-editor.c:833
 msgid "Magic Links"
 msgstr "魔法链接"
 
-#: ../components/editor/gtkhtml-editor.c:799
+#: ../components/editor/gtkhtml-editor.c:834
 msgid "Make URIs clickable as you type"
 msgstr "输入时将 URI 转换为可点击"
 
-#: ../components/editor/gtkhtml-editor.c:809
+#: ../components/editor/gtkhtml-editor.c:844
 msgid "Magic Smileys"
 msgstr "魔法表情"
 
-#: ../components/editor/gtkhtml-editor.c:810
+#: ../components/editor/gtkhtml-editor.c:845
 msgid "Convert emoticons to images as you type"
 msgstr "输入时将表情转换为图像"
 
@@ -1297,9 +1314,8 @@ msgid "_Width:"
 msgstr "宽度(_W)："
 
 #: ../components/editor/gtkhtml-editor-builder.ui.h:85
-#, fuzzy
 msgid "_With:"
-msgstr "为(_W)："
+msgstr "带有(_W)："
 
 #: ../components/editor/gtkhtml-editor-builder.ui.h:86
 msgid "_Wrap Text"
@@ -1342,42 +1358,42 @@ msgstr "拼错的单词"
 msgid "The current misspelled word"
 msgstr "当前拼错的单词"
 
-#: ../components/editor/gtkhtml-spell-dialog.c:449
+#: ../components/editor/gtkhtml-spell-dialog.c:447
 msgid "Spell Checker"
 msgstr "拼写检查器"
 
 #. Replace All Button
-#: ../components/editor/gtkhtml-spell-dialog.c:536
+#: ../components/editor/gtkhtml-spell-dialog.c:534
 msgid "R_eplace All"
 msgstr "全部替换(_E)"
 
 #. Ignore Button
-#: ../components/editor/gtkhtml-spell-dialog.c:550
+#: ../components/editor/gtkhtml-spell-dialog.c:548
 msgid "_Ignore"
 msgstr "忽略(_I)"
 
 #. Skip Button
-#: ../components/editor/gtkhtml-spell-dialog.c:564
+#: ../components/editor/gtkhtml-spell-dialog.c:562
 msgid "_Skip"
 msgstr "跳过(_S)"
 
 #. Back Button
-#: ../components/editor/gtkhtml-spell-dialog.c:577
+#: ../components/editor/gtkhtml-spell-dialog.c:575
 msgid "_Back"
 msgstr "反向(_B)"
 
 #. Dictionary Label
-#: ../components/editor/gtkhtml-spell-dialog.c:590
+#: ../components/editor/gtkhtml-spell-dialog.c:588
 msgid "Dictionary"
 msgstr "字典"
 
 #. Add Word Button
-#: ../components/editor/gtkhtml-spell-dialog.c:619
+#: ../components/editor/gtkhtml-spell-dialog.c:617
 msgid "_Add Word"
 msgstr "添加单词(_A)"
 
 #. Translators: %s is the language ISO code.
-#: ../components/editor/gtkhtml-spell-language.c:184
+#: ../components/editor/gtkhtml-spell-language.c:255
 #, c-format
 msgctxt "language"
 msgid "Unknown (%s)"
@@ -1385,8 +1401,8 @@ msgstr "未知 (%s)"
 
 #. Translators: The first %s is the language name, and the
 #. * second is the country name. Example: "French (France)"
-#: ../components/editor/gtkhtml-spell-language.c:199
-#: ../components/editor/gtkhtml-spell-language.c:204
+#: ../components/editor/gtkhtml-spell-language.c:270
+#: ../components/editor/gtkhtml-spell-language.c:275
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -1394,7 +1410,7 @@ msgstr "%s (%s)"
 
 #. Translators: This refers to the default language used
 #. * by the spell checker.
-#: ../components/editor/gtkhtml-spell-language.c:389
+#: ../components/editor/gtkhtml-spell-language.c:460
 msgctxt "language"
 msgid "Default"
 msgstr "默认"
@@ -1451,84 +1467,83 @@ msgstr "_HTML 源"
 msgid "_Plain Source"
 msgstr "纯源代码(_P)"
 
-#: ../gtkhtml/gtkhtml.c:3073
+#: ../gtkhtml/gtkhtml.c:3068
 msgid "Editable"
 msgstr "可编辑"
 
-#: ../gtkhtml/gtkhtml.c:3074
+#: ../gtkhtml/gtkhtml.c:3069
 msgid "Whether the html can be edited"
 msgstr "HTML 是否可编辑"
 
-#: ../gtkhtml/gtkhtml.c:3080
+#: ../gtkhtml/gtkhtml.c:3075
 msgid "Document Title"
 msgstr "文档标题"
 
-#: ../gtkhtml/gtkhtml.c:3081
+#: ../gtkhtml/gtkhtml.c:3076
 msgid "The title of the current document"
 msgstr "当前文档的标题"
 
-#: ../gtkhtml/gtkhtml.c:3087
-#, fuzzy
+#: ../gtkhtml/gtkhtml.c:3082
 msgid "Document Base"
-msgstr "文档基础"
+msgstr "文档基地址"
 
-#: ../gtkhtml/gtkhtml.c:3088
+#: ../gtkhtml/gtkhtml.c:3083
 msgid "The base URL for relative references"
 msgstr "相对引用的基础 URL"
 
-#: ../gtkhtml/gtkhtml.c:3094
+#: ../gtkhtml/gtkhtml.c:3089
 msgid "Target Base"
 msgstr "目标基础"
 
-#: ../gtkhtml/gtkhtml.c:3095
+#: ../gtkhtml/gtkhtml.c:3090
 msgid "The base URL of the target frame"
 msgstr "目标框架的基础 URL"
 
-#: ../gtkhtml/gtkhtml.c:3103
+#: ../gtkhtml/gtkhtml.c:3098
 msgid "Fixed Width Font"
 msgstr "固定宽度字体"
 
-#: ../gtkhtml/gtkhtml.c:3104
+#: ../gtkhtml/gtkhtml.c:3099
 msgid "The Monospace font to use for typewriter text"
 msgstr "打字机文字所用的等宽字体"
 
-#: ../gtkhtml/gtkhtml.c:3110
+#: ../gtkhtml/gtkhtml.c:3105
 msgid "New Link Color"
 msgstr "新链接颜色"
 
-#: ../gtkhtml/gtkhtml.c:3111
+#: ../gtkhtml/gtkhtml.c:3106
 msgid "The color of new link elements"
 msgstr "新链接元素的颜色"
 
-#: ../gtkhtml/gtkhtml.c:3116
+#: ../gtkhtml/gtkhtml.c:3111
 msgid "Visited Link Color"
 msgstr "已浏览链接颜色"
 
-#: ../gtkhtml/gtkhtml.c:3117
+#: ../gtkhtml/gtkhtml.c:3112
 msgid "The color of visited link elements"
 msgstr "已浏览链接元素的颜色"
 
-#: ../gtkhtml/gtkhtml.c:3122
+#: ../gtkhtml/gtkhtml.c:3117
 msgid "Active Link Color"
 msgstr "激活链接颜色"
 
-#: ../gtkhtml/gtkhtml.c:3123
+#: ../gtkhtml/gtkhtml.c:3118
 msgid "The color of active link elements"
 msgstr "激活链接元素的颜色"
 
-#: ../gtkhtml/gtkhtml.c:3128
+#: ../gtkhtml/gtkhtml.c:3123
 msgid "Spelling Error Color"
 msgstr "拼写错误颜色"
 
-#: ../gtkhtml/gtkhtml.c:3129
+#: ../gtkhtml/gtkhtml.c:3124
 msgid "The color of the spelling error markers"
 msgstr "拼写错误标记的颜色"
 
-#: ../gtkhtml/gtkhtml.c:3134
+#: ../gtkhtml/gtkhtml.c:3129
 msgid "Cite Quotation Color"
 msgstr "引用颜色"
 
-#: ../gtkhtml/gtkhtml.c:3135
+#: ../gtkhtml/gtkhtml.c:3130
 msgid "The color of the cited text"
 msgstr "被引用文本的颜色"
 
@@ -1548,6 +1563,12 @@ msgstr "无法分配打印用的默认字体"
 #: ../gtkhtml/test.c:364
 msgid "GtkHTML Test"
 msgstr "GtkHTML 测试"
+
+#~ msgid "%s Dictionary"
+#~ msgstr "%s 字典"
+
+#~ msgid "Changed property"
+#~ msgstr "更改过的属性"
 
 #~ msgid "_Indifferent"
 #~ msgstr "冷淡(_I)"
@@ -2108,9 +2129,6 @@ msgstr "GtkHTML 测试"
 
 #~ msgid "Add Word to"
 #~ msgstr "添加单词到"
-
-#~ msgid "%s Dictionary"
-#~ msgstr "%s 字典"
 
 #~ msgid "Replace confirmation"
 #~ msgstr "替换确认"
